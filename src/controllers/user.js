@@ -15,28 +15,48 @@ exports.signup = (req, res, next) => {
       req.body.password
   );
 
-  bcrypt
-    .hash(req.body.password, 10) //process.env.BCRYPT_KEY)
-    .then((hash) => {
-      console.log("user.signup hash : " + hash);
+  // User existence check
+  User.findOne({ login: req.body.login })
+    .then((user) => {
+      if (user) {
+        return res.status(409).json({ message: "utilisateur déjà existant" });
+      } else {
+        // Password encryption
+        bcrypt
+          .hash(req.body.password, 10)
+          .then((hash) => {
+            console.log("user.signup hash : " + hash);
 
-      const user = new User({
-        name: req.body.name,
-        login: req.body.login,
-        password: hash,
-      });
+            // User creation
+            const user = new User({
+              name: { ...req.body.name },
+              login: { ...req.body.login },
+              password: hash,
+            });
 
-      console.log("user.signup user : " + user);
+            console.log("user.signup user : " + user);
 
-      user
-        .save()
-        .then(res.status(201).json({ message: "ustilisateur créé" }))
-        .catch((error) =>
-          res.status(400).json({ error, message: "erreur lors de la création" })
-        );
+            // User saving
+            user
+              .save()
+              .then(res.status(201).json({ message: "ustilisateur créé" }))
+              .catch((error) =>
+                res
+                  .status(400)
+                  .json({ error, message: "erreur lors de la création" })
+              );
+          })
+          .catch((error) =>
+            res
+              .status(500)
+              .json({ error, message: "erreur lors de l'encryption" })
+          );
+      }
     })
     .catch((error) =>
-      res.status(500).json({ error, message: "erreur lors de l'encryption" })
+      res
+        .status(500)
+        .json({ error, message: "erreur lors du check d'existance" })
     );
 };
 
