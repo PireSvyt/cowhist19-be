@@ -6,25 +6,15 @@ const jwt = require("jsonwebtoken");
 // https://www.makeuseof.com/nodejs-bcrypt-hash-verify-salt-password/
 
 exports.signup = (req, res, next) => {
-  console.log(
-    "user.signup " +
-      req.body.name +
-      " " +
-      req.body.login +
-      " " +
-      req.body.password
-  );
+  const reqbody = { ...req.body };
+  console.log("user.signup " + reqbody);
 
   bcrypt
     .hash(req.body.password, 10) //process.env.BCRYPT_KEY)
     .then((hash) => {
       console.log("user.signup hash : " + hash);
-
-      const user = new User({
-        name: req.body.name,
-        login: req.body.login,
-        password: hash,
-      });
+      reqbody.password = hash;
+      const user = new User(reqbody);
 
       console.log("user.signup user : " + user);
 
