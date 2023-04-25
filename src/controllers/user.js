@@ -6,27 +6,57 @@ const jwt = require("jsonwebtoken");
 // https://www.makeuseof.com/nodejs-bcrypt-hash-verify-salt-password/
 
 exports.signup = (req, res, next) => {
-  const reqbody = { ...req.body };
-  console.log("user.signup " + reqbody);
+  console.log(
+    "user.signup " +
+      { ...req.body.login } +
+      " " +
+      { ...req.body.password } +
+      " " +
+      { ...req.body.name }
+  );
 
-  bcrypt
-    .hash(req.body.password, 10) //process.env.BCRYPT_KEY)
-    .then((hash) => {
-      console.log("user.signup hash : " + hash);
-      reqbody.password = hash;
-      const user = new User(reqbody);
+  // User existence check
+  User.findOne({ login: req.body.login })
+    .then((user) => {
+      if (user) {
+        return res.status(409).json({ message: "utilisateur déjà existant" });
+      } else {
+        // Password encryption
+        bcrypt
+          .hash(req.body.password, 10)
+          .then((hash) => {
+            console.log("user.signup hash : " + hash);
 
-      console.log("user.signup user : " + user);
+            // User creation
+            const user = new User({
+              name: { ...req.body.name },
+              login: { ...req.body.login },
+              password: hash,
+            });
 
-      user
-        .save()
-        .then(res.status(201).json({ message: "ustilisateur créé" }))
-        .catch((error) =>
-          res.status(400).json({ error, message: "erreur lors de la création" })
-        );
+            console.log("user.signup user : " + user);
+
+            // User saving
+            user
+              .save()
+              .then(res.status(201).json({ message: "ustilisateur créé" }))
+              .catch((error) =>
+                res
+                  .status(400)
+                  .json({ error, message: "erreur lors de la création" })
+              );
+          })
+          .catch((error) =>
+            res
+              .status(500)
+              .json({ error, message: "erreur lors de l'encryption" })
+          );
+      }
     })
     .catch((error) =>
-      res.status(500).json({ error, message: "erreur lors de l'encryption" })
+      res
+        .status(500)
+        .json({ error, message: "erreur lors du check d'existance" })
     );
 };
 
