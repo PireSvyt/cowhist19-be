@@ -60,7 +60,11 @@ exports.login = (req, res, next) => {
             }),
           });
         })
-        .catch((error) => res.status(500).json({ error, message: "erreur lors du compare }));
+        .catch((error) =>
+          res.status(500).json({ error, message: "erreur lors du compare" })
+        );
     })
-    .catch((error) => res.status(500).json({ error, message: "erreur lors de la recherche" }));
+    .catch((error) =>
+      res.status(500).json({ error, message: "erreur lors de la recherche" })
+    );
 };
