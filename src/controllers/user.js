@@ -29,8 +29,8 @@ exports.signup = (req, res, next) => {
 
             // User creation
             const user = new User({
-              name: { ...req.body.name },
-              login: { ...req.body.login },
+              name: req.body.name,
+              login: req.body.login,
               password: hash,
             });
 
