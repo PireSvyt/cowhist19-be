@@ -3,17 +3,18 @@ const app = express();
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 
+const userRoutes = require("./routes/user");
+
 //await mongoose.connect("your_mongo_url", (err, db) => {
 //console.log("MongoDB Connected....");
 //});
 
 // CONNECT MONGO
-let DB_PW = "CunoSBF8sWbMs5Ux";
 let DB_ROOT = "cowhist19-pariscluster.n4sn6uh.mongodb.net/";
 let DB_ENV = process.env.NODE_ENV === "production" ? "prod" : "preprod";
 let DB_URL = DB_ROOT & DB_ENV & "?retryWrites=true&w=majority";
 mongoose
-  .connect("mongodb+srv://savoyatp:" + DB_PW + "@" + DB_URL, {
+  .connect("mongodb+srv://savoyatp:" + process.env.DB_PW + "@" + DB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -44,28 +45,14 @@ app.get("/", (req, res) => {
 
 app.listen(3000, () => console.log(`Server running on 3000`));
 
-app.post("/login", async (req, res) => {
-  try {
-    const { userlogin, password } = req.body;
-    const user = await User.findOne({ userlogin });
-    if (!user) {
-      return res.json({ msg: "Please enter a valid userlogin" });
-    }
-    const accessToken = jwt.sign({ userlogin, id: user._id }, JWT_SECRET, {
-      expiresIn: process.env.NODE_ENV === "production" ? "6h" : "2 days",
-    });
-    res.json({ msg: "User logged in!", accessToken });
-  } catch (err) {
-    console.log(err);
-    res.status(503).json({ msg: "Server error!" });
-  }
-});
+// USER
+app.use("/user", userRoutes);
 
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   if (token === null) return res.status(401).json({ msg: "Not Authorized" });
-  jwt.verify(token, JWT_SECRET, (err, user) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) return res.status(401).json({ msg: err });
     req.user = user;
     next();
