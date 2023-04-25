@@ -91,7 +91,7 @@ exports.details = (req, res, next) => {
   var status = 500;
   Game.findOne({ _id: req.params.id })
     .then((game) => {
-      if (!game) {
+      if (game !== undefined) {
         status = 200; // OK
         res.status(status).json({
           status: status,
