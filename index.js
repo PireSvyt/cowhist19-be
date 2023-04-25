@@ -36,7 +36,7 @@ app.use((req, res, next) => {
 
 //
 app.get("/", (req, res) => {
-  res.send("<h1>Cowhist19</h1><br>" & DB_URL);
+  res.send("<h1>Cowhist19</h1><br>" & process.env.DB_URL);
 });
 
 app.listen(3000, () => console.log(`Server running on 3000`));
