@@ -3,7 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 
-const userRoutes = require("./routes/user");
+const userRoutes = require("./src/routes/user");
 
 //await mongoose.connect("your_mongo_url", (err, db) => {
 //console.log("MongoDB Connected....");
