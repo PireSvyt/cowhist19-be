@@ -3,6 +3,8 @@ const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+// https://www.makeuseof.com/nodejs-bcrypt-hash-verify-salt-password/
+
 exports.signup = (req, res, next) => {
   console.log(
     "user.signup " +
@@ -14,7 +16,7 @@ exports.signup = (req, res, next) => {
   );
 
   bcrypt
-    .hash(req.body.password, process.env.BCRYPT_KEY)
+    .hash(req.body.password, 10) //process.env.BCRYPT_KEY)
     .then((hash) => {
       console.log("user.signup hash : " + hash);
 
@@ -45,7 +47,7 @@ exports.login = (req, res, next) => {
         return res.status(401).json({ message: "utilisateur non trouvé" });
       }
       bcrypt
-        .compare()
+        .compare(req.body.password, user.password)
         .then((valid) => {
           if (!valid) {
             return res.status(401).json({ message: "password incorrect" });
@@ -58,7 +60,7 @@ exports.login = (req, res, next) => {
             }),
           });
         })
-        .catch((error) => res.status(500).json({ error }));
+        .catch((error) => res.status(500).json({ error, message: "erreur lors du compare }));
     })
-    .catch((error) => res.status(500).json({ error }));
+    .catch((error) => res.status(500).json({ error, message: "erreur lors de la recherche" }));
 };
