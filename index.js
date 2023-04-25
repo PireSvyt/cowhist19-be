@@ -5,10 +5,6 @@ const jwt = require("jsonwebtoken");
 
 const userRoutes = require("./src/routes/user");
 
-//await mongoose.connect("your_mongo_url", (err, db) => {
-//console.log("MongoDB Connected....");
-//});
-
 // CONNECT MONGO
 let DB_ROOT = "cowhist19-pariscluster.n4sn6uh.mongodb.net/";
 let DB_ENV = process.env.NODE_ENV === "production" ? "prod" : "preprod";
