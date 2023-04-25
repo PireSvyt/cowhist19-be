@@ -6,7 +6,14 @@ const userSchema = mongoose.Schema({
   login: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   status: { type: String, required: true },
-  tables: { type: [], required: false },
+  tables: {
+    type: [
+      {
+        id: { type: String },
+      },
+    ],
+    required: false,
+  },
 });
 
 userSchema.plugin(uniqueValidator);

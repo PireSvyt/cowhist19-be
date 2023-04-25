@@ -108,9 +108,9 @@ exports.authenticate = (req, res, next) => {
 };
 
 exports.requesttoken = (req, res, next) => {
-  return res.status(500).json({ message: "NOT YET IN PLACE" });
+  return res.status(500).json({ message: "TODO auth.requesttoken" });
 };
 
 exports.resetpw = (req, res, next) => {
-  return res.status(500).json({ message: "NOT YET IN PLACE" });
+  return res.status(500).json({ message: "TODO auth.resetpw" });
 };
