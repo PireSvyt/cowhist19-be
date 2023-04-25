@@ -1,9 +1,12 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 
 const userRoutes = require("./src/routes/user");
+
+console.log("DB_URL : " + process.env.DB_URL);
 
 // CONNECT MONGO
 mongoose
@@ -36,7 +39,7 @@ app.use((req, res, next) => {
 
 //
 app.get("/", (req, res) => {
-  res.send("<h1>Cowhist19</h1><br>" & DB_URL);
+  res.send("<h1>Cowhist19</h1>");
 });
 
 app.listen(3000, () => console.log(`Server running on 3000`));
