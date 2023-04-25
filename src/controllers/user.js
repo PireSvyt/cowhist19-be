@@ -3,7 +3,7 @@ const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-// https://www.makeuseof.com/nodejs-bcrypt-hash-verify-salt-password/
+// BCRYPT https://www.makeuseof.com/nodejs-bcrypt-hash-verify-salt-password/
 
 exports.signup = (req, res, next) => {
   console.log(
