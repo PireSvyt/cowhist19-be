@@ -16,17 +16,26 @@ exports.signup = (req, res, next) => {
   bcrypt
     .hash(req.body.password, process.env.BCRYPT_KEY)
     .then((hash) => {
+      console.log("user.signup hash : " + hash);
+
       const user = new User({
         name: req.body.name,
         login: req.body.login,
         password: hash,
       });
+
+      console.log("user.signup user : " + user);
+
       user
         .save()
         .then(res.status(201).json({ message: "ustilisateur créé" }))
-        .catch((error) => res.status(400).json({ error }));
+        .catch((error) =>
+          res.status(400).json({ error, message: "erreur lors de la création" })
+        );
     })
-    .catch((error) => res.status(500).json({ error }));
+    .catch((error) =>
+      res.status(500).json({ error, message: "erreur lors de l'encryption" })
+    );
 };
 
 exports.login = (req, res, next) => {
