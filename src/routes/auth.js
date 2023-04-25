@@ -5,7 +5,7 @@ const authCtrl = require("../controllers/auth");
 router.post("/signup", authCtrl.signup);
 router.post("/login", authCtrl.login);
 
-router.post("/requesttoken", userCtrl.requesttoken);
-router.post("/resetpw", userCtrl.resetpw);
+router.post("/requesttoken", authCtrl.requesttoken);
+router.post("/resetpw", authCtrl.resetpw);
 
 module.exports = router;
