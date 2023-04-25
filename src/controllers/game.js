@@ -36,8 +36,8 @@ exports.save = (req, res, next) => {
     // Modify
     console.log("game to modify");
     console.log(req.body);
-    let game = new Tabble({ ...req.body });
-    Tabble.updateOne({ _id: game._id }, game)
+    let game = new Game({ ...req.body });
+    Game.updateOne({ _id: game._id }, game)
       .then(() => {
         console.log("game modified");
         status = 200;
@@ -62,7 +62,6 @@ exports.save = (req, res, next) => {
 };
 
 exports.delete = (req, res, next) => {
-  // TODO : delete from table
   console.log("game.delete");
   // Initialize
   var status = 500;
@@ -90,7 +89,6 @@ exports.details = (req, res, next) => {
   console.log("game.details");
   // Initialize
   var status = 500;
-
   Game.findOne({ _id: req.params.id })
     .then((game) => {
       status = 200; // OK

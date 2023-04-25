@@ -10,14 +10,6 @@ const tableSchema = mongoose.Schema({
     ],
     required: true,
   },
-  games: {
-    type: [
-      {
-        id: { type: String },
-      },
-    ],
-    required: true,
-  },
 });
 
 module.exports = mongoose.model("Table", tableSchema);
