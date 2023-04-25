@@ -9,8 +9,9 @@ const jwt = require("jsonwebtoken");
 
 // CONNECT MONGO
 let DB_PW = "CunoSBF8sWbMs5Ux";
-let DB_URL =
-  "cowhist19-pariscluster.n4sn6uh.mongodb.net/test?retryWrites=true&w=majority"; //process.env.DB_URL
+let DB_ROOT = "cowhist19-pariscluster.n4sn6uh.mongodb.net/";
+let DB_ENV = process.env.NODE_ENV === "production" ? "prod" : "preprod";
+let DB_URL = DB_ROOT & DB_ENV & "?retryWrites=true&w=majority";
 mongoose
   .connect("mongodb+srv://savoyatp:" + DB_PW + "@" + DB_URL, {
     useNewUrlParser: true,
@@ -45,12 +46,12 @@ app.listen(3000, () => console.log(`Server running on 3000`));
 
 app.post("/login", async (req, res) => {
   try {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
+    const { userlogin, password } = req.body;
+    const user = await User.findOne({ userlogin });
     if (!user) {
-      return res.json({ msg: "Please enter a valid username" });
+      return res.json({ msg: "Please enter a valid userlogin" });
     }
-    const accessToken = jwt.sign({ username, id: user._id }, JWT_SECRET, {
+    const accessToken = jwt.sign({ userlogin, id: user._id }, JWT_SECRET, {
       expiresIn: process.env.NODE_ENV === "production" ? "6h" : "2 days",
     });
     res.json({ msg: "User logged in!", accessToken });
