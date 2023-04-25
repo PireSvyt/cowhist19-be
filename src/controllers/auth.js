@@ -6,15 +6,7 @@ const jwt = require("jsonwebtoken");
 // BCRYPT https://www.makeuseof.com/nodejs-bcrypt-hash-verify-salt-password/
 
 exports.signup = (req, res, next) => {
-  console.log(
-    "user.signup " +
-      req.body.name +
-      " " +
-      req.body.login +
-      " " +
-      req.body.password
-  );
-
+  console.log("auth.signup");
   // User existence check
   User.findOne({ login: req.body.login })
     .then((user) => {
@@ -25,8 +17,6 @@ exports.signup = (req, res, next) => {
         bcrypt
           .hash(req.body.password, 10)
           .then((hash) => {
-            console.log("user.signup hash : " + hash);
-
             // User creation
             const user = new User({
               name: req.body.name,
@@ -34,9 +24,6 @@ exports.signup = (req, res, next) => {
               password: hash,
               status: "registered",
             });
-
-            console.log("user.signup user : " + user);
-
             // User saving
             user
               .save()
@@ -62,6 +49,7 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
+  console.log("auth.login");
   User.findOne({ login: req.body.login })
     .then((user) => {
       if (!user) {
@@ -91,11 +79,9 @@ exports.login = (req, res, next) => {
 };
 
 exports.authenticate = (req, res, next) => {
+  console.log("auth.authenticate");
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
-
-  console.log("auth.authenticateToken token " + token);
-
   if (token === null) {
     return res.status(401).json({ message: "Invalid token" });
   } else {

@@ -3,6 +3,12 @@ const Game = require("../models/Game");
 const User = require("../models/User");
 
 exports.save = (req, res, next) => {
+  /*
+  
+  TODO
+  * check user ids existance
+  
+  */
   console.log("table.save");
   // Initialize
   var status = 500;
