@@ -6,15 +6,13 @@ const jwt = require("jsonwebtoken");
 
 const userRoutes = require("./src/routes/user");
 
-console.log("DB_URL : " + process.env.DB_URL);
-
 // CONNECT MONGO
 mongoose
   .connect(
     "mongodb+srv://savoyatp:" +
       process.env.DB_PW +
       "@" +
-      process.env.DB_URL +
+      process.env.DB_CLUSTER +
       "?retryWrites=true&w=majority",
     {
       useNewUrlParser: true,
