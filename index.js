@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -8,14 +6,14 @@ const jwt = require("jsonwebtoken");
 const userRoutes = require("./src/routes/user");
 
 // CONNECT MONGO
-let DB_ROOT = "cowhist19-pariscluster.n4sn6uh.mongodb.net/";
-let DB_ENV = process.env.NODE_ENV === "production" ? "prod" : "preprod";
-let DB_URL = DB_ROOT & DB_ENV & "?retryWrites=true&w=majority";
 mongoose
-  .connect("mongodb+srv://savoyatp:" + process.env.DB_PW + "@" + DB_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(
+    "mongodb+srv://savoyatp:" + process.env.DB_PW + "@" + process.env.DB_URL,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
   .then(() => console.log("Connexion à MongoDB réussie"))
   .catch((err) => {
     console.log("Connexion à MongoDB échouée");
