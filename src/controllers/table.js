@@ -118,15 +118,25 @@ exports.delete = (req, res, next) => {
     });
 
   // Delete table's games
-  Game.deleteMany({ table: req.params.id }).catch((error) => {
-    status = 400; // OK
-    res.status(status).json({
-      status: status,
-      message: "error on delete table's game",
-      error: error,
+  Game.deleteMany({ table: req.params.id })
+    .catch((error) => {
+      status = 400; // OK
+      res.status(status).json({
+        status: status,
+        message: "error on delete table's game",
+        error: error,
+      });
+      console.error(error);
+    })
+    .catch((error) => {
+      status = 400; // OK
+      res.status(status).json({
+        status: status,
+        message: "error on delete games",
+        error: error,
+      });
+      console.error(error);
     });
-    console.error(error);
-  });
 
   // Delete table
   Table.deleteOne({ _id: req.params.id })
