@@ -17,6 +17,7 @@ exports.signup = (req, res, next) => {
     .hash(req.body.password, process.env.BCRYPT_KEY)
     .then((hash) => {
       const user = new User({
+        name: req.body.name,
         login: req.body.login,
         password: hash,
       });
