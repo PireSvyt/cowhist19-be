@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 
+const authRoutes = require("./src/routes/auth");
 const userRoutes = require("./src/routes/user");
 const authCtrl = require("./src/controllers/auth");
 
@@ -45,9 +46,10 @@ app.get("/", (req, res) => {
 
 app.listen(3000, () => console.log(`Server running on 3000`));
 
-// USER
+// ROUTES
+app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 
-app.get("/dashboard", authCtrl.authenticateToken, (req, res) => {
+app.get("/dashboard", authCtrl.authenticate, (req, res) => {
   res.send("<h1>Welcome to dashboard</h1>");
 });
