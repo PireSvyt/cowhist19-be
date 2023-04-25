@@ -5,10 +5,9 @@ const tableSchema = mongoose.Schema({
   users: {
     type: [
       {
-        id: { type: String },
+        type: String,
       },
     ],
-    required: true,
   },
 });
 

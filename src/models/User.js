@@ -9,10 +9,9 @@ const userSchema = mongoose.Schema({
   tables: {
     type: [
       {
-        id: { type: String },
+        type: String,
       },
     ],
-    required: false,
   },
 });
 
