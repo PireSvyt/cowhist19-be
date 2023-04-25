@@ -91,12 +91,21 @@ exports.details = (req, res, next) => {
   var status = 500;
   Game.findOne({ _id: req.params.id })
     .then((game) => {
-      status = 200; // OK
-      res.status(status).json({
-        status: status,
-        message: "game ok",
-        game: game,
-      });
+      if (!game) {
+        status = 200; // OK
+        res.status(status).json({
+          status: status,
+          message: "game ok",
+          game: game,
+        });
+      } else {
+        status = 101; // Inexisting
+        res.status(status).json({
+          status: status,
+          message: "game ok",
+          game: {},
+        });
+      }
     })
     .catch((error) => {
       status = 400; // OK
