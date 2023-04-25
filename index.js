@@ -5,20 +5,20 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 
 const userRoutes = require("./src/routes/user");
+const authCtrl = require("./src/controllers/auth");
 
 // CONNECT MONGO
+let DB_URL =
+  "mongodb+srv://savoyatp:" +
+  process.env.DB_PW +
+  "@" +
+  process.env.DB_CLUSTER +
+  "?retryWrites=true&w=majority";
 mongoose
-  .connect(
-    "mongodb+srv://savoyatp:" +
-      process.env.DB_PW +
-      "@" +
-      process.env.DB_CLUSTER +
-      "?retryWrites=true&w=majority",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  )
+  .connect(DB_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("Connexion à MongoDB réussie"))
   .catch((err) => {
     console.log("Connexion à MongoDB échouée");
@@ -49,17 +49,6 @@ app.listen(3000, () => console.log(`Server running on 3000`));
 // USER
 app.use("/user", userRoutes);
 
-const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-  if (token === null) return res.status(401).json({ msg: "Not Authorized" });
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) return res.status(401).json({ msg: err });
-    req.user = user;
-    next();
-  });
-};
-
-app.get("/dashboard", authenticateToken, (req, res) => {
+app.get("/dashboard", authCtrl.authenticateToken, (req, res) => {
   res.send("<h1>Welcome to dashboard</h1>");
 });
