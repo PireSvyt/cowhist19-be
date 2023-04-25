@@ -8,18 +8,16 @@ const gameSchema = mongoose.Schema({
   attack: {
     type: [
       {
-        id: { type: String },
+        type: String,
       },
     ],
-    required: true,
   },
   defense: {
     type: [
       {
-        id: { type: String },
+        type: String,
       },
     ],
-    required: true,
   },
 });
 
