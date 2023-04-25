@@ -6,6 +6,7 @@ exports.save = (req, res, next) => {
   TODO
   * check table id existance
   * check user ids existance
+  * only users from the table can do this
   
   */
   console.log("game.save");
@@ -69,6 +70,12 @@ exports.save = (req, res, next) => {
 };
 
 exports.delete = (req, res, next) => {
+  /*
+  
+  TODO
+  * only users from the table can do this
+  
+  */
   console.log("game.delete");
   // Initialize
   var status = 500;
@@ -93,6 +100,12 @@ exports.delete = (req, res, next) => {
 };
 
 exports.details = (req, res, next) => {
+  /*
+  
+  TODO
+  * only users from the table can do this
+  
+  */
   console.log("game.details");
   // Initialize
   var status = 500;

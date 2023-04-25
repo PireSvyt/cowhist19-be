@@ -93,6 +93,14 @@ exports.authenticate = (req, res, next) => {
   }
 };
 
+exports.belongstotable = (req, res, next) => {
+  return res.status(500).json({ message: "TODO auth.belongstotable" });
+};
+
+exports.isadminuser = (req, res, next) => {
+  return res.status(500).json({ message: "TODO auth.isadminuser" });
+};
+
 exports.requesttoken = (req, res, next) => {
   return res.status(500).json({ message: "TODO auth.requesttoken" });
 };
