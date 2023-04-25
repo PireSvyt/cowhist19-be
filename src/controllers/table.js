@@ -7,6 +7,7 @@ exports.save = (req, res, next) => {
   
   TODO
   * check user ids existance
+  * only users from the table can do this
   
   */
   console.log("table.save");
@@ -70,6 +71,12 @@ exports.save = (req, res, next) => {
 };
 
 exports.delete = (req, res, next) => {
+  /*
+  
+  TODO
+  * only users from the table can do this
+  
+  */
   console.log("table.delete");
   // Initialize
   var status = 500;
@@ -160,6 +167,12 @@ exports.delete = (req, res, next) => {
 };
 
 exports.details = (req, res, next) => {
+  /*
+  
+  TODO
+  * only users from the table can do this
+  
+  */
   console.log("game.details");
   // Initialize
   var status = 500;
@@ -197,6 +210,9 @@ exports.history = (req, res, next) => {
     - list : simple list of existing fields without post processing
   * games.index : index of first to retrieve from last one (in time)
   * games.number : number of games to retrive from games.index
+  
+  TODO
+  * only users from the table can do this
   
   */
 
