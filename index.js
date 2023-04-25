@@ -7,7 +7,6 @@ const authRoutes = require("./src/routes/auth");
 const userRoutes = require("./src/routes/user");
 const gameRoutes = require("./src/routes/game");
 const tableRoutes = require("./src/routes/table");
-const authCtrl = require("./src/controllers/auth");
 
 // CONNECT MONGO
 let DB_URL =
@@ -41,11 +40,6 @@ app.use((req, res, next) => {
   next();
 });
 
-//
-app.get("/", (req, res) => {
-  res.send("<h1>Cowhist19</h1>");
-});
-
 app.listen(3000, () => console.log(`Server running on 3000`));
 
 // ROUTES
@@ -54,6 +48,7 @@ app.use("/user", userRoutes);
 app.use("/game", gameRoutes);
 app.use("/table", tableRoutes);
 
-app.get("/dashboard", authCtrl.authenticate, (req, res) => {
-  res.send("<h1>Welcome to dashboard</h1>");
+// Landing
+app.get("/", (req, res) => {
+  res.send("<h1>Cowhist19</h1>");
 });
