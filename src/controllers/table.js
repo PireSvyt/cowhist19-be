@@ -14,12 +14,6 @@ exports.save = (req, res, next) => {
   // Initialize
   var status = 500;
   console.log(req.body);
-  // Prep
-  var users = [];
-  req.body.users.forEach((user) => {
-    users.append(user._id);
-  });
-  req.body.users = users;
   // Save
   if (req.body._id === "" || req.body._id === undefined) {
     console.log("table to create");
@@ -186,18 +180,6 @@ exports.details = (req, res, next) => {
   var message = "";
   Table.findOne({ _id: req.params.id })
     .then((table) => {
-      // Prep
-      const getUsersRes = getUsers(table);
-      table.users = getUsersRes.users;
-      if (getUsersRes.status === 200) {
-        status = 200; // OK
-        message = "table ok";
-      } else {
-        status = getUsersRes.status;
-        message = getUsersRes.message;
-      }
-      console.log("table " + table);
-      // Send
       status = 200; // OK
       res.status(status).json({
         status: status,
@@ -302,41 +284,3 @@ exports.history = (req, res, next) => {
       });
   }
 };
-
-// ENABLERS
-async function getUsers(table) {
-  /*
-  enabler retrieving a dict of users belonging to the table
-  removes 
-  * password
-  * tables
-  */
-  console.log("table.getUsers");
-  var users = {};
-  table.users.forEach((userid) => {
-    User.findById(userid)
-      .then((user) => {
-        // Prep
-        delete user.password;
-        delete user.tables;
-        delete user.login;
-        // Agregate
-        users[userid] = user;
-      })
-      .catch((error) => {
-        console.error(error);
-        return {
-          status: 400,
-          message: "error on find user by id",
-          users: {},
-          error: error,
-        };
-      });
-  });
-  return {
-    status: 200,
-    message: "users ok",
-    users: users,
-    error: error,
-  };
-}

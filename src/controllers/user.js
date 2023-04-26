@@ -81,16 +81,6 @@ exports.details = (req, res, next) => {
     .then((user) => {
       // Prep
       delete user.password;
-      const getTablesRes = getTables(user);
-      user.tables = getTablesRes.tables;
-      if (getTablesRes.status === 200) {
-        status = 200; // OK
-        message = "user ok";
-      } else {
-        status = getTablesRes.status;
-        message = getTablesRes.message;
-      }
-      console.log("user " + user);
       // Send
       res.status(status).json({
         status: status,
@@ -109,33 +99,3 @@ exports.details = (req, res, next) => {
       console.error(error);
     });
 };
-
-// ENABLERS
-async function getTables(user) {
-  /*
-  enabler retrieving a dict of tables user belongs to  
-  */
-  console.log("user.getTables");
-  var tables = {};
-  user.tables.forEach((tableid) => {
-    Table.findById(tableid)
-      .then((table) => {
-        tables[tableid] = table;
-      })
-      .catch((error) => {
-        console.error(error);
-        return {
-          status: 400,
-          message: "error on find table by id",
-          tables: {},
-          error: error,
-        };
-      });
-  });
-  return {
-    status: 200,
-    message: "tables ok",
-    tables: tables,
-    error: error,
-  };
-}
