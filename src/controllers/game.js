@@ -121,23 +121,35 @@ exports.details = (req, res, next) => {
     .then((game) => {
       if (game !== undefined) {
         // Prep
-        const getUsersRes = getUsers(game);
-        console.log("getUsersRes " + getUsersRes);
-        game.users = getUsersRes.users;
-        if (getUsersRes.status === 200) {
-          status = 200; // OK
-          message = "game ok";
-        } else {
-          status = getUsersRes.status;
-          message = getUsersRes.message;
-        }
-        console.log("game " + game);
-        // Send
-        res.status(status).json({
-          status: status,
-          message: message,
-          game: game,
-        });
+        getUsers(game)
+          .then((getUsersRes) => {
+            console.log("getUsersRes " + getUsersRes);
+            game.users = getUsersRes.users;
+            if (getUsersRes.status === 200) {
+              status = 200; // OK
+              message = "game ok";
+            } else {
+              status = getUsersRes.status;
+              message = getUsersRes.message;
+            }
+            console.log("game " + game);
+            // Send
+            res.status(status).json({
+              status: status,
+              message: message,
+              game: game,
+            });
+          })
+          .catch((error) => {
+            status = 400; // OK
+            res.status(status).json({
+              status: status,
+              message: "error on getUsers",
+              game: {},
+              error: error,
+            });
+            console.error(error);
+          });
       } else {
         status = 101; // Inexisting
         res.status(status).json({
