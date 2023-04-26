@@ -84,14 +84,15 @@ exports.details = (req, res, next) => {
   User.findOne({ _id: req.params.id })
     .then((user) => {
       // Prep
-      delete user["password"];
+      let tempuser = user;
+      delete tempuser["password"];
       console.log("user " + user);
       // Send
       status = 200;
       res.status(status).json({
         status: status,
         message: message,
-        user: user,
+        user: tempuser,
       });
     })
     .catch((error) => {
