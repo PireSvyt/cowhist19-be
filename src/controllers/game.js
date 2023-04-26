@@ -1,4 +1,5 @@
 const Game = require("../models/Game");
+const User = require("../models/User");
 
 exports.save = (req, res, next) => {
   /*
@@ -13,7 +14,13 @@ exports.save = (req, res, next) => {
   // Initialize
   var status = 500;
   console.log(req.body);
-  // Name violation check
+  // Prep
+  var users = [];
+  req.body.users.forEach((user) => {
+    delete user.name;
+  });
+  req.body.users = users;
+  // Save
   if (req.body._id === "" || req.body._id === undefined) {
     console.log("game to create");
     // Create
@@ -109,9 +116,21 @@ exports.details = (req, res, next) => {
   console.log("game.details");
   // Initialize
   var status = 500;
+  var message = "";
   Game.findOne({ _id: req.params.id })
     .then((game) => {
       if (game !== undefined) {
+        // Prep
+        const getUsersRes = getUsers(game);
+        game.users = getUsersRes.users;
+        if (getUsersRes.status === 200) {
+          status = 200; // OK
+          message = "game ok";
+        } else {
+          status = getUsersRes.status;
+          message = getUsersRes.message;
+        }
+        // Send
         status = 200; // OK
         res.status(status).json({
           status: status,
@@ -138,3 +157,36 @@ exports.details = (req, res, next) => {
       console.error(error);
     });
 };
+
+// ENABLERS
+function getUsers(game) {
+  /*
+  enabler retrieving a dict of users belonging to the game
+  adds
+  * name
+  
+  */
+  console.log("game.getUsers");
+  game.users.forEach((rawuser) => {
+    User.findById(rawuser.id)
+      .then((user) => {
+        // Prep
+        rawuser.name = user.name;
+      })
+      .catch((error) => {
+        console.error(error);
+        return {
+          status: 400,
+          message: "error on find user by id",
+          users: [],
+          error: error,
+        };
+      });
+  });
+  return {
+    status: 200,
+    message: "users ok",
+    users: game.users,
+    error: error,
+  };
+}
