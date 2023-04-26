@@ -71,7 +71,11 @@ exports.stats = (req, res, next) => {
 
 exports.details = (req, res, next) => {
   /*
-  provides user details removing password
+  provides user details 
+  
+  removes 
+  * password
+  
   */
   console.log("user.details");
   // Initialize
@@ -80,9 +84,10 @@ exports.details = (req, res, next) => {
   User.findOne({ _id: req.params.id })
     .then((user) => {
       // Prep
-      delete user.password;
+      user.delete(password);
       console.log("user " + user);
       // Send
+      status = 200;
       res.status(status).json({
         status: status,
         message: message,
