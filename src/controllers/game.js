@@ -120,36 +120,12 @@ exports.details = (req, res, next) => {
   Game.findOne({ _id: req.params.id })
     .then((game) => {
       if (game !== undefined) {
-        // Prep
-        getUsers(game)
-          .then((getUsersRes) => {
-            console.log("getUsersRes " + getUsersRes);
-            game.users = getUsersRes.users;
-            if (getUsersRes.status === 200) {
-              status = 200; // OK
-              message = "game ok";
-            } else {
-              status = getUsersRes.status;
-              message = getUsersRes.message;
-            }
-            console.log("game " + game);
-            // Send
-            res.status(status).json({
-              status: status,
-              message: message,
-              game: game,
-            });
-          })
-          .catch((error) => {
-            status = 400; // OK
-            res.status(status).json({
-              status: status,
-              message: "error on getUsers",
-              game: {},
-              error: error,
-            });
-            console.error(error);
-          });
+        status = 200;
+        res.status(status).json({
+          status: status,
+          message: message,
+          game: game,
+        });
       } else {
         status = 101; // Inexisting
         res.status(status).json({
@@ -172,36 +148,3 @@ exports.details = (req, res, next) => {
 };
 
 // ENABLERS
-async function getUsers(game) {
-  /*
-  enabler retrieving a dict of users belonging to the game
-  adds
-  * name
-  
-  */
-  console.log("game.getUsers");
-  console.log("game " + game);
-  game.users
-    .forEach((rawuser) => {
-      let user = await User.findById(rawuser.id).catch((error) => {
-      status = 400; // OK
-      res.status(status).json({
-        status: status,
-        message: "error on find user",
-        users: [],
-        error: error,
-      });
-      console.error(error);
-    });
-      // Prep
-      rawuser.name = user.name;
-    })
-    .then(() => {
-      return {
-        status: 200,
-        message: "users ok",
-        users: game.users,
-        error: error,
-      };
-    });
-}
