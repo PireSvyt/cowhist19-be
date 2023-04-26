@@ -86,7 +86,6 @@ exports.details = (req, res, next) => {
       // Prep
       let tempuser = {};
       tempuser.name = user.name;
-      tempuser.login = user.login;
       tempuser.tables = user.tables;
       tempuser.status = user.status;
       console.log("tempuser " + tempuser);

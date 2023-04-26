@@ -263,6 +263,7 @@ exports.history = (req, res, next) => {
       .where(where)
       .exec()
       .then((games) => {
+        console.log("games " + games);
         games.sort(compare);
         games = games.splice(req.body.games.index, req.body.games.number);
         status = 200; // OK
