@@ -196,6 +196,7 @@ exports.details = (req, res, next) => {
         status = getUsersRes.status;
         message = getUsersRes.message;
       }
+      console.log("table " + table);
       // Send
       status = 200; // OK
       res.status(status).json({

@@ -130,6 +130,7 @@ exports.details = (req, res, next) => {
           status = getUsersRes.status;
           message = getUsersRes.message;
         }
+        console.log("game " + game)
         // Send
         res.status(status).json({
           status: status,

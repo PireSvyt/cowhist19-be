@@ -90,6 +90,7 @@ exports.details = (req, res, next) => {
         status = getTablesRes.status;
         message = getTablesRes.message;
       }
+      console.log("user " + user);
       // Send
       res.status(status).json({
         status: status,
