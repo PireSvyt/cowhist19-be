@@ -241,7 +241,7 @@ exports.history = (req, res, next) => {
     switch (req.body.need) {
       case "list":
         filters = { table: req.params.id };
-        fields = "contract outcome attack defense date";
+        fields = "contract outcome users date";
         break;
       default:
         status = 403; // Access denied

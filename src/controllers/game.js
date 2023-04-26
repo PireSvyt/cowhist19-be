@@ -1,5 +1,4 @@
 const Game = require("../models/Game");
-const User = require("../models/User");
 
 exports.save = (req, res, next) => {
   /*

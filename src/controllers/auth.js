@@ -11,7 +11,37 @@ exports.signup = (req, res, next) => {
   User.findOne({ login: req.body.login })
     .then((user) => {
       if (user) {
-        return res.status(409).json({ message: "utilisateur déjà existant" });
+        // Invited
+        if (user.status === "invited") {
+          bcrypt
+            .hash(req.body.password, 10)
+            .then((hash) => {
+              // User edit
+              user.name = req.body.name;
+              user.password = hash;
+              user.status = "registered";
+              // User saving
+              user
+                .save()
+                .then(
+                  res
+                    .status(201)
+                    .json({ id: user._id, message: "ustilisateur enregistré" })
+                )
+                .catch((error) =>
+                  res
+                    .status(400)
+                    .json({ error, message: "erreur lors de la création" })
+                );
+            })
+            .catch((error) =>
+              res
+                .status(500)
+                .json({ error, message: "erreur lors de l'encryption" })
+            );
+        } else {
+          return res.status(409).json({ message: "utilisateur déjà existant" });
+        }
       } else {
         // Password encryption
         bcrypt
@@ -27,7 +57,11 @@ exports.signup = (req, res, next) => {
             // User saving
             user
               .save()
-              .then(res.status(201).json({ message: "ustilisateur créé" }))
+              .then(
+                res
+                  .status(201)
+                  .json({ id: user._id, message: "ustilisateur créé" })
+              )
               .catch((error) =>
                 res
                   .status(400)
