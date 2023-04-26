@@ -110,7 +110,7 @@ exports.details = (req, res, next) => {
 };
 
 // ENABLERS
-function getTables(user) {
+async function getTables(user) {
   /*
   enabler retrieving a dict of tables user belongs to  
   */

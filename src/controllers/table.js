@@ -15,11 +15,11 @@ exports.save = (req, res, next) => {
   var status = 500;
   console.log(req.body);
   // Prep
-  var users = []
+  var users = [];
   req.body.users.forEach((user) => {
-    users.append(user._id)
-  })
-  req.body.users = users
+    users.append(user._id);
+  });
+  req.body.users = users;
   // Save
   if (req.body._id === "" || req.body._id === undefined) {
     console.log("table to create");
@@ -183,7 +183,7 @@ exports.details = (req, res, next) => {
   console.log("game.details");
   // Initialize
   var status = 500;
-  var message = ""
+  var message = "";
   Table.findOne({ _id: req.params.id })
     .then((table) => {
       // Prep
@@ -303,7 +303,7 @@ exports.history = (req, res, next) => {
 };
 
 // ENABLERS
-function getUsers(table) {
+async function getUsers(table) {
   /*
   enabler retrieving a dict of users belonging to the table
   removes 

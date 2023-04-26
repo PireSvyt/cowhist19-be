@@ -131,17 +131,16 @@ exports.details = (req, res, next) => {
           message = getUsersRes.message;
         }
         // Send
-        status = 200; // OK
         res.status(status).json({
           status: status,
-          message: "game ok",
+          message: message,
           game: game,
         });
       } else {
         status = 101; // Inexisting
         res.status(status).json({
           status: status,
-          message: "game ok",
+          message: "inexisting game",
           game: {},
         });
       }
@@ -159,7 +158,7 @@ exports.details = (req, res, next) => {
 };
 
 // ENABLERS
-function getUsers(game) {
+async function getUsers(game) {
   /*
   enabler retrieving a dict of users belonging to the game
   adds
