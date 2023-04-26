@@ -5,17 +5,11 @@ const gameSchema = mongoose.Schema({
   date: { type: Date, required: true },
   contract: { type: String, required: true },
   outcome: { type: Number, required: true },
-  attack: {
+  users: {
     type: [
       {
-        type: String,
-      },
-    ],
-  },
-  defense: {
-    type: [
-      {
-        type: String,
+        id: { type: String, required: true },
+        role: { type: String, required: true },
       },
     ],
   },
