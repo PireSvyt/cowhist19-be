@@ -182,20 +182,9 @@ async function getUsers(game) {
   console.log("game.getUsers");
   game.users
     .forEach((rawuser) => {
-      User.findById(rawuser.id)
-        .then((user) => {
-          // Prep
-          rawuser.name = user.name;
-        })
-        .catch((error) => {
-          console.error(error);
-          return {
-            status: 400,
-            message: "error on find user by id",
-            users: [],
-            error: error,
-          };
-        });
+      const user = await User.findById(rawuser.id)
+      // Prep
+      rawuser.name = user.name;
     })
     .then(() => {
       return {
