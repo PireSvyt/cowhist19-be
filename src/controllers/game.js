@@ -122,6 +122,7 @@ exports.details = (req, res, next) => {
       if (game !== undefined) {
         // Prep
         const getUsersRes = getUsers(game);
+        console.log("getUsersRes " + getUsersRes);
         game.users = getUsersRes.users;
         if (getUsersRes.status === 200) {
           status = 200; // OK
@@ -130,7 +131,7 @@ exports.details = (req, res, next) => {
           status = getUsersRes.status;
           message = getUsersRes.message;
         }
-        console.log("game " + game)
+        console.log("game " + game);
         // Send
         res.status(status).json({
           status: status,
@@ -167,26 +168,29 @@ async function getUsers(game) {
   
   */
   console.log("game.getUsers");
-  game.users.forEach((rawuser) => {
-    User.findById(rawuser.id)
-      .then((user) => {
-        // Prep
-        rawuser.name = user.name;
-      })
-      .catch((error) => {
-        console.error(error);
-        return {
-          status: 400,
-          message: "error on find user by id",
-          users: [],
-          error: error,
-        };
-      });
-  });
-  return {
-    status: 200,
-    message: "users ok",
-    users: game.users,
-    error: error,
-  };
+  game.users
+    .forEach((rawuser) => {
+      User.findById(rawuser.id)
+        .then((user) => {
+          // Prep
+          rawuser.name = user.name;
+        })
+        .catch((error) => {
+          console.error(error);
+          return {
+            status: 400,
+            message: "error on find user by id",
+            users: [],
+            error: error,
+          };
+        });
+    })
+    .then(() => {
+      return {
+        status: 200,
+        message: "users ok",
+        users: game.users,
+        error: error,
+      };
+    });
 }
