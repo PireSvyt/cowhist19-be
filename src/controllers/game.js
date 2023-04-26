@@ -14,12 +14,6 @@ exports.save = (req, res, next) => {
   // Initialize
   var status = 500;
   console.log(req.body);
-  // Prep
-  var users = [];
-  req.body.users.forEach((user) => {
-    delete user.name;
-  });
-  req.body.users = users;
   // Save
   if (req.body._id === "" || req.body._id === undefined) {
     console.log("game to create");

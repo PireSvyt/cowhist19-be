@@ -11,6 +11,6 @@ router.post("/changelogin", authCtrl.authenticate, userCtrl.changelogin);
 router.post("/merge", authCtrl.authenticate, userCtrl.merge);
 router.get("/tables/:id", authCtrl.authenticate, userCtrl.tables);
 router.get("/stats/:id", authCtrl.authenticate, userCtrl.stats);
-router.get("/details/:id", authCtrl.authenticate, userCtrl.details);
+router.get("/:id", authCtrl.authenticate, userCtrl.details);
 
 module.exports = router;
