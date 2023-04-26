@@ -85,8 +85,8 @@ exports.details = (req, res, next) => {
     .then((user) => {
       // Prep
       let tempuser = user;
-      delete tempuser["password"];
-      console.log("user " + user);
+      delete tempuser.password;
+      console.log("tempuser " + tempuser);
       // Send
       status = 200;
       res.status(status).json({
