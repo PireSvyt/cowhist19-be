@@ -84,7 +84,7 @@ exports.details = (req, res, next) => {
   User.findOne({ _id: req.params.id })
     .then((user) => {
       // Prep
-      user.delete(password);
+      user.delete("password");
       console.log("user " + user);
       // Send
       status = 200;
