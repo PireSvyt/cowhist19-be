@@ -180,9 +180,19 @@ async function getUsers(game) {
   
   */
   console.log("game.getUsers");
+  console.log("game " + game);
   game.users
     .forEach((rawuser) => {
-      const user = await User.findById(rawuser.id)
+      let user = await User.findById(rawuser.id).catch((error) => {
+      status = 400; // OK
+      res.status(status).json({
+        status: status,
+        message: "error on find user",
+        users: [],
+        error: error,
+      });
+      console.error(error);
+    });
       // Prep
       rawuser.name = user.name;
     })
