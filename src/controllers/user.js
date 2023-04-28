@@ -5,11 +5,16 @@ exports.invite = (req, res, next) => {
   create invited user if not yet existing
   */
   console.log("user.invite");
+  let status = 500;
   // User existence check
   User.findOne({ login: req.body.login })
     .then((user) => {
       if (user) {
-        return res.status(202).json({ message: "utilisateur déjà existant" });
+        status = 202;
+        return res.status(status).json({
+          status: status,
+          message: "utilisateur déjà existant",
+        });
       } else {
         // User creation
         let name = req.body.login.split("@")[0];
@@ -22,44 +27,54 @@ exports.invite = (req, res, next) => {
         // Saving
         user
           .save()
-          .then(
-            res.status(201).json({
+          .then(() => {
+            status = 201;
+            res.status(status).json({
+              status: status,
               id: user._id,
               message: "ustilisateur créé",
-            })
-          )
-          .catch((error) =>
-            res
-              .status(400)
-              .json({ error, message: "erreur lors de la création" })
-          );
+            });
+          })
+          .catch((error) => {
+            status = 400;
+            res.status(status).json({
+              status: status,
+              error,
+              message: "erreur lors de la création",
+            });
+          });
       }
     })
-    .catch((error) =>
-      res
-        .status(500)
-        .json({ error, message: "erreur lors du check d'existance" })
-    );
+    .catch((error) => {
+      status = 500;
+      res.status(status).json({
+        status: status,
+        error,
+        message: "erreur lors du check d'existance",
+      });
+    });
 };
 
 exports.close = (req, res, next) => {
-  return res.status(500).json({ message: "TODO user.close" });
+  return res.status(500).json({ status: 500, message: "TODO user.close" });
 };
 
 exports.anonymize = (req, res, next) => {
-  return res.status(500).json({ message: "TODO user.anonymize" });
+  return res.status(500).json({ status: 500, message: "TODO user.anonymize" });
 };
 
 exports.changepw = (req, res, next) => {
-  return res.status(500).json({ message: "TODO user.changepw" });
+  return res.status(500).json({ status: 500, message: "TODO user.changepw" });
 };
 
 exports.changelogin = (req, res, next) => {
-  return res.status(500).json({ message: "TODO user.changelogin" });
+  return res
+    .status(500)
+    .json({ status: 500, message: "TODO user.changelogin" });
 };
 
 exports.merge = (req, res, next) => {
-  return res.status(500).json({ message: "TODO user.merge" });
+  return res.status(500).json({ status: 500, message: "TODO user.merge" });
 };
 
 exports.tables = (req, res, next) => {
@@ -92,7 +107,7 @@ exports.tables = (req, res, next) => {
 };
 
 exports.stats = (req, res, next) => {
-  return res.status(500).json({ message: "TODO user.stats" });
+  return res.status(500).json({ status: 500, message: "TODO user.stats" });
 };
 
 exports.details = (req, res, next) => {
