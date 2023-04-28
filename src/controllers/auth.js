@@ -24,7 +24,7 @@ exports.signup = (req, res, next) => {
               user
                 .save()
                 .then(() => {
-                  status = 201;
+                  status = 200;
                   res.status(status).json({
                     status: status,
                     id: user._id,
