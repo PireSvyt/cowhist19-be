@@ -49,7 +49,7 @@ exports.signup = (req, res, next) => {
               });
             });
         } else {
-          status = 500;
+          status = 409;
           return res
             .status(status)
             .json({ status: status, message: "utilisateur déjà existant" });
@@ -148,13 +148,11 @@ exports.login = (req, res, next) => {
     })
     .catch((error) => {
       status = 500;
-      res
-        .status(status)
-        .json({
-          status: status,
-          error,
-          message: "erreur lors de la recherche",
-        });
+      res.status(status).json({
+        status: status,
+        error,
+        message: "erreur lors de la recherche",
+      });
     });
 };
 
