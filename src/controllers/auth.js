@@ -160,28 +160,34 @@ exports.login = (req, res, next) => {
 
 exports.assess = (req, res, next) => {
   console.log("auth.assess");
+  console.log("req.body.token");
+  console.log(req.body.token);
   let status = 500;
-  // Extract data from token
-
   // Assess
   if (req.body.token === null || req.body.token === undefined) {
     status = 401;
-    return res
-      .status(status)
-      .json({ status: status, message: "Invalid token" });
+    return res.status(status).json({
+      status: status,
+      token: req.body.token,
+      message: "Invalid token",
+    });
   } else {
     jwt.verify(req.body.token, process.env.JWT_SECRET, (err, user) => {
       if (err) {
         status = 404;
-        return res
-          .status(status)
-          .json({ status: status, message: "Unauthorized", error: err });
+        return res.status(status).json({
+          status: status,
+          message: "Unauthorized",
+          error: err,
+        });
       }
       // Token is valid
       status = 200;
-      return res
-        .status(status)
-        .json({ status: status, message: "Valid token", user: user });
+      return res.status(status).json({
+        status: status,
+        message: "Valid token",
+        user: user,
+      });
     });
   }
 };
