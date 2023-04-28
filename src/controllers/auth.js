@@ -133,7 +133,7 @@ exports.login = (req, res, next) => {
             message: "user connecté",
             userId: user._id,
             token: jwt.sign(
-              { status: status, userId: user._id },
+              { status: user.status, userId: user._id, login: req.body.login },
               process.env.JWT_SECRET,
               {
                 expiresIn: "24h",
@@ -156,6 +156,34 @@ exports.login = (req, res, next) => {
         message: "erreur lors de la recherche",
       });
     });
+};
+
+exports.assess = (req, res, next) => {
+  console.log("auth.assess");
+  let status = 500;
+  // Extract data from token
+
+  // Assess
+  if (req.body.token === null || req.body.token === undefined) {
+    status = 401;
+    return res
+      .status(status)
+      .json({ status: status, message: "Invalid token" });
+  } else {
+    jwt.verify(req.body.token, process.env.JWT_SECRET, (err, user) => {
+      if (err) {
+        status = 404;
+        return res
+          .status(status)
+          .json({ status: status, message: "Unauthorized", error: err });
+      }
+      // Token is valid
+      status = 200;
+      return res
+        .status(status)
+        .json({ status: status, message: "Valid token", user: user });
+    });
+  }
 };
 
 exports.authenticate = (req, res, next) => {
