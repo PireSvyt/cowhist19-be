@@ -24,7 +24,7 @@ exports.signup = (req, res, next) => {
               user
                 .save()
                 .then(() => {
-                  status = 201;
+                  status = 200;
                   res.status(status).json({
                     status: status,
                     id: user._id,
@@ -49,7 +49,8 @@ exports.signup = (req, res, next) => {
               });
             });
         } else {
-          status = 500;
+          // Already existing
+          status = 409;
           return res
             .status(status)
             .json({ status: status, message: "utilisateur déjà existant" });
@@ -148,13 +149,11 @@ exports.login = (req, res, next) => {
     })
     .catch((error) => {
       status = 500;
-      res
-        .status(status)
-        .json({
-          status: status,
-          error,
-          message: "erreur lors de la recherche",
-        });
+      res.status(status).json({
+        status: status,
+        error,
+        message: "erreur lors de la recherche",
+      });
     });
 };
 
