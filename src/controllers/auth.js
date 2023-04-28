@@ -49,6 +49,7 @@ exports.signup = (req, res, next) => {
               });
             });
         } else {
+          // Already existing
           status = 409;
           return res
             .status(status)
