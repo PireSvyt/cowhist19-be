@@ -129,6 +129,7 @@ exports.login = (req, res, next) => {
           }
           status = 200;
           res.status(status).json({
+            status: status,
             message: "user connecté",
             userId: user._id,
             token: jwt.sign(
