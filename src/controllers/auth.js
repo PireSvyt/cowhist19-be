@@ -113,7 +113,7 @@ exports.login = (req, res, next) => {
   User.findOne({ login: req.body.login })
     .then((user) => {
       if (!user) {
-        status = 401;
+        status = 404;
         return res
           .status(status)
           .json({ status: status, message: "utilisateur non trouvé" });
