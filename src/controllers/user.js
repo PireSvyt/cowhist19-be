@@ -17,9 +17,8 @@ exports.invite = (req, res, next) => {
         });
       } else {
         // User creation
-        let name = req.body.login.split("@")[0];
         const user = new User({
-          name: name,
+          name: req.body.name,
           login: req.body.login,
           password: "NONE SO FAR",
           status: "invited",
