@@ -133,7 +133,12 @@ exports.login = (req, res, next) => {
             message: "user connecté",
             userId: user._id,
             token: jwt.sign(
-              { status: user.status, userId: user._id, login: req.body.login },
+              {
+                status: user.status,
+                id: user._id,
+                pseudo: user.name,
+                login: req.body.login,
+              },
               process.env.JWT_SECRET,
               {
                 expiresIn: "24h",
