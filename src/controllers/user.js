@@ -127,8 +127,10 @@ exports.details = (req, res, next) => {
       // Prep
       let tempuser = {};
       tempuser.name = user.name;
+      tempuser.login = user.login;
       tempuser.tables = user.tables;
       tempuser.status = user.status;
+      tempuser.priviledges = user.priviledges;
       console.log("tempuser " + tempuser);
       // Send
       status = 200;

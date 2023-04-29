@@ -13,6 +13,13 @@ const userSchema = mongoose.Schema({
       },
     ],
   },
+  priviledges: {
+    type: [
+      {
+        type: String,
+      },
+    ],
+  },
 });
 
 userSchema.plugin(uniqueValidator);
