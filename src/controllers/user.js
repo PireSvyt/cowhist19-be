@@ -13,6 +13,7 @@ exports.invite = (req, res, next) => {
         status = 202;
         return res.status(status).json({
           status: status,
+          user: { id: user._id, name: user.name, status: user.status },
           message: "utilisateur déjà existant",
         });
       } else {
@@ -30,7 +31,7 @@ exports.invite = (req, res, next) => {
             status = 201;
             res.status(status).json({
               status: status,
-              id: user._id,
+              user: { id: user._id, name: user.name, status: user.status },
               message: "ustilisateur créé",
             });
           })
