@@ -123,7 +123,8 @@ exports.save = (req, res, next) => {
             // Add table to user
             User.findOne({ _id: player })
               .then((user) => {
-                user.tables.push(table._id);
+                console.log("found user " + user.login);
+                user.tables.push(tableToSave._id);
                 user.save();
               })
               .catch((error) => {
