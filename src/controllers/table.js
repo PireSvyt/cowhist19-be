@@ -124,12 +124,13 @@ exports.save = (req, res, next) => {
           if (!table.users.includes(player)) {
             console.log("player to add " + player);
             // Add table to user
+            userCtrl.addtable(player, tableToSave._id);
+            /*
             User.findOne({ _id: player })
               .then((user) => {
                 console.log("found user " + user.login);
-                userCtrl.addtable(player, tableToSave._id);
-                //user.tables.push(tableToSave._id);
-                //user.save();
+                user.tables.push(tableToSave._id);
+                user.save();
               })
               .catch((error) => {
                 status = 400; // OK
@@ -140,7 +141,7 @@ exports.save = (req, res, next) => {
                   table: req.body,
                 });
                 console.error(error);
-              });
+              });*/
           }
         });
       })

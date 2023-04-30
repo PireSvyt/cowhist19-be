@@ -81,7 +81,7 @@ exports.addtable = (userid, idToAdd) => {
   /*
   add a table to a user tables
   */
-  console.log("user.addtable");
+  console.log("user.addtable " + idToAdd + " to " + userid);
   User.findOne({ _id: userid }).then((user) => {
     // Edit
     user.tables.push(idToAdd);
@@ -89,15 +89,15 @@ exports.addtable = (userid, idToAdd) => {
   });
 };
 
-exports.removetable = (userid, idToAdd) => {
+exports.removetable = (userid, idToRemove) => {
   /*
   removes a table from a user tables
   */
-  console.log("user.removetable");
+  console.log("user.removetable " + idToRemove + " from " + userid);
   User.findOne({ _id: userid }).then((user) => {
     // Edit
     let sublist = user.tables.filter((tableid) => {
-      return tableid !== idToAdd;
+      return tableid !== idToRemove;
     });
     user.tables = sublist;
     user.save();
