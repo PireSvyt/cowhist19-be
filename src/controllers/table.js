@@ -13,7 +13,7 @@ exports.save = (req, res, next) => {
   console.log("table.save");
   // Initialize
   var status = 500;
-  console.log(req.body);
+  //console.log(req.body);
   // Save
   if (req.body._id === "" || req.body._id === undefined) {
     console.log("table to create");
@@ -76,7 +76,7 @@ exports.save = (req, res, next) => {
     // Modify
     console.log("table to modify");
     console.log(req.body);
-    let tableToSave = new Table({ ...req.body });
+    let tableToSave = { ...req.body };
     // Prep
     let tableUsers = [];
     tableToSave.users.forEach((user) => {
