@@ -23,7 +23,7 @@ exports.save = (req, res, next) => {
     // Prep
     let tableUsers = [];
     table.users.forEach((user) => {
-      tableUsers.push(user.id);
+      tableUsers.push(user._id);
     });
     table.users = tableUsers;
     // Save
@@ -56,7 +56,7 @@ exports.save = (req, res, next) => {
     // Prep
     let tableUsers = [];
     table.users.forEach((user) => {
-      tableUsers.push(user.id);
+      tableUsers.push(user._id);
     });
     table.users = tableUsers;
     // Save
