@@ -85,7 +85,7 @@ exports.addtable = (userid, idToAdd) => {
   User.findOne({ _id: userid }).then((user) => {
     // Edit
     user.tables.push(idToAdd);
-    user.save();
+    User.updateOne({ _id: userid });
   });
 };
 
@@ -100,7 +100,7 @@ exports.removetable = (userid, idToRemove) => {
       return tableid !== idToRemove;
     });
     user.tables = sublist;
-    user.save();
+    User.updateOne({ _id: userid });
   });
 };
 
