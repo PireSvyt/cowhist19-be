@@ -17,7 +17,7 @@ exports.signup = (req, res, next) => {
             .hash(req.body.password, 10)
             .then((hash) => {
               // User edit
-              user.name = req.body.name;
+              user.pseudo = req.body.pseudo;
               user.password = hash;
               user.status = "registered";
               // User saving
@@ -136,7 +136,7 @@ exports.login = (req, res, next) => {
               {
                 status: user.status,
                 id: user._id,
-                pseudo: user.name,
+                pseudo: user.pseudo,
                 login: req.body.login,
               },
               process.env.JWT_SECRET,

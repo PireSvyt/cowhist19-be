@@ -15,13 +15,13 @@ exports.invite = (req, res, next) => {
         status = 202;
         return res.status(status).json({
           status: status,
-          user: { _id: user._id, name: user.name, status: user.status },
+          user: { _id: user._id, pseudo: user.pseudo, status: user.status },
           message: "utilisateur déjà existant",
         });
       } else {
         // User creation
         const user = new User({
-          name: req.body.name,
+          pseudo: req.body.pseudo,
           login: req.body.login,
           password: "NONE SO FAR",
           status: "invited",
@@ -33,7 +33,7 @@ exports.invite = (req, res, next) => {
             status = 201;
             res.status(status).json({
               status: status,
-              user: { _id: user._id, name: user.name, status: user.status },
+              user: { _id: user._id, pseudo: user.pseudo, status: user.status },
               message: "ustilisateur créé",
             });
           })
@@ -158,7 +158,7 @@ exports.details = (req, res, next) => {
     .then((user) => {
       // Prep
       let tempuser = {};
-      tempuser.name = user.name;
+      tempuser.pseudo = user.pseudo;
       tempuser.login = user.login;
       tempuser.tables = user.tables;
       tempuser.status = user.status;
