@@ -97,8 +97,9 @@ exports.save = (req, res, next) => {
             console.log("player to remove " + player);
             User.findOne({ _id: player })
               .then((user) => {
+                console.log("found user " + user.login);
                 let sublist = user.tables.filter((tableid) => {
-                  return tableid !== table._id;
+                  return tableid !== tableToSave._id;
                 });
                 user.tables = sublist;
                 user.save();
@@ -113,10 +114,6 @@ exports.save = (req, res, next) => {
                 });
                 console.error(error);
               });
-          } else {
-            console.log(
-              "player " + player + " already in " + tableToSave.users
-            );
           }
         });
         // Check users to be added
