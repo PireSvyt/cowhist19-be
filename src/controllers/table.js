@@ -88,7 +88,8 @@ exports.save = (req, res, next) => {
     // Manage table to users
     Table.findOne({ _id: tableToSave._id })
       .then((table) => {
-        console.log("found table " + tableToSave._id);
+        console.log("found table " + table._id);
+        console.log(table);
         // Check users to be removed
         table.users.forEach((player) => {
           if (!tableToSave.users.includes(player)) {
@@ -112,6 +113,10 @@ exports.save = (req, res, next) => {
                 });
                 console.error(error);
               });
+          } else {
+            console.log(
+              "player " + player + " already in " + tableToSave.users
+            );
           }
         });
         // Check users to be added
