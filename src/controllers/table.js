@@ -96,7 +96,7 @@ exports.save = (req, res, next) => {
           if (!tableToSave.users.includes(player)) {
             // Remove table from user
             console.log("player to remove " + player);
-            userCtrl.addtable(player, tableToSave._id);
+            userCtrl.removetable(player, tableToSave._id);
             /*
             User.findOne({ _id: player })
               .then((user) => {
@@ -127,8 +127,9 @@ exports.save = (req, res, next) => {
             User.findOne({ _id: player })
               .then((user) => {
                 console.log("found user " + user.login);
-                user.tables.push(tableToSave._id);
-                user.save();
+                userCtrl.addtable(player, tableToSave._id);
+                //user.tables.push(tableToSave._id);
+                //user.save();
               })
               .catch((error) => {
                 status = 400; // OK
