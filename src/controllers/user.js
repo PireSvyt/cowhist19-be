@@ -1,4 +1,6 @@
+import jwt_decode from "jwt-decode";
 const User = require("../models/User");
+const Table = require("../models/Table");
 
 exports.invite = (req, res, next) => {
   /*
@@ -84,6 +86,31 @@ exports.tables = (req, res, next) => {
   console.log("user.tables");
   // Initialize
   var status = 500;
+
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  const decodedToken = jwt_decode(token);
+
+  Table.find({ users: decodedToken.id })
+    .then((tables) => {
+      status = 200; // OK
+      res.status(status).json({
+        status: status,
+        message: "tables ok",
+        tables: tables,
+      });
+    })
+    .catch((error) => {
+      status = 400; // OK
+      res.status(status).json({
+        status: status,
+        message: "error on find",
+        tables: [],
+        error: error,
+      });
+      console.error(error);
+    });
+  /*
   User.findOne({ _id: req.params.id })
     .then((user) => {
       status = 200; // OK
@@ -103,6 +130,7 @@ exports.tables = (req, res, next) => {
       });
       console.error(error);
     });
+    */
 };
 
 exports.stats = (req, res, next) => {
