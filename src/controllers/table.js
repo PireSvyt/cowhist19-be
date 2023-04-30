@@ -17,22 +17,25 @@ exports.save = (req, res, next) => {
   // Save
   if (req.body._id === "" || req.body._id === undefined) {
     console.log("table to create");
-    // Create
     delete req.body._id;
-    const table = new Table({ ...req.body });
     // Prep
+    let tableToSave = { ...req.body };
     let tableUsers = [];
-    table.users.forEach((user) => {
+    tableToSave.users.forEach((user) => {
       tableUsers.push(user._id);
     });
-    table.users = tableUsers;
+    tableToSave.users = tableUsers;
+    console.log("table to save ");
+    console.log(tableToSave);
+    // Generate
+    tableToSave = new Table(tableToSave);
     // Add table to users
-    table.users.forEach((player) => {
+    tableToSave.users.forEach((player) => {
       console.log("adding table to " + player);
       User.findOne({ _id: player })
         .then((user) => {
           console.log("found player " + user.login);
-          user.tables.push(table._id);
+          user.tables.push(tableToSave._id);
           user.save();
         })
         .catch((error) => {
@@ -47,7 +50,7 @@ exports.save = (req, res, next) => {
         });
     });
     // Save
-    table
+    tableToSave
       .save()
       .then(() => {
         console.log("table created");
@@ -56,7 +59,7 @@ exports.save = (req, res, next) => {
         res.status(status).json({
           status: status,
           message: "table created",
-          id: table._id,
+          id: tableToSave._id,
         });
       })
       .catch((error) => {
@@ -80,6 +83,8 @@ exports.save = (req, res, next) => {
       tableUsers.push(user._id);
     });
     tableToSave.users = tableUsers;
+    console.log("table to save ");
+    console.log(tableToSave);
     // Manage table to users
     Table.findOne({ _id: tableToSave._id })
       .then((table) => {
