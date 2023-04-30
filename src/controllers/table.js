@@ -96,7 +96,15 @@ exports.save = (req, res, next) => {
           if (!tableToSave.users.includes(player)) {
             // Remove table from user
             console.log("player to remove " + player);
-            userCtrl.removetable(player, tableToSave._id);
+            User.findOne({ _id: player }).then((user) => {
+              // Edit
+              let sublist = user.tables.filter((tableid) => {
+                return tableid !== tableToSave._id;
+              });
+              user.tables = sublist;
+              user.save();
+            });
+            //userCtrl.removetable(player, tableToSave._id);
             /*
             User.findOne({ _id: player })
               .then((user) => {
@@ -124,7 +132,12 @@ exports.save = (req, res, next) => {
           if (!table.users.includes(player)) {
             console.log("player to add " + player);
             // Add table to user
-            userCtrl.addtable(player, tableToSave._id);
+            User.findOne({ _id: player }).then((user) => {
+              // Edit
+              user.tables.push(tableToSave._id);
+              user.save();
+            });
+            //userCtrl.addtable(player, tableToSave._id);
             /*
             User.findOne({ _id: player })
               .then((user) => {
