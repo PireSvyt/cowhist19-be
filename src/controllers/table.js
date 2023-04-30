@@ -17,8 +17,8 @@ exports.save = (req, res, next) => {
   // Save
   if (req.body._id === "" || req.body._id === undefined) {
     console.log("table to create");
-    delete req.body._id;
     // Prep
+    delete req.body._id;
     let tableToSave = { ...req.body };
     let tableUsers = [];
     tableToSave.users.forEach((user) => {
