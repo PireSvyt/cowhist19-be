@@ -84,7 +84,6 @@ exports.tables = (req, res, next) => {
   console.log("user.tables");
   // Initialize
   var status = 500;
-  var tables = {};
   User.findOne({ _id: req.params.id })
     .then((user) => {
       status = 200; // OK

@@ -26,11 +26,30 @@ exports.save = (req, res, next) => {
       tableUsers.push(user._id);
     });
     table.users = tableUsers;
+    // Add table to users
+    table.users.forEach((player) => {
+      User.findOne({ _id: player })
+        .then((user) => {
+          user.tables.push(table._id);
+          user.save();
+        })
+        .catch((error) => {
+          status = 400; // OK
+          res.status(status).json({
+            status: status,
+            message: "error on user update",
+            error: error,
+            table: req.body,
+          });
+          console.error(error);
+        });
+    });
     // Save
     table
       .save()
       .then(() => {
         console.log("table created");
+        // Response
         status = 201;
         res.status(status).json({
           status: status,
@@ -52,22 +71,83 @@ exports.save = (req, res, next) => {
     // Modify
     console.log("table to modify");
     console.log(req.body);
-    let table = new Table({ ...req.body });
+    let tableToSave = new Table({ ...req.body });
     // Prep
     let tableUsers = [];
-    table.users.forEach((user) => {
+    tableToSave.users.forEach((user) => {
       tableUsers.push(user._id);
     });
-    table.users = tableUsers;
+    tableToSave.users = tableUsers;
+    // Manage table to users
+    Table.findOne({ _id: tableToSave._id })
+      .then((table) => {
+        // Check users to be removed
+        table.users.forEach((player) => {
+          if (!player in tableToSave.users) {
+            // Remove table from user
+            User.findOne({ _id: player })
+              .then((user) => {
+                let sublist = user.tables.filter((tableid) => {
+                  return tableid !== table._id;
+                });
+                user.tables = sublist;
+                user.save();
+              })
+              .catch((error) => {
+                status = 400; // OK
+                res.status(status).json({
+                  status: status,
+                  message: "error on user update",
+                  error: error,
+                  table: req.body,
+                });
+                console.error(error);
+              });
+          }
+        });
+        // Check users to be added
+        tableToSave.users.forEach((player) => {
+          if (!player in table.users) {
+            // Add table to user
+            User.findOne({ _id: player })
+              .then((user) => {
+                user.tables.push(table._id);
+                user.save();
+              })
+              .catch((error) => {
+                status = 400; // OK
+                res.status(status).json({
+                  status: status,
+                  message: "error on user update",
+                  error: error,
+                  table: req.body,
+                });
+                console.error(error);
+              });
+          }
+        });
+      })
+      .catch((error) => {
+        console.log("error on user update");
+        status = 400; // OK
+        res.status(status).json({
+          status: status,
+          message: "error on modify",
+          error: error,
+          table: req.body,
+        });
+        console.error(error);
+      });
+    // Response
     // Save
-    Table.updateOne({ _id: table._id }, table)
+    Table.updateOne({ _id: tableToSave._id }, tableToSave)
       .then(() => {
         console.log("table modified");
         status = 200;
         res.status(status).json({
           status: status,
           message: "table modified",
-          id: req.body.id,
+          id: tableToSave._id,
         });
       })
       .catch((error) => {
