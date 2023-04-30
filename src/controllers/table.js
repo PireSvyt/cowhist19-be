@@ -20,6 +20,13 @@ exports.save = (req, res, next) => {
     // Create
     delete req.body._id;
     const table = new Table({ ...req.body });
+    // Prep
+    let tableUsers = [];
+    table.users.forEach((user) => {
+      tableUsers.push(user.id);
+    });
+    table.users = tableUsers;
+    // Save
     table
       .save()
       .then(() => {
@@ -46,6 +53,13 @@ exports.save = (req, res, next) => {
     console.log("table to modify");
     console.log(req.body);
     let table = new Table({ ...req.body });
+    // Prep
+    let tableUsers = [];
+    table.users.forEach((user) => {
+      tableUsers.push(user.id);
+    });
+    table.users = tableUsers;
+    // Save
     Table.updateOne({ _id: table._id }, table)
       .then(() => {
         console.log("table modified");
