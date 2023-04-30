@@ -77,33 +77,6 @@ exports.merge = (req, res, next) => {
   return res.status(500).json({ status: 500, message: "TODO user.merge" });
 };
 
-exports.addtable = (userid, idToAdd) => {
-  /*
-  add a table to a user tables
-  */
-  console.log("user.addtable " + idToAdd + " to " + userid);
-  User.findOne({ _id: userid }).then((user) => {
-    // Edit
-    user.tables.push(idToAdd);
-    user.save();
-  });
-};
-
-exports.removetable = (userid, idToRemove) => {
-  /*
-  removes a table from a user tables
-  */
-  console.log("user.removetable " + idToRemove + " from " + userid);
-  User.findOne({ _id: userid }).then((user) => {
-    // Edit
-    let sublist = user.tables.filter((tableid) => {
-      return tableid !== idToRemove;
-    });
-    user.tables = sublist;
-    user.save();
-  });
-};
-
 exports.tables = (req, res, next) => {
   /*
   provides a dict of tables user belongs to  

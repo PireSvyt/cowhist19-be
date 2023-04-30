@@ -1,7 +1,6 @@
 const Table = require("../models/Table");
 const Game = require("../models/Game");
 const User = require("../models/User");
-const userCtrl = require("../controllers/user");
 
 exports.save = (req, res, next) => {
   /*
@@ -35,7 +34,6 @@ exports.save = (req, res, next) => {
       console.log("adding table to " + player);
       User.findOne({ _id: player })
         .then((user) => {
-          console.log("found player " + user.login);
           user.tables.push(tableToSave._id);
           user.save();
         })
@@ -104,27 +102,6 @@ exports.save = (req, res, next) => {
               user.tables = sublist;
               user.save();
             });
-            //userCtrl.removetable(player, tableToSave._id);
-            /*
-            User.findOne({ _id: player })
-              .then((user) => {
-                console.log("found user " + user.login);
-                let sublist = user.tables.filter((tableid) => {
-                  return tableid !== tableToSave._id;
-                });
-                user.tables = sublist;
-                user.save();
-              })
-              .catch((error) => {
-                status = 400; // OK
-                res.status(status).json({
-                  status: status,
-                  message: "error on user update",
-                  error: error,
-                  table: req.body,
-                });
-                console.error(error);
-              });*/
           }
         });
         // Check users to be added
@@ -137,52 +114,33 @@ exports.save = (req, res, next) => {
               user.tables.push(tableToSave._id);
               user.save();
             });
-            //userCtrl.addtable(player, tableToSave._id);
-            /*
-            User.findOne({ _id: player })
-              .then((user) => {
-                console.log("found user " + user.login);
-                user.tables.push(tableToSave._id);
-                user.save();
-              })
-              .catch((error) => {
-                status = 400; // OK
-                res.status(status).json({
-                  status: status,
-                  message: "error on user update",
-                  error: error,
-                  table: req.body,
-                });
-                console.error(error);
-              });*/
           }
         });
+        // Save
+        Table.updateOne({ _id: tableToSave._id }, tableToSave)
+          .then(() => {
+            console.log("table modified");
+            status = 200;
+            res.status(status).json({
+              status: status,
+              message: "table modified",
+              id: tableToSave._id,
+            });
+          })
+          .catch((error) => {
+            console.log("error on modified");
+            status = 400; // OK
+            res.status(status).json({
+              status: status,
+              message: "error on modify",
+              error: error,
+              table: req.body,
+            });
+            console.error(error);
+          });
       })
       .catch((error) => {
         console.log("error on user update");
-        status = 400; // OK
-        res.status(status).json({
-          status: status,
-          message: "error on modify",
-          error: error,
-          table: req.body,
-        });
-        console.error(error);
-      });
-    // Response
-    // Save
-    Table.updateOne({ _id: tableToSave._id }, tableToSave)
-      .then(() => {
-        console.log("table modified");
-        status = 200;
-        res.status(status).json({
-          status: status,
-          message: "table modified",
-          id: tableToSave._id,
-        });
-      })
-      .catch((error) => {
-        console.log("error on modified");
         status = 400; // OK
         res.status(status).json({
           status: status,
