@@ -62,7 +62,7 @@ exports.signup = (req, res, next) => {
           .then((hash) => {
             // User creation
             const user = new User({
-              name: req.body.name,
+              pseudo: req.body.pseudo,
               login: req.body.login,
               password: hash,
               status: "registered",
