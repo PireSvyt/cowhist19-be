@@ -91,7 +91,7 @@ exports.save = (req, res, next) => {
         console.log("found table " + tableToSave._id);
         // Check users to be removed
         table.users.forEach((player) => {
-          if (!player in tableToSave.users) {
+          if (!tableToSave.users.includes(player)) {
             // Remove table from user
             console.log("player to remove " + player);
             User.findOne({ _id: player })
@@ -116,7 +116,7 @@ exports.save = (req, res, next) => {
         });
         // Check users to be added
         tableToSave.users.forEach((player) => {
-          if (!player in table.users) {
+          if (!table.users.includes(player)) {
             console.log("player to add " + player);
             // Add table to user
             User.findOne({ _id: player })
