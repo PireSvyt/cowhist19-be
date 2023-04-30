@@ -28,8 +28,10 @@ exports.save = (req, res, next) => {
     table.users = tableUsers;
     // Add table to users
     table.users.forEach((player) => {
+      console.log("adding table to " + player);
       User.findOne({ _id: player })
         .then((user) => {
+          console.log("found player " + user.login);
           user.tables.push(table._id);
           user.save();
         })
