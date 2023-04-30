@@ -79,65 +79,29 @@ exports.merge = (req, res, next) => {
 
 exports.addtable = (userid, idToAdd) => {
   /*
-  provides a dict of tables user belongs to  
+  add a table to a user tables
   */
   console.log("user.addtable");
-  // Initialize
-  var status = 500;
-  User.findOne({ _id: userid })
-    .then((user) => {
-      // Edit
-      user.tables.push(idToAdd);
-      user.save();
-      // Response
-      status = 200; // OK
-      res.status(status).json({
-        status: status,
-        message: "table added " + idToAdd,
-      });
-    })
-    .catch((error) => {
-      status = 400; // OK
-      res.status(status).json({
-        status: status,
-        message: "error on find",
-        error: error,
-      });
-      console.error(error);
-    });
+  User.findOne({ _id: userid }).then((user) => {
+    // Edit
+    user.tables.push(idToAdd);
+    user.save();
+  });
 };
 
 exports.removetable = (userid, idToAdd) => {
   /*
-  provides a dict of tables user belongs to  
+  removes a table from a user tables
   */
   console.log("user.removetable");
-  // Initialize
-  var status = 500;
-  User.findOne({ _id: userid })
-    .then((user) => {
-      // Edit
-      let sublist = user.tables.filter((tableid) => {
-        return tableid !== idToAdd;
-      });
-      user.tables = sublist;
-      user.save();
-      // Response
-      status = 200; // OK
-      res.status(status).json({
-        status: status,
-        message: "table removed " + idToAdd,
-      });
-    })
-    .catch((error) => {
-      status = 400; // OK
-      res.status(status).json({
-        status: status,
-        message: "error on find",
-        error: error,
-      });
-      console.error(error);
+  User.findOne({ _id: userid }).then((user) => {
+    // Edit
+    let sublist = user.tables.filter((tableid) => {
+      return tableid !== idToAdd;
     });
+    user.tables = sublist;
+    user.save();
+  });
 };
 
 exports.tables = (req, res, next) => {
