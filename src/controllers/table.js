@@ -95,15 +95,16 @@ exports.save = (req, res, next) => {
           if (!tableToSave.users.includes(player)) {
             // Remove table from user
             console.log("player to remove " + player);
-            User.findOne({ _id: player })
-              .then((user) => {
+            let user = await User.findOne({ _id: player })
+            //User.findOne({ _id: player })
+              //.then((user) => {
                 console.log("found user " + user.login);
                 let sublist = user.tables.filter((tableid) => {
                   return tableid !== tableToSave._id;
                 });
                 user.tables = sublist;
                 user.save();
-              })
+              /*})
               .catch((error) => {
                 status = 400; // OK
                 res.status(status).json({
@@ -113,7 +114,7 @@ exports.save = (req, res, next) => {
                   table: req.body,
                 });
                 console.error(error);
-              });
+              });*/
           }
         });
         // Check users to be added
