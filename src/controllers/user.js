@@ -85,7 +85,7 @@ exports.addtable = async (userid, idToAdd) => {
   User.findOne({ _id: userid }).then((user) => {
     // Edit
     user.tables.push(idToAdd);
-    User.updateOne({ _id: userid });
+    User.updateOne({ _id: userid }, user);
   });
 };
 
@@ -100,7 +100,7 @@ exports.removetable = async (userid, idToRemove) => {
       return tableid !== idToRemove;
     });
     user.tables = sublist;
-    User.updateOne({ _id: userid });
+    User.updateOne({ _id: userid }, user);
   });
 };
 
