@@ -1,6 +1,7 @@
 const Table = require("../models/Table");
 const Game = require("../models/Game");
 const User = require("../models/User");
+const userCtrl = require("../controllers/user");
 
 exports.save = (req, res, next) => {
   /*
@@ -95,16 +96,17 @@ exports.save = (req, res, next) => {
           if (!tableToSave.users.includes(player)) {
             // Remove table from user
             console.log("player to remove " + player);
-            let user = await User.findOne({ _id: player })
-            //User.findOne({ _id: player })
-              //.then((user) => {
+            userCtrl.addtable(player, tableToSave._id);
+            /*
+            User.findOne({ _id: player })
+              .then((user) => {
                 console.log("found user " + user.login);
                 let sublist = user.tables.filter((tableid) => {
                   return tableid !== tableToSave._id;
                 });
                 user.tables = sublist;
                 user.save();
-              /*})
+              })
               .catch((error) => {
                 status = 400; // OK
                 res.status(status).json({

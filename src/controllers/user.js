@@ -77,6 +77,39 @@ exports.merge = (req, res, next) => {
   return res.status(500).json({ status: 500, message: "TODO user.merge" });
 };
 
+exports.addtable = (req, res, next) => {
+  /*
+  provides a dict of tables user belongs to  
+  */
+  console.log("user.addtable");
+  // Initialize
+  var status = 500;
+  User.findOne({ _id: req.params.userid })
+    .then((user) => {
+      // Edit
+      let sublist = user.tables.filter((tableid) => {
+        return tableid !== req.params.tableid;
+      });
+      user.tables = sublist;
+      user.save();
+      // Response
+      status = 200; // OK
+      res.status(status).json({
+        status: status,
+        message: "table added " + req.params.tableid,
+      });
+    })
+    .catch((error) => {
+      status = 400; // OK
+      res.status(status).json({
+        status: status,
+        message: "error on find",
+        error: error,
+      });
+      console.error(error);
+    });
+};
+
 exports.tables = (req, res, next) => {
   /*
   provides a dict of tables user belongs to  
