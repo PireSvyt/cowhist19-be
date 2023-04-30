@@ -149,7 +149,12 @@ exports.details = (req, res, next) => {
   // Initialize
   var status = 500;
   var message = "";
-  User.findOne({ _id: req.params.id })
+
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  const decodedToken = jwt_decode(token);
+
+  User.findOne({ _id: decodedToken.id })
     .then((user) => {
       // Prep
       let tempuser = {};
