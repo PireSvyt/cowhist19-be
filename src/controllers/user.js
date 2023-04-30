@@ -77,7 +77,7 @@ exports.merge = (req, res, next) => {
   return res.status(500).json({ status: 500, message: "TODO user.merge" });
 };
 
-exports.addtable = async (userid, idToAdd) => {
+exports.addtable = (userid, idToAdd) => {
   /*
   add a table to a user tables
   */
@@ -89,7 +89,7 @@ exports.addtable = async (userid, idToAdd) => {
   });
 };
 
-exports.removetable = async (userid, idToRemove) => {
+exports.removetable = (userid, idToRemove) => {
   /*
   removes a table from a user tables
   */
