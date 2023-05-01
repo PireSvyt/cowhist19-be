@@ -257,6 +257,7 @@ exports.details = (req, res, next) => {
   Table.findOne({ _id: req.params.id })
     .then(async (table) => {
       // Get user details
+        console.log(">> ENRICHED TO START ");
       enrichedUsers(table).then((tableToSend) => {
         console.log(">> SEND RESPONSE");
         // Response
