@@ -1,4 +1,6 @@
+const jwt_decode = require('jwt-decode');
 const User = require("../models/User");
+const Table = require("../models/Table");
 
 exports.invite = (req, res, next) => {
   /*
@@ -13,13 +15,17 @@ exports.invite = (req, res, next) => {
         status = 202;
         return res.status(status).json({
           status: status,
-          user: { _id: user._id, name: user.name, status: user.status },
+          user: { 
+            _id: user._id, 
+            pseudo: user.pseudo, 
+            status: user.status 
+          },
           message: "utilisateur déjà existant",
         });
       } else {
         // User creation
         const user = new User({
-          name: req.body.name,
+          pseudo: req.body.pseudo,
           login: req.body.login,
           password: "NONE SO FAR",
           status: "invited",
@@ -31,7 +37,11 @@ exports.invite = (req, res, next) => {
             status = 201;
             res.status(status).json({
               status: status,
-              user: { _id: user._id, name: user.name, status: user.status },
+              user: { 
+                _id: user._id, 
+                pseudo: user.pseudo, 
+                status: user.status 
+              },
               message: "ustilisateur créé",
             });
           })
@@ -84,14 +94,18 @@ exports.tables = (req, res, next) => {
   console.log("user.tables");
   // Initialize
   var status = 500;
-  var tables = {};
-  User.findOne({ _id: req.params.id })
-    .then((user) => {
+
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  const decodedToken = jwt_decode(token);
+
+  Table.find({ users: decodedToken.id })
+    .then((tables) => {
       status = 200; // OK
       res.status(status).json({
         status: status,
-        message: "user ok",
-        tables: user.tables,
+        message: "tables ok",
+        tables: tables,
       });
     })
     .catch((error) => {
@@ -122,22 +136,24 @@ exports.details = (req, res, next) => {
   // Initialize
   var status = 500;
   var message = "";
-  User.findOne({ _id: req.params.id })
+
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  const decodedToken = jwt_decode(token);
+
+  User.findOne({ _id: decodedToken.id })
     .then((user) => {
-      // Prep
-      let tempuser = {};
-      tempuser.name = user.name;
-      tempuser.login = user.login;
-      tempuser.tables = user.tables;
-      tempuser.status = user.status;
-      tempuser.priviledges = user.priviledges;
-      console.log("tempuser " + tempuser);
       // Send
       status = 200;
       res.status(status).json({
         status: status,
         message: message,
-        user: tempuser,
+        user: {
+          pseudo : user.pseudo,
+          login : user.login,
+          status : user.status,
+          priviledges : user.priviledges,
+        },
       });
     })
     .catch((error) => {
