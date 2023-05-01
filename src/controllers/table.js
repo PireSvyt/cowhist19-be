@@ -204,7 +204,7 @@ exports.delete = (req, res, next) => {
     });
 };
 
-function  enrichedUsers  (table) {
+async function enrichedUsers (table) {
   console.log("table.enrichedUsers");
 
   return new Promise((res, rej) => {
@@ -248,7 +248,15 @@ exports.details = (req, res, next) => {
   Table.findOne({ _id: req.params.id })
     .then(async (table) => {
       // Get user details
-      let tableToSend = await enrichedUsers(table)
+      enrichedUsers(table).then((tableToSend) => {
+        // Response
+        status = 200; // OK
+        res.status(status).json({
+          status: status,
+          message: "table ok",
+          table: tableToSend,
+        });
+      })
       /*
       let tableToSend = {
         _id : table._id,
@@ -279,6 +287,7 @@ exports.details = (req, res, next) => {
       })
       tableToSend.users = enrichedUsers;
       */
+     /*
       // Response
       status = 200; // OK
       res.status(status).json({
@@ -286,6 +295,7 @@ exports.details = (req, res, next) => {
         message: "table ok",
         table: tableToSend,
       });
+      */
     })
     .catch((error) => {
       status = 400; // OK
