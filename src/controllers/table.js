@@ -204,6 +204,25 @@ exports.delete = (req, res, next) => {
     });
 };
 
+async function enrichedUser (userid) {
+  console.log("table.enrichedUser");
+
+  return new Promise((res, rej) => {
+    try {
+      let user = await User.findOne({ _id: userid })
+      console.log(">> USER PSEUDO " + user.pseudo);
+      res({
+        _id : user._id, 
+        pseudo : user.pseudo, 
+        login : user.login,
+        status : user.status
+      })
+    } catch (err) {
+      throw err;
+    }
+  }) 
+}
+
 async function enrichedUsers (table) {
   console.log("table.enrichedUsers");
 
@@ -257,7 +276,26 @@ exports.details = (req, res, next) => {
   Table.findOne({ _id: req.params.id })
     .then(async (table) => {
       // Get user details
-        console.log(">> ENRICHED TO START ");
+      let tableToSend = {
+        _id : table._id,
+        name : table_name,
+        users : []
+      };
+      let enrichedUsers = []
+      let user = {}
+      table.users.forEach((player) => {
+      user = await enrichedUser(player)
+      enrichedUsers.push(user)
+      tableToSend.users = enrichedUsers;
+      // Response
+      status = 200; // OK
+      res.status(status).json({
+        status: status,
+        message: "table ok",
+        table: tableToSend,
+      });
+      /*
+      console.log(">> ENRICHED TO START ");
       enrichedUsers(table).then((tableToSend) => {
         console.log(">> SEND RESPONSE");
         // Response
@@ -268,6 +306,7 @@ exports.details = (req, res, next) => {
           table: tableToSend,
         });
       })
+      */
       /*
       let tableToSend = {
         _id : table._id,
