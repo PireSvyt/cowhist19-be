@@ -208,13 +208,13 @@ function  enrichedUsers  (table) {
   console.log("table.enrichedUsers");
 
   return new Promise((res, rej) => {
-      let tableToSend = {
-          _id : table._id,
-          name : table_name,
-          users : []
-        };
-      let enrichedUsers = []
-      try {
+    let tableToSend = {
+        _id : table._id,
+        name : table.name,
+        users : []
+      };
+    let enrichedUsers = []
+    try {
       table.users.forEach((player) => {
           User.findOne({ _id: player }).then((user) => {
           enrichedUsers.push({
@@ -227,9 +227,9 @@ function  enrichedUsers  (table) {
       })
       tableToSend.users = enrichedUsers;
       res(tableToSend)
-      } catch (err) {
+    } catch (err) {
       throw err;
-      }
+    }
   }) 
 }
 
