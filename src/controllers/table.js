@@ -218,7 +218,7 @@ exports.details = (req, res, next) => {
   Table.findOne({ _id: req.params.id })
     .then((table) => {
       // Get user details
-      let tableToSend = {...table};
+      let tableToSend = table;
       let enrichedUsers = []
       table.users.forEach((player) => {
         User.findOne({ _id: player })
