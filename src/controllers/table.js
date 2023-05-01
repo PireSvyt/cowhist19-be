@@ -278,7 +278,7 @@ exports.details = (req, res, next) => {
       // Get user details
       let tableToSend = {
         _id : table._id,
-        name : table_name,
+        name : table.name,
         users : []
       };
       let enrichedUsers = []
