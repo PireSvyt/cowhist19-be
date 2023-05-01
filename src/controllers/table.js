@@ -29,25 +29,6 @@ exports.save = (req, res, next) => {
     console.log(tableToSave);
     // Generate
     tableToSave = new Table(tableToSave);
-    // Add table to users
-    tableToSave.users.forEach((player) => {
-      console.log("adding table to " + player);
-      User.findOne({ _id: player })
-        .then((user) => {
-          user.tables.push(tableToSave._id);
-          user.save();
-        })
-        .catch((error) => {
-          status = 400; // OK
-          res.status(status).json({
-            status: status,
-            message: "error on user update",
-            error: error,
-            table: req.body,
-          });
-          console.error(error);
-        });
-    });
     // Save
     tableToSave
       .save()
@@ -89,33 +70,6 @@ exports.save = (req, res, next) => {
       .then((table) => {
         console.log("found table " + table._id);
         console.log(table);
-        // Check users to be removed
-        table.users.forEach((player) => {
-          if (!tableToSave.users.includes(player)) {
-            // Remove table from user
-            console.log("player to remove " + player);
-            User.findOne({ _id: player }).then((user) => {
-              // Edit
-              let sublist = user.tables.filter((tableid) => {
-                return tableid !== tableToSave._id;
-              });
-              user.tables = sublist;
-              user.save();
-            })
-          }
-        });
-        // Check users to be added
-        tableToSave.users.forEach((player) => {
-          if (!table.users.includes(player)) {
-            console.log("player to add " + player);
-            // Add table to user
-            User.findOne({ _id: player }).then((user) => {
-              // Edit
-              user.tables.push(tableToSave._id);
-              user.save();
-            });
-          }
-        });
         // Save
         Table.updateOne({ _id: tableToSave._id }, tableToSave)
           .then(() => {
@@ -257,13 +211,14 @@ exports.details = (req, res, next) => {
   * only users from the table can do this
   
   */
-  console.log("game.details");
+  console.log("table.details");
   // Initialize
   var status = 500;
   var message = "";
   Table.findOne({ _id: req.params.id })
     .then((table) => {
       // Get user details
+      let tableToSend = {...table};
       let enrichedUsers = []
       table.users.forEach((player) => {
         User.findOne({ _id: player })
@@ -285,14 +240,14 @@ exports.details = (req, res, next) => {
             });
             console.error(error);
           });
-      });
-      table.users = enrichedUsers
+      })
+      tableToSend.users = enrichedUsers;
       // Response
       status = 200; // OK
       res.status(status).json({
         status: status,
         message: "table ok",
-        table: table,
+        table: tableToSend,
       });
     })
     .catch((error) => {
