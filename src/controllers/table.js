@@ -217,15 +217,24 @@ async function enrichedUsers (table) {
     let user = {}
     try {
       table.users.forEach(async (player) => {
+        console.log(">> FOR PLAYER " + player);
         user = await User.findOne({ _id: player })
+        console.log(">> USER PSEUDO " + user.pseudo);
         enrichedUsers.push({
           _id : user._id, 
           pseudo : user.pseudo, 
           login : user.login,
           status : user.status
         });
+        console.log(">> ENRICHED USERS ");
+        console.log(enrichedUsers);
       })
+      console.log(">> END OF FOREACH ");
+      console.log(">> ENRICHED USERS ");
+      console.log(enrichedUsers);
       tableToSend.users = enrichedUsers;
+      console.log(">> TABLE TO SEND ");
+      console.log(tableToSend);
       res(tableToSend)
     } catch (err) {
       throw err;
@@ -249,6 +258,7 @@ exports.details = (req, res, next) => {
     .then(async (table) => {
       // Get user details
       enrichedUsers(table).then((tableToSend) => {
+        console.log(">> SEND RESPONSE");
         // Response
         status = 200; // OK
         res.status(status).json({
