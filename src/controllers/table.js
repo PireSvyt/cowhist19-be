@@ -207,7 +207,7 @@ exports.delete = (req, res, next) => {
 async function enrichedUser (userid) {
   console.log("table.enrichedUser");
 
-  return new Promise((res, rej) => {
+  return new Promise(async (res, rej) => {
     try {
       let user = await User.findOne({ _id: userid })
       console.log(">> USER PSEUDO " + user.pseudo);
@@ -283,10 +283,20 @@ exports.details = (req, res, next) => {
       };
       let enrichedUsers = []
       let user = {}
-      table.users.forEach((player) => {
-      user = await enrichedUser(player)
-      enrichedUsers.push(user)
-      tableToSend.users = enrichedUsers;
+      try {
+        table.users.forEach(async (player) => {
+          console.log(">> ENRICHING PLAYER " + player);
+          user = await enrichedUser(player)
+          enrichedUsers.push(user)
+          console.log(">> ENRICHED USERS ");
+          console.log(enrichedUsers);
+        })
+        tableToSend.users = enrichedUsers;
+        console.log(">> TABLE TO SAVE ");
+        console.log(tableToSend);
+      } catch (err) {
+        console.error(`Something went wrong: ${err}`);
+      }
       // Response
       status = 200; // OK
       res.status(status).json({
