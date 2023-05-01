@@ -207,14 +207,23 @@ exports.delete = (req, res, next) => {
 async function enrichedUser (userid) {
   console.log("table.enrichedUser");
 
-  let user = await User.findOne({ _id: userid })
-  console.log(">> USER PSEUDO " + user.pseudo);
-  res({
-    _id : user._id, 
-    pseudo : user.pseudo, 
-    login : user.login,
-    status : user.status
+  User.findOne({ _id: userid }).then((user) => {
+    console.log(">> USER PSEUDO " + user.pseudo);
+    res({
+      _id : user._id, 
+      pseudo : user.pseudo, 
+      login : user.login,
+      status : user.status
+    })
   })
+  .catch((error) => {
+    res.status(400).json({
+      status: 400,
+      message: "error on find",
+      error: error,
+    });
+    console.error(error);
+  });
     
 }
 
