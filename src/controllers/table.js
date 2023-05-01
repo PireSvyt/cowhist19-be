@@ -214,16 +214,16 @@ async function enrichedUsers (table) {
         users : []
       };
     let enrichedUsers = []
+    let user = {}
     try {
-      table.users.forEach((player) => {
-          User.findOne({ _id: player }).then((user) => {
-          enrichedUsers.push({
-              _id : user._id, 
-              pseudo : user.pseudo, 
-              login : user.login,
-              status : user.status
-              });
-          })
+      table.users.forEach(async (player) => {
+        user = await User.findOne({ _id: player })
+        enrichedUsers.push({
+          _id : user._id, 
+          pseudo : user.pseudo, 
+          login : user.login,
+          status : user.status
+        });
       })
       tableToSend.users = enrichedUsers;
       res(tableToSend)
