@@ -204,10 +204,10 @@ exports.delete = (req, res, next) => {
     });
 };
 
-async function enrichedUser (userid) {
+function enrichedUser (userid) {
   console.log("table.enrichedUser");
 
-  User.findOne({ _id: userid }).then(async (user) => {
+  User.findOne({ _id: userid }).then((user) => {
     console.log(">> USER PSEUDO " + user.pseudo);
     res({
       _id : user._id, 
