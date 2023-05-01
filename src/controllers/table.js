@@ -1,7 +1,7 @@
 const Table = require("../models/Table");
 const Game = require("../models/Game");
 const User = require("../models/User");
-const helpers = require("./helpers");
+//const helpers = require("./helpers");
 
 exports.save = (req, res, next) => {
   /*
@@ -204,6 +204,35 @@ exports.delete = (req, res, next) => {
     });
 };
 
+function  enrichedUsers  (table) {
+  console.log("table.enrichedUsers");
+
+  return new Promise((res, rej) => {
+      let tableToSend = {
+          _id : table._id,
+          name : table_name,
+          users : []
+        };
+      let enrichedUsers = []
+      try {
+      table.users.forEach((player) => {
+          User.findOne({ _id: player }).then((user) => {
+          enrichedUsers.push({
+              _id : user._id, 
+              pseudo : user.pseudo, 
+              login : user.login,
+              status : user.status
+              });
+          })
+      })
+      tableToSend.users = enrichedUsers;
+      res(tableToSend)
+      } catch (err) {
+      throw err;
+      }
+  }) 
+}
+
 exports.details = (req, res, next) => {
   /*
   provides the details of a table
@@ -217,8 +246,13 @@ exports.details = (req, res, next) => {
   var status = 500;
   var message = "";
   Table.findOne({ _id: req.params.id })
-    .then((table) => {
+    .then(async (table) => {
       // Get user details
+      try {
+        let tableToSend = await enrichedUsers(table)
+      } catch (err) {
+          responseService.errorWithMessage(response, err);
+      }
       /*
       let tableToSend = {
         _id : table._id,
@@ -254,7 +288,7 @@ exports.details = (req, res, next) => {
       res.status(status).json({
         status: status,
         message: "table ok",
-        table: helpers.enrichedUsers(table),
+        table: tableToSend,
       });
     })
     .catch((error) => {
