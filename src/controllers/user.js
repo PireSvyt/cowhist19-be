@@ -1,4 +1,4 @@
-import jwt_decode from "jwt-decode";
+const jwt_decode = require('jwt-decode');
 const User = require("../models/User");
 const Table = require("../models/Table");
 
@@ -15,7 +15,11 @@ exports.invite = (req, res, next) => {
         status = 202;
         return res.status(status).json({
           status: status,
-          user: { _id: user._id, pseudo: user.pseudo, status: user.status },
+          user: { 
+            _id: user._id, 
+            pseudo: user.pseudo, 
+            status: user.status 
+          },
           message: "utilisateur déjà existant",
         });
       } else {
@@ -33,7 +37,11 @@ exports.invite = (req, res, next) => {
             status = 201;
             res.status(status).json({
               status: status,
-              user: { _id: user._id, pseudo: user.pseudo, status: user.status },
+              user: { 
+                _id: user._id, 
+                pseudo: user.pseudo, 
+                status: user.status 
+              },
               message: "ustilisateur créé",
             });
           })
@@ -110,27 +118,6 @@ exports.tables = (req, res, next) => {
       });
       console.error(error);
     });
-  /*
-  User.findOne({ _id: req.params.id })
-    .then((user) => {
-      status = 200; // OK
-      res.status(status).json({
-        status: status,
-        message: "user ok",
-        tables: user.tables,
-      });
-    })
-    .catch((error) => {
-      status = 400; // OK
-      res.status(status).json({
-        status: status,
-        message: "error on find",
-        tables: [],
-        error: error,
-      });
-      console.error(error);
-    });
-    */
 };
 
 exports.stats = (req, res, next) => {
@@ -156,20 +143,17 @@ exports.details = (req, res, next) => {
 
   User.findOne({ _id: decodedToken.id })
     .then((user) => {
-      // Prep
-      let tempuser = {};
-      tempuser.pseudo = user.pseudo;
-      tempuser.login = user.login;
-      tempuser.tables = user.tables;
-      tempuser.status = user.status;
-      tempuser.priviledges = user.priviledges;
-      console.log("tempuser " + tempuser);
       // Send
       status = 200;
       res.status(status).json({
         status: status,
         message: message,
-        user: tempuser,
+        user: {
+          pseudo : user.pseudo,
+          login : user.login,
+          status : user.status,
+          priviledges : user.priviledges,
+        },
       });
     })
     .catch((error) => {

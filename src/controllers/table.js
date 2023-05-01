@@ -101,7 +101,7 @@ exports.save = (req, res, next) => {
               });
               user.tables = sublist;
               user.save();
-            });
+            })
           }
         });
         // Check users to be added
@@ -263,6 +263,31 @@ exports.details = (req, res, next) => {
   var message = "";
   Table.findOne({ _id: req.params.id })
     .then((table) => {
+      // Get user details
+      let enrichedUsers = []
+      table.users.forEach((player) => {
+        User.findOne({ _id: player })
+          .then((user) => {
+            enrichedUsers.push({
+              _id : user._id, 
+              pseudo : user.pseudo, 
+              login : user.login,
+              status : user.status
+            });
+          })
+          .catch((error) => {
+            status = 400; // OK
+            res.status(status).json({
+              status: status,
+              message: "error on user enrichment",
+              error: error,
+              table: table,
+            });
+            console.error(error);
+          });
+      });
+      table.users = enrichedUsers
+      // Response
       status = 200; // OK
       res.status(status).json({
         status: status,
