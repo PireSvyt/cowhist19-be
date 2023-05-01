@@ -241,7 +241,7 @@ exports.details = (req, res, next) => {
             console.error(error);
           });
       })
-      tableToSend.users = enrichedUsers
+      tableToSend.users = enrichedUsers;
       // Response
       status = 200; // OK
       res.status(status).json({
