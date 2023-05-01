@@ -248,11 +248,7 @@ exports.details = (req, res, next) => {
   Table.findOne({ _id: req.params.id })
     .then(async (table) => {
       // Get user details
-      try {
-        let tableToSend = await enrichedUsers(table)
-      } catch (err) {
-          responseService.errorWithMessage(response, err);
-      }
+      let tableToSend = await enrichedUsers(table)
       /*
       let tableToSend = {
         _id : table._id,
