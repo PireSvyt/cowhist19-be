@@ -1,6 +1,7 @@
 const Table = require("../models/Table");
 const Game = require("../models/Game");
 const User = require("../models/User");
+const helpers = require("./helpers");
 
 exports.save = (req, res, next) => {
   /*
@@ -218,7 +219,12 @@ exports.details = (req, res, next) => {
   Table.findOne({ _id: req.params.id })
     .then((table) => {
       // Get user details
-      let tableToSend = table;
+      /*
+      let tableToSend = {
+        _id : table._id,
+        name : table_name,
+        users : []
+      };
       let enrichedUsers = []
       table.users.forEach((player) => {
         User.findOne({ _id: player })
@@ -242,12 +248,13 @@ exports.details = (req, res, next) => {
           });
       })
       tableToSend.users = enrichedUsers;
+      */
       // Response
       status = 200; // OK
       res.status(status).json({
         status: status,
         message: "table ok",
-        table: tableToSend,
+        table: helpers.enrichedUsers(table),
       });
     })
     .catch((error) => {
