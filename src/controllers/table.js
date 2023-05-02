@@ -278,21 +278,21 @@ exports.details = (req, res, next) => {
   var message = "";
 
   Table.aggregate( [
-    { $match : { _id: req.params.id } },
     { $lookup:
       {
         from: "Users",
         localField: "users",
         foreignField: "_id",
         as : "players",
-        /*pipeline : [
-          { $project: { 
+        pipeline : [
+          { $match : { _id: req.params.id } },
+          /*{ $project: { 
             _id: 0, 
             pseudo : 0, 
             login : 0, 
             status : 0 
-          }}
-        ]*/
+          }}*/
+        ]
       }
     }
   ])
