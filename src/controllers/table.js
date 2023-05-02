@@ -290,7 +290,7 @@ exports.details = (req, res, next) => {
         from: "User",
         foreignField: "_id",
         as : "players",
-        pipeline : [
+        /*pipeline : [
           { $project: { 
             _id: 0, 
             pseudo : 0, 
@@ -300,7 +300,7 @@ exports.details = (req, res, next) => {
           {
              $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$players", 0 ] }, "$$ROOT" ] } }
           }
-        ]
+        ]*/
       }
     }
   ])
