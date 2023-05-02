@@ -268,16 +268,19 @@ exports.details = (req, res, next) => {
         _id: new mongoose.Types.ObjectId(req.params.id) 
       } },
       { $addToSet: { 
-        userids: new mongoose.Types.ObjectId( { $each: "users" } )
+        userids: { $each: "users" }
       } },
       /*{ $addFields: { 
         _id: new mongoose.Types.ObjectId(req.params.id) 
       } },*/
       { $lookup: { 
         from: 'User',
-        foreignField: '_id', 
+        foreignField: 'userid', 
         localField: 'userids', 
-        as: 'players' 
+        as: 'players',
+        pipeline: [
+          { $set: { "userid": "$_id" } }
+        ]
       } }
     ])
     .then((table) => {
