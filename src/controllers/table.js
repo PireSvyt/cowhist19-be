@@ -216,7 +216,9 @@ exports.details = (req, res, next) => {
   console.log("table.details");
   // Initialize
   var status = 500;
- 
+
+  
+ /*
   Table.findOne({ _id: req.params.id })
     .then((table) => {
       // Get user details
@@ -258,6 +260,36 @@ exports.details = (req, res, next) => {
         error: error,
       });
       console.error(error);
+    });
+    */
+
+   Table.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(req.params.id) } },
+      { $lookup: { 
+        from: 'User', 
+        localField: 'users', 
+        foreignField: '_id', 
+        as: 'players' 
+      }}
+    ])
+    .then((table) => {
+      // Response
+      status = 200; // OK
+      res.status(status).json({
+        status: status,
+        message: "table ok",
+        table: table,
+      });
+    })
+    .catch((error) => {
+      status = 400; // OK
+      console.error(error);
+      res.status(status).json({
+        status: status,
+        message: "error on table find",
+        table: {},
+        error: error,
+      });
     });
 };
 
