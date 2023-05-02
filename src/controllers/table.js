@@ -290,19 +290,15 @@ exports.details = (req, res, next) => {
               foreignField: "_id",
               as: "players",
               pipeline: [
-                { 
-                  $replaceWith: {
-                    $unsetField: {
-                      field: "password",
-                      input: "$$ROOT"
-                    },
-                    $unsetField: {
-                        field: "priviledges",
-                        input: "$$ROOT"
-                    },
-                  } 
+                {
+                  $project: {
+                    _id: 0,
+                    pseudo: 1,
+                    login: 1,
+                    status: 1
+                  }
                 }
-             ],
+              ]
             }
         }
       ])
