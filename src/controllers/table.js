@@ -286,12 +286,15 @@ exports.details = (req, res, next) => {
         as : "players",
         pipeline : [
           { $match : { _id: req.params.id } },
-          /*{ $project: { 
+          { $project: { 
             _id: 0, 
             pseudo : 0, 
             login : 0, 
             status : 0 
-          }}*/
+          }},,
+          {
+             $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$players", 0 ] }, "$$ROOT" ] } }
+          }
         ]
       }
     }
