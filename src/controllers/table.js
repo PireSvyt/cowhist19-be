@@ -278,15 +278,15 @@ exports.details = (req, res, next) => {
   var message = "";
 
   User.aggregate( [
-    { $match : { _id : "_id" } },
+    { $match : { _id : req.params.id } },
     { $lookup:
       {
         from: "Table",
         localField: "_id",
         foreignField: "users",
         as : "players",
-/*        pipeline : [
-          { $project: { 
+        pipeline : [
+          /*{ $project: { 
             _id: 0, 
             pseudo : 0, 
             login : 0, 
@@ -294,8 +294,8 @@ exports.details = (req, res, next) => {
           }},
           {
              $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$players", 0 ] }, "$$ROOT" ] } }
-          }
-        ]*/
+          }*/
+        ]
       }
     }
   ])
