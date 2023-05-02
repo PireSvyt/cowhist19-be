@@ -283,7 +283,7 @@ exports.details = (req, res, next) => {
       console.log("table")
       console.log(table)
       Table.aggregate( [
-        { $match : { _id: req.params.id } },
+        { $match : { _id: table._id } },
         { $lookup:
           {
             from: "Users",
