@@ -284,11 +284,12 @@ exports.details = (req, res, next) => {
     { 
       $match : { _id : new mongoose.Types.ObjectId(req.params.id) }
     },
+    
     { $lookup:
       {
-        localField: "users",
         from: "User",
-        foreignField: "_id",
+        foreignField: "$_id",
+        localField: "users",
         as : "players",
         /*pipeline : [
           { $project: { 
