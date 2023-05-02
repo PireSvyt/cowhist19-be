@@ -297,14 +297,14 @@ exports.details = (req, res, next) => {
     }
   ])
   .then((tableToSend) => {
-    console.log("tableToSend[0]")
-    console.log(tableToSend[0])
+    console.log("tableToSend")
+    console.log(tableToSend)
     // Response
     status = 200; // OK
     res.status(status).json({
       status: status,
       message: "table ok",
-      table: tableToSend[0]
+      table: tableToSend
     });
   })
   .catch((error) => {
