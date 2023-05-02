@@ -286,13 +286,21 @@ exports.details = (req, res, next) => {
               from: "Table",
               localField: "users",
               foreignField: "_id",
-              as: "players"
+              as: "players",
+              pipeline: [
+                { $project: { _id: 0, user: { 
+                  _id: "$_id", 
+                  pseudo: "$pseudo" , 
+                  login: "$login" , 
+                  status: "$status" 
+                } } },
+             ],
             }
         }
       ])
-      .then((table) => {
+      .then((players) => {
         // Merge
-        //table.players = players
+        table.players = players
         // Response
         status = 200; // OK
         res.status(status).json({
