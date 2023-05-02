@@ -279,7 +279,7 @@ exports.details = (req, res, next) => {
 
   Table.findOne({ _id: req.params.id })
     .then( (table) => {
-      Table.aggregate( [
+      table.aggregate( [
         {
           $lookup:
             {
@@ -290,9 +290,9 @@ exports.details = (req, res, next) => {
             }
         }
       ])
-      .then((players) => {
+      .then((table) => {
         // Merge
-        table.players = players
+        //table.players = players
         // Response
         status = 200; // OK
         res.status(status).json({
