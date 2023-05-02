@@ -277,7 +277,7 @@ exports.details = (req, res, next) => {
   var status = 500;
   var message = "";
 
-  Users.aggregate( [
+  User.aggregate( [
     { $lookup:
       {
         from: "Table",
