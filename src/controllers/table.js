@@ -2,10 +2,6 @@ const Table = require("../models/Table");
 const Game = require("../models/Game");
 const User = require("../models/User");
 
-var mongoose = require('mongoose');
-mongoose.promise = require('bluebird');
-mongoose.promise = global.Promise 
-
 exports.save = (req, res, next) => {
   /*
   
@@ -207,67 +203,6 @@ exports.delete = (req, res, next) => {
     });
 };
 
-function enrichedUser (userid) {
-  console.log("table.enrichedUser");
-
-  User.findOne({ _id: userid }).then((user) => {
-    console.log(">> USER PSEUDO " + user.pseudo);
-    res({
-      _id : user._id, 
-      pseudo : user.pseudo, 
-      login : user.login,
-      status : user.status
-    })
-  })
-  .catch((error) => {
-    res.status(400).json({
-      status: 400,
-      message: "error on find",
-      error: error,
-    });
-    console.error(error);
-  });
-    
-}
-
-async function enrichedUsers (table) {
-  console.log("table.enrichedUsers");
-
-  return new Promise((res, rej) => {
-    let tableToSend = {
-        _id : table._id,
-        name : table.name,
-        users : []
-      };
-    let enrichedUsers = []
-    let user = {}
-    try {
-      table.users.forEach(async (player) => {
-        console.log(">> FOR PLAYER " + player);
-        user = await User.findOne({ _id: player })
-        console.log(">> USER PSEUDO " + user.pseudo);
-        enrichedUsers.push({
-          _id : user._id, 
-          pseudo : user.pseudo, 
-          login : user.login,
-          status : user.status
-        });
-        console.log(">> ENRICHED USERS ");
-        console.log(enrichedUsers);
-      })
-      console.log(">> END OF FOREACH ");
-      console.log(">> ENRICHED USERS ");
-      console.log(enrichedUsers);
-      tableToSend.users = enrichedUsers;
-      console.log(">> TABLE TO SEND ");
-      console.log(tableToSend);
-      res(tableToSend)
-    } catch (err) {
-      throw err;
-    }
-  }) 
-}
-
 exports.details = (req, res, next) => {
   /*
   provides the details of a table
@@ -339,8 +274,7 @@ exports.details = (req, res, next) => {
   Table.findOne({ _id: req.params.id })
     .then(async (table) => {
       // Get user details
-      User.find( { _id: table.users }, "pseudo login status" )
-      .exec()
+      User.find( { _id: { $in: table.users } }, "pseudo login status" )
       .Then((users) => {
         // Response
         status = 200; // OK
@@ -375,58 +309,6 @@ exports.details = (req, res, next) => {
       });
       console.error(error);
     });
-
-
-      /*
-      let tableToSend = {
-        _id : table._id,
-        name : table_name,
-        users : []
-      };
-      let enrichedUsers = []
-      table.users.forEach((player) => {
-        User.findOne({ _id: player })
-          .then((user) => {
-            enrichedUsers.push({
-              _id : user._id, 
-              pseudo : user.pseudo, 
-              login : user.login,
-              status : user.status
-            });
-          })
-          .catch((error) => {
-            status = 400; // OK
-            res.status(status).json({
-              status: status,
-              message: "error on user enrichment",
-              error: error,
-              table: table,
-            });
-            console.error(error);
-          });
-      })
-      tableToSend.users = enrichedUsers;
-      */
-     /*
-      // Response
-      status = 200; // OK
-      res.status(status).json({
-        status: status,
-        message: "table ok",
-        table: tableToSend,
-      });
-      *//*
-    })
-    .catch((error) => {
-      status = 400; // OK
-      res.status(status).json({
-        status: status,
-        message: "error on find",
-        table: {},
-        error: error,
-      });
-      console.error(error);
-    });*/
 };
 
 exports.stats = (req, res, next) => {
