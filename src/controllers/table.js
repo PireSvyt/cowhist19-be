@@ -218,7 +218,7 @@ exports.details = (req, res, next) => {
   var status = 500;
  
   Table.findOne({ _id: req.params.id })
-    .then(async (table) => {
+    .then((table) => {
       // Get user details
       let usersObjId = []
       table.users.forEach((userid) => {
