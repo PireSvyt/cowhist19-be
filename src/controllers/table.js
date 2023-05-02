@@ -286,13 +286,10 @@ exports.details = (req, res, next) => {
           $lookup:
             {
               from: "Table",
-              localField: "users",
-              foreignField: "_id",
+              localField: "_id",
+              foreignField: "users",
               as: "players",
               pipeline: [
-                {
-                  $match : { _id : table._id } 
-                },
                 {
                   $project: {
                     _id: 0,
