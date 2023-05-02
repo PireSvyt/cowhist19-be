@@ -277,15 +277,14 @@ exports.details = (req, res, next) => {
   var status = 500;
   var message = "";
 
-  Table.aggregate( [
-    { $match : { _id: req.params.id } },
+  User.aggregate( [
     { $lookup:
       {
-        from: "User",
-        localField: "users",
-        foreignField: "_id",
+        from: "Table",
+        localField: "_id",
+        foreignField: "users",
         as : "players",
-        pipeline : [
+/*        pipeline : [
           { $project: { 
             _id: 0, 
             pseudo : 0, 
@@ -295,7 +294,7 @@ exports.details = (req, res, next) => {
           {
              $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$players", 0 ] }, "$$ROOT" ] } }
           }
-        ]
+        ]*/
       }
     }
   ])
