@@ -281,11 +281,11 @@ exports.details = (req, res, next) => {
     .then( (table) => {
       console.log("table")
       console.log(table)
-      User.aggregate( [
+      Table.aggregate( [
         {
           $lookup:
             {
-              from: "Table",
+              from: "User",
               localField: "users",
               foreignField: "_id",
               as: "players",
