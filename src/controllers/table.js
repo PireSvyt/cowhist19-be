@@ -291,7 +291,7 @@ exports.details = (req, res, next) => {
               as: "players",
               pipeline: [
                 {
-                  $match : { _id : table_id } 
+                  $match : { _id : table._id } 
                 },
                 {
                   $project: {
