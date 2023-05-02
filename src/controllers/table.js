@@ -277,7 +277,24 @@ exports.details = (req, res, next) => {
   var status = 500;
   var message = "";
 
-  User.aggregate( [
+
+  Table.aggregate( [
+    { 
+      $match : { _id : ObjectId(req.params.id) }
+    },
+    { 
+      $project: {
+         users: {
+            $filter: {
+               input: "$items",
+               cond: { $gte: [ "$$item.price", 100 ] },
+               as: "item",
+               limit: 1
+            }
+         }
+      }
+   }
+/*
     { $lookup:
       {
         from: "Table",
@@ -285,8 +302,17 @@ exports.details = (req, res, next) => {
         foreignField: "users",
         as : "players",
         pipeline : [
-          { $match : { _id : req.params.id } },
-          /*{ $project: { 
+          { $project: {
+            items: {
+               $filter: {
+                  input: "$items",
+                  cond: { $gte: [ "$$item.price", 100 ] },
+                  as: "item",
+                  limit: 1
+               }
+            }
+         }}
+          { $project: { 
             _id: 0, 
             pseudo : 0, 
             login : 0, 
@@ -294,10 +320,10 @@ exports.details = (req, res, next) => {
           }},
           {
              $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$players", 0 ] }, "$$ROOT" ] } }
-          }*/
+          }
         ]
       }
-    }
+    }*/
   ])
   .then((tableToSend) => {
     console.log("tableToSend")
