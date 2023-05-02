@@ -300,7 +300,7 @@ exports.details = (req, res, next) => {
       ])
       .then((players) => {
         // Merge
-        table.players = players
+        table["players"] = players
         // Response
         status = 200; // OK
         res.status(status).json({
