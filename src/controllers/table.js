@@ -291,7 +291,7 @@ exports.details = (req, res, next) => {
             pseudo : 0, 
             login : 0, 
             status : 0 
-          }},,
+          }},
           {
              $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$players", 0 ] }, "$$ROOT" ] } }
           }
