@@ -277,36 +277,53 @@ exports.details = (req, res, next) => {
   var status = 500;
   var message = "";
 
-  Table.aggregate( [
-    {
-      $lookup:
+  Table.findOne({ _id: req.params.id })
+    .then( (table) => {
+      Table.aggregate( [
         {
-          from: "User",
-          localField: "users",
-          foreignField: "_id",
-          as: "users"
+          $lookup:
+            {
+              from: "User",
+              localField: "users",
+              foreignField: "_id",
+              as: "players"
+            }
         }
-    }
-  ])
-  .then((table) => {
-    // Response
-    status = 200; // OK
-    res.status(status).json({
-      status: status,
-      message: "table ok",
-      table: table,
+      ])
+      .then((players) => {
+        // Merge
+        table.players = players
+        // Response
+        status = 200; // OK
+        res.status(status).json({
+          status: status,
+          message: "table ok",
+          table: table,
+        });
+      })
+      .catch((error) => {
+        status = 400; // OK
+        res.status(status).json({
+          status: status,
+          message: "error on find",
+          table: {},
+          error: error,
+        });
+        console.error(error);
+      });
+    })
+    .catch((error) => {
+      status = 400; // OK
+      res.status(status).json({
+        status: status,
+        message: "error on find",
+        table: {},
+        error: error,
+      });
+      console.error(error);
     });
-  })
-  .catch((error) => {
-    status = 400; // OK
-    res.status(status).json({
-      status: status,
-      message: "error on find",
-      table: {},
-      error: error,
-    });
-    console.error(error);
-  });
+
+  
 
 
  /*
