@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const Table = require("../models/Table");
 const Game = require("../models/Game");
 const User = require("../models/User");
@@ -214,67 +216,15 @@ exports.details = (req, res, next) => {
   console.log("table.details");
   // Initialize
   var status = 500;
-
-/*
-  Table.aggregate( [
-    { 
-      $match : { _id : new mongoose.Types.ObjectId(req.params.id) }
-    },
-    {
-      $addFields: {
-        'usersIds': {$toObjectId: "users"}  
-      }
-    },    
-    { $lookup:
-      {
-        from: "User",
-        foreignField: "_id",
-        localField: "usersIds",
-        as : "players",
-        pipeline : [
-          { $project: { 
-            _id: 0, 
-            pseudo : 0, 
-            login : 0, 
-            status : 0 
-          }},
-          {
-             $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$players", 0 ] }, "$$ROOT" ] } }
-          }
-        ]
-      }
-    }
-  ])
-  .then((tableToSend) => {
-    console.log("tableToSend")
-    console.log(tableToSend)
-    // Response
-    status = 200; // OK
-    res.status(status).json({
-      status: status,
-      message: "table ok",
-      table: tableToSend
-    });
-  })
-  .catch((error) => {
-    status = 400; // OK
-    res.status(status).json({
-      status: status,
-      message: "error on find",
-      table: {},
-      error: error,
-    });
-    console.error(error);
-  });
-*/
-  
-
-
  
   Table.findOne({ _id: req.params.id })
     .then(async (table) => {
       // Get user details
-      User.find( { _id: { $in: table.users } }, "pseudo login status" )
+      let usersObjId = []
+      table.users.forEach((userid) => {
+        usersObjId.push( new mongoose.Types.ObjectId(userid) )
+      })
+      User.find( { _id: { $in: usersObjId } }, "pseudo login status" )
       .Then((users) => {
         // Response
         status = 200; // OK
