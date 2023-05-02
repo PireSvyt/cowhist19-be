@@ -286,14 +286,14 @@ exports.details = (req, res, next) => {
     },
     {
       $addFields: {
-        '$users': {$toObjectId: "users"}  
+        'usersIds': {$toObjectId: "users"}  
       }
     },    
     { $lookup:
       {
         from: "User",
         foreignField: "_id",
-        localField: "users",
+        localField: "usersIds",
         as : "players",
         /*pipeline : [
           { $project: { 
