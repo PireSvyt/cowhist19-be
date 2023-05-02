@@ -267,7 +267,7 @@ exports.details = (req, res, next) => {
       { $match: { 
         _id: new mongoose.Types.ObjectId(req.params.id) 
       } },
-      { $addFields: { 
+      { $set: { 
         userids: { $each: "users" }
       } },
       /*{ $addFields: { 
