@@ -1,7 +1,6 @@
 const Table = require("../models/Table");
 const Game = require("../models/Game");
 const User = require("../models/User");
-//const helpers = require("./helpers");
 
 exports.save = (req, res, next) => {
   /*
@@ -277,6 +276,40 @@ exports.details = (req, res, next) => {
   // Initialize
   var status = 500;
   var message = "";
+
+  Table.aggregate( [
+    {
+      $lookup:
+        {
+          from: "User",
+          localField: "users",
+          foreignField: "_id",
+          as: "users"
+        }
+    }
+  ])
+  .then((table) => {
+    // Response
+    status = 200; // OK
+    res.status(status).json({
+      status: status,
+      message: "table ok",
+      table: table,
+    });
+  })
+  .catch((error) => {
+    status = 400; // OK
+    res.status(status).json({
+      status: status,
+      message: "error on find",
+      table: {},
+      error: error,
+    });
+    console.error(error);
+  });
+
+
+ /*
   Table.findOne({ _id: req.params.id })
     .then(async (table) => {
       // Get user details
@@ -359,7 +392,7 @@ exports.details = (req, res, next) => {
         message: "table ok",
         table: tableToSend,
       });
-      */
+      *//*
     })
     .catch((error) => {
       status = 400; // OK
@@ -370,7 +403,7 @@ exports.details = (req, res, next) => {
         error: error,
       });
       console.error(error);
-    });
+    });*/
 };
 
 exports.stats = (req, res, next) => {
