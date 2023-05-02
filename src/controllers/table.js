@@ -277,15 +277,15 @@ exports.details = (req, res, next) => {
   var status = 500;
   var message = "";
 
-  User.aggregate( [
+  Table.aggregate( [
+    { $match : { _id: req.params.id } },
     { $lookup:
       {
-        from: "Table",
-        localField: "users",
-        foreignField: "_id",
+        from: "User",
+        localField: "_id",
+        foreignField: "users",
         as : "players",
         pipeline : [
-          { $match : { _id: req.params.id } },
           { $project: { 
             _id: 0, 
             pseudo : 0, 
