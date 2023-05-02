@@ -287,8 +287,8 @@ exports.details = (req, res, next) => {
         { $lookup:
           {
             from: "Users",
-            localField: "users",
-            foreignField: "_id",
+            localField: "_id",
+            foreignField: "users",
             as : "players",
             pipeline : [
               { $project: { 
@@ -301,19 +301,15 @@ exports.details = (req, res, next) => {
           }
         }
       ])
-      .then((players) => {
-        console.log("players")
-        console.log(players)
+      .then((tableToSend) => {
+        console.log("tableToSend")
+        console.log(tableToSend)
         // Response
         status = 200; // OK
         res.status(status).json({
           status: status,
           message: "table ok",
-          table: {
-            _id : table._id,
-            name : table.name,
-            players : players
-          },
+          table: tableToSend
         });
       })
       .catch((error) => {
