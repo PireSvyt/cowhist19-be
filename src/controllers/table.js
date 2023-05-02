@@ -283,17 +283,22 @@ exports.details = (req, res, next) => {
       console.log("table")
       console.log(table)
       Table.aggregate( [
-        {
-          $lookup:
-            {
-              from: "Users",
-              localField: "users",
-              foreignField: "_id",
-              as : "players",
-              pipeline : [
-                { $match: { _id: req.params.id } },
-              ]
-            }
+        { $match : { _id: req.params.id } }
+        { $lookup:
+          {
+            from: "Users",
+            localField: "users",
+            foreignField: "_id",
+            as : "players",
+            pipeline : [
+              { $project: { 
+                _id: 0, 
+                pseudo : 0, 
+                login : 0, 
+                status : 0 
+              } }
+            ]
+          }
         }
       ])
       .then((players) => {
