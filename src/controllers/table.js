@@ -277,6 +277,54 @@ exports.details = (req, res, next) => {
   var status = 500;
   var message = "";
 
+  Table.aggregate( [
+    {
+      $lookup:
+        {
+          from: "User",
+          localField: "users",
+          foreignField: "_id",
+          as: "players",
+          pipeline: [
+            { $match: { _id: req.params.id } },
+            {
+              $project: {
+                _id: 0,
+                pseudo: 1,
+                login: 1,
+                status: 1
+              }
+            }
+          ]
+        }
+    }
+  ])
+  .then((players) => {
+    console.log("players")
+    console.log(players)
+    // Response
+    status = 200; // OK
+    res.status(status).json({
+      status: status,
+      message: "table ok",
+      table: {
+        _id : table._id,
+        name : table.name,
+        players : players
+      },
+    });
+  })
+  .catch((error) => {
+    status = 400; // OK
+    res.status(status).json({
+      status: status,
+      message: "error on find",
+      table: {},
+      error: error,
+    });
+    console.error(error);
+  });
+/*
   Table.findOne({ _id: req.params.id })
     .then( (table) => {
       console.log("table")
@@ -338,7 +386,7 @@ exports.details = (req, res, next) => {
       });
       console.error(error);
     });
-
+*/
   
 
 
