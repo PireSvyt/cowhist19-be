@@ -278,7 +278,6 @@ exports.details = (req, res, next) => {
   var message = "";
 
   User.aggregate( [
-    { $match : { _id : req.params.id } },
     { $lookup:
       {
         from: "Table",
@@ -286,6 +285,7 @@ exports.details = (req, res, next) => {
         foreignField: "users",
         as : "players",
         pipeline : [
+          { $match : { _id : req.params.id } },
           /*{ $project: { 
             _id: 0, 
             pseudo : 0, 
