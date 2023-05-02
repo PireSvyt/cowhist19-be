@@ -281,15 +281,18 @@ exports.details = (req, res, next) => {
     .then( (table) => {
       console.log("table")
       console.log(table)
-      Table.aggregate( [
+      User.aggregate( [
         {
           $lookup:
             {
-              from: "User",
+              from: "Table",
               localField: "users",
               foreignField: "_id",
               as: "players",
               pipeline: [
+                {
+                  $match : { _id : table_id } 
+                },
                 {
                   $project: {
                     _id: 0,
