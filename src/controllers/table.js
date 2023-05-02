@@ -277,9 +277,8 @@ exports.details = (req, res, next) => {
   console.log("table.details");
   // Initialize
   var status = 500;
-  var message = "";
 
-
+/*
   Table.aggregate( [
     { 
       $match : { _id : new mongoose.Types.ObjectId(req.params.id) }
@@ -295,7 +294,7 @@ exports.details = (req, res, next) => {
         foreignField: "_id",
         localField: "usersIds",
         as : "players",
-        /*pipeline : [
+        pipeline : [
           { $project: { 
             _id: 0, 
             pseudo : 0, 
@@ -305,7 +304,7 @@ exports.details = (req, res, next) => {
           {
              $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$players", 0 ] }, "$$ROOT" ] } }
           }
-        ]*/
+        ]
       }
     }
   ])
@@ -330,55 +329,51 @@ exports.details = (req, res, next) => {
     });
     console.error(error);
   });
-
+*/
   
 
 
- /*
+ 
   Table.findOne({ _id: req.params.id })
     .then(async (table) => {
       // Get user details
-      let tableToSend = {
-        _id : table._id,
-        name : table.name,
-        users : []
-      };
-      let enrichedUsers = []
-      let user = {}
-      try {
-        table.users.forEach(async (player) => {
-          console.log(">> ENRICHING PLAYER " + player);
-          user = await enrichedUser(player)
-          enrichedUsers.push(user)
-          console.log(">> ENRICHED USERS ");
-          console.log(enrichedUsers);
-        })
-        tableToSend.users = enrichedUsers;
-        console.log(">> TABLE TO SAVE ");
-        console.log(tableToSend);
-      } catch (err) {
-        console.error(`Something went wrong: ${err}`);
-      }
-      // Response
-      status = 200; // OK
-      res.status(status).json({
-        status: status,
-        message: "table ok",
-        table: tableToSend,
-      });
-      /*
-      console.log(">> ENRICHED TO START ");
-      enrichedUsers(table).then((tableToSend) => {
-        console.log(">> SEND RESPONSE");
+      User.find( { _id: table.users }, "pseudo login status" )
+      .Then((users) => {
         // Response
         status = 200; // OK
         res.status(status).json({
           status: status,
           message: "table ok",
-          table: tableToSend,
+          table: {
+            _id: table._id,
+            name: table.name,
+            users:  users
+          },
         });
       })
-      */
+      .catch((error) => {
+        status = 400; // OK
+        res.status(status).json({
+          status: status,
+          message: "error on user find",
+          table: {},
+          error: error,
+        });
+        console.error(error);
+      });
+    })
+    .catch((error) => {
+      status = 400; // OK
+      res.status(status).json({
+        status: status,
+        message: "error on table find",
+        table: {},
+        error: error,
+      });
+      console.error(error);
+    });
+
+
       /*
       let tableToSend = {
         _id : table._id,
