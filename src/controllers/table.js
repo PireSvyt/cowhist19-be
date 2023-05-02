@@ -2,6 +2,9 @@ const Table = require("../models/Table");
 const Game = require("../models/Game");
 const User = require("../models/User");
 
+const mongoose = require("mongoose");
+const ObjectId = mongoose.Types.ObjectId
+
 exports.save = (req, res, next) => {
   /*
   
