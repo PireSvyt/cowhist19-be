@@ -284,36 +284,13 @@ exports.details = (req, res, next) => {
     { 
       $match : { _id : new mongoose.Types.ObjectId(req.params.id) }
     },
-    { 
-      $project: {
-         users: {
-            $filter: {
-               input: "$items",
-               cond: { $gte: [ "$$item.price", 100 ] },
-               as: "item",
-               limit: 1
-            }
-         }
-      }
-   }
-/*
     { $lookup:
       {
-        from: "Table",
-        localField: "_id",
-        foreignField: "users",
+        localField: "users",
+        from: "User",
+        foreignField: "_id",
         as : "players",
         pipeline : [
-          { $project: {
-            items: {
-               $filter: {
-                  input: "$items",
-                  cond: { $gte: [ "$$item.price", 100 ] },
-                  as: "item",
-                  limit: 1
-               }
-            }
-         }}
           { $project: { 
             _id: 0, 
             pseudo : 0, 
@@ -325,7 +302,7 @@ exports.details = (req, res, next) => {
           }
         ]
       }
-    }*/
+    }
   ])
   .then((tableToSend) => {
     console.log("tableToSend")
