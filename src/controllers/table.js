@@ -3,7 +3,6 @@ const Game = require("../models/Game");
 const User = require("../models/User");
 
 const mongoose = require("mongoose");
-const ObjectId = mongoose.Types.ObjectId
 
 exports.save = (req, res, next) => {
   /*
@@ -283,7 +282,7 @@ exports.details = (req, res, next) => {
 
   Table.aggregate( [
     { 
-      $match : { _id : ObjectId(req.params.id) }
+      $match : { _id : mongoose.Types.ObjectId(req.params.id) }
     },
     { 
       $project: {
