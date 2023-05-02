@@ -278,6 +278,7 @@ exports.details = (req, res, next) => {
   var message = "";
 
   User.aggregate( [
+    { $match : { _id : "_id" } },
     { $lookup:
       {
         from: "Table",
