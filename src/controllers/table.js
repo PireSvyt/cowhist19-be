@@ -281,8 +281,8 @@ exports.details = (req, res, next) => {
     { $lookup:
       {
         from: "Table",
-        localField: "_id",
-        foreignField: "users",
+        localField: "users",
+        foreignField: "_id",
         as : "players",
         pipeline : [
           { $match : { _id: req.params.id } },
