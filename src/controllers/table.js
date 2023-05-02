@@ -264,13 +264,21 @@ exports.details = (req, res, next) => {
     */
 
    Table.aggregate([
-      { $match: { _id: new mongoose.Types.ObjectId(req.params.id) } },
+      { $match: { 
+        _id: new mongoose.Types.ObjectId(req.params.id) 
+      } },
+      { $addToSet: { 
+        userids: new mongoose.Types.ObjectId( { $each: req.params.id } )
+      } },
+      /*{ $addFields: { 
+        _id: new mongoose.Types.ObjectId(req.params.id) 
+      } },*/
       { $lookup: { 
-        from: 'User', 
-        localField: 'users', 
+        from: 'User',
         foreignField: '_id', 
+        localField: 'userids', 
         as: 'players' 
-      }}
+      } }
     ])
     .then((table) => {
       // Response
