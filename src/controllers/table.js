@@ -277,62 +277,46 @@ exports.details = (req, res, next) => {
   var status = 500;
   var message = "";
 
-
-  Table.findOne({ _id: req.params.id })
-    .then( (table) => {
-      console.log("table")
-      console.log(table)
-      Table.aggregate( [
-        { $match : { _id: table._id } },
-        { $lookup:
-          {
-            from: "Users",
-            localField: "_id",
-            foreignField: "users",
-            as : "players",
-            pipeline : [
-              { $project: { 
-                _id: 0, 
-                pseudo : 0, 
-                login : 0, 
-                status : 0 
-              }}
-            ]
-          }
-        }
-      ])
-      .then((tableToSend) => {
-        console.log("tableToSend")
-        console.log(tableToSend)
-        // Response
-        status = 200; // OK
-        res.status(status).json({
-          status: status,
-          message: "table ok",
-          table: tableToSend
-        });
-      })
-      .catch((error) => {
-        status = 400; // OK
-        res.status(status).json({
-          status: status,
-          message: "error on find",
-          table: {},
-          error: error,
-        });
-        console.error(error);
-      });
-    })
-    .catch((error) => {
-      status = 400; // OK
-      res.status(status).json({
-        status: status,
-        message: "error on find",
-        table: {},
-        error: error,
-      });
-      console.error(error);
+  Table.aggregate( [
+    { $match : { _id: req.params.id } },
+    { $lookup:
+      {
+        from: "Users",
+        localField: "_id",
+        foreignField: "users",
+        as : "players",
+        /*pipeline : [
+          { $project: { 
+            _id: 0, 
+            pseudo : 0, 
+            login : 0, 
+            status : 0 
+          }}
+        ]*/
+      }
+    }
+  ])
+  .then((tableToSend) => {
+    console.log("tableToSend[0]")
+    console.log(tableToSend[0])
+    // Response
+    status = 200; // OK
+    res.status(status).json({
+      status: status,
+      message: "table ok",
+      table: tableToSend[0]
     });
+  })
+  .catch((error) => {
+    status = 400; // OK
+    res.status(status).json({
+      status: status,
+      message: "error on find",
+      table: {},
+      error: error,
+    });
+    console.error(error);
+  });
 
   
 
