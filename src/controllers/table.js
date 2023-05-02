@@ -268,7 +268,7 @@ exports.details = (req, res, next) => {
         _id: new mongoose.Types.ObjectId(req.params.id) 
       } },
       { $addToSet: { 
-        userids: new mongoose.Types.ObjectId( { $each: req.params.id } )
+        userids: new mongoose.Types.ObjectId( { $each: "users" } )
       } },
       /*{ $addFields: { 
         _id: new mongoose.Types.ObjectId(req.params.id) 
