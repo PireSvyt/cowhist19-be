@@ -282,7 +282,7 @@ exports.details = (req, res, next) => {
 
   Table.aggregate( [
     { 
-      $match : { _id : mongoose.Types.ObjectId(req.params.id) }
+      $match : { _id : new mongoose.Types.ObjectId(req.params.id) }
     },
     { 
       $project: {
