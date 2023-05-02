@@ -279,11 +279,11 @@ exports.details = (req, res, next) => {
 
   Table.findOne({ _id: req.params.id })
     .then( (table) => {
-      table.aggregate( [
+      User.aggregate( [
         {
           $lookup:
             {
-              from: "User",
+              from: "Table",
               localField: "users",
               foreignField: "_id",
               as: "players"
