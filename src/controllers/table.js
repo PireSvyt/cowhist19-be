@@ -338,7 +338,6 @@ exports.details = (req, res, next) => {
     .then(async (table) => {
       // Get user details
       User.find( { _id: table.users }, "pseudo login status" )
-      .where("")
       .exec()
       .Then((users) => {
         // Response
