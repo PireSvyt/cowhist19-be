@@ -224,7 +224,7 @@ exports.details = (req, res, next) => {
       table.users.forEach((userid) => {
         usersObjId.push( new mongoose.Types.ObjectId(userid) )
       })
-      User.find( { _id: { $in: usersObjId } }, "pseudo login status" )
+      User.find( { _id: { $in: usersObjId } }, "pseudo login status" ).exec()
       .Then((users) => {
         // Response
         status = 200; // OK
