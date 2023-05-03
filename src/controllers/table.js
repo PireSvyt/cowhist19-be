@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 const Table = require("../models/Table");
 const Game = require("../models/Game");
-const User = require("../models/User");
 
 exports.save = (req, res, next) => {
   /*
@@ -192,6 +191,13 @@ exports.details = (req, res, next) => {
             status: 1,
           } }
         ]
+    } },
+    { $project: {
+      _id: 1, 
+      name: 1, 
+      users: 0, 
+      __v: 0,
+      players: 0, 
     } }
   ])
   .then((table) => {
