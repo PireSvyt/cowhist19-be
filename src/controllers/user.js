@@ -153,7 +153,6 @@ exports.details = (req, res, next) => {
           { $project: {
             _id: 1, 
             name: 1, 
-            __v: 0,
           } }
         ]
     } },
@@ -164,7 +163,6 @@ exports.details = (req, res, next) => {
       status: 1, 
       priviledges: 1, 
       password: 1, 
-      __v: 0,
     } }
   ])
   .then((table) => {

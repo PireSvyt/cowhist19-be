@@ -196,7 +196,6 @@ exports.details = (req, res, next) => {
       _id: 1, 
       name: 1, 
       users: 0, 
-      __v: 0,
       players: 0, 
     } }
   ])
