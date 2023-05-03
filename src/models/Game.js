@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const gameSchema = mongoose.Schema({
+  id: { type: String, required, unique: true},
   table: { type: String, required: true },
   date: { type: Date, required: true },
   contract: { type: String, required: true },
