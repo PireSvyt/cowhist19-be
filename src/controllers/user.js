@@ -20,7 +20,7 @@ exports.invite = (req, res, next) => {
         });
       } else {
         // User creation
-        const user = new User({
+        let user = new User({
           pseudo: req.body.pseudo,
           login: req.body.login,
           password: "NONE SO FAR",
