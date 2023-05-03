@@ -9,17 +9,13 @@ exports.invite = (req, res, next) => {
   console.log("user.invite");
   let status = 500;
   // User existence check
-  User.findOne({ login: req.body.login })
+  User.findOne({ login: req.body.login }, "pseudo status")
     .then((user) => {
       if (user) {
         status = 202;
         return res.status(status).json({
           status: status,
-          user: { 
-            _id: user._id, 
-            pseudo: user.pseudo, 
-            status: user.status 
-          },
+          user: user,
           message: "utilisateur déjà existant",
         });
       } else {
@@ -30,6 +26,7 @@ exports.invite = (req, res, next) => {
           password: "NONE SO FAR",
           status: "invited",
         });
+        user.id = user._id;
         // Saving
         user
           .save()
@@ -99,7 +96,7 @@ exports.tables = (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const decodedToken = jwt_decode(token);
 
-  Table.find({ users: decodedToken.id })
+  Table.find({ users: decodedToken.id }, "name")
     .then((tables) => {
       status = 200; // OK
       res.status(status).json({
@@ -141,19 +138,14 @@ exports.details = (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const decodedToken = jwt_decode(token);
 
-  User.findOne({ _id: decodedToken.id })
+  User.findOne({ _id: decodedToken.id }, "pseudo login status priviledges")
     .then((user) => {
       // Send
       status = 200;
       res.status(status).json({
         status: status,
         message: message,
-        user: {
-          pseudo : user.pseudo,
-          login : user.login,
-          status : user.status,
-          priviledges : user.priviledges,
-        },
+        user: user,
       });
     })
     .catch((error) => {

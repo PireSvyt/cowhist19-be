@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const Table = require("../models/Table");
 const Game = require("../models/Game");
 const User = require("../models/User");
@@ -29,25 +31,7 @@ exports.save = (req, res, next) => {
     console.log(tableToSave);
     // Generate
     tableToSave = new Table(tableToSave);
-    // Add table to users
-    tableToSave.users.forEach((player) => {
-      console.log("adding table to " + player);
-      User.findOne({ _id: player })
-        .then((user) => {
-          user.tables.push(tableToSave._id);
-          user.save();
-        })
-        .catch((error) => {
-          status = 400; // OK
-          res.status(status).json({
-            status: status,
-            message: "error on user update",
-            error: error,
-            table: req.body,
-          });
-          console.error(error);
-        });
-    });
+    tableToSave.id = tableToSave._id;
     // Save
     tableToSave
       .save()
@@ -89,33 +73,6 @@ exports.save = (req, res, next) => {
       .then((table) => {
         console.log("found table " + table._id);
         console.log(table);
-        // Check users to be removed
-        table.users.forEach((player) => {
-          if (!tableToSave.users.includes(player)) {
-            // Remove table from user
-            console.log("player to remove " + player);
-            User.findOne({ _id: player }).then((user) => {
-              // Edit
-              let sublist = user.tables.filter((tableid) => {
-                return tableid !== tableToSave._id;
-              });
-              user.tables = sublist;
-              user.save();
-            })
-          }
-        });
-        // Check users to be added
-        tableToSave.users.forEach((player) => {
-          if (!table.users.includes(player)) {
-            console.log("player to add " + player);
-            // Add table to user
-            User.findOne({ _id: player }).then((user) => {
-              // Edit
-              user.tables.push(tableToSave._id);
-              user.save();
-            });
-          }
-        });
         // Save
         Table.updateOne({ _id: tableToSave._id }, tableToSave)
           .then(() => {
@@ -163,49 +120,6 @@ exports.delete = (req, res, next) => {
   console.log("table.delete");
   // Initialize
   var status = 500;
-
-  // Delete table from users
-  Table.findOne({ _id: req.params.id })
-    .then((table) => {
-      table.users.forEach((userid) => {
-        User.findOne({ _id: userid })
-          .then((user) => {
-            user.tables = user.tables.splice(
-              user.tables.indexOf(req.params.id),
-              1
-            );
-            User.updateOne({ _id: userid }, user).catch((error) => {
-              console.log("error on modified");
-              status = 400; // OK
-              res.status(status).json({
-                status: status,
-                message: "error on modify user",
-                error: error,
-                table: req.body,
-              });
-              console.error(error);
-            });
-          })
-          .catch((error) => {
-            status = 400; // OK
-            res.status(status).json({
-              status: status,
-              message: "error on find user",
-              error: error,
-            });
-            console.error(error);
-          });
-      });
-    })
-    .catch((error) => {
-      status = 400; // OK
-      res.status(status).json({
-        status: status,
-        message: "error on find table",
-        error: error,
-      });
-      console.error(error);
-    });
 
   // Delete table's games
   Game.deleteMany({ table: req.params.id })
@@ -257,36 +171,64 @@ exports.details = (req, res, next) => {
   * only users from the table can do this
   
   */
-  console.log("game.details");
+  console.log("table.details");
   // Initialize
   var status = 500;
-  var message = "";
-  Table.findOne({ _id: req.params.id })
+
+  
+ 
+  Table.findOne({ _id: req.params.id }, "name users")
     .then((table) => {
       // Get user details
-      let enrichedUsers = []
-      table.users.forEach((player) => {
-        User.findOne({ _id: player })
-          .then((user) => {
-            enrichedUsers.push({
-              _id : user._id, 
-              pseudo : user.pseudo, 
-              login : user.login,
-              status : user.status
-            });
-          })
-          .catch((error) => {
-            status = 400; // OK
-            res.status(status).json({
-              status: status,
-              message: "error on user enrichment",
-              error: error,
-              table: table,
-            });
-            console.error(error);
-          });
+      User.find( { id: {$in: table.users}}, "pseudo login status" )
+      .Then((users) => {
+        // Response
+        status = 200; // OK
+        res.status(status).json({
+          status: status,
+          message: "table ok",
+          table: {
+            _id: table._id,
+            name: table.name,
+            users:  users
+          },
+        });
+      })
+      .catch((error) => {
+        status = 400; // OK
+        res.status(status).json({
+          status: status,
+          message: "error on user find",
+          table: {},
+          error: error,
+        });
+        console.error(error);
       });
-      table.users = enrichedUsers
+    })
+    .catch((error) => {
+      status = 400; // OK
+      res.status(status).json({
+        status: status,
+        message: "error on table find",
+        table: {},
+        error: error,
+      });
+      console.error(error);
+    });
+    
+/*
+   Table.aggregate([
+      { $match: { 
+          id: req.params.id
+      } },
+      { $lookup: { 
+          from: 'User',
+          foreignField: 'id', 
+          localField: 'users', 
+          as: 'players',
+      } }
+    ])
+    .then((table) => {
       // Response
       status = 200; // OK
       res.status(status).json({
@@ -297,14 +239,14 @@ exports.details = (req, res, next) => {
     })
     .catch((error) => {
       status = 400; // OK
+      console.error(error);
       res.status(status).json({
         status: status,
-        message: "error on find",
+        message: "error on table find",
         table: {},
         error: error,
       });
-      console.error(error);
-    });
+    });*/
 };
 
 exports.stats = (req, res, next) => {

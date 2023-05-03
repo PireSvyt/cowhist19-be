@@ -19,6 +19,7 @@ exports.save = (req, res, next) => {
     // Create
     delete req.body._id;
     const game = new Game({ ...req.body });
+    game.id = game._id;
     game
       .save()
       .then(() => {
@@ -110,7 +111,7 @@ exports.details = (req, res, next) => {
   // Initialize
   var status = 500;
   var message = "";
-  Game.findOne({ _id: req.params.id })
+  Game.findOne({ _id: req.params.id }, "table date contract outcome players")
     .then((game) => {
       if (game !== undefined) {
         status = 200;

@@ -60,12 +60,13 @@ exports.signup = (req, res, next) => {
           .hash(req.body.password, 10)
           .then((hash) => {
             // User creation
-            const user = new User({
+            var user = new User({
               pseudo: req.body.pseudo,
               login: req.body.login,
               password: hash,
               status: "registered",
             });
+            user.id = user._id;
             // User saving
             user
               .save()
@@ -109,7 +110,7 @@ exports.signup = (req, res, next) => {
 exports.login = (req, res, next) => {
   console.log("auth.login");
   let status = 500;
-  User.findOne({ login: req.body.login })
+  User.findOne({ login: req.body.login }, "pseudo login status priviledges password")
     .then((user) => {
       if (!user) {
         status = 404;
