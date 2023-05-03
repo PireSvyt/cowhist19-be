@@ -138,6 +138,52 @@ exports.details = (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const decodedToken = jwt_decode(token);
 
+  User.aggregate([
+    { $match: { 
+        id: decodedToken.id
+    } },
+    { $lookup: { 
+        from: 'tables',
+        foreignField: 'users', 
+        localField: 'id', 
+        as: 'tables',
+        pipeline: [
+          { $project: {
+            _id: 1, 
+            name: 1, 
+          } }
+        ]
+    } },
+    { $project: {
+      _id: 1, 
+      pseudo: 1, 
+      login: 1, 
+      status: 1, 
+      priviledges: 1, 
+      tables: 1, 
+    } }
+  ])
+  .then((user) => {
+    // Response
+    status = 200; // OK
+    res.status(status).json({
+      status: status,
+      message: "user ok",
+      user: user,
+    });
+  })
+  .catch((error) => {
+    status = 400; // OK
+    console.error(error);
+    res.status(status).json({
+      status: status,
+      message: "error on user find",
+      user: {},
+      error: error,
+    });
+  });
+
+/*
   User.findOne({ _id: decodedToken.id }, "pseudo login status priviledges")
     .then((user) => {
       // Send
@@ -158,4 +204,5 @@ exports.details = (req, res, next) => {
       });
       console.error(error);
     });
+    */
 };

@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 const Table = require("../models/Table");
 const Game = require("../models/Game");
-const User = require("../models/User");
 
 exports.save = (req, res, next) => {
   /*
@@ -174,79 +173,50 @@ exports.details = (req, res, next) => {
   console.log("table.details");
   // Initialize
   var status = 500;
-
-  
- 
-  Table.findOne({ _id: req.params.id }, "name users")
-    .then((table) => {
-      // Get user details
-      User.find( { id: {$in: table.users}}, "pseudo login status" )
-      .Then((users) => {
-        // Response
-        status = 200; // OK
-        res.status(status).json({
-          status: status,
-          message: "table ok",
-          table: {
-            _id: table._id,
-            name: table.name,
-            users:  users
-          },
-        });
-      })
-      .catch((error) => {
-        status = 400; // OK
-        res.status(status).json({
-          status: status,
-          message: "error on user find",
-          table: {},
-          error: error,
-        });
-        console.error(error);
-      });
-    })
-    .catch((error) => {
-      status = 400; // OK
-      res.status(status).json({
-        status: status,
-        message: "error on table find",
-        table: {},
-        error: error,
-      });
-      console.error(error);
-    });
     
-/*
-   Table.aggregate([
-      { $match: { 
-          id: req.params.id
-      } },
-      { $lookup: { 
-          from: 'User',
-          foreignField: 'id', 
-          localField: 'users', 
-          as: 'players',
-      } }
-    ])
-    .then((table) => {
-      // Response
-      status = 200; // OK
-      res.status(status).json({
-        status: status,
-        message: "table ok",
-        table: table,
-      });
-    })
-    .catch((error) => {
-      status = 400; // OK
-      console.error(error);
-      res.status(status).json({
-        status: status,
-        message: "error on table find",
-        table: {},
-        error: error,
-      });
-    });*/
+  Table.aggregate([
+    { $match: { 
+        id: req.params.id
+    } },
+    { $lookup: { 
+        from: 'users',
+        foreignField: 'id', 
+        localField: 'users', 
+        as: 'players',
+        pipeline: [
+          { $project: {
+            _id: 1, 
+            pseudo: 1, 
+            login: 1, 
+            status: 1,
+          } }
+        ]
+    } },
+    { $project: {
+      _id: 1, 
+      name: 1, 
+      players: 1, 
+    } }
+  ])
+  .then((table) => {
+    // Response
+    status = 200; // OK
+    res.status(status).json({
+      status: status,
+      message: "table ok",
+      table: table,
+    });
+  })
+  .catch((error) => {
+    status = 400; // OK
+    console.error(error);
+    res.status(status).json({
+      status: status,
+      message: "error on table find",
+      table: {},
+      error: error,
+    });
+  });
 };
 
 exports.stats = (req, res, next) => {
