@@ -138,8 +138,6 @@ exports.details = (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const decodedToken = jwt_decode(token);
 
-  
-    
   User.aggregate([
     { $match: { 
         id: decodedToken.id
@@ -162,16 +160,16 @@ exports.details = (req, res, next) => {
       login: 1, 
       status: 1, 
       priviledges: 1, 
-      password: 1, 
+      tables: 1, 
     } }
   ])
-  .then((table) => {
+  .then((user) => {
     // Response
     status = 200; // OK
     res.status(status).json({
       status: status,
-      message: "table ok",
-      table: table,
+      message: "user ok",
+      user: user,
     });
   })
   .catch((error) => {
@@ -179,8 +177,8 @@ exports.details = (req, res, next) => {
     console.error(error);
     res.status(status).json({
       status: status,
-      message: "error on table find",
-      table: {},
+      message: "error on user find",
+      user: {},
       error: error,
     });
   });

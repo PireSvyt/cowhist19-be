@@ -195,8 +195,7 @@ exports.details = (req, res, next) => {
     { $project: {
       _id: 1, 
       name: 1, 
-      users: 0, 
-      players: 0, 
+      players: 1, 
     } }
   ])
   .then((table) => {
