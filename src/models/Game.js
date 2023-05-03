@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+mongoose.set('debug', true);
+
 const gameSchema = mongoose.Schema({
   id: { type: String, required: true, unique: true},
   table: { type: String, required: true },
