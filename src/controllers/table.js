@@ -223,7 +223,7 @@ exports.details = (req, res, next) => {
   Table.findOne({ _id: req.params.id })
     .then((table) => {
       // Get user details
-      User.find( { id: { $in: users } }, "pseudo login status" ).exec()
+      User.find( { id: { $in: table.users } }, "pseudo login status" ).exec()
       .Then((users) => {
         // Response
         status = 200; // OK
