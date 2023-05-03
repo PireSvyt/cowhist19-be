@@ -266,7 +266,7 @@ exports.details = (req, res, next) => {
 
    Table.aggregate([
       { $match: { 
-          id: req.params.i
+          id: req.params.id
       } },
       { $lookup: { 
           from: 'User',
