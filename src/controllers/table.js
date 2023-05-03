@@ -180,7 +180,7 @@ exports.details = (req, res, next) => {
   Table.findOne({ _id: req.params.id }, "name users")
     .then((table) => {
       // Get user details
-      User.find( {}, "pseudo login status" ).where('id').in(table.users).exec()
+      User.find( { id: {$in: table.users}}, "pseudo login status" )
       .Then((users) => {
         // Response
         status = 200; // OK
