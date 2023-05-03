@@ -61,8 +61,8 @@ exports.save = (req, res, next) => {
     let tableToSave = { ...req.body };
     // Prep
     let tableUsers = [];
-    tableToSave.users.forEach((user) => {
-      tableUsers.push(user._id);
+    tableToSave.players.forEach((player) => {
+      tableUsers.push(player._id);
     });
     tableToSave.users = tableUsers;
     console.log("table to save ");
