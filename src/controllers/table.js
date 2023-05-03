@@ -219,15 +219,11 @@ exports.details = (req, res, next) => {
   var status = 500;
 
   
- /*
+ 
   Table.findOne({ _id: req.params.id })
     .then((table) => {
       // Get user details
-      let usersObjId = []
-      table.users.forEach((userid) => {
-        usersObjId.push( new mongoose.Types.ObjectId(userid) )
-      })
-      User.find( { _id: { $in: usersObjId } }, "pseudo login status" ).exec()
+      User.find( { id: { $in: users } }, "pseudo login status" ).exec()
       .Then((users) => {
         // Response
         status = 200; // OK
@@ -262,16 +258,16 @@ exports.details = (req, res, next) => {
       });
       console.error(error);
     });
-    */
-
+    
+/*
    Table.aggregate([
       { $match: { 
           id: req.params.id
       } },
       { $lookup: { 
           from: 'User',
-          foreignField: 'users', 
-          localField: 'id', 
+          foreignField: 'id', 
+          localField: 'users', 
           as: 'players',
       } }
     ])
@@ -293,7 +289,7 @@ exports.details = (req, res, next) => {
         table: {},
         error: error,
       });
-    });
+    });*/
 };
 
 exports.stats = (req, res, next) => {
