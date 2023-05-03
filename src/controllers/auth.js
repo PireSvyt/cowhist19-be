@@ -66,7 +66,7 @@ exports.signup = (req, res, next) => {
               password: hash,
               status: "registered",
             });
-            user["id"] = user._id;
+            user.id = user._id;
             // User saving
             user
               .save()
