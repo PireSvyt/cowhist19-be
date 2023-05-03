@@ -8,7 +8,7 @@ const gameSchema = mongoose.Schema({
   date: { type: Date, required: true },
   contract: { type: String, required: true },
   outcome: { type: Number, required: true },
-  users: {
+  players: {
     type: [
       {
         id: { type: String, required: true },

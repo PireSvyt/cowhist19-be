@@ -9,17 +9,13 @@ exports.invite = (req, res, next) => {
   console.log("user.invite");
   let status = 500;
   // User existence check
-  User.findOne({ login: req.body.login })
+  User.findOne({ login: req.body.login }, "pseudo status")
     .then((user) => {
       if (user) {
         status = 202;
         return res.status(status).json({
           status: status,
-          user: { 
-            _id: user._id, 
-            pseudo: user.pseudo, 
-            status: user.status 
-          },
+          user: user,
           message: "utilisateur déjà existant",
         });
       } else {

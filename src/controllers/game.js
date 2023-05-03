@@ -111,7 +111,7 @@ exports.details = (req, res, next) => {
   // Initialize
   var status = 500;
   var message = "";
-  Game.findOne({ _id: req.params.id })
+  Game.findOne({ _id: req.params.id }, "table date contract outcome players")
     .then((game) => {
       if (game !== undefined) {
         status = 200;

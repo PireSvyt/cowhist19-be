@@ -110,7 +110,7 @@ exports.signup = (req, res, next) => {
 exports.login = (req, res, next) => {
   console.log("auth.login");
   let status = 500;
-  User.findOne({ login: req.body.login })
+  User.findOne({ login: req.body.login }, "pseudo login status priviledges password")
     .then((user) => {
       if (!user) {
         status = 404;

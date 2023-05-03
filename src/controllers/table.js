@@ -121,49 +121,6 @@ exports.delete = (req, res, next) => {
   // Initialize
   var status = 500;
 
-  // Delete table from users
-  Table.findOne({ _id: req.params.id })
-    .then((table) => {
-      table.users.forEach((userid) => {
-        User.findOne({ _id: userid })
-          .then((user) => {
-            user.tables = user.tables.splice(
-              user.tables.indexOf(req.params.id),
-              1
-            );
-            User.updateOne({ _id: userid }, user).catch((error) => {
-              console.log("error on modified");
-              status = 400; // OK
-              res.status(status).json({
-                status: status,
-                message: "error on modify user",
-                error: error,
-                table: req.body,
-              });
-              console.error(error);
-            });
-          })
-          .catch((error) => {
-            status = 400; // OK
-            res.status(status).json({
-              status: status,
-              message: "error on find user",
-              error: error,
-            });
-            console.error(error);
-          });
-      });
-    })
-    .catch((error) => {
-      status = 400; // OK
-      res.status(status).json({
-        status: status,
-        message: "error on find table",
-        error: error,
-      });
-      console.error(error);
-    });
-
   // Delete table's games
   Game.deleteMany({ table: req.params.id })
     .catch((error) => {
