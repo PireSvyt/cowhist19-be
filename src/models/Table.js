@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 
 const tableSchema = mongoose.Schema({
-  id: { type: String, required, unique: true},
+  id: { type: String, required: true, unique: true},
   name: { type: String, required: false, unique: true },
   users: {
     type: [
