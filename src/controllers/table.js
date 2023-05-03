@@ -176,7 +176,7 @@ exports.details = (req, res, next) => {
   var status = 500;
 
   
- 
+ /*
   Table.findOne({ _id: req.params.id }, "name users")
     .then((table) => {
       // Get user details
@@ -216,14 +216,15 @@ exports.details = (req, res, next) => {
       });
       console.error(error);
     });
+    */
     
-/*
+
    Table.aggregate([
       { $match: { 
           id: req.params.id
       } },
       { $lookup: { 
-          from: 'User',
+          from: 'users',
           foreignField: 'id', 
           localField: 'users', 
           as: 'players',
@@ -247,7 +248,7 @@ exports.details = (req, res, next) => {
         table: {},
         error: error,
       });
-    });*/
+    });
 };
 
 exports.stats = (req, res, next) => {
