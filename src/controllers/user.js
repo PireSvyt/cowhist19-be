@@ -142,19 +142,14 @@ exports.details = (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const decodedToken = jwt_decode(token);
 
-  User.findOne({ _id: decodedToken.id })
+  User.findOne({ _id: decodedToken.id }, "pseudo login status priviledges")
     .then((user) => {
       // Send
       status = 200;
       res.status(status).json({
         status: status,
         message: message,
-        user: {
-          pseudo : user.pseudo,
-          login : user.login,
-          status : user.status,
-          priviledges : user.priviledges,
-        },
+        user: user,
       });
     })
     .catch((error) => {
