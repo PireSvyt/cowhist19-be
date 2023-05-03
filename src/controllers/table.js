@@ -270,8 +270,8 @@ exports.details = (req, res, next) => {
       } },
       { $lookup: { 
           from: 'User',
-          foreignField: 'id', 
-          localField: 'users', 
+          foreignField: 'users', 
+          localField: 'id', 
           as: 'players',
       } }
     ])
