@@ -190,7 +190,8 @@ exports.details = (req, res, next) => {
           table: {
             _id: table._id,
             name: table.name,
-            users:  users
+            users:  table.users,
+            players:  users
           },
         });
       })
