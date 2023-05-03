@@ -199,20 +199,29 @@ exports.details = (req, res, next) => {
     } }
   ])
   .then((table) => {
-    // Response
-    status = 200; // OK
-    res.status(status).json({
-      status: status,
-      message: "table ok",
-      table: table,
-    });
+    if (table.length === 1) {
+      // Response
+      status = 200; // OK
+      res.status(status).json({
+        status: status,
+        message: "table ok",
+        table: table[0],
+      });
+    } else {
+      status = 400; // OK
+      res.status(status).json({
+        status: status,
+        message: "error on find",
+        table: {},
+      });
+    }
   })
   .catch((error) => {
     status = 400; // OK
     console.error(error);
     res.status(status).json({
       status: status,
-      message: "error on table find",
+      message: "error on aggregate",
       table: {},
       error: error,
     });

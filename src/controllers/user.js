@@ -164,20 +164,29 @@ exports.details = (req, res, next) => {
     } }
   ])
   .then((user) => {
-    // Response
-    status = 200; // OK
-    res.status(status).json({
-      status: status,
-      message: "user ok",
-      user: user,
-    });
+    if (user.length === 1) {
+      // Response
+      status = 200; // OK
+      res.status(status).json({
+        status: status,
+        message: "user ok",
+        user: user[0],
+      });
+    } else {
+      status = 400; // OK
+      res.status(status).json({
+        status: status,
+        message: "error on user find",
+        user: {},
+      });
+    }
   })
   .catch((error) => {
     status = 400; // OK
     console.error(error);
     res.status(status).json({
       status: status,
-      message: "error on user find",
+      message: "error on aggregate",
       user: {},
       error: error,
     });
