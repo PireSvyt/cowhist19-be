@@ -186,8 +186,7 @@ exports.details = (req, res, next) => {
         pipeline: [
           { $project: {
             _id: 1, 
-            pseudo: 1, 
-            login: 1, 
+            pseudo: 1,
             status: 1,
           } }
         ]
