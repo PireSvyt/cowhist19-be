@@ -266,13 +266,13 @@ exports.details = (req, res, next) => {
 
    Table.aggregate([
       { $match: { 
-        id: req.params.i
+          id: req.params.i
       } },
       { $lookup: { 
-        from: 'User',
-        foreignField: 'id', 
-        localField: 'users', 
-        as: 'players',
+          from: 'User',
+          foreignField: 'id', 
+          localField: 'users', 
+          as: 'players',
       } }
     ])
     .then((table) => {
