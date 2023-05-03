@@ -96,7 +96,7 @@ exports.tables = (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const decodedToken = jwt_decode(token);
 
-  Table.find({ users: decodedToken.id })
+  Table.find({ users: decodedToken.id }, "name")
     .then((tables) => {
       status = 200; // OK
       res.status(status).json({
