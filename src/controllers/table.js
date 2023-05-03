@@ -31,6 +31,7 @@ exports.save = (req, res, next) => {
     console.log(tableToSave);
     // Generate
     tableToSave = new Table(tableToSave);
+    tableToSave.id = tableToSave._id;
     // Save
     tableToSave
       .save()
@@ -265,22 +266,13 @@ exports.details = (req, res, next) => {
 
    Table.aggregate([
       { $match: { 
-        _id: new mongoose.Types.ObjectId(req.params.id) 
+        id: req.params.i
       } },
-      { $set: { 
-        userids: { $each: "users" }
-      } },
-      /*{ $addFields: { 
-        _id: new mongoose.Types.ObjectId(req.params.id) 
-      } },*/
       { $lookup: { 
         from: 'User',
-        foreignField: 'userid', 
-        localField: 'userids', 
+        foreignField: 'id', 
+        localField: 'users', 
         as: 'players',
-        pipeline: [
-          { $set: { "userid": "$_id" } }
-        ]
       } }
     ])
     .then((table) => {

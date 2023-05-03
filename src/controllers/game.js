@@ -19,6 +19,7 @@ exports.save = (req, res, next) => {
     // Create
     delete req.body._id;
     const game = new Game({ ...req.body });
+    game.id = game._id;
     game
       .save()
       .then(() => {

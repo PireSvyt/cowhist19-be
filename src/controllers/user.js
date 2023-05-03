@@ -30,6 +30,7 @@ exports.invite = (req, res, next) => {
           password: "NONE SO FAR",
           status: "invited",
         });
+        user.id = user._id;
         // Saving
         user
           .save()
