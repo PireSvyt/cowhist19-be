@@ -60,7 +60,7 @@ exports.signup = (req, res, next) => {
           .hash(req.body.password, 10)
           .then((hash) => {
             // User creation
-            let user = new User({
+            var user = new User({
               pseudo: req.body.pseudo,
               login: req.body.login,
               password: hash,
