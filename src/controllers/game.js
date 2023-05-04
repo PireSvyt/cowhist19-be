@@ -111,34 +111,59 @@ exports.details = (req, res, next) => {
   // Initialize
   var status = 500;
   var message = "";
-  Game.findOne({ _id: req.params.id }, "table date contract outcome players")
-    .then((game) => {
-      if (game !== undefined) {
-        status = 200;
-        res.status(status).json({
-          status: status,
-          message: message,
-          game: game,
-        });
-      } else {
-        status = 101; // Inexisting
-        res.status(status).json({
-          status: status,
-          message: "inexisting game",
-          game: {},
-        });
-      }
-    })
-    .catch((error) => {
+
+  Game.aggregate([
+    { $match: { 
+        id: req.params.id
+    } },
+    { $lookup: { 
+        from: 'users',
+        foreignField: 'id', 
+        localField: 'players._id', 
+        as: 'players',
+        pipeline: [
+          { $project: {
+            _id: 1, 
+            pseudo: 1,
+            role: 1,
+          } }
+        ]
+    } },
+    { $project: {
+      _id: 1, 
+      contract: 1, 
+      players: 1, 
+      outcome: 1, 
+    } }
+  ])
+  .then((game) => {
+    if (game.length === 1) {
+      // Response
+      status = 200; // OK
+      res.status(status).json({
+        status: status,
+        message: "game ok",
+        game: game[0],
+      });
+    } else {
       status = 400; // OK
       res.status(status).json({
         status: status,
         message: "error on find",
         game: {},
-        error: error,
       });
-      console.error(error);
+    }
+  })
+  .catch((error) => {
+    status = 400; // OK
+    console.error(error);
+    res.status(status).json({
+      status: status,
+      message: "error on aggregate",
+      game: {},
+      error: error,
     });
+  });
 };
 
 // ENABLERS

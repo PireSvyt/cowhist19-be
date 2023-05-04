@@ -11,7 +11,7 @@ const gameSchema = mongoose.Schema({
   players: {
     type: [
       {
-        id: { type: String, required: true },
+        _id: { type: String, required: true },
         role: { type: String, required: true },
       },
     ],
