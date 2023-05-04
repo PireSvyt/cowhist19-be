@@ -113,79 +113,34 @@ exports.details = (req, res, next) => {
   var status = 500;
   var message = "";
 
-  Game.aggregate([
-    { $match: { 
-        id: req.params.id
-    } },
-    { $lookup: { 
-        from: 'users',
-        foreignField: 'id', 
-        localField: 'players._id', 
-        as: 'playerspseudo',
-        pipeline: [
-          { $project: {
-            _id: 1, 
-            pseudo: 1,
-          } }
-        ]
-    } },
-    { $project: {
-      _id: 1, 
-      contract: 1, 
-      outcome: 1,
-      playerspseudo: 1, 
-      players: {
-        $map: {
-          input: "$players",
-          as: "p",
-          in: {
-            $mergeObjects: [
-              "$$p",
-              {
-                $arrayElemAt: [
-                  {
-                    $filter: {
-                      input: "$playerspseudo",
-                      cond: { $eq: ["$$this._id", "$$p._id"] }
-                    }
-                  },
-                  0
-                ]
-              }
-            ]
-          }
-        }
-      },       
-    } }
-  ])
-  .then((game) => {
-    if (game.length === 1) {
-      // Response
-      status = 200; // OK
-      res.status(status).json({
-        status: status,
-        message: "game ok",
-        game: game[0],
-      });
-    } else {
+  Game.findOne({ _id: req.params.id }, "table contract outcome players")
+    .then((game) => {
+      if (game !== undefined) {
+        status = 200;
+        res.status(status).json({
+          status: status,
+          message: message,
+          game: game,
+        });
+      } else {
+        status = 101; // Inexisting
+        res.status(status).json({
+          status: status,
+          message: "inexisting game",
+          game: {},
+        });
+      }
+    })
+    .catch((error) => {
       status = 400; // OK
       res.status(status).json({
         status: status,
         message: "error on find",
         game: {},
+        error: error,
       });
-    }
-  })
-  .catch((error) => {
-    status = 400; // OK
-    console.error(error);
-    res.status(status).json({
-      status: status,
-      message: "error on aggregate",
-      game: {},
-      error: error,
+      console.error(error);
     });
-  });
 };
 
 // ENABLERS
