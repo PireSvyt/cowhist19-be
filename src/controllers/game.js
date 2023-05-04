@@ -13,6 +13,7 @@ exports.save = (req, res, next) => {
   // Initialize
   var status = 500;
   console.log(req.body);
+
   // Save
   if (req.body._id === "" || req.body._id === undefined) {
     console.log("game to create");
@@ -122,11 +123,15 @@ exports.details = (req, res, next) => {
         localField: 'players._id', 
         as: 'players',
         pipeline: [
+          { $addFields : {
+            pseudo: "$pseudo"
+          } }
+          /*
           { $project: {
             _id: 1, 
             pseudo: 1,
             role: 1,
-          } }
+          } }*/
         ]
     } },
     { $project: {
