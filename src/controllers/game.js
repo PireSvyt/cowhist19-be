@@ -123,15 +123,14 @@ exports.details = (req, res, next) => {
         localField: 'players._id', 
         as: 'players',
         pipeline: [
-          { $addFields : {
-            pseudo: "$pseudo"
-          } }
-          /*
           { $project: {
             _id: 1, 
             pseudo: 1,
             role: 1,
-          } }*/
+          } },
+          { $addFields : {
+            role: "$role"
+          } }
         ]
     } },
     { $project: {
