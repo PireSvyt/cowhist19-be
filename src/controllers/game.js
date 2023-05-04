@@ -20,7 +20,7 @@ exports.save = (req, res, next) => {
     delete req.body._id;
     const gameToSave = new Game({ ...req.body });
     gameToSave.id = gameToSave._id;
-    gameToSave.date = undefined;
+    gameToSave.date = new Date();
     console.log("gameToSave");
     console.log(gameToSave);
     gameToSave
