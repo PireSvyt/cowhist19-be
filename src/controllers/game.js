@@ -18,10 +18,12 @@ exports.save = (req, res, next) => {
     console.log("game to create");
     // Create
     delete req.body._id;
-    const game = new Game({ ...req.body });
-    game.id = game._id;
-    game.date = undefined;
-    game
+    const gameToSave = new Game({ ...req.body });
+    gameToSave.id = gameToSave._id;
+    gameToSave.date = undefined;
+    console.log("gameToSave");
+    console.log(gameToSave);
+    gameToSave
       .save()
       .then(() => {
         console.log("game created");
@@ -29,7 +31,7 @@ exports.save = (req, res, next) => {
         res.status(status).json({
           status: status,
           message: "game created",
-          id: game._id,
+          id: gameToSave._id,
         });
       })
       .catch((error) => {
