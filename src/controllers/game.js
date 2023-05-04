@@ -126,10 +126,9 @@ exports.details = (req, res, next) => {
           { $project: {
             _id: 1, 
             pseudo: 1,
-            role: 1,
           } },
           { $addFields : {
-            role: "$role"
+            role: "role"
           } }
         ]
     } },
