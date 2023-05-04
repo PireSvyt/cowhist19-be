@@ -251,7 +251,6 @@ exports.history = (req, res, next) => {
   var status = 500;
   var filters = {};
   var fields = "";
-  var where = "";
 
   // useful
   function compare(a, b) {

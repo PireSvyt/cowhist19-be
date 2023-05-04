@@ -6,7 +6,7 @@ const authCtrl = require("../controllers/auth");
 router.post("/save", authCtrl.authenticate, tableCtrl.save);
 router.delete("/:id", authCtrl.authenticate, tableCtrl.delete);
 router.get("/:id", authCtrl.authenticate, tableCtrl.details);
-router.get("/stats/:id", authCtrl.authenticate, tableCtrl.stats);
-router.get("/history/:id", authCtrl.authenticate, tableCtrl.history);
+router.post("/stats/:id", authCtrl.authenticate, tableCtrl.stats);
+router.post("/history/:id", authCtrl.authenticate, tableCtrl.history);
 
 module.exports = router;
