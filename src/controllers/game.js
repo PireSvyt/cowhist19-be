@@ -12,7 +12,6 @@ exports.save = (req, res, next) => {
   console.log("game.save");
   // Initialize
   var status = 500;
-  console.log(req.body);
 
   // Save
   if (req.body._id === "" || req.body._id === undefined) {
@@ -21,6 +20,7 @@ exports.save = (req, res, next) => {
     delete req.body._id;
     const game = new Game({ ...req.body });
     game.id = game._id;
+    game.date = undefined;
     game
       .save()
       .then(() => {
@@ -47,6 +47,7 @@ exports.save = (req, res, next) => {
     console.log("game to modify");
     console.log(req.body);
     let game = new Game({ ...req.body });
+    game.id = game._id;
     Game.updateOne({ _id: game._id }, game)
       .then(() => {
         console.log("game modified");
