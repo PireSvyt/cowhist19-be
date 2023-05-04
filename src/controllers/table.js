@@ -269,7 +269,7 @@ exports.history = (req, res, next) => {
     switch (req.body.need) {
       case "list":
         filters = { table: req.params.id };
-        fields = "contract outcome users date";
+        fields = "contract outcome players date";
         break;
       default:
         status = 403; // Access denied
@@ -288,10 +288,8 @@ exports.history = (req, res, next) => {
     // executes, name LIKE john and only selecting the "name" and "friends" fields
     // await MyModel.find({ name: /john/i }, 'name friends').exec();
     Game.find(filters, fields)
-      .where(where)
-      .exec()
       .then((games) => {
-        console.log("games " + games);
+        //console.log("games " + games);
         games.sort(compare);
         games = games.splice(req.body.games.index, req.body.games.number);
         status = 200; // OK
