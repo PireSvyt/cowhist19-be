@@ -126,17 +126,19 @@ exports.details = (req, res, next) => {
           { $project: {
             _id: 1, 
             pseudo: 1,
-          } },
-          { $addFields : {
-            role: "$$this.role"
           } }
         ]
     } },
     { $project: {
       _id: 1, 
       contract: 1, 
-      players: 1, 
-      outcome: 1, 
+      players: {
+        _id: 1, 
+        pseudo: 1,
+        role: "$$this.role"
+      }, 
+      outcome: 1,
+      
     } }
   ])
   .then((game) => {
