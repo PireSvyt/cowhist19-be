@@ -128,7 +128,7 @@ exports.details = (req, res, next) => {
             pseudo: 1,
           } },
           { $addFields : {
-            role: "role"
+            role: "$$this.role"
           } }
         ]
     } },
