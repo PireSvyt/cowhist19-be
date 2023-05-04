@@ -132,6 +132,8 @@ exports.details = (req, res, next) => {
     { $project: {
       _id: 1, 
       contract: 1, 
+      outcome: 1,
+      playerspseudo: 1, 
       players: {
         $map: {
           input: "$players",
@@ -153,9 +155,7 @@ exports.details = (req, res, next) => {
             ]
           }
         }
-      }, 
-      outcome: 1,
-      
+      },       
     } }
   ])
   .then((game) => {
