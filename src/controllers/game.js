@@ -121,7 +121,7 @@ exports.details = (req, res, next) => {
         from: 'users',
         foreignField: 'id', 
         localField: 'players._id', 
-        as: 'players',
+        as: 'playerspseudo',
         pipeline: [
           { $project: {
             _id: 1, 
@@ -133,9 +133,26 @@ exports.details = (req, res, next) => {
       _id: 1, 
       contract: 1, 
       players: {
-        _id: 1, 
-        pseudo: 1,
-        role: "$$this.role"
+        $map: {
+          input: "$players",
+          as: "p",
+          in: {
+            $mergeObjects: [
+              "$$p",
+              {
+                $arrayElemAt: [
+                  {
+                    $filter: {
+                      input: "$playerspseudo",
+                      cond: { $eq: ["$$this._id", "$$p._id"] }
+                    }
+                  },
+                  0
+                ]
+              }
+            ]
+          }
+        }
       }, 
       outcome: 1,
       
