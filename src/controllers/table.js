@@ -228,7 +228,118 @@ exports.details = (req, res, next) => {
 };
 
 exports.stats = (req, res, next) => {
-  return res.status(500).json({ message: "TODO table.stats" });
+  /*
+  provides the stats according to given parameters
+  
+  body parameters
+  * need : for post processing purpose
+  
+  TODO
+  * only users from the table can do this
+    - ranking
+    - graph
+  
+  */
+  console.log("table.stats");
+  var status = 500;
+
+  Game.aggregate([
+    { $match: { 
+        table: req.params.id
+    } },
+    { $lookup: { 
+        from: 'users',
+        foreignField: 'id', 
+        localField: 'users', 
+        as: 'players',
+        pipeline: [
+          { $project: {
+            _id: 1, 
+          } }
+        ]
+    } }
+  ])
+  .then((games) => {
+    // Post process
+    let stats = {}
+    console.log("games")
+    console.log(games)
+
+    // Response
+    status = 200; // OK
+    res.status(status).json({
+      status: status,
+      message: "table ok",
+      stats: stats,
+    });
+  })
+  .catch((error) => {
+    status = 400; // OK
+    console.error(error);
+    res.status(status).json({
+      status: status,
+      message: "error on aggregate",
+      stats: {},
+      error: error,
+    });
+  });
+
+  /*
+  // Initialize
+  var status = 500;
+  var filters = {};
+  var fields = "";
+
+  // Needs
+  if (!req.body.need) {
+    status = 403; // Access denied
+  } else {
+    switch (req.body.need) {
+      case "ranking":
+        filters = { table: req.params.id };
+        fields = "contract outcome players";
+        break;
+      case "graph":
+        filters = { table: req.params.id };
+        fields = "contract outcome players date";
+        break;
+      default:
+        status = 403; // Access denied
+    }
+  }
+
+  if (status === 403) {
+    res.status(status).json({
+      status: status,
+      message: "error on prior filtering",
+      stats: {},
+    });
+  } else {
+    Game.find(filters, fields)
+      .then((games) => {
+        // Post process
+        let stats = {}
+        
+
+        // Response
+        status = 200; // OK
+        res.status(status).json({
+          status: status,
+          message: "list ok",
+          stats: stats,
+        });
+      })
+      .catch((error) => {
+        status = 400; // OK
+        res.status(status).json({
+          status: status,
+          message: "error on find",
+          stats: {},
+          error: error,
+        });
+        console.error(error);
+      });
+  }*/
 };
 
 exports.history = (req, res, next) => {
