@@ -422,10 +422,10 @@ function processGames (games, request) {
   playersArray.sort(function ( a, b ) {
     // sorting field
     let f = "scorev0"
-    if ( a[f] < b[f] ){
+    if ( a[f] > b[f] ){
       return -1;
     }
-    if ( a[f] > b[f] ){
+    if ( a[f] < b[f] ){
       return 1;
     }
     return 0;
