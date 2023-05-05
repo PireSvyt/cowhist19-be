@@ -253,7 +253,7 @@ exports.stats = (req, res, next) => {
     status = 200; // OK
     res.status(status).json({
       status: status,
-      message: "table ok",
+      message: "stats ok",
       stats: stats,
     });
   })
