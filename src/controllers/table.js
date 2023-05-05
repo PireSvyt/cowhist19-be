@@ -430,7 +430,7 @@ function processGames (games, request) {
     return 0;
   }
   let playersArray = Object.entries(players)
-  playersArray.sort(compare(field))
+  playersArray.sort(compare("scorev0"))
 
   // Stats
   stats.ranking = playersArray
