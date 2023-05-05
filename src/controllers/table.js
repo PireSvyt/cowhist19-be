@@ -245,28 +245,7 @@ exports.stats = (req, res, next) => {
   console.log("table.stats");
   var status = 500;
 
-  Game.aggregate([
-    { $match: { 
-        table: req.params.id
-    } },
-    { $lookup: { 
-        from: 'users',
-        foreignField: 'id', 
-        localField: 'users', 
-        as: 'players',
-        pipeline: [
-          { $project: {
-            _id: 1, 
-          } }
-        ]
-    } },
-    { $project: {
-      _id: 1, 
-      contract: 1, 
-      outcome: 1, 
-      players: 1, 
-    } }
-  ])
+  Game.find({table: req.params.id})
   .then((games) => {
     // Post process
     console.log("games")
