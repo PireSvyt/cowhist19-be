@@ -248,11 +248,7 @@ exports.stats = (req, res, next) => {
   Game.find({table: req.params.id})
   .then((games) => {
     // Post process
-    console.log("games")
-    console.log(games)
     let stats = processGames(games, req.body)
-    console.log("stats")
-    console.log(stats)
     // Response
     status = 200; // OK
     res.status(status).json({
@@ -380,6 +376,7 @@ function processGames (games, request) {
         // Add player to players if missing
         if ( !Object.keys(players).includes(player._id) ) {
           players[player._id] = {
+            _id: player._id,
             attackWins: 0,
             attackLoss: 0,
             defenseWins: 0,
@@ -421,9 +418,7 @@ function processGames (games, request) {
   }
 
   // Make a sorted array
-  let playersArray = Object.entries(players)
-  console.log("playersArray")
-  console.log(playersArray)
+  let playersArray = Object.values(players)
   playersArray.sort(function ( a, b ) {
     // sorting field
     let f = "scorev0"
