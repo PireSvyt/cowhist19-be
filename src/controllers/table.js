@@ -448,28 +448,34 @@ function checkContract (game) {
   let compliance = true
   let nonCompliances = []
 
-  let contract = contracts[game.contract]
+  let contract = contracts.filter(contract => {contract.key === game.contract})[0]
+  if (contract === undefined) {
+    compliance = false
+    nonCompliances.push("contract not found")
+  } else {
 
-  // Attack
-  if (game.players.filter(player => {player.role === "attack"}).length !== contract.attack) {
-    compliance = false
-    nonCompliances.push("number of attackant(s) does not match")
-  }
+    // Attack
+    if (game.players.filter(player => {player.role === "attack"}).length !== contract.attack) {
+      compliance = false
+      nonCompliances.push("number of attackant(s) does not match")
+    }
+  
+    // Defense
+    if (game.players.filter(player => {player.role === "defense"}).length !== contract.defense) {
+      compliance = false
+      nonCompliances.push("number of defender(s) does not match")
+    }
+  
+    // Folds
+    if (game.outcome + contract.folds > 13) {
+      compliance = false
+      nonCompliances.push("number of folds won exceeds possibilities")
+    }
+    if (game.outcome < -13) {
+      compliance = false
+      nonCompliances.push("number of folds lost exceeds possibilities")
+    }
 
-  // Defense
-  if (game.players.filter(player => {player.role === "defense"}).length !== contract.defense) {
-    compliance = false
-    nonCompliances.push("number of defender(s) does not match")
-  }
-
-  // Folds
-  if (game.outcome + contract.folds > 13) {
-    compliance = false
-    nonCompliances.push("number of folds won exceeds possibilities")
-  }
-  if (game.outcome < -13) {
-    compliance = false
-    nonCompliances.push("number of folds lost exceeds possibilities")
   }
 
   // Console
