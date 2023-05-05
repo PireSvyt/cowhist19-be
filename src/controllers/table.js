@@ -266,7 +266,7 @@ exports.stats = (req, res, next) => {
     console.error(error);
     res.status(status).json({
       status: status,
-      message: "error on aggregate",
+      message: "error on find",
       stats: {},
       error: error,
     });
@@ -448,7 +448,16 @@ function checkContract (game) {
   let compliance = true
   let nonCompliances = []
 
-  let contract = contracts.filter(contract => {contract.key === game.contract})[0]
+  console.log("contracts")
+  console.log(contracts)
+
+  let contractList = contracts.filter(contract => {contract.key === game.contract})
+
+  console.log("contractList")
+  console.log(contractList)
+
+  let contract = contractList[0]
+
   if (contract === undefined) {
     compliance = false
     nonCompliances.push("contract not found")
