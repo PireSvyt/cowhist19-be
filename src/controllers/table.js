@@ -407,8 +407,7 @@ function processGames (games, request) {
   })
 
   // Compute a score
-  players.forEach(player => {
-    // Number of games
+  for (const [id, player] of Object.entries(players)) {// Number of games
     players[player._id].games = player.attackWins + player.attackLoss + player.defenseWins + player.defenseLoss
     // Attack rate
     players[player._id].rateattack = (player.attackWins + player.attackLoss) / player.games
@@ -418,8 +417,8 @@ function processGames (games, request) {
     // 5+ROUND((0.75*defenseWins-0.75*defenseLoss+1.25*attackWins-1.25*attackLoss)/games*10,1)
     players[player._id].scorev0 = 
       5 + (0.75*(player.defenseWins-player.defenseLoss)+1.25*(player.attackWins-player.attackLoss))/player.games*10
-  })
 
+  }
   // Make an array
   function compare( a, b, f ) {
     if ( a[f] < b[f] ){
@@ -447,18 +446,8 @@ function checkContract (game) {
   console.log("table.checkContract");
   let compliance = true
   let nonCompliances = []
-  
-  console.log("game")
-  console.log(game)
-
-  console.log("contracts")
-  console.log(contracts)
 
   let contractList = contracts.filter(contract => contract.key === game.contract)
-
-  console.log("contractList")
-  console.log(contractList)
-
   let contract = contractList[0]
 
   if (contract === undefined) {
@@ -467,13 +456,13 @@ function checkContract (game) {
   } else {
 
     // Attack
-    if (game.players.filter(player => {player.role === "attack"}).length !== contract.attack) {
+    if (game.players.filter(player => player.role === "attack").length !== contract.attack) {
       compliance = false
       nonCompliances.push("number of attackant(s) does not match")
     }
   
     // Defense
-    if (game.players.filter(player => {player.role === "defense"}).length !== contract.defense) {
+    if (game.players.filter(player => player.role === "defense").length !== contract.defense) {
       compliance = false
       nonCompliances.push("number of defender(s) does not match")
     }
@@ -494,6 +483,10 @@ function checkContract (game) {
   if (nonCompliances.length > 0) {
     console.log("non compliance list : ")
     console.log(nonCompliances)
+    console.log("game")
+    console.log(game)
+    console.log("contract")
+    console.log(contract)
   }
 
   return compliance
