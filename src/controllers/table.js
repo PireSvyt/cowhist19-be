@@ -408,14 +408,14 @@ function processGames (games, request) {
 
   // Compute a score
   for (const [id, player] of Object.entries(players)) {// Number of games
-    players[player._id].games = player.attackWins + player.attackLoss + player.defenseWins + player.defenseLoss
+    players[id].games = player.attackWins + player.attackLoss + player.defenseWins + player.defenseLoss
     // Attack rate
-    players[player._id].rateattack = (player.attackWins + player.attackLoss) / player.games
+    players[id].rateattack = (player.attackWins + player.attackLoss) / player.games
     // Win rate
-    players[player._id].ratevictory = (player.attackWins + player.defenseWins) / player.games
+    players[id].ratevictory = (player.attackWins + player.defenseWins) / player.games
     // Cowhist19 V0 score
     // 5+ROUND((0.75*defenseWins-0.75*defenseLoss+1.25*attackWins-1.25*attackLoss)/games*10,1)
-    players[player._id].scorev0 = 
+    players[id].scorev0 = 
       5 + (0.75*(player.defenseWins-player.defenseLoss)+1.25*(player.attackWins-player.attackLoss))/player.games*10
 
   }
