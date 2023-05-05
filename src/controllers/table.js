@@ -447,6 +447,9 @@ function checkContract (game) {
   console.log("table.checkContract");
   let compliance = true
   let nonCompliances = []
+  
+  console.log("game")
+  console.log(game)
 
   console.log("contracts")
   console.log(contracts)
