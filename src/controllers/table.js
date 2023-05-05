@@ -419,8 +419,11 @@ function processGames (games, request) {
       5 + (0.75*(player.defenseWins-player.defenseLoss)+1.25*(player.attackWins-player.attackLoss))/player.games*10
 
   }
-  // Make an array
-  function compare( a, b, f ) {
+
+  // Sorting for ranking
+  function compare( a, b ) {
+    // sorting field
+    let f = "scorev0"
     if ( a[f] < b[f] ){
       return -1;
     }
@@ -429,8 +432,10 @@ function processGames (games, request) {
     }
     return 0;
   }
+
+  // Make an array
   let playersArray = Object.entries(players)
-  playersArray.sort(compare("scorev0"))
+  playersArray.sort(compare())
 
   // Stats
   stats.ranking = playersArray
