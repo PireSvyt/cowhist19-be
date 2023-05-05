@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const Table = require("../models/Table");
 const Game = require("../models/Game");
 
+const contracts = require("../ressources/contracts");
+
 exports.save = (req, res, next) => {
   /*
   
@@ -61,8 +63,8 @@ exports.save = (req, res, next) => {
     let tableToSave = { ...req.body };
     // Prep
     let tableUsers = [];
-    tableToSave.users.forEach((user) => {
-      tableUsers.push(user._id);
+    tableToSave.players.forEach((player) => {
+      tableUsers.push(player._id);
     });
     tableToSave.users = tableUsers;
     console.log("table to save ");
@@ -199,6 +201,7 @@ exports.details = (req, res, next) => {
   ])
   .then((table) => {
     if (table.length === 1) {
+      table.contracts = contracts
       // Response
       status = 200; // OK
       res.status(status).json({
@@ -228,7 +231,42 @@ exports.details = (req, res, next) => {
 };
 
 exports.stats = (req, res, next) => {
-  return res.status(500).json({ message: "TODO table.stats" });
+  /*
+  provides the stats according to given parameters
+  
+  body parameters are transfered to the processGames function 
+  
+  TODO
+  * only users from the table can do this
+    - ranking
+    - graph
+  
+  */
+  console.log("table.stats");
+  var status = 500;
+
+  Game.find({table: req.params.id})
+  .then((games) => {
+    // Post process
+    let stats = processGames(games, req.body)
+    // Response
+    status = 200; // OK
+    res.status(status).json({
+      status: status,
+      message: "stats ok",
+      stats: stats,
+    });
+  })
+  .catch((error) => {
+    status = 400; // OK
+    console.error(error);
+    res.status(status).json({
+      status: status,
+      message: "error on find",
+      stats: {},
+      error: error,
+    });
+  });
 };
 
 exports.history = (req, res, next) => {
@@ -251,7 +289,6 @@ exports.history = (req, res, next) => {
   var status = 500;
   var filters = {};
   var fields = "";
-  var where = "";
 
   // useful
   function compare(a, b) {
@@ -269,7 +306,7 @@ exports.history = (req, res, next) => {
     switch (req.body.need) {
       case "list":
         filters = { table: req.params.id };
-        fields = "contract outcome users date";
+        fields = "contract outcome players date";
         break;
       default:
         status = 403; // Access denied
@@ -288,10 +325,8 @@ exports.history = (req, res, next) => {
     // executes, name LIKE john and only selecting the "name" and "friends" fields
     // await MyModel.find({ name: /john/i }, 'name friends').exec();
     Game.find(filters, fields)
-      .where(where)
-      .exec()
       .then((games) => {
-        console.log("games " + games);
+        //console.log("games " + games);
         games.sort(compare);
         games = games.splice(req.body.games.index, req.body.games.number);
         status = 200; // OK
@@ -313,3 +348,145 @@ exports.history = (req, res, next) => {
       });
   }
 };
+
+// Helpers
+
+function processGames (games, request) {
+  /*
+  process the game list to provide stats according to request
+  
+  body parameters
+  * need : for post processing purpose
+  
+  TODO
+  * only users from the table can do this
+    - ranking
+    - graph
+  
+  */
+  console.log("table.processGames");
+
+  let stats = {}
+  let players = {}
+
+  // Summarize game outcomes per user
+  games.forEach(game => {
+    if ( checkContract(game) ) {
+      game.players.forEach(player => {
+        // Add player to players if missing
+        if ( !Object.keys(players).includes(player._id) ) {
+          players[player._id] = {
+            _id: player._id,
+            attackWins: 0,
+            attackLoss: 0,
+            defenseWins: 0,
+            defenseLoss: 0,
+          }
+        }
+        // Record outcome
+        if ( game.outcome < 0 ) {
+          if ( player.role === "attack" ) {
+            players[player._id].attackLoss += 1
+          }
+          if ( player.role === "defense" ) {
+            players[player._id].defenseWins += 1
+          }
+        } else {
+          if ( player.role === "attack" ) {
+            players[player._id].attackWins += 1
+          }
+          if ( player.role === "defense" ) {
+            players[player._id].defenseLoss += 1
+          }
+        }
+      })
+    }
+  })
+
+  // Compute a score
+  for (const [id, player] of Object.entries(players)) {// Number of games
+    players[id].games = player.attackWins + player.attackLoss + player.defenseWins + player.defenseLoss
+    // Attack rate
+    players[id].rateattack = (player.attackWins + player.attackLoss) / player.games
+    // Win rate
+    players[id].ratevictory = (player.attackWins + player.defenseWins) / player.games
+    // Cowhist19 V0 score
+    // 5+ROUND((0.75*defenseWins-0.75*defenseLoss+1.25*attackWins-1.25*attackLoss)/games*10,1)
+    players[id].scorev0 = 
+      5 + (0.75*(player.defenseWins-player.defenseLoss)+1.25*(player.attackWins-player.attackLoss))/player.games*10
+
+  }
+
+  // Make a sorted array
+  let playersArray = Object.values(players)
+  playersArray.sort(function ( a, b ) {
+    // sorting field
+    let f = "scorev0"
+    if ( a[f] > b[f] ){
+      return -1;
+    }
+    if ( a[f] < b[f] ){
+      return 1;
+    }
+    return 0;
+  })
+
+  // Stats
+  stats.ranking = playersArray
+
+  return stats
+}
+
+function checkContract (game) {
+  /*
+  check that a game matches with contract
+  
+  */
+  console.log("table.checkContract");
+  let compliance = true
+  let nonCompliances = []
+
+  let contractList = contracts.filter(contract => contract.key === game.contract)
+  let contract = contractList[0]
+
+  if (contract === undefined) {
+    compliance = false
+    nonCompliances.push("contract not found")
+  } else {
+
+    // Attack
+    if (game.players.filter(player => player.role === "attack").length !== contract.attack) {
+      compliance = false
+      nonCompliances.push("number of attackant(s) does not match")
+    }
+  
+    // Defense
+    if (game.players.filter(player => player.role === "defense").length !== contract.defense) {
+      compliance = false
+      nonCompliances.push("number of defender(s) does not match")
+    }
+  
+    // Folds
+    if (game.outcome + contract.folds > 13) {
+      compliance = false
+      nonCompliances.push("number of folds won exceeds possibilities")
+    }
+    if (game.outcome < -13) {
+      compliance = false
+      nonCompliances.push("number of folds lost exceeds possibilities")
+    }
+
+  }
+
+  // Console
+  if (nonCompliances.length > 0) {
+    console.log("non compliance list : ")
+    console.log(nonCompliances)
+    console.log("game")
+    console.log(game)
+    console.log("contract")
+    console.log(contract)
+  }
+
+  return compliance
+}

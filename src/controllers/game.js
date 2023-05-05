@@ -12,15 +12,18 @@ exports.save = (req, res, next) => {
   console.log("game.save");
   // Initialize
   var status = 500;
-  console.log(req.body);
+
   // Save
   if (req.body._id === "" || req.body._id === undefined) {
     console.log("game to create");
     // Create
     delete req.body._id;
-    const game = new Game({ ...req.body });
-    game.id = game._id;
-    game
+    const gameToSave = new Game({ ...req.body });
+    gameToSave.id = gameToSave._id;
+    gameToSave.date = new Date();
+    console.log("gameToSave");
+    console.log(gameToSave);
+    gameToSave
       .save()
       .then(() => {
         console.log("game created");
@@ -28,7 +31,7 @@ exports.save = (req, res, next) => {
         res.status(status).json({
           status: status,
           message: "game created",
-          id: game._id,
+          id: gameToSave._id,
         });
       })
       .catch((error) => {
@@ -46,6 +49,7 @@ exports.save = (req, res, next) => {
     console.log("game to modify");
     console.log(req.body);
     let game = new Game({ ...req.body });
+    game.id = game._id;
     Game.updateOne({ _id: game._id }, game)
       .then(() => {
         console.log("game modified");
@@ -111,7 +115,8 @@ exports.details = (req, res, next) => {
   // Initialize
   var status = 500;
   var message = "";
-  Game.findOne({ _id: req.params.id }, "table date contract outcome players")
+
+  Game.findOne({ _id: req.params.id }, "table contract outcome players")
     .then((game) => {
       if (game !== undefined) {
         status = 200;
