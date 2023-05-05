@@ -420,8 +420,11 @@ function processGames (games, request) {
 
   }
 
-  // Sorting for ranking
-  function compare( a, b ) {
+  // Make a sorted array
+  let playersArray = Object.entries(players)
+  console.log("playersArray")
+  console.log(playersArray)
+  playersArray.sort(function ( a, b ) {
     // sorting field
     let f = "scorev0"
     if ( a[f] < b[f] ){
@@ -431,11 +434,7 @@ function processGames (games, request) {
       return 1;
     }
     return 0;
-  }
-
-  // Make an array
-  let playersArray = Object.entries(players)
-  playersArray.sort(compare())
+  })
 
   // Stats
   stats.ranking = playersArray
