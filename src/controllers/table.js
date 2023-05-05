@@ -454,7 +454,7 @@ function checkContract (game) {
   console.log("contracts")
   console.log(contracts)
 
-  let contractList = contracts.filter(contract => {contract.key === game.contract})
+  let contractList = contracts.filter(contract => contract.key === game.contract)
 
   console.log("contractList")
   console.log(contractList)
