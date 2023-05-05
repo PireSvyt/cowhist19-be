@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const Table = require("../models/Table");
 const Game = require("../models/Game");
 
+const contracts = require("../ressources/contracts");
+
 exports.save = (req, res, next) => {
   /*
   
@@ -199,6 +201,7 @@ exports.details = (req, res, next) => {
   ])
   .then((table) => {
     if (table.length === 1) {
+      table.contracts = contracts
       // Response
       status = 200; // OK
       res.status(status).json({
@@ -231,8 +234,7 @@ exports.stats = (req, res, next) => {
   /*
   provides the stats according to given parameters
   
-  body parameters
-  * need : for post processing purpose
+  body parameters are transfered to the processGames function 
   
   TODO
   * only users from the table can do this
@@ -257,14 +259,21 @@ exports.stats = (req, res, next) => {
             _id: 1, 
           } }
         ]
+    } },
+    { $project: {
+      _id: 1, 
+      contract: 1, 
+      outcome: 1, 
+      players: 1, 
     } }
   ])
   .then((games) => {
     // Post process
-    let stats = {}
     console.log("games")
     console.log(games)
-
+    let stats = processGames(games, req.body)
+    console.log("stats")
+    console.log(stats)
     // Response
     status = 200; // OK
     res.status(status).json({
@@ -283,63 +292,6 @@ exports.stats = (req, res, next) => {
       error: error,
     });
   });
-
-  /*
-  // Initialize
-  var status = 500;
-  var filters = {};
-  var fields = "";
-
-  // Needs
-  if (!req.body.need) {
-    status = 403; // Access denied
-  } else {
-    switch (req.body.need) {
-      case "ranking":
-        filters = { table: req.params.id };
-        fields = "contract outcome players";
-        break;
-      case "graph":
-        filters = { table: req.params.id };
-        fields = "contract outcome players date";
-        break;
-      default:
-        status = 403; // Access denied
-    }
-  }
-
-  if (status === 403) {
-    res.status(status).json({
-      status: status,
-      message: "error on prior filtering",
-      stats: {},
-    });
-  } else {
-    Game.find(filters, fields)
-      .then((games) => {
-        // Post process
-        let stats = {}
-        
-
-        // Response
-        status = 200; // OK
-        res.status(status).json({
-          status: status,
-          message: "list ok",
-          stats: stats,
-        });
-      })
-      .catch((error) => {
-        status = 400; // OK
-        res.status(status).json({
-          status: status,
-          message: "error on find",
-          stats: {},
-          error: error,
-        });
-        console.error(error);
-      });
-  }*/
 };
 
 exports.history = (req, res, next) => {
@@ -421,3 +373,131 @@ exports.history = (req, res, next) => {
       });
   }
 };
+
+// Helpers
+
+function processGames (games, request) {
+  /*
+  process the game list to provide stats according to request
+  
+  body parameters
+  * need : for post processing purpose
+  
+  TODO
+  * only users from the table can do this
+    - ranking
+    - graph
+  
+  */
+  console.log("table.processGames");
+
+  let stats = {}
+  let players = {}
+
+  // Summarize game outcomes per user
+  games.forEach(game => {
+    if ( checkContract(game) ) {
+      game.players.forEach(player => {
+        // Add player to players if missing
+        if ( !Object.keys(players).includes(player._id) ) {
+          players[player._id] = {
+            attackWins: 0,
+            attackLoss: 0,
+            defenseWins: 0,
+            defenseLoss: 0,
+          }
+        }
+        // Record outcome
+        if ( game.outcome < 0 ) {
+          if ( player.role === "attack" ) {
+            players[player._id].attackLoss += 1
+          }
+          if ( player.role === "defense" ) {
+            players[player._id].defenseWins += 1
+          }
+        } else {
+          if ( player.role === "attack" ) {
+            players[player._id].attackWins += 1
+          }
+          if ( player.role === "defense" ) {
+            players[player._id].defenseLoss += 1
+          }
+        }
+      })
+    }
+  })
+
+  // Compute a score
+  players.forEach(player => {
+    // Number of games
+    players[player._id].games = player.attackWins + player.attackLoss + player.defenseWins + player.defenseLoss
+    // Attack rate
+    players[player._id].rateattack = (player.attackWins + player.attackLoss) / player.games
+    // Win rate
+    players[player._id].ratevictory = (player.attackWins + player.defenseWins) / player.games
+    // Cowhist19 V0 score
+    // 5+ROUND((0.75*defenseWins-0.75*defenseLoss+1.25*attackWins-1.25*attackLoss)/games*10,1)
+    players[player._id].scorev0 = 
+      5 + (0.75*(player.defenseWins-player.defenseLoss)+1.25*(player.attackWins-player.attackLoss))/player.games*10
+  })
+
+  // Make an array
+  function compare( a, b, f ) {
+    if ( a[f] < b[f] ){
+      return -1;
+    }
+    if ( a[f] > b[f] ){
+      return 1;
+    }
+    return 0;
+  }
+  let playersArray = Object.entries(players)
+  playersArray.sort(compare(field))
+
+  // Stats
+  stats.ranking = playersArray
+
+  return stats
+}
+
+function checkContract (game) {
+  /*
+  check that a game matches with contract
+  
+  */
+  console.log("table.checkContract");
+  let compliance = true
+  let nonCompliances = []
+
+  let contract = contracts[game.contract]
+
+  // Attack
+  if (game.players.filter(player => {player.role === "attack"}).length !== contract.attack) {
+    compliance = false
+    nonCompliances.push("number of attackant(s) does not match")
+  }
+
+  // Defense
+  if (game.players.filter(player => {player.role === "defense"}).length !== contract.defense) {
+    compliance = false
+    nonCompliances.push("number of defender(s) does not match")
+  }
+
+  // Folds
+  if (game.outcome + contract.folds > 13) {
+    compliance = false
+    nonCompliances.push("number of folds won exceeds possibilities")
+  }
+  if (game.outcome < -13) {
+    compliance = false
+    nonCompliances.push("number of folds lost exceeds possibilities")
+  }
+
+  // Console
+  if (nonCompliances.length > 0) {
+    console.log("non compliance list : ")
+    console.log(nonCompliances)
+  }
+
+  return compliance
+}

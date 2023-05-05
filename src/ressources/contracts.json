@@ -1,0 +1,86 @@
+[
+    {
+      "key": "8plis",
+      "folds": 8,
+      "attack": 2,
+      "defense": 2
+    },
+    {
+      "key": "9plis",
+      "folds": 9,
+      "attack": 2,
+      "defense": 2
+    },
+    {
+      "key": "solo6",
+      "folds": 6,
+      "attack": 1,
+      "defense": 3
+    },
+    {
+      "key": "10plis",
+      "folds": 10,
+      "attack": 2,
+      "defense": 2
+    },
+    {
+      "key": "solo7",
+      "folds": 7,
+      "attack": 1,
+      "defense": 3
+    },
+    {
+      "key": "11plis",
+      "folds": 11,
+      "attack": 2,
+      "defense": 2
+    },
+    {
+      "key": "petitemisere",
+      "folds": 0,
+      "attack": 1,
+      "defense": 3
+    },
+    {
+      "key": "solo8",
+      "folds": 8,
+      "attack": 1,
+      "defense": 3
+    },
+    {
+      "key": "12plis",
+      "folds": 12,
+      "attack": 2,
+      "defense": 2
+    },
+    {
+      "key": "13plis",
+      "folds": 13,
+      "attack": 2,
+      "defense": 2
+    },
+    {
+      "key": "trou8",
+      "folds": 8,
+      "attack": 2,
+      "defense": 2
+    },
+    {
+      "key": "trou9",
+      "folds": 9,
+      "attack": 2,
+      "defense": 2
+    },
+    {
+      "key": "grandchelem",
+      "folds": 13,
+      "attack": 1,
+      "defense": 3
+    },
+    {
+      "key": "grandemisere",
+      "folds": 0,
+      "attack": 1,
+      "defense": 3
+    }
+  ]
