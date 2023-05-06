@@ -128,6 +128,7 @@ exports.activate = (req, res, next) => {
                 status: status,
                 id: user._id,
                 message: "ustilisateur activé",
+                outcome: "activated",
               });
             })
             .catch((error) => {
@@ -136,7 +137,7 @@ exports.activate = (req, res, next) => {
                 status: status,
                 error,
                 message: "erreur lors du save",
-                outcome: "activated",
+                outcome: "error",
               });
             });
         } else {
@@ -146,6 +147,7 @@ exports.activate = (req, res, next) => {
               status: status,
               id: user._id,
               message: "ustilisateur déjà activé",
+              outcome: "activated",
             });
           } else {
             status = 202;
