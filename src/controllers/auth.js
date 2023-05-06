@@ -1,8 +1,9 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
+// BCRYPT https://www.makeuseof.com/nodejs-bcrypt-hash-verify-salt-password/
 const jwt = require("jsonwebtoken");
 
-// BCRYPT https://www.makeuseof.com/nodejs-bcrypt-hash-verify-salt-password/
+import { random_string } from "../ressources/toolkit";
 
 exports.signup = (req, res, next) => {
   console.log("auth.signup");
@@ -18,7 +19,8 @@ exports.signup = (req, res, next) => {
               // User edit
               user.pseudo = req.body.pseudo;
               user.password = hash;
-              user.status = "registered";
+              user.status = "signedup";
+              user.activationtoken = random_string(10);
               // User saving
               user
                 .save()
@@ -64,7 +66,7 @@ exports.signup = (req, res, next) => {
               pseudo: req.body.pseudo,
               login: req.body.login,
               password: hash,
-              status: "registered",
+              status: "signedup",
             });
             user.id = user._id;
             // User saving
@@ -107,10 +109,74 @@ exports.signup = (req, res, next) => {
     });
 };
 
+exports.activate = (req, res, next) => {
+  console.log("auth.activate");
+  let status = 500;
+  User.findOne({ activationtoken: req.params.id })
+    .then((user) => {
+      if (user) {
+        // Signedup check
+        if (user.status === "signedup") {
+          // Update status
+          user.status = "activated";
+          // Delete activation token
+          delete user.activationtoken;
+
+          // User saving
+          user
+            .save()
+            .then(() => {
+              status = 200;
+              res.status(status).json({
+                status: status,
+                id: user._id,
+                message: "ustilisateur enregistré",
+              });
+            })
+            .catch((error) => {
+              status = 400;
+              res.status(status).json({
+                status: status,
+                error,
+                message: "erreur lors du save",
+                outcome: "activated",
+              });
+            });
+        } else {
+          status = 202;
+          return res.status(status).json({
+            status: status,
+            message: "token non trouvé",
+            outcome: "notfound",
+          });
+        }
+      } else {
+        status = 202;
+        return res.status(status).json({
+          status: status,
+          message: "token non trouvé",
+          outcome: "notfound",
+        });
+      }
+    })
+    .catch((error) => {
+      status = 500;
+      res.status(status).json({
+        status: status,
+        error,
+        message: "erreur lors du check d'existance",
+        outcome: "error",
+      });
+    });
+};
+
 exports.login = (req, res, next) => {
   console.log("auth.login");
   let status = 500;
-  User.findOne({ login: req.body.login }, "pseudo login status priviledges password")
+  User.findOne(
+    { login: req.body.login },
+    "pseudo login status priviledges password"
+  )
     .then((user) => {
       if (!user) {
         status = 404;
