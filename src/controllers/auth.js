@@ -115,7 +115,7 @@ exports.activate = (req, res, next) => {
   let status = 500;
   User.findOne({ activationtoken: req.params.id })
     .then((user) => {
-      if (user) {
+      if (user !== undefined) {
         // Signedup check
         if (user.status === "signedup") {
           user.status = "activated";
@@ -141,12 +141,11 @@ exports.activate = (req, res, next) => {
             });
         } else {
           if (user.status === "activated") {
-            status = 400;
+            status = 200;
             res.status(status).json({
               status: status,
-              error,
-              message: "erreur lors du save",
-              outcome: "activated",
+              id: user._id,
+              message: "ustilisateur déjà activé",
             });
           } else {
             status = 202;
