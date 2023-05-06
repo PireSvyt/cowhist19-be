@@ -20,7 +20,7 @@ exports.signup = (req, res, next) => {
               user.pseudo = req.body.pseudo;
               user.password = hash;
               user.status = "signedup";
-              user.activationtoken = random_string(10);
+              user.activationtoken = random_string(20);
               // User saving
               user
                 .save()
@@ -67,7 +67,7 @@ exports.signup = (req, res, next) => {
               login: req.body.login,
               password: hash,
               status: "signedup",
-              activationtoken: random_string(10),
+              activationtoken: random_string(20),
             });
             user.id = user._id;
             // User saving
