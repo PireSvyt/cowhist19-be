@@ -121,8 +121,8 @@ exports.activate = (req, res, next) => {
           let updatedUser = { ...user };
           // Update status
           updatedUser.status = "activated";
-          // Delete activation token
-          delete updatedUser.activationtoken;
+          // Suppression of activation token
+          updatedUser.activationtoken = "";
 
           // User saving
           updatedUser
