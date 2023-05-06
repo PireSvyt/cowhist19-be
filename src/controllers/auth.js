@@ -67,6 +67,7 @@ exports.signup = (req, res, next) => {
               login: req.body.login,
               password: hash,
               status: "signedup",
+              activationtoken: random_string(10),
             });
             user.id = user._id;
             // User saving
