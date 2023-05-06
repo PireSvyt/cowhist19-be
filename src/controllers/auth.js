@@ -118,11 +118,7 @@ exports.activate = (req, res, next) => {
       if (user) {
         // Signedup check
         if (user.status === "signedup") {
-          // Update status
           user.status = "activated";
-          // Suppression of activation token
-          user.activationtoken = "";
-
           // User saving
           user
             .save()
@@ -144,12 +140,22 @@ exports.activate = (req, res, next) => {
               });
             });
         } else {
-          status = 202;
-          return res.status(status).json({
-            status: status,
-            message: "token non trouvé",
-            outcome: "notfound",
-          });
+          if (user.status === "activated") {
+            status = 400;
+            res.status(status).json({
+              status: status,
+              error,
+              message: "erreur lors du save",
+              outcome: "activated",
+            });
+          } else {
+            status = 202;
+            return res.status(status).json({
+              status: status,
+              message: "token non trouvé",
+              outcome: "notfound",
+            });
+          }
         }
       } else {
         status = 202;
