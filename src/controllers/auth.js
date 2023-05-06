@@ -118,20 +118,21 @@ exports.activate = (req, res, next) => {
       if (user) {
         // Signedup check
         if (user.status === "signedup") {
+          let updatedUser = { ...user };
           // Update status
-          user.status = "activated";
+          updatedUser.status = "activated";
           // Delete activation token
-          delete user.activationtoken;
+          delete updatedUser.activationtoken;
 
           // User saving
-          user
+          updatedUser
             .save()
             .then(() => {
               status = 200;
               res.status(status).json({
                 status: status,
                 id: user._id,
-                message: "ustilisateur enregistré",
+                message: "ustilisateur activé",
               });
             })
             .catch((error) => {
