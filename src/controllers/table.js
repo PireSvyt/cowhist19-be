@@ -199,15 +199,16 @@ exports.details = (req, res, next) => {
       players: 1, 
     } }
   ])
-  .then((table) => {
-    if (table.length === 1) {
-      table.contracts = contracts
+  .then((tables) => {
+    if (tables.length === 1) {
+      let table = tables[0];
+      table.contracts = contracts;
       // Response
       status = 200; // OK
       res.status(status).json({
         status: status,
         message: "table ok",
-        table: table[0],
+        table: table,
       });
     } else {
       status = 400; // OK
