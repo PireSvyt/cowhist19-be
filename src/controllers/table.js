@@ -200,7 +200,7 @@ exports.details = (req, res, next) => {
     } }
   ])
   .then((tables) => {
-    if (table.length === 1) {
+    if (tables.length === 1) {
       let table = tables[0];
       table.contracts = contracts;
       // Response
