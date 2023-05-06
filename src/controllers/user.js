@@ -1,4 +1,4 @@
-const jwt_decode = require('jwt-decode');
+const jwt_decode = require("jwt-decode");
 const User = require("../models/User");
 const Table = require("../models/Table");
 
@@ -34,10 +34,10 @@ exports.invite = (req, res, next) => {
             status = 201;
             res.status(status).json({
               status: status,
-              user: { 
-                _id: user._id, 
-                pseudo: user.pseudo, 
-                status: user.status 
+              user: {
+                _id: user._id,
+                pseudo: user.pseudo,
+                status: user.status,
               },
               message: "ustilisateur créé",
             });
@@ -139,79 +139,64 @@ exports.details = (req, res, next) => {
   const decodedToken = jwt_decode(token);
 
   User.aggregate([
-    { $match: { 
-        id: decodedToken.id
-    } },
-    { $lookup: { 
-        from: 'tables',
-        foreignField: 'users', 
-        localField: 'id', 
-        as: 'tables',
+    {
+      $match: {
+        id: decodedToken.id,
+      },
+    },
+    {
+      $lookup: {
+        from: "tables",
+        foreignField: "users",
+        localField: "id",
+        as: "tables",
         pipeline: [
-          { $project: {
-            _id: 1, 
-            name: 1, 
-          } }
-        ]
-    } },
-    { $project: {
-      _id: 1, 
-      pseudo: 1, 
-      login: 1, 
-      status: 1, 
-      priviledges: 1, 
-      tables: 1, 
-    } }
+          {
+            $project: {
+              _id: 1,
+              name: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        pseudo: 1,
+        login: 1,
+        status: 1,
+        priviledges: 1,
+        tables: 1,
+      },
+    },
   ])
-  .then((user) => {
-    if (user.length === 1) {
-      // Response
-      status = 200; // OK
-      res.status(status).json({
-        status: status,
-        message: "user ok",
-        user: user[0],
-      });
-    } else {
-      status = 400; // OK
-      res.status(status).json({
-        status: status,
-        message: "error on user find",
-        user: {},
-      });
-    }
-  })
-  .catch((error) => {
-    status = 400; // OK
-    console.error(error);
-    res.status(status).json({
-      status: status,
-      message: "error on aggregate",
-      user: {},
-      error: error,
-    });
-  });
-
-/*
-  User.findOne({ _id: decodedToken.id }, "pseudo login status priviledges")
     .then((user) => {
-      // Send
-      status = 200;
-      res.status(status).json({
-        status: status,
-        message: message,
-        user: user,
-      });
+      if (user.length === 1) {
+        // Response
+        status = 200; // OK
+        res.status(status).json({
+          status: status,
+          message: "user ok",
+          user: user[0],
+        });
+      } else {
+        status = 400; // OK
+        res.status(status).json({
+          status: status,
+          message: "error on user find",
+          user: {},
+        });
+      }
     })
     .catch((error) => {
       status = 400; // OK
+      console.error(error);
       res.status(status).json({
         status: status,
-        message: "error on find",
+        message: "error on aggregate",
         user: {},
         error: error,
       });
-      console.error(error);
     });
-    */
 };
