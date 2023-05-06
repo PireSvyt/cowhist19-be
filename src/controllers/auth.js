@@ -118,14 +118,13 @@ exports.activate = (req, res, next) => {
       if (user) {
         // Signedup check
         if (user.status === "signedup") {
-          let updatedUser = { ...user };
           // Update status
-          updatedUser.status = "activated";
+          user.status = "activated";
           // Suppression of activation token
-          updatedUser.activationtoken = "";
+          user.activationtoken = "";
 
           // User saving
-          updatedUser
+          user
             .save()
             .then(() => {
               status = 200;
