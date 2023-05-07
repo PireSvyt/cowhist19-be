@@ -3,9 +3,74 @@ const bcrypt = require("bcrypt");
 // BCRYPT https://www.makeuseof.com/nodejs-bcrypt-hash-verify-salt-password/
 const jwt = require("jsonwebtoken");
 
-import { random_string } from "../ressources/toolkit";
+var toolkit = require("../ressources/toolkit");
 
-exports.signup = (req, res, next) => {
+module.exports = {
+  signup: signup,
+  activate: activate,
+  login: login,
+  assess: assess,
+  authenticate: authenticate,
+  belongstotable: belongstotable,
+  isadminuser: isadminuser,
+  requesttoken: requesttoken,
+  resetpw: resetpw,
+};
+/*
+async function signup(req, res, next) {
+  let status = 500;
+
+  try {
+    let user = await User.findOne({ login: req.body.login });
+    if (user) {
+      // Invited
+      if (user.status === "invited") {
+        let hash = await bcrypt.hash(req.body.password, 10);
+        // User edit
+        user.pseudo = req.body.pseudo;
+        user.password = hash;
+        user.status = "signedup";
+        user.activationtoken = toolkit.random_string(20);
+        // User saving
+        let savingoutcome = await user.save();
+        status = 200;
+        res.status(status).json({
+          status: status,
+          id: user._id,
+          message: "ustilisateur enregistré",
+        });
+        return;
+      } else {
+        status = 202;
+        res.status(status).json({
+          status: status,
+          id: user._id,
+          message: "ustilisateur not invited",
+        });
+        return;
+      }
+    } else {
+      status = 203;
+      res.status(status).json({
+        status: status,
+        id: user._id,
+        message: "ustilisateur not found",
+      });
+      return;
+    }
+  } catch (err) {
+    status = 400;
+    res.status(status).json({
+      status: status,
+      error,
+      message: "erreur in low try",
+    });
+    return;
+  }
+}
+*/
+
+async function signup(req, res, next) {
   console.log("auth.signup");
   let status = 500;
   User.findOne({ login: req.body.login })
@@ -20,7 +85,7 @@ exports.signup = (req, res, next) => {
               user.pseudo = req.body.pseudo;
               user.password = hash;
               user.status = "signedup";
-              user.activationtoken = random_string(20);
+              user.activationtoken = toolkit.random_string(20);
               // User saving
               user
                 .save()
@@ -67,7 +132,7 @@ exports.signup = (req, res, next) => {
               login: req.body.login,
               password: hash,
               status: "signedup",
-              activationtoken: random_string(20),
+              activationtoken: toolkit.random_string(20),
             });
             user.id = user._id;
             // User saving
@@ -108,9 +173,9 @@ exports.signup = (req, res, next) => {
         message: "erreur lors du check d'existance",
       });
     });
-};
+}
 
-exports.activate = (req, res, next) => {
+function activate(req, res, next) {
   console.log("auth.activate");
   let status = 500;
   User.findOne({ activationtoken: req.params.id })
@@ -176,9 +241,9 @@ exports.activate = (req, res, next) => {
         outcome: "error",
       });
     });
-};
+}
 
-exports.login = (req, res, next) => {
+function login(req, res, next) {
   console.log("auth.login");
   let status = 500;
   User.findOne(
@@ -235,9 +300,9 @@ exports.login = (req, res, next) => {
         message: "erreur lors de la recherche",
       });
     });
-};
+}
 
-exports.assess = (req, res, next) => {
+function assess(req, res, next) {
   console.log("auth.assess");
   console.log("req.body.token");
   console.log(req.body.token);
@@ -269,9 +334,9 @@ exports.assess = (req, res, next) => {
       });
     });
   }
-};
+}
 
-exports.authenticate = (req, res, next) => {
+function authenticate(req, res, next) {
   console.log("auth.authenticate");
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
@@ -291,26 +356,26 @@ exports.authenticate = (req, res, next) => {
       next();
     });
   }
-};
+}
 
-exports.belongstotable = (req, res, next) => {
+function belongstotable(req, res, next) {
   return res
     .status(500)
     .json({ status: 500, message: "TODO auth.belongstotable" });
-};
+}
 
-exports.isadminuser = (req, res, next) => {
+function isadminuser(req, res, next) {
   return res
     .status(500)
     .json({ status: 500, message: "TODO auth.isadminuser" });
-};
+}
 
-exports.requesttoken = (req, res, next) => {
+function requesttoken(req, res, next) {
   return res
     .status(500)
     .json({ status: 500, message: "TODO auth.requesttoken" });
-};
+}
 
-exports.resetpw = (req, res, next) => {
+function resetpw(req, res, next) {
   return res.status(500).json({ status: 500, message: "TODO auth.resetpw" });
-};
+}

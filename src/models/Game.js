@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
 
-mongoose.set('debug', true);
+if (process.env.MONGOOSE_DEBUG === true) {
+  mongoose.set("debug", true);
+}
 
 const gameSchema = mongoose.Schema({
-  id: { type: String, required: true, unique: true},
+  id: { type: String, required: true, unique: true },
   table: { type: String, required: true },
   date: { type: Date, required: true },
   contract: { type: String, required: true },

@@ -1,4 +1,8 @@
-export function random_string(length) {
+module.exports = {
+  random_string: random_string,
+};
+
+function random_string(length) {
   let result = "";
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
