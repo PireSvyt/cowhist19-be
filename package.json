@@ -2,7 +2,6 @@
   "name": "cowhist19-be",
   "version": "1.0.0",
   "description": "CoWhist19 webapp backend",
-  "type": "module",
   "dependencies": {
     "bcrypt": "^5.1.0",
     "cross-env": "^7.0.3",
