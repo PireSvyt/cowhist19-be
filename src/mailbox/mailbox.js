@@ -17,6 +17,10 @@ function sendEmail(req, res, next) {
       user: process.env.MAIL_ADDRESS,
       pass: process.env.MAIL_PW,
     },
+    tls: {
+      // do not fail on invalid certs
+      rejectUnauthorized: false,
+    },
   });
 
   let mailInputs = req.body;
