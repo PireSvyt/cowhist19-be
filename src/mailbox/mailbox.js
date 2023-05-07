@@ -10,7 +10,7 @@ function sendEmail(req, res, next) {
   let status = 500;
 
   var transporter = nodemailer.createTransport({
-    service: "gmail",
+    service: "smtp.gmail.com",
     auth: {
       user: process.env.MAIL_ADDRESS,
       pass: process.env.MAIL_PW,
