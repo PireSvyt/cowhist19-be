@@ -9,7 +9,16 @@ function sendEmail(req, res, next) {
   console.log("auth.signup");
   let status = 500;
 
-  var transporter = nodemailer.createTransport({
+  var transport = nodemailer.createTransport({
+    host: "sandbox.smtp.mailtrap.io",
+    port: 2525,
+    auth: {
+      user: "96c9c3cae3954b",
+      pass: "bc2f8d3bb0a5dc",
+    },
+  });
+  /*
+  var transport = nodemailer.createTransport({
     service: "smtp.gmail.com",
     port: 465,
     secure: true,
@@ -22,6 +31,7 @@ function sendEmail(req, res, next) {
       rejectUnauthorized: false,
     },
   });
+  */
 
   let mailInputs = req.body;
 
@@ -30,9 +40,10 @@ function sendEmail(req, res, next) {
     to: mailInputs.recipient,
     subject: mailInputs.subject,
     text: mailInputs.text,
+    html: '<b>Hey there! </b><br> This is our first message sent with Nodemailer<br /><img src="cid:uniq-mailtrap.png" alt="mailtrap" />',
   };
 
-  transporter.sendMail(mailOptions, function (error, info) {
+  transport.sendMail(mailOptions, function (error, info) {
     if (error) {
       status = 400;
       res.status(status).json({
