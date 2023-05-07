@@ -7,6 +7,7 @@ const authRoutes = require("./src/routes/auth");
 const userRoutes = require("./src/routes/user");
 const gameRoutes = require("./src/routes/game");
 const tableRoutes = require("./src/routes/table");
+const mailboxRoutes = require("./src/routes/mailbox");
 
 // CONNECT MONGO
 let DB_URL =
@@ -47,6 +48,7 @@ app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/game", gameRoutes);
 app.use("/table", tableRoutes);
+app.use("/mailbox", mailboxRoutes);
 
 // Landing
 app.get("/", (req, res) => {
