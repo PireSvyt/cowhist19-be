@@ -1,0 +1,16 @@
+INTRODUCE A V1 WITH NEW CONTROLLERS
+
+FE
+    - adapt table endpoints 
+        - new field "type"
+        - removed field "status"
+        - adapted structured below "data"
+        
+BE
+    - add unit tests for
+        - serviceCheckContract
+        - serviceProcessGames
+    - repackage controllers for
+        - auth
+        - game
+        - user
