@@ -1,4 +1,4 @@
-const serviceCheckContract = require("./serviceCheckContract");
+const serviceCheckContract = require("./serviceCheckContract.js");
 
 module.exports = function processGames(games, request) {
   /*

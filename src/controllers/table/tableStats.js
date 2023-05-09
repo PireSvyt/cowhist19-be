@@ -1,6 +1,6 @@
-const Game = require("../../models/Game");
+const Game = require("../../models/Game.js");
 
-const serviceProcessGames = require("./serviceProcessGames");
+const serviceProcessGames = require("./services/serviceProcessGames.js");
 
 module.exports = stats = (req, res, next) => {
   /*

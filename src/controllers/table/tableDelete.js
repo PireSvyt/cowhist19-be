@@ -1,5 +1,5 @@
-const Game = require("../../models/Game");
-const Table = require("../../models/Table");
+const Game = require("../../models/Game.js");
+const Table = require("../../models/Table.js");
 
 module.exports = tableDelete = (req, res, next) => {
   /*

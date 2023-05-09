@@ -1,4 +1,4 @@
-const Table = require("../../models/Table");
+const Table = require("../../models/Table.js");
 
 module.exports = tableSave = (req, res, next) => {
   /*

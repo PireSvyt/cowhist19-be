@@ -16,61 +16,9 @@ module.exports = {
   requesttoken: requesttoken,
   resetpw: resetpw,
 };
-/*
-async function signup(req, res, next) {
-  let status = 500;
 
-  try {
-    let user = await User.findOne({ login: req.body.login });
-    if (user) {
-      // Invited
-      if (user.status === "invited") {
-        let hash = await bcrypt.hash(req.body.password, 10);
-        // User edit
-        user.pseudo = req.body.pseudo;
-        user.password = hash;
-        user.status = "signedup";
-        user.activationtoken = toolkit.random_string(20);
-        // User saving
-        let savingoutcome = await user.save();
-        status = 200;
-        res.status(status).json({
-          status: status,
-          id: user._id,
-          message: "ustilisateur enregistré",
-        });
-        return;
-      } else {
-        status = 202;
-        res.status(status).json({
-          status: status,
-          id: user._id,
-          message: "ustilisateur not invited",
-        });
-        return;
-      }
-    } else {
-      status = 203;
-      res.status(status).json({
-        status: status,
-        id: user._id,
-        message: "ustilisateur not found",
-      });
-      return;
-    }
-  } catch (err) {
-    status = 400;
-    res.status(status).json({
-      status: status,
-      error,
-      message: "erreur in low try",
-    });
-    return;
-  }
-}
-*/
-
-async function signup(req, res, next) {
+// NEW CONTROLLER EXISTING
+function signup(req, res, next) {
   console.log("auth.signup");
   let status = 500;
   User.findOne({ login: req.body.login })
