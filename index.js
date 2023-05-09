@@ -3,10 +3,10 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 
-const authRoutes = require("./src/routes/auth");
-const userRoutes = require("./src/routes/user");
-const gameRoutes = require("./src/routes/game");
-const tableRoutes = require("./src/routes/table");
+const authRoutes = require("./src/routes/auth.js");
+const userRoutes = require("./src/routes/user.js");
+const gameRoutes = require("./src/routes/game.js");
+const tableRoutes = require("./src/routes/table.js");
 
 // CONNECT MONGO
 let DB_URL =

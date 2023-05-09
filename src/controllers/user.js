@@ -1,6 +1,7 @@
 const jwt_decode = require("jwt-decode");
-const User = require("../models/User");
-const Table = require("../models/Table");
+
+const User = require("../models/User.js");
+const Table = require("../models/Table.js");
 
 exports.invite = (req, res, next) => {
   /*

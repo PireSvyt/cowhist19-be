@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const userCtrl = require("../controllers/user");
-const authCtrl = require("../controllers/auth");
+
+const userCtrl = require("../controllers/user.js");
+const authCtrl = require("../controllers/auth.js");
 
 router.post("/invite", authCtrl.authenticate, userCtrl.invite);
 router.post("/close", authCtrl.authenticate, userCtrl.close);

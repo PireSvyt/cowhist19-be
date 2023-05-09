@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 // Old controllers
-const authCtrl = require("../controllers/auth");
+const authCtrl = require("../controllers/auth.js");
 
 router.post("/signup", authCtrl.signup);
 router.post("/activate/:id", authCtrl.activate);

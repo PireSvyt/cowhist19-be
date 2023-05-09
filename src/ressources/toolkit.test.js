@@ -1,5 +1,6 @@
 require("@jest/globals");
-var toolkit = require("./toolkit");
+
+var toolkit = require("./toolkit.js");
 
 /*
 

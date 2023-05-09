@@ -1,4 +1,4 @@
-const Game = require("../models/Game");
+const Game = require("../models/Game.js");
 
 exports.save = (req, res, next) => {
   /*
