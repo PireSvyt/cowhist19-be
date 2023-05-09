@@ -1,7 +1,7 @@
 INTRODUCE A V1 WITH NEW CONTROLLERS
 
 FE
-    - adapt table endpoints 
+    - adapt endpoints to V1
         - new field "type"
         - removed field "status"
         - adapted structured below "data"
