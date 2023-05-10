@@ -7,8 +7,5 @@ FE
         
 BE
     - type the responses with TS
-    - add unit tests for
-        - serviceCheckContract
-        - serviceProcessGames
-        - endpoints ???
+    - add unit tests for endpoints ???
         

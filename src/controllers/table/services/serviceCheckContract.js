@@ -55,15 +55,5 @@ module.exports = function serviceCheckContract(game) {
     }
   }
 
-  // Console
-  if (nonCompliances.length > 0) {
-    console.log("non compliance list : ");
-    console.log(nonCompliances);
-    console.log("game");
-    console.log(game);
-    console.log("contract");
-    console.log(contract);
-  }
-
   return compliance;
 };
