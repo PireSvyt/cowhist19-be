@@ -8,7 +8,7 @@ const userRoutes = require("./src/routes/user.js");
 const gameRoutes = require("./src/routes/game.js");
 const tableRoutes = require("./src/routes/table.js");
 
-module.exports = function index() {
+
   // CONNECT MONGO
   let DB_URL =
     "mongodb+srv://savoyatp:" +
@@ -51,4 +51,4 @@ module.exports = function index() {
   app.get("/", (req, res) => {
     res.send("<h1>Cowhist19</h1>");
   });
-};
+module.exports = app
