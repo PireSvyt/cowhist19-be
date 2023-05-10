@@ -3,7 +3,8 @@ const router = express.Router();
 
 // Old controllers
 const authCtrl = require("../controllers/auth.js");
-const tableCtrl = require("../controllers/tableCtrl.js");
+const tableCtrl = require("../controllers/table.js");
+
 router.post("/save", authCtrl.authenticate, tableCtrl.save);
 router.get("/:id", authCtrl.authenticate, tableCtrl.details);
 router.delete("/:id", authCtrl.authenticate, tableCtrl.delete);

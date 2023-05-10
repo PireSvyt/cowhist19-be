@@ -1,6 +1,6 @@
 const Table = require("../models/Table.js");
 const Game = require("../models/Game.js");
-const contracts = require("../ressources/contracts.json");
+const contracts = require("./table/resources/contracts.json");
 
 // NEW CONTROLLER EXISTING
 exports.save = (req, res, next) => {

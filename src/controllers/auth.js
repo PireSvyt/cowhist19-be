@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/User.js");
-var toolkit = require("../ressources/toolkit.js");
+var toolkit = require("./auth/services/toolkit.js");
 
 module.exports = {
   signup: signup,

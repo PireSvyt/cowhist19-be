@@ -1,5 +1,5 @@
 const Table = require("../../models/Table.js");
-const contracts = require("./ressources/contracts.json");
+const contracts = require("./resources/contracts.json");
 
 module.exports = tableDetails = (req, res, next) => {
   /*
