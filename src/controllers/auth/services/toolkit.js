@@ -1,8 +1,4 @@
-module.exports = {
-  random_string: random_string,
-};
-
-function random_string(length) {
+module.exports = function random_string(length) {
   let result = "";
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -13,4 +9,4 @@ function random_string(length) {
     counter += 1;
   }
   return result;
-}
+};
