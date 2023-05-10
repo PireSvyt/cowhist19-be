@@ -1,7 +1,7 @@
 const Table = require("../../models/Table.js");
-const contracts = require("../../ressources/contracts.json");
+const contracts = require("./ressources/contracts.json");
 
-module.exports = details = (req, res, next) => {
+module.exports = tableDetails = (req, res, next) => {
   /*
   
   provides the details of a table
@@ -72,8 +72,7 @@ module.exports = details = (req, res, next) => {
       }
     })
     .catch((error) => {
-      console.error(400);
-      res.status(status).json({
+      res.status(400).json({
         type: "table.details.error.onaggregate",
         message: "error on aggregate",
         data: {
@@ -81,5 +80,6 @@ module.exports = details = (req, res, next) => {
         },
         error: error,
       });
+      console.error(error);
     });
 };

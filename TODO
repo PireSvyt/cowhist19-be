@@ -3,13 +3,12 @@ FE
         - new field "type"
         - removed field "status"
         - adapted structured below "data"
+    - then retire V0
         
 BE
     - type the responses with TS
     - add unit tests for
         - serviceCheckContract
         - serviceProcessGames
-    - repackage controllers for
-        - auth WIP
-        - game
-        - user
+        - endpoints ???
+        

@@ -252,6 +252,7 @@ function login(req, res, next) {
     });
 }
 
+// NEW CONTROLLER EXISTING
 function assess(req, res, next) {
   console.log("auth.assess");
   console.log("req.body.token");
@@ -286,6 +287,7 @@ function assess(req, res, next) {
   }
 }
 
+// NEW CONTROLLER EXISTING
 function authenticate(req, res, next) {
   console.log("auth.authenticate");
   const authHeader = req.headers["authorization"];

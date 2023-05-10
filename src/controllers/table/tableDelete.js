@@ -8,8 +8,8 @@ module.exports = tableDelete = (req, res, next) => {
   
   possible response types
   * table.delete.success
-  * table.delete.error.deletinggames
-  * table.delete.error.deletingtable
+  * table.delete.error.ondeletegames
+  * table.delete.error.ondeletetable
   
   TODO
   * only users from the table can do this
@@ -21,7 +21,7 @@ module.exports = tableDelete = (req, res, next) => {
   // Delete table's games
   Game.deleteMany({ table: req.params.id }).catch((error) => {
     res.status(400).json({
-      type: "table.delete.error.deletinggames",
+      type: "table.delete.error.ondeletegames",
       message: "error on games delete",
       error: error,
     });
@@ -38,7 +38,7 @@ module.exports = tableDelete = (req, res, next) => {
     })
     .catch((error) => {
       res.status(400).json({
-        type: "table.delete.error.deletingtable",
+        type: "table.delete.error.ondeletetable",
         message: "error on table delete",
         error: error,
       });

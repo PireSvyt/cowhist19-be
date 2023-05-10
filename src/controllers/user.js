@@ -3,6 +3,7 @@ const jwt_decode = require("jwt-decode");
 const User = require("../models/User.js");
 const Table = require("../models/Table.js");
 
+// NEW CONTROLLER EXISTING
 exports.invite = (req, res, next) => {
   /*
   create invited user if not yet existing
@@ -85,6 +86,7 @@ exports.merge = (req, res, next) => {
   return res.status(500).json({ status: 500, message: "TODO user.merge" });
 };
 
+// NEW CONTROLLER EXISTING
 exports.tables = (req, res, next) => {
   /*
   provides a dict of tables user belongs to  
@@ -122,6 +124,7 @@ exports.stats = (req, res, next) => {
   return res.status(500).json({ status: 500, message: "TODO user.stats" });
 };
 
+// NEW CONTROLLER EXISTING
 exports.details = (req, res, next) => {
   /*
   provides user details 

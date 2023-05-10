@@ -1,6 +1,6 @@
 const serviceCheckContract = require("./serviceCheckContract.js");
 
-module.exports = function processGames(games, request) {
+module.exports = function serviceProcessGames(games, request) {
   /*
   
   process the game list to provide stats according to request
@@ -16,7 +16,7 @@ module.exports = function processGames(games, request) {
   
   */
 
-  console.log("table.processGames");
+  console.log("table.serviceProcessGames");
 
   // Initialize
   let stats = {};

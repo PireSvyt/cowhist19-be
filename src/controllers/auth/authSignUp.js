@@ -1,8 +1,5 @@
-const bcrypt = require("bcrypt");
-// BCRYPT https://www.makeuseof.com/nodejs-bcrypt-hash-verify-salt-password/
-
 const User = require("../../models/User.js");
-var toolkit = require("../../ressources/toolkit.js");
+var toolkit = require("./services/toolkit.js");
 
 module.exports = authSignup = (req, res, next) => {
   /*
