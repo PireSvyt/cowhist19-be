@@ -1,5 +1,3 @@
-INTRODUCE A V1 WITH NEW CONTROLLERS
-
 FE
     - adapt endpoints to V1
         - new field "type"
@@ -7,10 +5,11 @@ FE
         - adapted structured below "data"
         
 BE
+    - type the responses with TS
     - add unit tests for
         - serviceCheckContract
         - serviceProcessGames
     - repackage controllers for
-        - auth
+        - auth WIP
         - game
         - user

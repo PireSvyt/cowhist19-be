@@ -18,10 +18,6 @@ module.exports = details = (req, res, next) => {
 
   console.log("table.details");
 
-  // Initialize
-  var status = 500;
-  var type = "table.details.error";
-
   Table.aggregate([
     {
       $match: {
@@ -57,22 +53,17 @@ module.exports = details = (req, res, next) => {
       if (tables.length === 1) {
         let table = tables[0];
         table.contracts = contracts;
-
         // Response
-        status = 200;
-        type = "table.details.success";
-        res.status(status).json({
-          type: type,
+        res.status(200).json({
+          type: "table.details.success",
           message: "table ok",
           data: {
             table: table,
           },
         });
       } else {
-        status = 400;
-        type = "table.details.error.onfind";
-        res.status(status).json({
-          type: type,
+        res.status(400).json({
+          type: "table.details.error.onfind",
           message: "error on find",
           data: {
             table: {},
@@ -81,11 +72,9 @@ module.exports = details = (req, res, next) => {
       }
     })
     .catch((error) => {
-      status = 400;
-      type = "table.details.error.onaggregate";
-      console.error(error);
+      console.error(400);
       res.status(status).json({
-        type: type,
+        type: "table.details.error.onaggregate",
         message: "error on aggregate",
         data: {
           table: {},

@@ -9,7 +9,7 @@ module.exports = stats = (req, res, next) => {
   body parameters are transfered to the processGames function 
   
   possible response types
-  * table.save.success
+  * table.stats.success
   * table.stats.error
   
   TODO
@@ -21,10 +21,6 @@ module.exports = stats = (req, res, next) => {
 
   console.log("table.stats");
 
-  // Initialize
-  var status = 500;
-  var type = "table.stats.error";
-
   // Find tablegames
   Game.find({ table: req.params.id })
     .then((games) => {
@@ -32,10 +28,8 @@ module.exports = stats = (req, res, next) => {
       let stats = serviceProcessGames(games, req.body);
 
       // Response
-      status = 200; // OK
-      type = "table.stats.success";
-      res.status(status).json({
-        type: type,
+      res.status(200).json({
+        type: "table.stats.success",
         message: "stats ok",
         data: {
           stats: stats,
@@ -43,11 +37,9 @@ module.exports = stats = (req, res, next) => {
       });
     })
     .catch((error) => {
-      status = 400;
-      type = "table.stats.error";
       console.error(error);
-      res.status(status).json({
-        type: type,
+      res.status(400).json({
+        type: "table.stats.error",
         message: "error on find",
         error: error,
         data: {

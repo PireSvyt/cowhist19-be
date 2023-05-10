@@ -123,6 +123,7 @@ function signup(req, res, next) {
     });
 }
 
+// NEW CONTROLLER EXISTING
 function activate(req, res, next) {
   console.log("auth.activate");
   let status = 500;
@@ -191,6 +192,7 @@ function activate(req, res, next) {
     });
 }
 
+// NEW CONTROLLER EXISTING
 function login(req, res, next) {
   console.log("auth.login");
   let status = 500;

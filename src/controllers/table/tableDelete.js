@@ -18,16 +18,10 @@ module.exports = tableDelete = (req, res, next) => {
 
   console.log("table.delete");
 
-  // Initialize
-  var status = 500;
-  var type = "table.delete.error";
-
   // Delete table's games
   Game.deleteMany({ table: req.params.id }).catch((error) => {
-    status = 400;
-    type = "table.delete.error.deletinggames";
-    res.status(status).json({
-      type: type,
+    res.status(400).json({
+      type: "table.delete.error.deletinggames",
       message: "error on games delete",
       error: error,
     });
@@ -37,18 +31,14 @@ module.exports = tableDelete = (req, res, next) => {
   // Delete table
   Table.deleteOne({ _id: req.params.id })
     .then(() => {
-      status = 200;
-      type = "table.delete.success";
-      res.status(status).json({
-        type: type,
+      res.status(200).json({
+        type: "table.delete.success",
         message: "table deleted",
       });
     })
     .catch((error) => {
-      status = 400;
-      type = "table.delete.error.deletingtable";
-      res.status(status).json({
-        type: type,
+      res.status(400).json({
+        type: "table.delete.error.deletingtable",
         message: "error on table delete",
         error: error,
       });

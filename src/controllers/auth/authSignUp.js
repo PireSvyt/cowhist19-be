@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const User = require("../../models/User.js");
 var toolkit = require("../../ressources/toolkit.js");
 
-module.exports = signup = (req, res, next) => {
+module.exports = authSignup = (req, res, next) => {
   /*
   
   signup a user
@@ -14,7 +14,7 @@ module.exports = signup = (req, res, next) => {
     password is encrypted on FE side and saved as provided!
   
   possible response types
-  * auth.signup.signedup
+  * auth.signup.success.signedup
   * auth.signup.success.alreadysignedup
   * auth.signup.error.notfound
   * auth.signup.error.savingoncreate
@@ -23,10 +23,6 @@ module.exports = signup = (req, res, next) => {
   */
 
   console.log("auth.signup");
-
-  // Initialize
-  let status = 500;
-  var type = "auth.signup.error";
 
   User.findOne({ login: req.body.login })
     .then((user) => {
@@ -42,10 +38,8 @@ module.exports = signup = (req, res, next) => {
           user
             .save()
             .then(() => {
-              status = 200;
-              type = "auth.signup.signedup";
-              res.status(status).json({
-                type: type,
+              res.status(200).json({
+                type: "auth.signup.success.signedup",
                 message: "user signed up from invited",
                 data: {
                   id: user._id,
@@ -53,10 +47,8 @@ module.exports = signup = (req, res, next) => {
               });
             })
             .catch((error) => {
-              status = 400;
-              type = "auth.signup.error.savingfrominvited";
-              res.status(status).json({
-                type: type,
+              res.status(400).json({
+                type: "auth.signup.error.savingfrominvited",
                 error,
                 message: "erreur lors de la création",
                 data: {
@@ -66,10 +58,8 @@ module.exports = signup = (req, res, next) => {
             });
         } else {
           // Already existing
-          status = 409;
-          type = "auth.signup.success.alreadysignedup";
-          return res.status(status).json({
-            type: type,
+          return res.status(409).json({
+            type: "auth.signup.success.alreadysignedup",
             message: "utilisateur déjà existant",
             data: {
               id: user._id,
@@ -91,10 +81,8 @@ module.exports = signup = (req, res, next) => {
         user
           .save()
           .then(() => {
-            status = 201;
-            type = "auth.signup.success.signedup";
-            res.status(status).json({
-              type: type,
+            res.status(201).json({
+              type: "auth.signup.success.signedup",
               message: "user signedup creation",
               data: {
                 id: user._id,
@@ -102,10 +90,8 @@ module.exports = signup = (req, res, next) => {
             });
           })
           .catch((error) => {
-            status = 400;
-            type = "auth.signup.error.savingoncreate";
-            res.status(status).json({
-              type: type,
+            res.status(400).json({
+              type: "auth.signup.error.savingoncreate",
               error,
               message: "erreur lors de la création",
               data: {
@@ -116,10 +102,8 @@ module.exports = signup = (req, res, next) => {
       }
     })
     .catch((error) => {
-      status = 500;
-      type = "auth.signup.error.notfound";
-      res.status(status).json({
-        type: type,
+      res.status(500).json({
+        type: "auth.signup.error.notfound",
         error,
         message: "erreur user not found",
         data: {

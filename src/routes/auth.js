@@ -9,12 +9,13 @@ router.post("/activate/:id", authCtrl.activate);
 router.post("/login", authCtrl.login);
 router.post("/assess", authCtrl.assess);
 
-router.post("/requesttoken", authCtrl.requesttoken);
-router.post("/resetpw", authCtrl.resetpw);
-
-// New controllers
+// V1 controllers
 const authSignUp = require("../controllers/auth/authSignUp.js");
+const authActivate = require("../controllers/auth/authActivate");
+const authLogin = require("../controllers/auth/authLogin");
 
-router.post("/signup/v1", authSignUp);
+router.post("/v1/signup", authSignUp);
+router.post("/v1/activate", authActivate);
+router.post("/v1/login", authLogin);
 
 module.exports = router;

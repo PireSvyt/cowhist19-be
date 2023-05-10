@@ -18,14 +18,8 @@ module.exports = tableSave = (req, res, next) => {
 
   console.log("table.tableSave");
 
-  // Initialize
-  var status = 500;
-  var type = "table.save.error";
-
   // Save
   if (req.body._id === "" || req.body._id === undefined) {
-    console.log("table to create");
-
     // Prep
     delete req.body._id;
     let tableToSave = { ...req.body };
@@ -34,8 +28,6 @@ module.exports = tableSave = (req, res, next) => {
       tableUsers.push(user._id);
     });
     tableToSave.users = tableUsers;
-    console.log("table to save ");
-    console.log(tableToSave);
 
     // Generate
     tableToSave = new Table(tableToSave);
@@ -45,13 +37,9 @@ module.exports = tableSave = (req, res, next) => {
     tableToSave
       .save()
       .then(() => {
-        console.log("table created");
-
         // Response
-        status = 201;
-        type = "table.save.success.created";
-        res.status(status).json({
-          type: type,
+        res.status(201).json({
+          type: "table.save.success.created",
           message: "table created",
           data: {
             id: tableToSave._id,
@@ -59,11 +47,8 @@ module.exports = tableSave = (req, res, next) => {
         });
       })
       .catch((error) => {
-        console.log("error on create");
-        status = 400;
-        type = "table.save.error.oncreate";
-        res.status(status).json({
-          type: type,
+        res.status(400).json({
+          type: "table.save.error.oncreate",
           message: "error on create",
           error: error,
           data: {
@@ -73,33 +58,21 @@ module.exports = tableSave = (req, res, next) => {
       });
   } else {
     // Modify
-    console.log("table to modify");
-    console.log(req.body);
     let tableToSave = { ...req.body };
-
-    // Prep
     let tableUsers = [];
     tableToSave.players.forEach((player) => {
       tableUsers.push(player._id);
     });
     tableToSave.users = tableUsers;
-    console.log("table to save ");
-    console.log(tableToSave);
 
     // Manage table to users
     Table.findOne({ _id: tableToSave._id })
-      .then((table) => {
-        console.log("found table " + table._id);
-        console.log(table);
-
+      .then(() => {
         // Save
         Table.updateOne({ _id: tableToSave._id }, tableToSave)
           .then(() => {
-            console.log("table modified");
-            status = 200;
-            type = "table.save.success.modified";
-            res.status(status).json({
-              type: type,
+            res.status(200).json({
+              type: "table.save.success.modified",
               message: "table modified",
               data: {
                 id: tableToSave._id,
@@ -107,11 +80,8 @@ module.exports = tableSave = (req, res, next) => {
             });
           })
           .catch((error) => {
-            console.log("error on modified");
-            status = 400;
-            type = "table.save.error.onmodify";
-            res.status(status).json({
-              type: type,
+            res.status(400).json({
+              type: "table.save.error.onmodify",
               message: "error on modify",
               error: error,
               data: {
@@ -122,11 +92,8 @@ module.exports = tableSave = (req, res, next) => {
           });
       })
       .catch((error) => {
-        console.log("error on user update");
-        status = 400;
-        type = "table.save.error.onfindtable";
-        res.status(status).json({
-          type: type,
+        res.status(400).json({
+          type: "table.save.error.onfindtable",
           message: "error on find table",
           error: error,
           data: {
