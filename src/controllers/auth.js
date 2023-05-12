@@ -128,7 +128,7 @@ function signup(req, res, next) {
           .hash(req.body.password, 10)
           .then((hash) => {
             // User creation
-            console.log({
+            let user = new User({
               pseudo: req.body.pseudo,
               login: req.body.login,
               password: hash,
