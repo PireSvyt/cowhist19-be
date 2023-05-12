@@ -1,6 +1,6 @@
 const contracts = require("../resources/contracts.json");
 
-function serviceCheckContract(game) {
+module.exports = function serviceCheckContract(game) {
   /*
   
   check that a game matches with contract
@@ -58,4 +58,3 @@ function serviceCheckContract(game) {
   return compliance;
 }
 
-module.exports = { serviceCheckContract };

@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/User");
-var toolkit = require("./auth/services/toolkit.js");
+var random_string = require("./auth/services/random_string.js");
 
 module.exports = {
   signup: signup,
@@ -30,7 +30,7 @@ async function signup(req, res, next) {
         user.pseudo = req.body.pseudo;
         user.password = hash;
         user.status = "signedup";
-        user.activationtoken = toolkit.random_string(20);
+        user.activationtoken = random_string(20);
         // User saving
         let savingoutcome = await user.save();
         status = 200;
@@ -86,7 +86,7 @@ function signup(req, res, next) {
               user.pseudo = req.body.pseudo;
               user.password = hash;
               user.status = "signedup";
-              user.activationtoken = toolkit.random_string(20);
+              user.activationtoken = random_string(20);
               // User saving
               user
                 .save()
@@ -130,14 +130,14 @@ function signup(req, res, next) {
             // User creation
             console.log(req.body);
             console.log(hash);
-            console.log(toolkit.random_string(20));
+            console.log(random_string(20));
 
             let newuser = {
               pseudo: req.body.pseudo,
               login: req.body.login,
               password: hash,
               status: "signedup",
-              activationtoken: toolkit.random_string(20),
+              activationtoken: random_string(20),
             };
             console.log(newuser);
 

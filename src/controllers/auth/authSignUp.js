@@ -1,5 +1,5 @@
 const User = require("../../models/User.js");
-var toolkit = require("./services/toolkit.js");
+var random_string = require("./services/random_string.js");
 
 module.exports = authSignup = (req, res, next) => {
   /*
@@ -29,7 +29,7 @@ module.exports = authSignup = (req, res, next) => {
           // User edit
           user.pseudo = req.body.pseudo;
           user.status = "signedup";
-          user.activationtoken = toolkit.random_string(20);
+          user.activationtoken = random_string(20);
 
           // User saving
           user
@@ -66,12 +66,11 @@ module.exports = authSignup = (req, res, next) => {
       } else {
         // Prep
         var user = new User({
-          id: toolkit.random_string(10),
           pseudo: req.body.pseudo,
           login: req.body.login,
           password: req.body.password,
           status: "signedup",
-          activationtoken: toolkit.random_string(20),
+          activationtoken: random_string(20),
         });
         user.id = user._id;
 

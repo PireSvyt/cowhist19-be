@@ -1,4 +1,13 @@
-function random_string(length) {
+module.exports = function random_string(length) {
+  /*
+  
+  generates a random string
+  
+  parameters
+  * length of the string
+  
+  */
+
   let result = "";
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -11,6 +20,4 @@ function random_string(length) {
   }
 
   return result;
-}
-
-module.exports = { random_string };
+};

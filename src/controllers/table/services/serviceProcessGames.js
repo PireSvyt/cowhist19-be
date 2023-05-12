@@ -1,6 +1,6 @@
 const serviceCheckContract = require("./serviceCheckContract.js");
 
-function serviceProcessGames(games, request) {
+module.exports = function serviceProcessGames(games, request) {
   /*
   
   process the game list to provide stats according to request
@@ -98,6 +98,4 @@ function serviceProcessGames(games, request) {
   stats.ranking = playersArray;
 
   return stats;
-}
-
-module.exports = { serviceProcessGames };
+};
