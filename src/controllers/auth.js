@@ -129,7 +129,6 @@ async function signup(req, res, next) {
           .then((hash) => {
             // User creation
             let newuser = {
-              id: toolkit.random_string(10),
               pseudo: req.body.pseudo,
               login: req.body.login,
               password: hash,
