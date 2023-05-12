@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
-/*if (process.env.MONGOOSE_DEBUG === true) {
+if (process.env.MONGOOSE_DEBUG === "TRUE") {
   mongoose.set("debug", true);
-}*/
+}
 
 const gameSchema = mongoose.Schema(
   {

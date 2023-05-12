@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 
-/*if (process.env.MONGOOSE_DEBUG === true) {
+if (process.env.MONGOOSE_DEBUG === "TRUE") {
   mongoose.set("debug", true);
-}*/
+}
 
 const tableSchema = mongoose.Schema(
   {
