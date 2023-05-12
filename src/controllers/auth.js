@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 // BCRYPT https://www.makeuseof.com/nodejs-bcrypt-hash-verify-salt-password/
 const jwt = require("jsonwebtoken");
 
-var toolkit = require("../ressources/toolkit");
+var toolkit = require("./auth/services/toolkit.js");
 
 module.exports = {
   signup: signup,

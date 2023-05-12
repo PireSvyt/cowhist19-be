@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Table = require("../models/Table");
 const Game = require("../models/Game");
 
-const contracts = require("../ressources/contracts");
+const contracts = require("./table/resources/contracts.json");
 
 exports.save = (req, res, next) => {
   /*
