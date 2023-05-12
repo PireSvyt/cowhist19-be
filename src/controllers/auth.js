@@ -76,6 +76,7 @@ async function signup(req, res, next) {
   User.findOne({ login: req.body.login })
     .then((user) => {
       if (user) {
+        console.log("user to signup from invited");
         // Invited
         if (user.status === "invited") {
           bcrypt
@@ -123,6 +124,7 @@ async function signup(req, res, next) {
             .json({ status: status, message: "utilisateur déjà existant" });
         }
       } else {
+        console.log("user to signup from scratch");
         // Password encryption
         bcrypt
           .hash(req.body.password, 10)
@@ -130,6 +132,7 @@ async function signup(req, res, next) {
             console.log(hash);
             // User creation
             var user = new User({
+              id: "dummy id",
               pseudo: req.body.pseudo,
               login: req.body.login,
               password: hash,
