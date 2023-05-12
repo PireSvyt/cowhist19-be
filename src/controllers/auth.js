@@ -1,8 +1,8 @@
-const User = require("../models/User");
 const bcrypt = require("bcrypt");
 // BCRYPT https://www.makeuseof.com/nodejs-bcrypt-hash-verify-salt-password/
 const jwt = require("jsonwebtoken");
 
+const User = require("../models/User");
 var toolkit = require("./auth/services/toolkit.js");
 
 module.exports = {
