@@ -1,21 +1,21 @@
 const User = require("../../models/User.js");
 
-module.exports = authLogin = (req, res, next) => {
+module.exports = authSignin = (req, res, next) => {
   /*
   
-  login a user
+  sign in a user
   sends back a jwt token
   
   possible response types
-  * auth.login.success
-  * auth.login.error.notfound
-  * auth.login.error.onfind
-  * auth.login.error.invalidpassword
-  * auth.login.error.onpasswordcompare
+  * auth.signin.success
+  * auth.signin.error.notfound
+  * auth.signin.error.onfind
+  * auth.signin.error.invalidpassword
+  * auth.signin.error.onpasswordcompare
   
   */
 
-  console.log("auth.login");
+  console.log("auth.signin");
 
   User.findOne(
     { login: req.body.login },
@@ -24,7 +24,7 @@ module.exports = authLogin = (req, res, next) => {
     .then((user) => {
       if (!user) {
         return res.status(404).json({
-          type: "auth.login.error.notfound",
+          type: "auth.signin.error.notfound",
           message: "utilisateur non trouvé",
           data: {
             id: "",
@@ -37,7 +37,7 @@ module.exports = authLogin = (req, res, next) => {
         .then((valid) => {
           if (!valid) {
             return res.status(401).json({
-              type: "auth.login.error.invalidpassword",
+              type: "auth.signin.error.invalidpassword",
               message: "password incorrect",
               data: {
                 id: "",
@@ -46,7 +46,7 @@ module.exports = authLogin = (req, res, next) => {
             });
           }
           res.status(200).json({
-            type: "auth.login.success",
+            type: "auth.signin.success",
             message: "user connecté",
             data: {
               id: user._id,
@@ -67,7 +67,7 @@ module.exports = authLogin = (req, res, next) => {
         })
         .catch((error) => {
           res.status(500).json({
-            type: "auth.login.error.onpasswordcompare",
+            type: "auth.signin.error.onpasswordcompare",
             error,
             message: "erreur lors du compare",
             data: {
@@ -79,7 +79,7 @@ module.exports = authLogin = (req, res, next) => {
     })
     .catch((error) => {
       res.status(500).json({
-        type: "auth.login.error.onfind",
+        type: "auth.signin.error.onfind",
         error,
         message: "erreur lors de la recherche",
         data: {
