@@ -1,37 +1,22 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const mongoose = require("mongoose");
 
-const authRoutes = require("./src/routes/auth");
-const userRoutes = require("./src/routes/user");
-const gameRoutes = require("./src/routes/game");
-const tableRoutes = require("./src/routes/table");
+const serviceConnectMongoDB = require("./src/database/serviceConnectDatabase.js");
+const authRoutes = require("./src/routes/auth.js");
+const userRoutes = require("./src/routes/user.js");
+const gameRoutes = require("./src/routes/game.js");
+const tableRoutes = require("./src/routes/table.js");
 
 // CONNECT MONGO
-let DB_URL =
-  "mongodb+srv://savoyatp:" +
-  process.env.DB_PW +
-  "@" +
-  process.env.DB_CLUSTER +
-  "?retryWrites=true&w=majority";
-mongoose
-  .connect(DB_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("Connexion à MongoDB réussie"))
-  .catch((err) => {
-    console.log("Connexion à MongoDB échouée");
-    console.log(err);
-  });
+serviceConnectMongoDB();
 
 // CAPTURE REQ BODY
 app.use(express.json());
 
 // CORS MANAGEMENT
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Origin", process.env.SUPPORTED_ORIGIN);
   res.setHeader(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
@@ -39,8 +24,6 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   next();
 });
-
-app.listen(3000, () => console.log(`Server running on 3000`));
 
 // ROUTES
 app.use("/auth", authRoutes);
@@ -50,5 +33,7 @@ app.use("/table", tableRoutes);
 
 // Landing
 app.get("/", (req, res) => {
-  res.send("<h1>Cowhist19</h1>");
+  res.send("<h1>Cowhist19-BE</h1>");
 });
+
+module.exports = app;

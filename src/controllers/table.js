@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const Table = require("../models/Table");
 const Game = require("../models/Game");
 
-const contracts = require("../ressources/contracts");
+const contracts = require("./table/resources/contracts.json");
 
 exports.save = (req, res, next) => {
   /*
@@ -175,60 +175,68 @@ exports.details = (req, res, next) => {
   console.log("table.details");
   // Initialize
   var status = 500;
-    
+
   Table.aggregate([
-    { $match: { 
-        id: req.params.id
-    } },
-    { $lookup: { 
-        from: 'users',
-        foreignField: 'id', 
-        localField: 'users', 
-        as: 'players',
+    {
+      $match: {
+        id: req.params.id,
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        foreignField: "id",
+        localField: "users",
+        as: "players",
         pipeline: [
-          { $project: {
-            _id: 1, 
-            pseudo: 1,
-            status: 1,
-          } }
-        ]
-    } },
-    { $project: {
-      _id: 1, 
-      name: 1, 
-      players: 1, 
-    } }
+          {
+            $project: {
+              _id: 1,
+              pseudo: 1,
+              status: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        name: 1,
+        players: 1,
+      },
+    },
   ])
-  .then((tables) => {
-    if (tables.length === 1) {
-      let table = tables[0];
-      table.contracts = contracts;
-      // Response
-      status = 200; // OK
-      res.status(status).json({
-        status: status,
-        message: "table ok",
-        table: table,
-      });
-    } else {
+    .then((tables) => {
+      if (tables.length === 1) {
+        let table = tables[0];
+        table.contracts = contracts;
+        // Response
+        status = 200; // OK
+        res.status(status).json({
+          status: status,
+          message: "table ok",
+          table: table,
+        });
+      } else {
+        status = 400; // OK
+        res.status(status).json({
+          status: status,
+          message: "error on find",
+          table: {},
+        });
+      }
+    })
+    .catch((error) => {
       status = 400; // OK
+      console.error(error);
       res.status(status).json({
         status: status,
-        message: "error on find",
+        message: "error on aggregate",
         table: {},
+        error: error,
       });
-    }
-  })
-  .catch((error) => {
-    status = 400; // OK
-    console.error(error);
-    res.status(status).json({
-      status: status,
-      message: "error on aggregate",
-      table: {},
-      error: error,
     });
-  });
 };
 
 exports.stats = (req, res, next) => {
@@ -246,28 +254,28 @@ exports.stats = (req, res, next) => {
   console.log("table.stats");
   var status = 500;
 
-  Game.find({table: req.params.id})
-  .then((games) => {
-    // Post process
-    let stats = processGames(games, req.body)
-    // Response
-    status = 200; // OK
-    res.status(status).json({
-      status: status,
-      message: "stats ok",
-      stats: stats,
+  Game.find({ table: req.params.id })
+    .then((games) => {
+      // Post process
+      let stats = processGames(games, req.body);
+      // Response
+      status = 200; // OK
+      res.status(status).json({
+        status: status,
+        message: "stats ok",
+        stats: stats,
+      });
+    })
+    .catch((error) => {
+      status = 400; // OK
+      console.error(error);
+      res.status(status).json({
+        status: status,
+        message: "error on find",
+        stats: {},
+        error: error,
+      });
     });
-  })
-  .catch((error) => {
-    status = 400; // OK
-    console.error(error);
-    res.status(status).json({
-      status: status,
-      message: "error on find",
-      stats: {},
-      error: error,
-    });
-  });
 };
 
 exports.history = (req, res, next) => {
@@ -352,7 +360,7 @@ exports.history = (req, res, next) => {
 
 // Helpers
 
-function processGames (games, request) {
+function processGames(games, request) {
   /*
   process the game list to provide stats according to request
   
@@ -367,127 +375,143 @@ function processGames (games, request) {
   */
   console.log("table.processGames");
 
-  let stats = {}
-  let players = {}
+  let stats = {};
+  let players = {};
 
   // Summarize game outcomes per user
-  games.forEach(game => {
-    if ( checkContract(game) ) {
-      game.players.forEach(player => {
+  games.forEach((game) => {
+    if (checkContract(game)) {
+      game.players.forEach((player) => {
         // Add player to players if missing
-        if ( !Object.keys(players).includes(player._id) ) {
+        if (!Object.keys(players).includes(player._id)) {
           players[player._id] = {
             _id: player._id,
             attackWins: 0,
             attackLoss: 0,
             defenseWins: 0,
             defenseLoss: 0,
-          }
+          };
         }
         // Record outcome
-        if ( game.outcome < 0 ) {
-          if ( player.role === "attack" ) {
-            players[player._id].attackLoss += 1
+        if (game.outcome < 0) {
+          if (player.role === "attack") {
+            players[player._id].attackLoss += 1;
           }
-          if ( player.role === "defense" ) {
-            players[player._id].defenseWins += 1
+          if (player.role === "defense") {
+            players[player._id].defenseWins += 1;
           }
         } else {
-          if ( player.role === "attack" ) {
-            players[player._id].attackWins += 1
+          if (player.role === "attack") {
+            players[player._id].attackWins += 1;
           }
-          if ( player.role === "defense" ) {
-            players[player._id].defenseLoss += 1
+          if (player.role === "defense") {
+            players[player._id].defenseLoss += 1;
           }
         }
-      })
+      });
     }
-  })
+  });
 
   // Compute a score
-  for (const [id, player] of Object.entries(players)) {// Number of games
-    players[id].games = player.attackWins + player.attackLoss + player.defenseWins + player.defenseLoss
+  for (const [id, player] of Object.entries(players)) {
+    // Number of games
+    players[id].games =
+      player.attackWins +
+      player.attackLoss +
+      player.defenseWins +
+      player.defenseLoss;
     // Attack rate
-    players[id].rateattack = (player.attackWins + player.attackLoss) / player.games
+    players[id].rateattack =
+      (player.attackWins + player.attackLoss) / player.games;
     // Win rate
-    players[id].ratevictory = (player.attackWins + player.defenseWins) / player.games
+    players[id].ratevictory =
+      (player.attackWins + player.defenseWins) / player.games;
     // Cowhist19 V0 score
     // 5+ROUND((0.75*defenseWins-0.75*defenseLoss+1.25*attackWins-1.25*attackLoss)/games*10,1)
-    players[id].scorev0 = 
-      5 + (0.75*(player.defenseWins-player.defenseLoss)+1.25*(player.attackWins-player.attackLoss))/player.games*10
-
+    players[id].scorev0 =
+      5 +
+      ((0.75 * (player.defenseWins - player.defenseLoss) +
+        1.25 * (player.attackWins - player.attackLoss)) /
+        player.games) *
+        10;
   }
 
   // Make a sorted array
-  let playersArray = Object.values(players)
-  playersArray.sort(function ( a, b ) {
+  let playersArray = Object.values(players);
+  playersArray.sort(function (a, b) {
     // sorting field
-    let f = "scorev0"
-    if ( a[f] > b[f] ){
+    let f = "scorev0";
+    if (a[f] > b[f]) {
       return -1;
     }
-    if ( a[f] < b[f] ){
+    if (a[f] < b[f]) {
       return 1;
     }
     return 0;
-  })
+  });
 
   // Stats
-  stats.ranking = playersArray
+  stats.ranking = playersArray;
 
-  return stats
+  return stats;
 }
 
-function checkContract (game) {
+function checkContract(game) {
   /*
   check that a game matches with contract
   
   */
   console.log("table.checkContract");
-  let compliance = true
-  let nonCompliances = []
+  let compliance = true;
+  let nonCompliances = [];
 
-  let contractList = contracts.filter(contract => contract.key === game.contract)
-  let contract = contractList[0]
+  let contractList = contracts.filter(
+    (contract) => contract.key === game.contract
+  );
+  let contract = contractList[0];
 
   if (contract === undefined) {
-    compliance = false
-    nonCompliances.push("contract not found")
+    compliance = false;
+    nonCompliances.push("contract not found");
   } else {
-
     // Attack
-    if (game.players.filter(player => player.role === "attack").length !== contract.attack) {
-      compliance = false
-      nonCompliances.push("number of attackant(s) does not match")
+    if (
+      game.players.filter((player) => player.role === "attack").length !==
+      contract.attack
+    ) {
+      compliance = false;
+      nonCompliances.push("number of attackant(s) does not match");
     }
-  
+
     // Defense
-    if (game.players.filter(player => player.role === "defense").length !== contract.defense) {
-      compliance = false
-      nonCompliances.push("number of defender(s) does not match")
+    if (
+      game.players.filter((player) => player.role === "defense").length !==
+      contract.defense
+    ) {
+      compliance = false;
+      nonCompliances.push("number of defender(s) does not match");
     }
-  
+
     // Folds
     if (game.outcome + contract.folds > 13) {
-      compliance = false
-      nonCompliances.push("number of folds won exceeds possibilities")
+      compliance = false;
+      nonCompliances.push("number of folds won exceeds possibilities");
     }
     if (game.outcome < -13) {
-      compliance = false
-      nonCompliances.push("number of folds lost exceeds possibilities")
+      compliance = false;
+      nonCompliances.push("number of folds lost exceeds possibilities");
     }
-
   }
 
   // Console
   if (nonCompliances.length > 0) {
-    console.log("non compliance list : ")
-    console.log(nonCompliances)
-    console.log("game")
-    console.log(game)
-    console.log("contract")
-    console.log(contract)
+    console.log("non compliance list : ");
+    console.log(nonCompliances);
+    console.log("game");
+    console.log(game);
+    console.log("contract");
+    console.log(contract);
   }
 
-  return compliance
+  return compliance;
 }

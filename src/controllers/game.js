@@ -1,5 +1,6 @@
-const Game = require("../models/Game");
+const Game = require("../models/Game.js");
 
+// NEW CONTROLLER EXISTING
 exports.save = (req, res, next) => {
   /*
   
@@ -74,6 +75,7 @@ exports.save = (req, res, next) => {
   }
 };
 
+// NEW CONTROLLER EXISTING
 exports.delete = (req, res, next) => {
   /*
   
@@ -104,6 +106,7 @@ exports.delete = (req, res, next) => {
     });
 };
 
+// NEW CONTROLLER EXISTING
 exports.details = (req, res, next) => {
   /*
   

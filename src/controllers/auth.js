@@ -1,9 +1,9 @@
-const User = require("../models/User");
 const bcrypt = require("bcrypt");
 // BCRYPT https://www.makeuseof.com/nodejs-bcrypt-hash-verify-salt-password/
 const jwt = require("jsonwebtoken");
 
-var toolkit = require("../ressources/toolkit");
+const User = require("../models/User");
+var random_string = require("./auth/services/random_string.js");
 
 module.exports = {
   signup: signup,
@@ -30,7 +30,7 @@ async function signup(req, res, next) {
         user.pseudo = req.body.pseudo;
         user.password = hash;
         user.status = "signedup";
-        user.activationtoken = toolkit.random_string(20);
+        user.activationtoken = random_string(20);
         // User saving
         let savingoutcome = await user.save();
         status = 200;
@@ -70,7 +70,7 @@ async function signup(req, res, next) {
 }
 */
 
-async function signup(req, res, next) {
+function signup(req, res, next) {
   console.log("auth.signup");
   let status = 500;
   User.findOne({ login: req.body.login })
@@ -81,11 +81,12 @@ async function signup(req, res, next) {
           bcrypt
             .hash(req.body.password, 10)
             .then((hash) => {
+              console.log(hash);
               // User edit
               user.pseudo = req.body.pseudo;
               user.password = hash;
               user.status = "signedup";
-              user.activationtoken = toolkit.random_string(20);
+              user.activationtoken = random_string(20);
               // User saving
               user
                 .save()
@@ -111,7 +112,7 @@ async function signup(req, res, next) {
               res.status(status).json({
                 status: status,
                 error,
-                message: "erreur lors de l'encryption",
+                message: "erreur lors de l'encryption on modify",
               });
             });
         } else {
@@ -127,12 +128,12 @@ async function signup(req, res, next) {
           .hash(req.body.password, 10)
           .then((hash) => {
             // User creation
-            var user = new User({
+            console.log({
               pseudo: req.body.pseudo,
               login: req.body.login,
               password: hash,
               status: "signedup",
-              activationtoken: toolkit.random_string(20),
+              activationtoken: random_string(20),
             });
             user.id = user._id;
             // User saving
@@ -160,7 +161,7 @@ async function signup(req, res, next) {
             res.status(status).json({
               status: status,
               error,
-              message: "erreur lors de l'encryption",
+              message: "erreur lors de l'encryption on create",
             });
           });
       }
