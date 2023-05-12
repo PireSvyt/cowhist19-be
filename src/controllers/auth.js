@@ -128,25 +128,14 @@ function signup(req, res, next) {
           .hash(req.body.password, 10)
           .then((hash) => {
             // User creation
-            console.log(req.body);
-            console.log(hash);
-            console.log(random_string(20));
-
-            let newuser = {
+            console.log({
               pseudo: req.body.pseudo,
               login: req.body.login,
               password: hash,
               status: "signedup",
               activationtoken: random_string(20),
-            };
-            console.log(newuser);
-
-            let user = new User(newuser);
-            console.log(user);
-
+            });
             user.id = user._id;
-            console.log(user);
-
             // User saving
             user
               .save()
