@@ -66,7 +66,7 @@ module.exports = authSignup = (req, res, next) => {
       } else {
         // Prep
         var user = new User({
-          
+          id: toolkit.random_string(10),
           pseudo: req.body.pseudo,
           login: req.body.login,
           password: req.body.password,
