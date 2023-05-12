@@ -70,7 +70,7 @@ async function signup(req, res, next) {
 }
 */
 
-async function signup(req, res, next) {
+function signup(req, res, next) {
   console.log("auth.signup");
   let status = 500;
   User.findOne({ login: req.body.login })
@@ -128,6 +128,10 @@ async function signup(req, res, next) {
           .hash(req.body.password, 10)
           .then((hash) => {
             // User creation
+            console.log(req.body);
+            console.log(hash);
+            console.log(toolkit.random_string(20));
+
             let newuser = {
               pseudo: req.body.pseudo,
               login: req.body.login,
@@ -136,10 +140,13 @@ async function signup(req, res, next) {
               activationtoken: toolkit.random_string(20),
             };
             console.log(newuser);
+
             let user = new User(newuser);
             console.log(user);
+
             user.id = user._id;
             console.log(user);
+
             // User saving
             user
               .save()
