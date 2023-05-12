@@ -2,11 +2,11 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 
+const serviceConnectMongoDB = require("./src/database/serviceConnectDatabase.js");
 const authRoutes = require("./src/routes/auth.js");
 const userRoutes = require("./src/routes/user.js");
 const gameRoutes = require("./src/routes/game.js");
 const tableRoutes = require("./src/routes/table.js");
-const serviceConnectMongoDB = require("./src/database/serviceConnectDatabase.js");
 
 // CONNECT MONGO
 serviceConnectMongoDB();
