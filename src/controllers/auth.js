@@ -81,6 +81,7 @@ async function signup(req, res, next) {
           bcrypt
             .hash(req.body.password, 10)
             .then((hash) => {
+              console.log(hash);
               // User edit
               user.pseudo = req.body.pseudo;
               user.password = hash;
@@ -111,7 +112,7 @@ async function signup(req, res, next) {
               res.status(status).json({
                 status: status,
                 error,
-                message: "erreur lors de l'encryption",
+                message: "erreur lors de l'encryption on create",
               });
             });
         } else {
@@ -126,6 +127,7 @@ async function signup(req, res, next) {
         bcrypt
           .hash(req.body.password, 10)
           .then((hash) => {
+            console.log(hash);
             // User creation
             var user = new User({
               pseudo: req.body.pseudo,
@@ -160,7 +162,7 @@ async function signup(req, res, next) {
             res.status(status).json({
               status: status,
               error,
-              message: "erreur lors de l'encryption",
+              message: "erreur lors de l'encryption on modify",
             });
           });
       }
