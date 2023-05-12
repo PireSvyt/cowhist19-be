@@ -128,16 +128,16 @@ async function signup(req, res, next) {
           .hash(req.body.password, 10)
           .then((hash) => {
             // User creation
-
-            console.log(req.body);
-            let user = new User({
+            let newuser = {
               id: toolkit.random_string(10),
               pseudo: req.body.pseudo,
               login: req.body.login,
               password: hash,
               status: "signedup",
               activationtoken: toolkit.random_string(20),
-            });
+            };
+            console.log(newuser);
+            let user = new User(newuser);
             console.log(user);
             user.id = user._id;
             console.log(user);
