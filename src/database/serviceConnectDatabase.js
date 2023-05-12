@@ -40,6 +40,4 @@ module.exports = function serviceConnectMongoDB() {
         error: err,
       };
     });
-
-  return compliance;
 };
