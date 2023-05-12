@@ -1,8 +1,10 @@
-const Table = require("../models/Table.js");
-const Game = require("../models/Game.js");
-const contracts = require("./table/resources/contracts.json");
+const mongoose = require("mongoose");
 
-// NEW CONTROLLER EXISTING
+const Table = require("../models/Table");
+const Game = require("../models/Game");
+
+const contracts = require("../ressources/contracts");
+
 exports.save = (req, res, next) => {
   /*
   
@@ -109,7 +111,6 @@ exports.save = (req, res, next) => {
   }
 };
 
-// NEW CONTROLLER EXISTING
 exports.delete = (req, res, next) => {
   /*
   
@@ -163,7 +164,6 @@ exports.delete = (req, res, next) => {
     });
 };
 
-// NEW CONTROLLER EXISTING
 exports.details = (req, res, next) => {
   /*
   provides the details of a table
@@ -239,7 +239,6 @@ exports.details = (req, res, next) => {
     });
 };
 
-// NEW CONTROLLER EXISTING
 exports.stats = (req, res, next) => {
   /*
   provides the stats according to given parameters
@@ -279,7 +278,6 @@ exports.stats = (req, res, next) => {
     });
 };
 
-// NEW CONTROLLER EXISTING
 exports.history = (req, res, next) => {
   /*
   provides a list of games sorted per date
@@ -362,7 +360,6 @@ exports.history = (req, res, next) => {
 
 // Helpers
 
-// NEW SERVICE EXISTING
 function processGames(games, request) {
   /*
   process the game list to provide stats according to request
@@ -459,7 +456,6 @@ function processGames(games, request) {
   return stats;
 }
 
-// NEW SERVICE EXISTING
 function checkContract(game) {
   /*
   check that a game matches with contract
