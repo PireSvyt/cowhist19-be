@@ -76,7 +76,6 @@ async function signup(req, res, next) {
   User.findOne({ login: req.body.login })
     .then((user) => {
       if (user) {
-        console.log("user to signup from invited");
         // Invited
         if (user.status === "invited") {
           bcrypt
@@ -113,7 +112,7 @@ async function signup(req, res, next) {
               res.status(status).json({
                 status: status,
                 error,
-                message: "erreur lors de l'encryption on create",
+                message: "erreur lors de l'encryption on modify",
               });
             });
         } else {
@@ -124,15 +123,13 @@ async function signup(req, res, next) {
             .json({ status: status, message: "utilisateur déjà existant" });
         }
       } else {
-        console.log("user to signup from scratch");
         // Password encryption
         bcrypt
           .hash(req.body.password, 10)
           .then((hash) => {
-            console.log(hash);
             // User creation
-            var user = new User({
-              id: "dummy id",
+            let user = new User({
+              id: toolkit.random_string(10),
               pseudo: req.body.pseudo,
               login: req.body.login,
               password: hash,
@@ -140,6 +137,7 @@ async function signup(req, res, next) {
               activationtoken: toolkit.random_string(20),
             });
             user.id = user._id;
+            console.log(user);
             // User saving
             user
               .save()
@@ -165,7 +163,7 @@ async function signup(req, res, next) {
             res.status(status).json({
               status: status,
               error,
-              message: "erreur lors de l'encryption on modify",
+              message: "erreur lors de l'encryption on create",
             });
           });
       }
