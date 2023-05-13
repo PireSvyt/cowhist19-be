@@ -40,7 +40,6 @@ module.exports = tableSave = (req, res, next) => {
         // Response
         res.status(201).json({
           type: "table.save.success.created",
-          message: "table created",
           data: {
             id: tableToSave._id,
           },
@@ -49,7 +48,6 @@ module.exports = tableSave = (req, res, next) => {
       .catch((error) => {
         res.status(400).json({
           type: "table.save.error.oncreate",
-          message: "error on create",
           error: error,
           data: {
             id: null,
@@ -73,7 +71,6 @@ module.exports = tableSave = (req, res, next) => {
           .then(() => {
             res.status(200).json({
               type: "table.save.success.modified",
-              message: "table modified",
               data: {
                 id: tableToSave._id,
               },
@@ -82,7 +79,6 @@ module.exports = tableSave = (req, res, next) => {
           .catch((error) => {
             res.status(400).json({
               type: "table.save.error.onmodify",
-              message: "error on modify",
               error: error,
               data: {
                 id: null,
@@ -94,7 +90,6 @@ module.exports = tableSave = (req, res, next) => {
       .catch((error) => {
         res.status(400).json({
           type: "table.save.error.onfindtable",
-          message: "error on find table",
           error: error,
           data: {
             id: null,

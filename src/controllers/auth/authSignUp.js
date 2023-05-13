@@ -38,7 +38,6 @@ module.exports = authSignup = (req, res, next) => {
             .then(() => {
               res.status(200).json({
                 type: "auth.signup.success.signedup",
-                message: "user signed up from invited",
                 data: {
                   id: user._id,
                 },
@@ -47,8 +46,7 @@ module.exports = authSignup = (req, res, next) => {
             .catch((error) => {
               res.status(400).json({
                 type: "auth.signup.error.savingfrominvited",
-                error,
-                message: "erreur lors de la création",
+                error: error,
                 data: {
                   id: "",
                 },
@@ -58,7 +56,6 @@ module.exports = authSignup = (req, res, next) => {
           // Already existing
           return res.status(409).json({
             type: "auth.signup.success.alreadysignedup",
-            message: "utilisateur déjà existant",
             data: {
               id: user._id,
             },
@@ -81,7 +78,6 @@ module.exports = authSignup = (req, res, next) => {
           .then(() => {
             res.status(201).json({
               type: "auth.signup.success.signedup",
-              message: "user signedup creation",
               data: {
                 id: user._id,
               },
@@ -90,8 +86,7 @@ module.exports = authSignup = (req, res, next) => {
           .catch((error) => {
             res.status(400).json({
               type: "auth.signup.error.savingoncreate",
-              error,
-              message: "erreur lors de la création",
+              error: error,
               data: {
                 id: "",
               },
@@ -102,8 +97,7 @@ module.exports = authSignup = (req, res, next) => {
     .catch((error) => {
       res.status(500).json({
         type: "auth.signup.error.notfound",
-        error,
-        message: "erreur user not found",
+        error: error,
         data: {
           id: "",
         },

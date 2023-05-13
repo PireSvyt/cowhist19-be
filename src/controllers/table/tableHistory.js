@@ -59,7 +59,6 @@ module.exports = tableHistory = (req, res, next) => {
   if (status === 403) {
     res.status(status).json({
       type: type,
-      message: "error on prior filtering",
       data: {
         games: [],
       },
@@ -85,7 +84,6 @@ module.exports = tableHistory = (req, res, next) => {
         type = "table.history.success";
         res.status(status).json({
           type: type,
-          message: "list ok",
           data: {
             games: games,
             more: more,
@@ -97,7 +95,6 @@ module.exports = tableHistory = (req, res, next) => {
         type = "table.history.error.findinggames";
         res.status(status).json({
           type: type,
-          message: "error on find",
           data: {
             games: [],
             more: null,

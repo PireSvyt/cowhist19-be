@@ -20,13 +20,11 @@ module.exports = gameDelete = (req, res, next) => {
     .then(() => {
       res.status(200).json({
         type: "game.delete.success",
-        message: "game deleted",
       });
     })
     .catch((error) => {
       res.status(400).json({
         type: "game.delete.errorondelete",
-        message: "error on delete",
         error: error,
       });
       console.error(error);

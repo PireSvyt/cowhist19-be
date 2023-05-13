@@ -20,7 +20,6 @@ module.exports = gameDetails = (req, res, next) => {
       if (game !== undefined) {
         res.status(200).json({
           type: "game.details.success",
-          message: message,
           data: {
             game: game,
           },
@@ -28,7 +27,6 @@ module.exports = gameDetails = (req, res, next) => {
       } else {
         res.status(101).json({
           type: "game.details.notfound",
-          message: "inexisting game",
           data: {
             game: {},
           },
@@ -38,7 +36,6 @@ module.exports = gameDetails = (req, res, next) => {
     .catch((error) => {
       res.status(400).json({
         type: "game.details.onfind",
-        message: "error on find",
         error: error,
         data: {
           game: {},

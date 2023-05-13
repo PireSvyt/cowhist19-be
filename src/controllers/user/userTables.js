@@ -22,7 +22,6 @@ module.exports = userTables = (req, res, next) => {
     .then((tables) => {
       res.status(200).json({
         type: "user.tables.success",
-        message: "tables ok",
         data: {
           tables: tables,
         },
@@ -31,7 +30,6 @@ module.exports = userTables = (req, res, next) => {
     .catch((error) => {
       res.status(400).json({
         type: "user.tables.error.onfind",
-        message: "error on find",
         error: error,
         data: {
           tables: [],

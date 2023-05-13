@@ -33,20 +33,19 @@ module.exports = authSignIn = (req, res, next) => {
         // Inexisting user
         return res.status(404).json({
           type: "auth.signin.error.notfound",
-          message: "utilisateur non trouvé",
           data: {
             id: "",
             token: "",
           },
         });
       } else {
+        console.log(req);
         bcrypt
           .compare(req.body.password, user.password)
           .then((valid) => {
             if (!valid) {
               return res.status(401).json({
                 type: "auth.signin.error.invalidpassword",
-                message: "password incorrect",
                 data: {
                   id: "",
                   token: "",
@@ -55,7 +54,6 @@ module.exports = authSignIn = (req, res, next) => {
             } else {
               return res.status(200).json({
                 type: "auth.signin.success",
-                message: "user connecté",
                 data: {
                   id: user._id,
                   token: jwt.sign(
@@ -77,8 +75,7 @@ module.exports = authSignIn = (req, res, next) => {
           .catch((error) => {
             return res.status(500).json({
               type: "auth.signin.error.onpasswordcompare",
-              error,
-              message: "erreur lors du compare",
+              error: error,
               data: {
                 id: "",
                 token: "",
@@ -90,7 +87,7 @@ module.exports = authSignIn = (req, res, next) => {
     .catch((error) => {
       return res.status(500).json({
         type: "auth.signin.error.onfind",
-        error,
+        error: error,
         data: {
           id: "",
           token: "",

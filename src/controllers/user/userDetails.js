@@ -58,7 +58,6 @@ module.exports = userDetails = (req, res, next) => {
       if (user.length === 1) {
         res.status(200).json({
           type: "user.details.success",
-          message: "user ok",
           data: {
             user: user[0],
           },
@@ -66,7 +65,6 @@ module.exports = userDetails = (req, res, next) => {
       } else {
         res.status(403).json({
           type: "user.details.error.notfound",
-          message: "error on user find",
           data: {
             user: {},
           },
@@ -76,7 +74,6 @@ module.exports = userDetails = (req, res, next) => {
     .catch((error) => {
       res.status(400).json({
         type: "user.details.error.onaggregate",
-        message: "error on aggregate",
         error: error,
         data: {
           user: {},
