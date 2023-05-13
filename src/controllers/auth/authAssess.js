@@ -6,7 +6,7 @@ module.exports = authAssess = (req, res, next) => {
   assess the data in a jwt
   
   possible response types
-  * auth.assess.error.validtoken
+  * auth.assess.success.validtoken
   * auth.assess.error.invalidtoken
   * auth.assess.error.nulltoken
   
@@ -29,7 +29,7 @@ module.exports = authAssess = (req, res, next) => {
       }
       // Token is valid
       return res.status(200).json({
-        type: "auth.assess.error.validtoken",
+        type: "auth.assess.success.validtoken",
       });
     });
   }
