@@ -10,19 +10,18 @@ module.exports = userInvite = (req, res, next) => {
   * user.invite.success.alreadyexisting
   
   */
-  
+
   console.log("user.invite");
-  
+
   // User existence check
   User.findOne({ login: req.body.login }, "pseudo status")
     .then((user) => {
       if (user) {
-          
         return res.status(202).json({
           type: "user.invite.success.alreadyexisting",
-          message: "utilisateur déjà existant",
-          data : {
-              user: user}
+          data: {
+            user: user,
+          },
         });
       } else {
         // User creation
@@ -38,8 +37,7 @@ module.exports = userInvite = (req, res, next) => {
           .save()
           .then(() => {
             res.status(201).json({
-          type: "user.invite.success.created",
-              message: "ustilisateur créé",
+              type: "user.invite.success.created",
               user: {
                 _id: user._id,
                 pseudo: user.pseudo,
@@ -49,9 +47,8 @@ module.exports = userInvite = (req, res, next) => {
           })
           .catch((error) => {
             res.status(400).json({
-          type: "user.invite.error.oncreate",
-              message: "erreur lors de la création",
-              error,
+              type: "user.invite.error.oncreate",
+              error: error,
               user: {
                 _id: "",
                 pseudo: "",
@@ -63,14 +60,13 @@ module.exports = userInvite = (req, res, next) => {
     })
     .catch((error) => {
       res.status(500).json({
-          type: "user.invite.error.onfind",
-        message: "erreur lors du check d'existance",
-        error,
+        type: "user.invite.error.onfind",
+        error: error,
         user: {
-                _id: "",
-                pseudo: "",
-                status: "",
-              },
+          _id: "",
+          pseudo: "",
+          status: "",
+        },
       });
     });
 };

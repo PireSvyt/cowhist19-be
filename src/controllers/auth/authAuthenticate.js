@@ -20,14 +20,13 @@ module.exports = authAuthenticate = (req, res, next) => {
   if (token === null) {
     return res.status(401).json({
       type: "auth.authenticate.error.nulltoken",
-      message: "Invalid token",
     });
   } else {
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
       if (err) {
         return res.status(401).json({
           type: "auth.authenticate.error.invalidtoken",
-          message: err,
+          error: err,
         });
       }
       req.user = user;

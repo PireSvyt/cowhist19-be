@@ -30,7 +30,6 @@ module.exports = authActivate = (req, res, next) => {
             .then(() => {
               res.status(200).json({
                 type: "auth.activate.success.activated",
-                message: "ustilisateur activé",
                 data: {
                   id: user._id,
                 },
@@ -39,15 +38,16 @@ module.exports = authActivate = (req, res, next) => {
             .catch((error) => {
               res.status(400).json({
                 type: "auth.activate.error.onsave",
-                error,
-                message: "erreur lors du save",
+                error: error,
+                data: {
+                  id: user._id,
+                },
               });
             });
         } else {
           if (user.status === "activated") {
             res.status(200).json({
               type: "auth.activate.success.alreadyctivated",
-              message: "ustilisateur déjà activé",
               data: {
                 id: user._id,
               },
@@ -55,7 +55,6 @@ module.exports = authActivate = (req, res, next) => {
           } else {
             return res.status(202).json({
               type: "auth.activate.error.notfound",
-              message: "token non trouvé",
               data: {
                 id: "",
               },
@@ -65,7 +64,6 @@ module.exports = authActivate = (req, res, next) => {
       } else {
         return res.status(202).json({
           type: "auth.activate.error.notfound",
-          message: "token non trouvé",
           data: {
             id: "",
           },
@@ -75,7 +73,7 @@ module.exports = authActivate = (req, res, next) => {
     .catch((error) => {
       res.status(500).json({
         type: "auth.activate.error.notfound",
-        message: "token non trouvé",
+        error: error,
         data: {
           id: "",
         },

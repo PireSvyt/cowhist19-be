@@ -30,7 +30,6 @@ module.exports = tableStats = (req, res, next) => {
       // Response
       res.status(200).json({
         type: "table.stats.success",
-        message: "stats ok",
         data: {
           stats: stats,
         },
@@ -40,7 +39,6 @@ module.exports = tableStats = (req, res, next) => {
       console.error(error);
       res.status(400).json({
         type: "table.stats.error",
-        message: "error on find",
         error: error,
         data: {
           stats: {},

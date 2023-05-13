@@ -22,7 +22,6 @@ module.exports = tableDelete = (req, res, next) => {
   Game.deleteMany({ table: req.params.id }).catch((error) => {
     res.status(400).json({
       type: "table.delete.error.ondeletegames",
-      message: "error on games delete",
       error: error,
     });
     console.error(error);
@@ -33,13 +32,11 @@ module.exports = tableDelete = (req, res, next) => {
     .then(() => {
       res.status(200).json({
         type: "table.delete.success",
-        message: "table deleted",
       });
     })
     .catch((error) => {
       res.status(400).json({
         type: "table.delete.error.ondeletetable",
-        message: "error on table delete",
         error: error,
       });
       console.error(error);

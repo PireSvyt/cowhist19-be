@@ -56,7 +56,6 @@ module.exports = tableDetails = (req, res, next) => {
         // Response
         res.status(200).json({
           type: "table.details.success",
-          message: "table ok",
           data: {
             table: table,
           },
@@ -64,7 +63,6 @@ module.exports = tableDetails = (req, res, next) => {
       } else {
         res.status(400).json({
           type: "table.details.error.onfind",
-          message: "error on find",
           data: {
             table: {},
           },
@@ -74,7 +72,6 @@ module.exports = tableDetails = (req, res, next) => {
     .catch((error) => {
       res.status(400).json({
         type: "table.details.error.onaggregate",
-        message: "error on aggregate",
         data: {
           table: {},
         },

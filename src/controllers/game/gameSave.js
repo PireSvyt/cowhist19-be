@@ -31,7 +31,6 @@ module.exports = gameSave = (req, res, next) => {
       .then(() => {
         res.status(201).json({
           type: "game.save.success.created",
-          message: "game created",
           data: {
             id: gameToSave._id,
           },
@@ -40,7 +39,6 @@ module.exports = gameSave = (req, res, next) => {
       .catch((error) => {
         res.status(400).json({
           type: "game.save.error.oncreate",
-          message: "error on create",
           error: error,
           data: {
             id: "",
@@ -57,7 +55,6 @@ module.exports = gameSave = (req, res, next) => {
       .then(() => {
         res.status(200).json({
           type: "game.save.success.modified",
-          message: "game modified",
           data: {
             id: game.id,
           },
@@ -66,7 +63,6 @@ module.exports = gameSave = (req, res, next) => {
       .catch((error) => {
         res.status(400).json({
           type: "game.save.error.onmodify",
-          message: "error on modify",
           error: error,
           data: {
             id: "",
