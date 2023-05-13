@@ -3,11 +3,15 @@ const bcrypt = require("bcrypt");
 
 const User = require("../../models/User.js");
 
-module.exports = authSignin = (req, res, next) => {
+module.exports = authSignIn = (req, res, next) => {
   /*
   
   sign in a user
   sends back a jwt token
+  
+  IMPORTANT NOTE : 
+    AT SIGN UP ENCRYPTION IS DONE IN FRONTEND, PASSWORD IS SAVED AS IS
+    AT SIGN IN NO ENCRYPTION IS DONE, COMPARE HAPPENS IN BACKEND
   
   possible response types
   * auth.signin.success
@@ -26,6 +30,7 @@ module.exports = authSignin = (req, res, next) => {
   )
     .then((user) => {
       if (!user) {
+        // Inexisting user
         return res.status(404).json({
           type: "auth.signin.error.notfound",
           message: "utilisateur non trouvé",

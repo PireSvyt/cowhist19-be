@@ -16,60 +16,8 @@ module.exports = {
   requesttoken: requesttoken,
   resetpw: resetpw,
 };
-/*
-async function signup(req, res, next) {
-  let status = 500;
 
-  try {
-    let user = await User.findOne({ login: req.body.login });
-    if (user) {
-      // Invited
-      if (user.status === "invited") {
-        let hash = await bcrypt.hash(req.body.password, 10);
-        // User edit
-        user.pseudo = req.body.pseudo;
-        user.password = hash;
-        user.status = "signedup";
-        user.activationtoken = random_string(20);
-        // User saving
-        let savingoutcome = await user.save();
-        status = 200;
-        res.status(status).json({
-          status: status,
-          id: user._id,
-          message: "ustilisateur enregistré",
-        });
-        return;
-      } else {
-        status = 202;
-        res.status(status).json({
-          status: status,
-          id: user._id,
-          message: "ustilisateur not invited",
-        });
-        return;
-      }
-    } else {
-      status = 203;
-      res.status(status).json({
-        status: status,
-        id: user._id,
-        message: "ustilisateur not found",
-      });
-      return;
-    }
-  } catch (err) {
-    status = 400;
-    res.status(status).json({
-      status: status,
-      error,
-      message: "erreur in low try",
-    });
-    return;
-  }
-}
-*/
-
+// NEW CONTROLLER EXISTING
 function signup(req, res, next) {
   console.log("auth.signup");
   let status = 500;
@@ -176,6 +124,7 @@ function signup(req, res, next) {
     });
 }
 
+// NEW CONTROLLER EXISTING
 function activate(req, res, next) {
   console.log("auth.activate");
   let status = 500;
@@ -244,6 +193,7 @@ function activate(req, res, next) {
     });
 }
 
+// NEW CONTROLLER EXISTING
 function login(req, res, next) {
   console.log("auth.login");
   let status = 500;
@@ -258,6 +208,7 @@ function login(req, res, next) {
           .status(status)
           .json({ status: status, message: "utilisateur non trouvé" });
       }
+
       bcrypt
         .compare(req.body.password, user.password)
         .then((valid) => {
@@ -303,6 +254,7 @@ function login(req, res, next) {
     });
 }
 
+// NEW CONTROLLER EXISTING
 function assess(req, res, next) {
   console.log("auth.assess");
   console.log("req.body.token");
@@ -337,6 +289,7 @@ function assess(req, res, next) {
   }
 }
 
+// NEW CONTROLLER EXISTING
 function authenticate(req, res, next) {
   console.log("auth.authenticate");
   const authHeader = req.headers["authorization"];

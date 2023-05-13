@@ -16,6 +16,7 @@ const tableSchema = mongoose.Schema(
         },
       ],
     },
+    meta: { type: Map, of: String },
   },
   { strict: true }
 );

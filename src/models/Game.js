@@ -19,6 +19,7 @@ const gameSchema = mongoose.Schema(
         },
       ],
     },
+    meta: { type: Map, of: String },
   },
   { strict: true }
 );
