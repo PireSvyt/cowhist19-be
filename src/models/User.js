@@ -14,12 +14,9 @@ const userSchema = mongoose.Schema(
     status: { type: String, required: true },
     activationtoken: { type: String, unique: true },
     priviledges: {
-      type: [
-        {
-          type: String,
-        },
-      ],
+      type: [{ type: String }],
     },
+    meta: { type: Map, of: String },
   },
   { strict: true }
 );
