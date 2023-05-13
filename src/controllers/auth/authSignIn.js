@@ -39,7 +39,6 @@ module.exports = authSignIn = (req, res, next) => {
           },
         });
       } else {
-        console.log(req);
         bcrypt
           .compare(req.body.password, user.password)
           .then((valid) => {
@@ -73,6 +72,7 @@ module.exports = authSignIn = (req, res, next) => {
             }
           })
           .catch((error) => {
+            console.log(error);
             return res.status(500).json({
               type: "auth.signin.error.onpasswordcompare",
               error: error,
