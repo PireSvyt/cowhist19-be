@@ -1,4 +1,5 @@
 const serviceCheckContract = require("./serviceCheckContract.js");
+const serviceGamePoints = require("./serviceGamePoints.js");
 
 module.exports = function serviceProcessGames(games, request) {
   /*
@@ -25,6 +26,7 @@ module.exports = function serviceProcessGames(games, request) {
   // Summarize game outcomes per user
   games.forEach((game) => {
     if (serviceCheckContract(game)) {
+      let gamePoints = serviceGamePoints(game);
       game.players.forEach((player) => {
         // Add player to players if missing
         if (!Object.keys(players).includes(player._id)) {
@@ -34,22 +36,27 @@ module.exports = function serviceProcessGames(games, request) {
             attackLoss: 0,
             defenseWins: 0,
             defenseLoss: 0,
+            cumulatedPoints: 0,
           };
         }
         // Record outcome
         if (game.outcome < 0) {
           if (player.role === "attack") {
             players[player._id].attackLoss += 1;
+            players[player._id].cumulatedPoints += gamePoints.attack;
           }
           if (player.role === "defense") {
             players[player._id].defenseWins += 1;
+            players[player._id].cumulatedPoints += gamePoints.defense;
           }
         } else {
           if (player.role === "attack") {
             players[player._id].attackWins += 1;
+            players[player._id].cumulatedPoints += gamePoints.attack;
           }
           if (player.role === "defense") {
             players[player._id].defenseLoss += 1;
+            players[player._id].cumulatedPoints += gamePoints.defense;
           }
         }
       });
@@ -78,6 +85,8 @@ module.exports = function serviceProcessGames(games, request) {
         1.25 * (player.attackWins - player.attackLoss)) /
         player.games) *
         10;
+    // Average points
+    players[id].averagepoints = player.cumulatedPoints / player.games;
   }
 
   // Make a sorted array

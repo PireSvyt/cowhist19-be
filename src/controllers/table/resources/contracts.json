@@ -1,86 +1,176 @@
 [
-    {
-      "key": "8plis",
-      "folds": 8,
-      "attack": 2,
-      "defense": 2
-    },
-    {
-      "key": "9plis",
-      "folds": 9,
-      "attack": 2,
-      "defense": 2
-    },
-    {
-      "key": "solo6",
-      "folds": 6,
-      "attack": 1,
-      "defense": 3
-    },
-    {
-      "key": "10plis",
-      "folds": 10,
-      "attack": 2,
-      "defense": 2
-    },
-    {
-      "key": "solo7",
-      "folds": 7,
-      "attack": 1,
-      "defense": 3
-    },
-    {
-      "key": "11plis",
-      "folds": 11,
-      "attack": 2,
-      "defense": 2
-    },
-    {
-      "key": "petitemisere",
-      "folds": 0,
-      "attack": 1,
-      "defense": 3
-    },
-    {
-      "key": "solo8",
-      "folds": 8,
-      "attack": 1,
-      "defense": 3
-    },
-    {
-      "key": "12plis",
-      "folds": 12,
-      "attack": 2,
-      "defense": 2
-    },
-    {
-      "key": "13plis",
-      "folds": 13,
-      "attack": 2,
-      "defense": 2
-    },
-    {
-      "key": "trou8",
-      "folds": 8,
-      "attack": 2,
-      "defense": 2
-    },
-    {
-      "key": "trou9",
-      "folds": 9,
-      "attack": 2,
-      "defense": 2
-    },
-    {
-      "key": "grandchelem",
-      "folds": 13,
-      "attack": 1,
-      "defense": 3
-    },
-    {
-      "key": "grandemisere",
-      "folds": 0,
-      "attack": 1,
-      "defense": 3
+  {
+    "key": "8plis",
+    "type": "coop",
+    "folds": 8,
+    "attack": 2,
+    "defense": 2,
+    "points": {
+      "base": 7,
+      "fold": 3,
+      "all": 30
     }
-  ]
+  },
+  {
+    "key": "9plis",
+    "type": "coop",
+    "folds": 9,
+    "attack": 2,
+    "defense": 2,
+    "points": {
+      "base": 10,
+      "fold": 3,
+      "all": 30
+    }
+  },
+  {
+    "key": "solo6",
+    "type": "solo",
+    "folds": 6,
+    "attack": 1,
+    "defense": 3,
+    "points": {
+      "base": 12,
+      "fold": 3,
+      "max": 18
+    }
+  },
+  {
+    "key": "10plis",
+    "type": "coop",
+    "folds": 10,
+    "attack": 2,
+    "defense": 2,
+    "points": {
+      "base": 13,
+      "fold": 3,
+      "all": 30
+    }
+  },
+  {
+    "key": "solo7",
+    "type": "solo",
+    "folds": 7,
+    "attack": 1,
+    "defense": 3,
+    "points": {
+      "base": 15,
+      "fold": 3,
+      "max": 18
+    }
+  },
+  {
+    "key": "11plis",
+    "type": "coop",
+    "folds": 11,
+    "attack": 2,
+    "defense": 2,
+    "points": {
+      "base": 16,
+      "fold": 3,
+      "all": 30
+    }
+  },
+  {
+    "key": "petitemisere",
+    "type": "fixed",
+    "folds": 0,
+    "attack": 1,
+    "defense": 3,
+    "points": {
+      "attack": 18,
+      "defense": 12
+    }
+  },
+  {
+    "key": "solo8",
+    "type": "solo",
+    "folds": 8,
+    "attack": 1,
+    "defense": 3,
+    "points": {
+      "base": 21,
+      "fold": 3,
+      "max": 21
+    }
+  },
+  {
+    "key": "12plis",
+    "type": "coop",
+    "folds": 12,
+    "attack": 2,
+    "defense": 2,
+    "points": {
+      "base": 19,
+      "fold": 3,
+      "all": 30
+    }
+  },
+  {
+    "key": "13plis",
+    "type": "coop",
+    "folds": 13,
+    "attack": 2,
+    "defense": 2,
+    "points": {
+      "base": 30,
+      "fold": 3,
+      "all": 30
+    }
+  },
+  {
+    "key": "trou8",
+    "type": "trou",
+    "folds": 8,
+    "attack": 2,
+    "defense": 2,
+    "points": {
+      "attack": 16,
+      "all": 30
+    }
+  },
+  {
+    "key": "trou9",
+    "type": "trou",
+    "folds": 9,
+    "attack": 2,
+    "defense": 2,
+    "points": {
+      "attack": 16,
+      "all": 30
+    }
+  },
+  {
+    "key": "grandemisere",
+    "type": "fixed",
+    "folds": 0,
+    "attack": 1,
+    "defense": 3,
+    "points": {
+      "attack": 36,
+      "defense": 24
+    }
+  },
+  {
+    "key": "grandemisereetalee",
+    "type": "fixed",
+    "folds": 0,
+    "attack": 1,
+    "defense": 3,
+    "points": {
+      "attack": 75,
+      "defense": 32
+    }
+  },
+  {
+    "key": "grandchelem",
+    "type": "fixed",
+    "folds": 13,
+    "attack": 1,
+    "defense": 3,
+    "points": {
+      "attack": 200,
+      "defense": 66
+    }
+  }
+]
