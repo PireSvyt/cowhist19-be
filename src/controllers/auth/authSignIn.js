@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 // BCRYPT https://www.makeuseof.com/nodejs-bcrypt-hash-verify-salt-password/
+var AES = require("crypto-js/aes");
 
 const User = require("../../models/User.js");
 
@@ -10,9 +11,7 @@ module.exports = authSignIn = (req, res, next) => {
   sign in a user
   sends back a jwt token
   
-  IMPORTANT NOTE : 
-    AT SIGN UP ENCRYPTION IS DONE IN FRONTEND, PASSWORD IS SAVED AS IS
-    AT SIGN IN NO ENCRYPTION IS DONE, COMPARE HAPPENS IN BACKEND
+  IMPORTANT NOTE : PASSWORD IS ENCRYPTED IN FE AND DECRYPTED FOR BCRYPT COMPARE
   
   possible response types
   * auth.signin.success
@@ -40,8 +39,14 @@ module.exports = authSignIn = (req, res, next) => {
           },
         });
       } else {
+        // Password decrypt
+        const decrypted = AES.decrypt(
+          req.body.password,
+          process.env.ENCRYPTION_KEY
+        ).toString();
+        // Password compare
         bcrypt
-          .compare(req.body.password, user.password)
+          .compare(decrypted, user.password)
           .then((valid) => {
             if (!valid) {
               return res.status(401).json({
