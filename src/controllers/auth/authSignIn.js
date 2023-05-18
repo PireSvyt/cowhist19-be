@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 // BCRYPT https://www.makeuseof.com/nodejs-bcrypt-hash-verify-salt-password/
-var AES = require("crypto-js/aes");
+const CryptoJS = require("crypto-js");
 
 const User = require("../../models/User.js");
 
@@ -40,13 +40,21 @@ module.exports = authSignIn = (req, res, next) => {
         });
       } else {
         // Password decrypt
-        const decrypted = AES.decrypt(
-          req.body.password,
-          process.env.ENCRYPTION_KEY
-        ).toString();
+        if (req.body.encryption === true) {
+          console.log("password decryption");
+          console.log(req.body.password);
+          var decrypted = CryptoJS.AES.decrypt(
+            "U2FsdGVkX18NmX6i458Xec/+OhFDnref7Y7pKe6Iu6s=",
+            process.env.ENCRYPTION_KEY.toString()
+          );
+          console.log(decrypted);
+          var decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
+          console.log(decryptedString);
+        }
+
         // Password compare
         bcrypt
-          .compare(decrypted, user.password)
+          .compare(decryptedString, user.password)
           .then((valid) => {
             if (!valid) {
               return res.status(401).json({
