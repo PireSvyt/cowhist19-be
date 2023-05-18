@@ -49,7 +49,7 @@ module.exports = authSignIn = (req, res, next) => {
             process.env.ENCRYPTION_KEY.toString()
           );
           console.log(decrypted);
-          var attemptPassword = decrypted.toString(CryptoJS.enc.Utf8);
+          attemptPassword = decrypted.toString(CryptoJS.enc.Utf8);
           console.log(attemptPassword);
         }
 
