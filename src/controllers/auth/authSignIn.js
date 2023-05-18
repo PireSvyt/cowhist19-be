@@ -40,29 +40,17 @@ module.exports = authSignIn = (req, res, next) => {
         });
       } else {
         // Password decrypt
-        console.log("password decryption");
-        console.log(req.body.password);
-        var decrypted = CryptoJS.AES.decrypt(
-          req.body.password,
-          process.env.ENCRYPTION_KEY.toString()
-        );
-        console.log(decrypted);
-        var decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
-        console.log(decryptedString);
-
-        var ciphertext = CryptoJS.AES.encrypt(
-          "my message",
-          process.env.ENCRYPTION_KEY.toString()
-        ).toString();
-        // Decrypt
-        console.log(ciphertext);
-        var bytes = CryptoJS.AES.decrypt(
-          ciphertext,
-          process.env.ENCRYPTION_KEY.toString()
-        );
-        console.log(bytes);
-        var originalText = bytes.toString(CryptoJS.enc.Utf8);
-        console.log(originalText);
+        if (req.body.encryption === true) {
+          console.log("password decryption");
+          console.log(req.body.password);
+          var decrypted = CryptoJS.AES.decrypt(
+            "U2FsdGVkX18NmX6i458Xec/+OhFDnref7Y7pKe6Iu6s=",
+            process.env.ENCRYPTION_KEY.toString()
+          );
+          console.log(decrypted);
+          var decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
+          console.log(decryptedString);
+        }
 
         // Password compare
         bcrypt
