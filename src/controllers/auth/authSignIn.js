@@ -44,11 +44,11 @@ module.exports = authSignIn = (req, res, next) => {
         console.log(req.body.password);
         console.log(req.body.password.toString());
         var decrypted = CryptoJS.AES.decrypt(
-          req.body.password,
+          req.body.password.toString(),
           process.env.ENCRYPTION_KEY.toString()
         );
         console.log(decrypted);
-        var decryptedString = decrypted.toString();
+        var decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
         console.log(decryptedString);
 
         var ciphertext = CryptoJS.AES.encrypt(
@@ -62,7 +62,7 @@ module.exports = authSignIn = (req, res, next) => {
           process.env.ENCRYPTION_KEY
         );
         console.log(bytes);
-        var originalText = bytes.toString();
+        var originalText = bytes.toString(CryptoJS.enc.Utf8);
         console.log(originalText);
 
         // Password compare
