@@ -53,11 +53,14 @@ module.exports = authSignIn = (req, res, next) => {
 
         var ciphertext = CryptoJS.AES.encrypt(
           "my message",
-          "secret key 123"
+          process.env.ENCRYPTION_KEY
         ).toString();
         // Decrypt
         console.log(ciphertext);
-        var bytes = CryptoJS.AES.decrypt(ciphertext, "secret key 123");
+        var bytes = CryptoJS.AES.decrypt(
+          ciphertext,
+          process.env.ENCRYPTION_KEY
+        );
         console.log(bytes);
         var originalText = bytes.toString(CryptoJS.enc.Utf8);
         console.log(originalText);
