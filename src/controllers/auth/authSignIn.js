@@ -39,7 +39,7 @@ module.exports = authSignIn = (req, res, next) => {
           },
         });
       } else {
-        let attemptPassword = eq.body.password;
+        let attemptPassword = req.body.password;
         // Password decrypt
         if (req.body.encryption === true) {
           console.log("password decryption");
