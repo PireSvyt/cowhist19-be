@@ -39,6 +39,7 @@ module.exports = authSignIn = (req, res, next) => {
           },
         });
       } else {
+        let attemptPassword = eq.body.password;
         // Password decrypt
         if (req.body.encryption === true) {
           console.log("password decryption");
@@ -48,13 +49,13 @@ module.exports = authSignIn = (req, res, next) => {
             process.env.ENCRYPTION_KEY.toString()
           );
           console.log(decrypted);
-          var decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
-          console.log(decryptedString);
+          var attemptPassword = decrypted.toString(CryptoJS.enc.Utf8);
+          console.log(attemptPassword);
         }
 
         // Password compare
         bcrypt
-          .compare(decryptedString, user.password)
+          .compare(attemptPassword, user.password)
           .then((valid) => {
             if (!valid) {
               return res.status(401).json({
