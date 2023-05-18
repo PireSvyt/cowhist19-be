@@ -42,8 +42,8 @@ module.exports = authSignIn = (req, res, next) => {
         // Password decrypt
         console.log("password decryption");
         const decrypted = cryptojs.AES.decrypt(
-          req.body.password.toString(),
-          process.env.ENCRYPTION_KEY.toString()
+          req.body.password,
+          process.env.ENCRYPTION_KEY
         ).toString();
         console.log(decrypted);
         // Password compare
