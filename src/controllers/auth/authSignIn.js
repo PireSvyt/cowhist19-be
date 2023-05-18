@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 // BCRYPT https://www.makeuseof.com/nodejs-bcrypt-hash-verify-salt-password/
-var cryptojs = require("crypto-js");
+var CryptoJS = require("crypto-js");
 
 const User = require("../../models/User.js");
 
@@ -41,17 +41,16 @@ module.exports = authSignIn = (req, res, next) => {
       } else {
         // Password decrypt
         console.log("password decryption");
-        let decrypted = cryptojs.AES.decrypt(
+        let decrypted = CryptoJS.AES.decrypt(
           req.body.password,
           process.env.ENCRYPTION_KEY
         );
         console.log(decrypted);
-        console.log(cryptojs.enc.Utf8);
-        decrypted = decrypted.toString(cryptojs.enc.Utf8);
-        console.log(decrypted);
+        let decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
+        console.log(decryptedString);
         // Password compare
         bcrypt
-          .compare(decrypted, user.password)
+          .compare(decryptedString, user.password)
           .then((valid) => {
             if (!valid) {
               return res.status(401).json({
