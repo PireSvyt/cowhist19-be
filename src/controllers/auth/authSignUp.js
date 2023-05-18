@@ -29,7 +29,7 @@ module.exports = authSignup = (req, res, next) => {
           // User edit
           user.pseudo = req.body.pseudo;
           user.status = "signedup";
-          password = req.body.password;
+          user.password = req.body.password;
           user.activationtoken = random_string(20);
 
           // User saving
