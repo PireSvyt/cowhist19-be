@@ -44,7 +44,7 @@ module.exports = authSignIn = (req, res, next) => {
         console.log(req.body.password);
         var decrypted = CryptoJS.AES.decrypt(
           req.body.password,
-          process.env.ENCRYPTION_KEY
+          process.env.ENCRYPTION_KEY.toString()
         );
         console.log(decrypted);
         var decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
