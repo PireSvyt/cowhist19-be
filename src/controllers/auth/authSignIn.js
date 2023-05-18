@@ -48,7 +48,7 @@ module.exports = authSignIn = (req, res, next) => {
           process.env.ENCRYPTION_KEY.toString()
         );
         console.log(decrypted);
-        var decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
+        var decryptedString = decrypted.toString();
         console.log(decryptedString);
 
         var ciphertext = CryptoJS.AES.encrypt(
@@ -62,7 +62,7 @@ module.exports = authSignIn = (req, res, next) => {
           process.env.ENCRYPTION_KEY
         );
         console.log(bytes);
-        var originalText = bytes.toString(CryptoJS.enc.Utf8);
+        var originalText = bytes.toString();
         console.log(originalText);
 
         // Password compare
