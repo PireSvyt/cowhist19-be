@@ -46,7 +46,7 @@ module.exports = authSignIn = (req, res, next) => {
           process.env.ENCRYPTION_KEY
         );
         console.log(decrypted);
-        console.log(decrypted.toString());
+        console.log(decrypted.toString(cryptojs.enc.Utf8));
         // Password compare
         bcrypt
           .compare(decrypted, user.password)
