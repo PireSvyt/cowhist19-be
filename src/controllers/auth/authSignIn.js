@@ -41,12 +41,13 @@ module.exports = authSignIn = (req, res, next) => {
       } else {
         // Password decrypt
         console.log("password decryption");
-        const decrypted = cryptojs.AES.decrypt(
+        let decrypted = cryptojs.AES.decrypt(
           req.body.password,
           process.env.ENCRYPTION_KEY
         );
         console.log(decrypted);
-        console.log(decrypted.toString(cryptojs.enc.Utf8));
+        decrypted = decrypted.toString(cryptojs.enc.Utf8);
+        console.log(decrypted);
         // Password compare
         bcrypt
           .compare(decrypted, user.password)
