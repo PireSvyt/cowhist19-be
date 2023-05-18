@@ -48,6 +48,16 @@ module.exports = authSignIn = (req, res, next) => {
         console.log(decrypted);
         var decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
         console.log(decryptedString);
+
+        var ciphertext = CryptoJS.AES.encrypt(
+          "my message",
+          "secret key 123"
+        ).toString();
+        // Decrypt
+        var bytes = CryptoJS.AES.decrypt(ciphertext, "secret key 123");
+        var originalText = bytes.toString(CryptoJS.enc.Utf8);
+        console.log(originalText);
+
         // Password compare
         bcrypt
           .compare(decryptedString, user.password)
