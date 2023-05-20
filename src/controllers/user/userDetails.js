@@ -10,7 +10,9 @@ module.exports = userDetails = (req, res, next) => {
   NOTE : removes field password
   
   possible response types
-  * user.invite.success.created
+  * user.details.success
+  * user.details.error.notfound
+  * user.details.error.onaggregate
   
   */
 

@@ -8,6 +8,8 @@ module.exports = userInvite = (req, res, next) => {
   possible response types
   * user.invite.success.created
   * user.invite.success.alreadyexisting
+  * user.invite.error.oncreate
+  * user.invite.error.onfind
   
   */
 
