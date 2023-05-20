@@ -38,10 +38,12 @@ module.exports = userInvite = (req, res, next) => {
           .then(() => {
             res.status(201).json({
               type: "user.invite.success.created",
-              user: {
-                _id: user._id,
-                pseudo: user.pseudo,
-                status: user.status,
+              data: {
+                user: {
+                  _id: user._id,
+                  pseudo: user.pseudo,
+                  status: user.status,
+                },
               },
             });
           })
@@ -49,10 +51,12 @@ module.exports = userInvite = (req, res, next) => {
             res.status(400).json({
               type: "user.invite.error.oncreate",
               error: error,
-              user: {
-                _id: "",
-                pseudo: "",
-                status: "",
+              data: {
+                user: {
+                  _id: "",
+                  pseudo: "",
+                  status: "",
+                },
               },
             });
           });
@@ -62,10 +66,12 @@ module.exports = userInvite = (req, res, next) => {
       res.status(500).json({
         type: "user.invite.error.onfind",
         error: error,
-        user: {
-          _id: "",
-          pseudo: "",
-          status: "",
+        data: {
+          user: {
+            _id: "",
+            pseudo: "",
+            status: "",
+          },
         },
       });
     });
