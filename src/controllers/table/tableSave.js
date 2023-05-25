@@ -1,4 +1,5 @@
 const Table = require("../../models/Table.js");
+const serviceCheckAccess = require("./services/serviceCheckAccess.js");
 
 module.exports = tableSave = (req, res, next) => {
   /*
@@ -56,46 +57,60 @@ module.exports = tableSave = (req, res, next) => {
       });
   } else {
     // Modify
-    let tableToSave = { ...req.body };
-    let tableUsers = [];
-    tableToSave.players.forEach((player) => {
-      tableUsers.push(player._id);
-    });
-    tableToSave.users = tableUsers;
 
-    // Manage table to users
-    Table.findOne({ _id: tableToSave._id })
-      .then(() => {
-        // Save
-        Table.updateOne({ _id: tableToSave._id }, tableToSave)
-          .then(() => {
-            res.status(200).json({
-              type: "table.save.success.modified",
-              data: {
-                id: tableToSave._id,
-              },
-            });
-          })
-          .catch((error) => {
-            res.status(400).json({
-              type: "table.save.error.onmodify",
-              error: error,
-              data: {
-                id: null,
-              },
-            });
-            console.error(error);
+    // Check access
+    serviceCheckAccess(req.body._id, req.headers["authorization"]).then(
+      (access) => {
+        if (!access.outcome) {
+          // Unauthorized
+          res.status(401).json({
+            type: "table.delete.error.deniedaccess",
+            error: access.reason,
           });
-      })
-      .catch((error) => {
-        res.status(400).json({
-          type: "table.save.error.onfindtable",
-          error: error,
-          data: {
-            id: null,
-          },
-        });
-        console.error(error);
-      });
+        } else {
+          let tableToSave = { ...req.body };
+          let tableUsers = [];
+          tableToSave.players.forEach((player) => {
+            tableUsers.push(player._id);
+          });
+          tableToSave.users = tableUsers;
+
+          // Manage table to users
+          Table.findOne({ _id: tableToSave._id })
+            .then(() => {
+              // Save
+              Table.updateOne({ _id: tableToSave._id }, tableToSave)
+                .then(() => {
+                  res.status(200).json({
+                    type: "table.save.success.modified",
+                    data: {
+                      id: tableToSave._id,
+                    },
+                  });
+                })
+                .catch((error) => {
+                  res.status(400).json({
+                    type: "table.save.error.onmodify",
+                    error: error,
+                    data: {
+                      id: null,
+                    },
+                  });
+                  console.error(error);
+                });
+            })
+            .catch((error) => {
+              res.status(400).json({
+                type: "table.save.error.onfindtable",
+                error: error,
+                data: {
+                  id: null,
+                },
+              });
+              console.error(error);
+            });
+        }
+      }
+    );
   }
 };
