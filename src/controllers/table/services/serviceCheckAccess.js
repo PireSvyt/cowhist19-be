@@ -33,13 +33,13 @@ module.exports = async function serviceCheckAccess(tableid, authHeader) {
               reason: "table.ismember",
             });
           } else {
-            reject({
+            resolve({
               outcome: false,
               reason: "table.notamember",
             });
           }
         } else {
-          reject({
+          resolve({
             outcome: false,
             reason: "table.notfound",
           });
@@ -47,7 +47,7 @@ module.exports = async function serviceCheckAccess(tableid, authHeader) {
       })
       .catch((error) => {
         console.error(error);
-        reject({
+        resolve({
           outcome: false,
           reason: "table.erroronfind",
         });
