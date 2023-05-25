@@ -23,6 +23,8 @@ module.exports = async function serviceCheckAccess(tableid, authHeader) {
     // Find table
     Table.findOne({ _id: tableid })
       .then((table) => {
+        console.log("userid " + userid);
+        console.log(table);
         if (table !== undefined) {
           let userList = table.users.filter((user) => {
             return user._id === userid;
