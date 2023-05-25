@@ -37,7 +37,7 @@ module.exports = gameDetails = (req, res, next) => {
               });
             } else {
               res.status(101).json({
-                type: "game.details.notfound",
+                type: "game.details.error.notfound",
                 data: {
                   game: {},
                 },
@@ -49,7 +49,7 @@ module.exports = gameDetails = (req, res, next) => {
     })
     .catch((error) => {
       res.status(400).json({
-        type: "game.details.onfind",
+        type: "game.details.error.onfind",
         error: error,
         data: {
           game: {},

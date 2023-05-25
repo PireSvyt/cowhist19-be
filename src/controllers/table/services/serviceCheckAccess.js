@@ -12,7 +12,7 @@ module.exports = async function serviceCheckAccess(tableid, authHeader) {
   
   */
 
-  console.log("table.serviceCheckAccess " + userid + " to " + tableid);
+  console.log("table.serviceCheckAccess");
 
   // Get user id from header
   const token = authHeader && authHeader.split(" ")[1];
