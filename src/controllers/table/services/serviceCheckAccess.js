@@ -14,7 +14,7 @@ module.exports = async function serviceCheckAccess(tableid, authHeader) {
 
   console.log("table.serviceCheckAccess");
 
-  return new Promise(() => {
+  return new Promise((resolve, reject) => {
     // Get user id from header
     const token = authHeader && authHeader.split(" ")[1];
     const decodedtoken = jwt_decode(token);
@@ -28,29 +28,29 @@ module.exports = async function serviceCheckAccess(tableid, authHeader) {
             return user._id === userid;
           });
           if (userList.length > 0) {
-            return {
+            resolve({
               outcome: true,
               reason: "table.ismember",
-            };
+            });
           } else {
-            return {
+            reject({
               outcome: false,
               reason: "table.notamember",
-            };
+            });
           }
         } else {
-          return {
+          reject({
             outcome: false,
             reason: "table.notfound",
-          };
+          });
         }
       })
       .catch((error) => {
         console.error(error);
-        return {
+        reject({
           outcome: false,
           reason: "table.erroronfind",
-        };
+        });
       });
   });
 };
