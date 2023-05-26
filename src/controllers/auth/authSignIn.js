@@ -24,8 +24,17 @@ module.exports = authSignIn = (req, res, next) => {
 
   console.log("auth.signin");
 
+  let attemptLogin = req.body.login;
+  // Login decrypt
+  if (req.body.encryption === true) {
+    attemptLogin = CryptoJS.AES.decrypt(
+      attemptLogin,
+      process.env.ENCRYPTION_KEY
+    ).toString(CryptoJS.enc.Utf8);
+  }
+
   User.findOne(
-    { login: req.body.login },
+    { login: attemptLogin },
     "pseudo login status priviledges password"
   )
     .then((user) => {
@@ -42,114 +51,56 @@ module.exports = authSignIn = (req, res, next) => {
         let attemptPassword = req.body.password;
         // Password decrypt
         if (req.body.encryption === true) {
-          console.log("password decryption");
-          console.log(req.body.encryptions);
-          console.log(process.env.ENCRYPTION_KEY);
+          attemptPassword = CryptoJS.AES.decrypt(
+            attemptPassword,
+            process.env.ENCRYPTION_KEY
+          ).toString(CryptoJS.enc.Utf8);
+        }
 
-          console.log(
-            "encryption.passwordTostring.processenvTostring.encryptionTostring"
-          );
-          console.log(
-            req.body.encryptions.passwordTostring.processenvTostring
-              .encryptionTostring
-          );
-          console.log(
-            CryptoJS.AES.decrypt(
-              req.body.encryptions.passwordTostring.processenvTostring
-                .encryptionTostring,
-              process.env.ENCRYPTION_KEY
-            ).toString(CryptoJS.enc.Utf8)
-          );
-
-          console.log(
-            "encryption.passwordTostring.processenvAsis.encryptionTostring"
-          );
-          console.log(
-            req.body.encryptions.passwordTostring.processenvAsis
-              .encryptionTostring
-          );
-          console.log(
-            CryptoJS.AES.decrypt(
-              req.body.encryptions.passwordTostring.processenvAsis
-                .encryptionTostring,
-              process.env.ENCRYPTION_KEY
-            ).toString(CryptoJS.enc.Utf8)
-          );
-
-          console.log(
-            "encryption.passwordAsis.processenvTostring.encryptionTostring"
-          );
-          console.log(
-            req.body.encryptions.passwordAsis.processenvTostring
-              .encryptionTostring
-          );
-          console.log(
-            CryptoJS.AES.decrypt(
-              req.body.encryptions.passwordAsis.processenvTostring
-                .encryptionTostring,
-              process.env.ENCRYPTION_KEY
-            ).toString(CryptoJS.enc.Utf8)
-          );
-
-          console.log(
-            "encryption.passwordAsis.processenvAsis.encryptionTostring"
-          );
-          console.log(
-            req.body.encryptions.passwordAsis.processenvAsis.encryptionTostring
-          );
-          console.log(
-            CryptoJS.AES.decrypt(
-              req.body.encryptions.passwordAsis.processenvAsis
-                .encryptionTostring,
-              process.env.ENCRYPTION_KEY
-            ).toString(CryptoJS.enc.Utf8)
-          );
-
-          // Password compare
-          bcrypt
-            .compare(attemptPassword, user.password)
-            .then((valid) => {
-              if (!valid) {
-                return res.status(401).json({
-                  type: "auth.signin.error.invalidpassword",
-                  data: {
-                    id: "",
-                    token: "",
-                  },
-                });
-              } else {
-                return res.status(200).json({
-                  type: "auth.signin.success",
-                  data: {
-                    id: user._id,
-                    token: jwt.sign(
-                      {
-                        status: user.status,
-                        id: user._id,
-                        pseudo: user.pseudo,
-                        login: req.body.login,
-                      },
-                      process.env.JWT_SECRET,
-                      {
-                        expiresIn: "24h",
-                      }
-                    ),
-                  },
-                });
-              }
-            })
-            .catch((error) => {
-              console.log(error);
-              return res.status(500).json({
-                type: "auth.signin.error.onpasswordcompare",
-                error: error,
+        // Password compare
+        bcrypt
+          .compare(attemptPassword, user.password)
+          .then((valid) => {
+            if (!valid) {
+              return res.status(401).json({
+                type: "auth.signin.error.invalidpassword",
                 data: {
                   id: "",
                   token: "",
                 },
               });
+            } else {
+              return res.status(200).json({
+                type: "auth.signin.success",
+                data: {
+                  id: user._id,
+                  token: jwt.sign(
+                    {
+                      status: user.status,
+                      id: user._id,
+                      pseudo: user.pseudo,
+                      login: req.body.login,
+                    },
+                    process.env.JWT_SECRET,
+                    {
+                      expiresIn: "24h",
+                    }
+                  ),
+                },
+              });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            return res.status(500).json({
+              type: "auth.signin.error.onpasswordcompare",
+              error: error,
+              data: {
+                id: "",
+                token: "",
+              },
             });
-        }
+          });
       }
     })
     .catch((error) => {
