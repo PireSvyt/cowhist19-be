@@ -24,8 +24,17 @@ module.exports = authSignIn = (req, res, next) => {
 
   console.log("auth.signin");
 
+  let attemptLogin = req.body.login;
+  // Login decrypt
+  if (req.body.encryption === true) {
+    attemptLogin = CryptoJS.AES.decrypt(
+      attemptLogin,
+      process.env.ENCRYPTION_KEY
+    ).toString(CryptoJS.enc.Utf8);
+  }
+
   User.findOne(
-    { login: req.body.login },
+    { login: attemptLogin },
     "pseudo login status priviledges password"
   )
     .then((user) => {
@@ -42,15 +51,10 @@ module.exports = authSignIn = (req, res, next) => {
         let attemptPassword = req.body.password;
         // Password decrypt
         if (req.body.encryption === true) {
-          console.log("password decryption");
-          console.log(req.body.password);
-          var decrypted = CryptoJS.AES.decrypt(
-            "U2FsdGVkX18NmX6i458Xec/+OhFDnref7Y7pKe6Iu6s=",
-            process.env.ENCRYPTION_KEY.toString()
-          );
-          console.log(decrypted);
-          attemptPassword = decrypted.toString(CryptoJS.enc.Utf8);
-          console.log(attemptPassword);
+          attemptPassword = CryptoJS.AES.decrypt(
+            attemptPassword,
+            process.env.ENCRYPTION_KEY
+          ).toString(CryptoJS.enc.Utf8);
         }
 
         // Password compare
