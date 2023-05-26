@@ -77,6 +77,7 @@ module.exports = authSignIn = (req, res, next) => {
                   token: jwt.sign(
                     {
                       id: user._id,
+                      status: user.status,
                     },
                     process.env.JWT_SECRET,
                     {
