@@ -31,7 +31,7 @@ module.exports = tablesByGames = (req, res, next) => {
         {
           $lookup: {
             from: "games",
-            foreignField: "game",
+            foreignField: "table",
             localField: "id",
             as: "games",
           },
@@ -39,11 +39,19 @@ module.exports = tablesByGames = (req, res, next) => {
         {
           $group: {
             _id: "$games",
+            nbgames: {
+              $sum: 1,
+            },
+          },
+        },
+        {
+          $group: {
+            _id: "$nbgames",
             count: { $sum: 1 },
           },
         },
         {
-          $sort: { games: 1 },
+          $sort: { nbgames: 1 },
         },
       ])
         .then((tables) => {
