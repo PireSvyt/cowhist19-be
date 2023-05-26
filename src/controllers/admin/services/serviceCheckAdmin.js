@@ -1,18 +1,14 @@
 const jwt_decode = require("jwt-decode");
-const Table = require("../../../models/Table.js");
+const User = require("../../../models/User.js");
 
-module.exports = async function serviceCheckAccess(tableid, authHeader) {
+module.exports = async function serviceCheckAdmin(authHeader) {
   /*
   
-  check that a a user belongs to a table (to act on it)
-  
-  parameters
-  * table
-  * api header to retrieve bearer token
+  check that a a user is admin
   
   */
 
-  console.log("table.serviceCheckAccess");
+  console.log("admin.serviceCheckAdmin");
 
   return new Promise((resolve, reject) => {
     // Get user id from header
@@ -21,24 +17,24 @@ module.exports = async function serviceCheckAccess(tableid, authHeader) {
     const userid = decodedtoken.id;
 
     // Find table
-    Table.findOne({ _id: tableid })
-      .then((table) => {
-        if (table !== undefined) {
-          if (table.users.includes(userid)) {
+    User.findOne({ _id: userid })
+      .then((user) => {
+        if (user !== undefined) {
+          if (user.priviledges.includes("admin")) {
             resolve({
               outcome: true,
-              reason: "table.ismember",
+              reason: "admin.isadmin",
             });
           } else {
             resolve({
               outcome: false,
-              reason: "table.notamember",
+              reason: "admin.isnotadmin",
             });
           }
         } else {
           resolve({
             outcome: false,
-            reason: "table.notfound",
+            reason: "admin.notfound",
           });
         }
       })
@@ -46,7 +42,7 @@ module.exports = async function serviceCheckAccess(tableid, authHeader) {
         console.error(error);
         resolve({
           outcome: false,
-          reason: "table.erroronfind",
+          reason: "admin.erroronfind",
         });
       });
   });
