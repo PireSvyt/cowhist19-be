@@ -52,7 +52,7 @@ module.exports = authSignIn = (req, res, next) => {
             CryptoJS.AES.decrypt(
               req.body.encryption.passwordTostring.processenvTostring
                 .encryptionTostring,
-              process.env.ENCRYPTION_KEY.toString()
+              process.env.ENCRYPTION_KEY
             )
           );
 
@@ -63,7 +63,7 @@ module.exports = authSignIn = (req, res, next) => {
             CryptoJS.AES.decrypt(
               req.body.encryption.passwordTostring.processenvAsis
                 .encryptionTostring,
-              process.env.ENCRYPTION_KEY.toString()
+              process.env.ENCRYPTION_KEY
             )
           );
 
@@ -74,7 +74,7 @@ module.exports = authSignIn = (req, res, next) => {
             CryptoJS.AES.decrypt(
               req.body.encryption.passwordAsis.processenvTostring
                 .encryptionTostring,
-              process.env.ENCRYPTION_KEY.toString()
+              process.env.ENCRYPTION_KEY
             )
           );
 
@@ -85,7 +85,7 @@ module.exports = authSignIn = (req, res, next) => {
             CryptoJS.AES.decrypt(
               req.body.encryption.passwordAsis.processenvAsis
                 .encryptionTostring,
-              process.env.ENCRYPTION_KEY.toString()
+              process.env.ENCRYPTION_KEY
             )
           );
 
