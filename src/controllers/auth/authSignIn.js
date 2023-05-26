@@ -58,7 +58,7 @@ module.exports = authSignIn = (req, res, next) => {
               req.body.encryptions.passwordTostring.processenvTostring
                 .encryptionTostring,
               process.env.ENCRYPTION_KEY
-            )
+            ).toString(CryptoJS.enc.Utf8)
           );
 
           console.log(
@@ -73,7 +73,7 @@ module.exports = authSignIn = (req, res, next) => {
               req.body.encryptions.passwordTostring.processenvAsis
                 .encryptionTostring,
               process.env.ENCRYPTION_KEY
-            )
+            ).toString(CryptoJS.enc.Utf8)
           );
 
           console.log(
@@ -88,7 +88,7 @@ module.exports = authSignIn = (req, res, next) => {
               req.body.encryptions.passwordAsis.processenvTostring
                 .encryptionTostring,
               process.env.ENCRYPTION_KEY
-            )
+            ).toString(CryptoJS.enc.Utf8)
           );
 
           console.log(
@@ -102,7 +102,7 @@ module.exports = authSignIn = (req, res, next) => {
               req.body.encryptions.passwordAsis.processenvAsis
                 .encryptionTostring,
               process.env.ENCRYPTION_KEY
-            )
+            ).toString(CryptoJS.enc.Utf8)
           );
 
           // Password compare
