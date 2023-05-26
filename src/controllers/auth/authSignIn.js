@@ -44,9 +44,14 @@ module.exports = authSignIn = (req, res, next) => {
         if (req.body.encryption === true) {
           console.log("password decryption");
           console.log(req.body.encryptions);
+          console.log(process.env.ENCRYPTION_KEY);
 
           console.log(
             "encryption.passwordTostring.processenvTostring.encryptionTostring"
+          );
+          console.log(
+            req.body.encryptions.passwordTostring.processenvTostring
+              .encryptionTostring
           );
           console.log(
             CryptoJS.AES.decrypt(
@@ -60,6 +65,10 @@ module.exports = authSignIn = (req, res, next) => {
             "encryption.passwordTostring.processenvAsis.encryptionTostring"
           );
           console.log(
+            req.body.encryptions.passwordTostring.processenvAsis
+              .encryptionTostring
+          );
+          console.log(
             CryptoJS.AES.decrypt(
               req.body.encryptions.passwordTostring.processenvAsis
                 .encryptionTostring,
@@ -71,6 +80,10 @@ module.exports = authSignIn = (req, res, next) => {
             "encryption.passwordAsis.processenvTostring.encryptionTostring"
           );
           console.log(
+            req.body.encryptions.passwordAsis.processenvTostring
+              .encryptionTostring
+          );
+          console.log(
             CryptoJS.AES.decrypt(
               req.body.encryptions.passwordAsis.processenvTostring
                 .encryptionTostring,
@@ -80,6 +93,9 @@ module.exports = authSignIn = (req, res, next) => {
 
           console.log(
             "encryption.passwordAsis.processenvAsis.encryptionTostring"
+          );
+          console.log(
+            req.body.encryptions.passwordAsis.processenvAsis.encryptionTostring
           );
           console.log(
             CryptoJS.AES.decrypt(
