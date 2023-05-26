@@ -57,34 +57,12 @@ module.exports = authSignIn = (req, res, next) => {
           );
 
           console.log(
-            "encryption.passwordTostring.processenvTostring.encryptionAsis"
-          );
-          console.log(
-            CryptoJS.AES.decrypt(
-              req.body.encryption.passwordTostring.processenvTostring
-                .encryptionAsis,
-              process.env.ENCRYPTION_KEY.toString(CryptoJS.enc.Utf8)
-            )
-          );
-
-          console.log(
             "encryption.passwordTostring.processenvAsis.encryptionTostring"
           );
           console.log(
             CryptoJS.AES.decrypt(
               req.body.encryption.passwordTostring.processenvAsis
                 .encryptionTostring,
-              process.env.ENCRYPTION_KEY.toString(CryptoJS.enc.Utf8)
-            )
-          );
-
-          console.log(
-            "encryption.passwordTostring.processenvAsis.encryptionAsis"
-          );
-          console.log(
-            CryptoJS.AES.decrypt(
-              req.body.encryption.passwordTostring.processenvAsis
-                .encryptionAsis,
               process.env.ENCRYPTION_KEY.toString(CryptoJS.enc.Utf8)
             )
           );
@@ -101,17 +79,6 @@ module.exports = authSignIn = (req, res, next) => {
           );
 
           console.log(
-            "encryption.passwordAsis.processenvTostring.encryptionAsis"
-          );
-          console.log(
-            CryptoJS.AES.decrypt(
-              req.body.encryption.passwordAsis.processenvTostring
-                .encryptionAsis,
-              process.env.ENCRYPTION_KEY.toString(CryptoJS.enc.Utf8)
-            )
-          );
-
-          console.log(
             "encryption.passwordAsis.processenvAsis.encryptionTostring"
           );
           console.log(
@@ -121,15 +88,6 @@ module.exports = authSignIn = (req, res, next) => {
               process.env.ENCRYPTION_KEY.toString(CryptoJS.enc.Utf8)
             )
           );
-
-          console.log("encryption.passwordAsis.processenvAsis.encryptionAsis");
-          console.log(
-            CryptoJS.AES.decrypt(
-              req.body.encryption.passwordAsis.processenvAsis.encryptionAsis,
-              process.env.ENCRYPTION_KEY.toString(CryptoJS.enc.Utf8)
-            )
-          );
-        }
 
         // Password compare
         bcrypt
