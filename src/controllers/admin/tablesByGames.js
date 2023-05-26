@@ -38,12 +38,12 @@ module.exports = tablesByGames = (req, res, next) => {
         },
         {
           $group: {
-            _id: { $size: "$games" },
-            count: { $sum: 1 },
+            games: { $size: "$games" },
+            tables: { $sum: 1 },
           },
         },
         {
-          $sort: { _id: 1 },
+          $sort: { games: 1 },
         },
       ])
         .then((tables) => {

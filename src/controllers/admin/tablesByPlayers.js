@@ -30,12 +30,12 @@ module.exports = tablesByPlayers = (req, res, next) => {
       Table.aggregate([
         {
           $group: {
-            _id: { $size: "$users" },
-            count: { $sum: 1 },
+            players: { $size: "$users" },
+            tables: { $sum: 1 },
           },
         },
         {
-          $sort: { _id: 1 },
+          $sort: { players: 1 },
         },
       ])
         .then((tables) => {
