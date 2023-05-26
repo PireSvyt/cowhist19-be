@@ -32,7 +32,7 @@ module.exports = usersByStatus = (req, res, next) => {
       User.aggregate([
         {
           $group: {
-            perstatus: "$status",
+            _id: "$status",
             nbusers: { $sum: 1 },
           },
         },
