@@ -1,8 +1,7 @@
 // Services
-const tableDelete = require("../../table/tableDelete.js");
-const tableSave = require("../../table/tableSave.js");
+const serviceTableDelete = require("../../table/services/serviceTableDelete.js");
+//const serviceTableSave = require("../../table/services/serviceTableSave.js");
 const gameSave = require("../../game/gameSave.js");
-const { length } = require("../../../../index.js");
 
 module.exports = async function servicePopulate(header) {
   /*
@@ -48,41 +47,31 @@ module.exports = async function servicePopulate(header) {
       populateData.tables.forEach((table) => {
         console.log("servicePopulate.delete table : ");
         console.log(table);
-        tableDelete(
-          {
-            headers: {
-              authorization: header,
-            },
-            params: {
-              id: table.id,
-            },
-          },
-          res
-        ).then(() => {
+        serviceTableDelete(table.id).then((deleteOutcome) => {
           console.log("deleteOutcome");
-          console.log(res);
+          console.log(deleteOutcome);
         });
       });
 
       // Create new tables
-      populateData.tables.forEach((table) => {
+      /*populateData.tables.forEach((table) => {
         console.log("servicePopulate.save table : ");
         console.log(table);
         tableSave(table).then((saveOutcome) => {
           console.log("saveOutcome");
           console.log(saveOutcome);
         });
-      });
+      });*/
 
       // Create new games
 
       // Outcome
       if (allWentWell) {
-        reject({
+        resolve({
           outcome: "success",
         });
       } else {
-        reject({
+        resolve({
           outcome: "error",
           error: "all went not well",
         });
@@ -92,7 +81,7 @@ module.exports = async function servicePopulate(header) {
         console.log("service caught error");
         console.log(err);
       }
-      reject({
+      resolve({
         outcome: "error",
         error: err,
       });
