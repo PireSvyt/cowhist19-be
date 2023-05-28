@@ -44,18 +44,23 @@ module.exports = async function servicePopulate(header) {
       let allWentWell = true;
 
       // Delete previous tables
+      let res = {};
       populateData.tables.forEach((table) => {
         console.log("servicePopulate.delete table : ");
         console.log(table);
-        tableDelete({
-          headers: { 
-              authorization: header },
-          params: {
-            id: table.id,
+        tableDelete(
+          {
+            headers: {
+              authorization: header,
+            },
+            params: {
+              id: table.id,
+            },
           },
-        }).then((deleteOutcome) => {
+          res
+        ).then(() => {
           console.log("deleteOutcome");
-          console.log(deleteOutcome);
+          console.log(res);
         });
       });
 
