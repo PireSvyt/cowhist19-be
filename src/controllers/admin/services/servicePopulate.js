@@ -42,14 +42,19 @@ module.exports = async function servicePopulate(header) {
     try {
       let allWentWell = true;
 
-      let res = {};
       populateData.tables.forEach((table) => {
         console.log("servicePopulate table");
         console.log(table);
         // Delete previous table
         console.log("servicePopulate.delete");
-        serviceTableDelete(table.id)
-          .then((deleteOutcome) => {
+        let deleteOutcome = await serviceTableDelete(table.id)
+        console.log("deleteOutcome");
+            console.log(deleteOutcome);
+        let createOutcome = await serviceTableCreate(table)
+        console.log("createOutcome");
+            console.log(createOutcome);
+        
+          /*.then((deleteOutcome) => {
             console.log("deleteOutcome");
             console.log(deleteOutcome);
           })
@@ -60,7 +65,7 @@ module.exports = async function servicePopulate(header) {
               console.log("createOutcome");
               console.log(createOutcome);
             });
-          });
+          });*/
       });
 
       // Create new games
