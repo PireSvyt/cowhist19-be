@@ -31,8 +31,14 @@ module.exports = tableSave = (req, res, next) => {
     tableToSave.users = tableUsers;
 
     // Generate
-    tableToSave = new Table(tableToSave);
-    tableToSave.id = tableToSave._id;
+    if (tableToSave.id === undefined) {
+      tableToSave = new Table(tableToSave);
+      tableToSave.id = tableToSave._id;
+    } else {
+      // Mocking data
+      tableToSave._id = tableToSave.id;
+      tableToSave = new Table(tableToSave);
+    }
 
     // Save
     tableToSave
