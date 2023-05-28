@@ -45,8 +45,9 @@ module.exports = async function servicePopulate(header) {
       console.log("servicePopulate table");
       console.log(table);
 
-      serviceTableDelete(table.id);
-      serviceTableCreate(table);
+      serviceTableDelete(table.id).then(() => {
+        serviceTableCreate(table);
+      });
       /*
       // Delete previous table
       console.log("servicePopulate.delete");

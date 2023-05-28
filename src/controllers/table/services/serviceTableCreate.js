@@ -25,8 +25,8 @@ module.exports = async function serviceTableCreate(tableToSave) {
       tableToSave.id = tableToSave._id;
     } else {
       // Mocking data
-      tableToSave._id = tableToSave.id;
       tableToSave = new Table(tableToSave);
+      tableToSave._id = tableToSave.id;
     }
     console.log(tableToSave);
 
