@@ -45,15 +45,26 @@ module.exports = async function servicePopulate(header) {
       console.log("servicePopulate table");
       console.log(table);
 
-      // Create new table
-      console.log("servicePopulate.create");
-      serviceTableCreate(table)
-        .then((createOutcome) => {
-          console.log("createOutcome");
-          console.log(createOutcome);
+      // Delete previous table
+      console.log("servicePopulate.delete");
+      serviceTableDelete(table.id)
+        .then((deleteOutcome) => {
+          console.log("deleteOutcome");
+          console.log(deleteOutcome);
+          // Create new table
+          console.log("servicePopulate.create");
+          serviceTableCreate(table)
+            .then((createOutcome) => {
+              console.log("createOutcome");
+              console.log(createOutcome);
+            })
+            .catch((err) => {
+              console.log("servicePopulate create table error");
+              console.log(err);
+            });
         })
         .catch((err) => {
-          console.log("servicePopulate create table error");
+          console.log("servicePopulate delete table error");
           console.log(err);
         });
     });
