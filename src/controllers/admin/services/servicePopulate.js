@@ -4,7 +4,7 @@ const tableSave = require("../../table/tableSave.js");
 const gameSave = require("../../game/gameSave.js");
 const { length } = require("../../../../index.js");
 
-module.exports = async function servicePopulate() {
+module.exports = async function servicePopulate(header) {
   /*
   
   populate the database with mocked data
@@ -47,7 +47,13 @@ module.exports = async function servicePopulate() {
       populateData.tables.forEach((table) => {
         console.log("servicePopulate.delete table : ");
         console.log(table);
-        tableDelete(table.id).then((deleteOutcome) => {
+        tableDelete({
+          headers: { 
+              authorization: header },
+          params: {
+            id: table.id,
+          },
+        }).then((deleteOutcome) => {
           console.log("deleteOutcome");
           console.log(deleteOutcome);
         });
