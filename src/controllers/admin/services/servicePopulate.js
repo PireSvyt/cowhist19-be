@@ -1,6 +1,6 @@
 // Services
 const serviceTableDelete = require("../../table/services/serviceTableDelete.js");
-//const serviceTableSave = require("../../table/services/serviceTableSave.js");
+const serviceTableCreate = require("../../table/services/serviceTableCreate.js");
 const gameSave = require("../../game/gameSave.js");
 
 module.exports = async function servicePopulate(header) {
@@ -42,26 +42,22 @@ module.exports = async function servicePopulate(header) {
     try {
       let allWentWell = true;
 
-      // Delete previous tables
       let res = {};
       populateData.tables.forEach((table) => {
+        // Delete previous tables
         console.log("servicePopulate.delete table : ");
         console.log(table);
         serviceTableDelete(table.id).then((deleteOutcome) => {
           console.log("deleteOutcome");
           console.log(deleteOutcome);
         });
+        // Create new tables
       });
 
-      // Create new tables
-      /*populateData.tables.forEach((table) => {
+      populateData.tables.forEach((table) => {
         console.log("servicePopulate.save table : ");
         console.log(table);
-        tableSave(table).then((saveOutcome) => {
-          console.log("saveOutcome");
-          console.log(saveOutcome);
-        });
-      });*/
+      });
 
       // Create new games
 

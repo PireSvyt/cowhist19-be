@@ -43,14 +43,9 @@ module.exports = tableDelete = (req, res, next) => {
         serviceTableDelete(req.params.id)
           .then((deleteOutcome) => {
             if (deleteOutcome.outcome === "table.delete.success") {
-              res.status(200).json({
-                type: "table.delete.success",
-              });
+              res.status(200).json(deleteOutcome);
             } else {
-              res.status(500).json({
-                type: "table.delete.error",
-                error: deleteOutcome.error,
-              });
+              res.status(500).json(deleteOutcome);
             }
           })
           .catch((error) => {

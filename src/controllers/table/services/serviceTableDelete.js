@@ -16,13 +16,13 @@ module.exports = async function serviceTableDelete(tableid) {
     Table.deleteOne({ _id: tableid })
       .then(() => {
         resolve({
-          outcome: "table.delete.success",
+          type: "table.delete.success",
         });
       })
       .catch((error) => {
         console.error(error);
         resolve({
-          outcome: "table.delete.error.ondeletetable",
+          type: "table.delete.error.ondeletetable",
           error: error,
         });
       });
