@@ -39,56 +39,39 @@ module.exports = async function servicePopulate(header) {
   };
 
   return new Promise((resolve, reject) => {
-    try {
-      let allWentWell = true;
+    let allWentWell = true;
 
-      populateData.tables.forEach((table) => {
-        console.log("servicePopulate table");
-        console.log(table);
-        // Delete previous table
-        console.log("servicePopulate.delete");
-        let deleteOutcome = await serviceTableDelete(table.id)
-        console.log("deleteOutcome");
-            console.log(deleteOutcome);
-        let createOutcome = await serviceTableCreate(table)
-        console.log("createOutcome");
+    populateData.tables.forEach((table) => {
+      console.log("servicePopulate table");
+      console.log(table);
+      // Delete previous table
+      console.log("servicePopulate.delete");
+      serviceTableDelete(table.id)
+        .then((deleteOutcome) => {
+          console.log("deleteOutcome");
+          console.log(deleteOutcome);
+        })
+        .finally(() => {
+          // Create new table
+          console.log("servicePopulate.create");
+          serviceTableCreate(table).then((createOutcome) => {
+            console.log("createOutcome");
             console.log(createOutcome);
-        
-          /*.then((deleteOutcome) => {
-            console.log("deleteOutcome");
-            console.log(deleteOutcome);
-          })
-          .finally(() => {
-            // Create new table
-            console.log("servicePopulate.create");
-            serviceTableCreate(table).then((createOutcome) => {
-              console.log("createOutcome");
-              console.log(createOutcome);
-            });
-          });*/
+          });
+        });
+    });
+
+    // Create new games
+
+    // Outcome
+    if (allWentWell) {
+      resolve({
+        outcome: "success",
       });
-
-      // Create new games
-
-      // Outcome
-      if (allWentWell) {
-        resolve({
-          outcome: "success",
-        });
-      } else {
-        resolve({
-          outcome: "error",
-          error: "all went not well",
-        });
-      }
-    } catch (err) {
-      if (process.env.REACT_APP_DEBUG === "TRUE") {
-        console.log("service caught error");
-        console.log(err);
-      }
+    } else {
       resolve({
         outcome: "error",
-        error: err,
+        error: "all went not well",
       });
     }
   });
