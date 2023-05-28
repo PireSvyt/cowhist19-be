@@ -13,7 +13,7 @@ module.exports = async function serviceTableDelete(tableid) {
   console.log("table.serviceTableDelete");
 
   return new Promise((resolve, reject) => {
-    Table.deleteOne({ _id: req.params.id })
+    Table.deleteOne({ _id: tableid })
       .then(() => {
         resolve({
           outcome: "table.delete.success",
