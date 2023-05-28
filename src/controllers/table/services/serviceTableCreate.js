@@ -34,6 +34,9 @@ module.exports = async function serviceTableCreate(tableToSave) {
     tableToSave
       .save()
       .then(() => {
+        if (process.env.NODE_ENV !== "_production") {
+          console.log("table.serviceTableCreate success");
+        }
         resolve({
           type: "table.save.success.created",
           data: {
@@ -42,6 +45,10 @@ module.exports = async function serviceTableCreate(tableToSave) {
         });
       })
       .catch((error) => {
+        if (process.env.NODE_ENV !== "_production") {
+          console.log("table.serviceTableCreate error");
+        }
+        console.log(error);
         resolve({
           type: "table.save.error.oncreate",
           error: error,
