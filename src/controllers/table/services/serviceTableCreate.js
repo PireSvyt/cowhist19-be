@@ -28,6 +28,7 @@ module.exports = async function serviceTableCreate(tableToSave) {
       tableToSave._id = tableToSave.id;
       tableToSave = new Table(tableToSave);
     }
+    console.log(tableToSave);
 
     // Save
     tableToSave

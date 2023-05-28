@@ -46,18 +46,21 @@ module.exports = async function servicePopulate(header) {
       populateData.tables.forEach((table) => {
         console.log("servicePopulate table");
         console.log(table);
-        // Delete previous tables
+        // Delete previous table
         console.log("servicePopulate.delete");
-        serviceTableDelete(table.id).then((deleteOutcome) => {
-          console.log("deleteOutcome");
-          console.log(deleteOutcome);
-        });
-        // Create new tables
-        console.log("servicePopulate.create");
-        serviceTableCreate(table).then((createOutcome) => {
-          console.log("createOutcome");
-          console.log(createOutcome);
-        });
+        serviceTableDelete(table.id)
+          .then((deleteOutcome) => {
+            console.log("deleteOutcome");
+            console.log(deleteOutcome);
+          })
+          .finally(() => {
+            // Create new table
+            console.log("servicePopulate.create");
+            serviceTableCreate(table).then((createOutcome) => {
+              console.log("createOutcome");
+              console.log(createOutcome);
+            });
+          });
       });
 
       // Create new games
