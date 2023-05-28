@@ -1,5 +1,6 @@
 const Table = require("../../models/Table.js");
 const serviceCheckAccess = require("./services/serviceCheckAccess.js");
+const serviceTableCreate = require("./services/serviceTableCreate.js");
 
 module.exports = tableSave = (req, res, next) => {
   /*
@@ -23,38 +24,15 @@ module.exports = tableSave = (req, res, next) => {
   if (req.body._id === "" || req.body._id === undefined) {
     // Prep
     delete req.body._id;
-    let tableToSave = { ...req.body };
-    let tableUsers = [];
-    tableToSave.users.forEach((user) => {
-      tableUsers.push(user._id);
-    });
-    tableToSave.users = tableUsers;
-
-    // Generate
-    tableToSave = new Table(tableToSave);
-    tableToSave.id = tableToSave._id;
 
     // Save
-    tableToSave
-      .save()
-      .then(() => {
-        // Response
-        res.status(201).json({
-          type: "table.save.success.created",
-          data: {
-            id: tableToSave._id,
-          },
-        });
-      })
-      .catch((error) => {
-        res.status(400).json({
-          type: "table.save.error.oncreate",
-          error: error,
-          data: {
-            id: null,
-          },
-        });
-      });
+    serviceTableCreate({ ...req.body }).then((createOutcome) => {
+      if (createOutcome.type === "table.save.success.created") {
+        res.status(201).json(createOutcome);
+      } else {
+        res.status(400).json(createOutcome);
+      }
+    });
   } else {
     // Modify
 

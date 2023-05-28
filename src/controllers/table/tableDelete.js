@@ -1,6 +1,7 @@
 const Game = require("../../models/Game.js");
 const Table = require("../../models/Table.js");
 const serviceCheckAccess = require("./services/serviceCheckAccess.js");
+const serviceTableDelete = require("./services/serviceTableDelete.js");
 
 module.exports = tableDelete = (req, res, next) => {
   /*
@@ -39,11 +40,13 @@ module.exports = tableDelete = (req, res, next) => {
         });
 
         // Delete table
-        Table.deleteOne({ _id: req.params.id })
-          .then(() => {
-            res.status(200).json({
-              type: "table.delete.success",
-            });
+        serviceTableDelete(req.params.id)
+          .then((deleteOutcome) => {
+            if (deleteOutcome.outcome === "table.delete.success") {
+              res.status(200).json(deleteOutcome);
+            } else {
+              res.status(500).json(deleteOutcome);
+            }
           })
           .catch((error) => {
             res.status(400).json({

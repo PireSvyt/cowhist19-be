@@ -35,7 +35,9 @@ module.exports = gameSave = (req, res, next) => {
           delete req.body._id;
           const gameToSave = new Game({ ...req.body });
           gameToSave.id = gameToSave._id;
-          gameToSave.date = new Date();
+          if (gameToSave.date === undefined) {
+            gameToSave.date = new Date();
+          }
           // Save
           gameToSave
             .save()
