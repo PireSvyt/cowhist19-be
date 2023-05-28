@@ -45,6 +45,8 @@ module.exports = async function servicePopulate() {
 
       // Delete previous tables
       populateData.tables.forEach((table) => {
+        console.log("servicePopulate.delete table : ");
+        console.log(table);
         tableDelete(table.id).then((deleteOutcome) => {
           console.log("deleteOutcome");
           console.log(deleteOutcome);
@@ -53,6 +55,8 @@ module.exports = async function servicePopulate() {
 
       // Create new tables
       populateData.tables.forEach((table) => {
+        console.log("servicePopulate.save table : ");
+        console.log(table);
         tableSave(table).then((saveOutcome) => {
           console.log("saveOutcome");
           console.log(saveOutcome);
