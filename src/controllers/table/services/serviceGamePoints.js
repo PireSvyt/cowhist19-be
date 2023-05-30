@@ -1,4 +1,4 @@
-const contracts = require("../resources/contracts.json");
+const contracts = require("../../../resources/contracts.json");
 
 module.exports = function serviceGamePoints(game) {
   /*
