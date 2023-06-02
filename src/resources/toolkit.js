@@ -9,7 +9,7 @@ function adjustProbabilities(dict, field) {
   if (Array.isArray(dict)) {
     let arrayToDict = {};
     dict.forEach((item) => {
-      arrayToDict[random_id()] = item;
+      arrayToDict[random_id()] = { ...item };
     });
     dict = arrayToDict;
   }
@@ -23,7 +23,7 @@ function adjustProbabilities(dict, field) {
     }
   });
   let adjustedDict = {};
-  if (initialTotal > 0.999) {
+  if (initialTotal > 0.999 && initialTotal < 1.001) {
     // No need to adjust
     adjustedDict = dict;
   } else {

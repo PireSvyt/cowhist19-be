@@ -29,7 +29,7 @@ async function seedDB() {
     // inputs
     const inputs = {
       weeks: 10,
-      nbgames: 100,
+      nbgames: 10,
       likelihood: {
         players: {
           "6457f5b9746d3231b7dab2cc": 0.3,
@@ -39,11 +39,11 @@ async function seedDB() {
           "6462e8de6e1746f44a560ed1": 0.2,
         },
         days: {
-          mon: 0.05,
-          tue: 0.15,
-          wed: 0.6,
-          thu: 0.15,
-          fri: 0.05,
+          mon: 0.025,
+          tue: 0.1,
+          wed: 0.8,
+          thu: 0.1,
+          fri: 0.025,
           sat: 0.0,
           sun: 0.0,
         },
@@ -135,8 +135,6 @@ async function seedDB() {
           role: "attack",
         });
       });
-      console.log("attack");
-      console.log(attack);
       // Defense
       let defenseCandidates = adjustProbabilities(
         Object.fromEntries(
@@ -145,8 +143,6 @@ async function seedDB() {
           })
         )
       );
-      console.log("defenseCandidates");
-      console.log(defenseCandidates);
       let defense = [];
       for (let p = 1; p <= adjustedContracts[contractId].defense; p++) {
         defense.push(pickOne(defenseCandidates));
@@ -158,7 +154,7 @@ async function seedDB() {
         });
       });
       // Date
-      let date = pickOne(adjustedDates, "likelihood");
+      let date = adjustedDates[pickOne(adjustedDates, "likelihood")].date;
 
       // build resulting game
       let game = {
@@ -166,9 +162,9 @@ async function seedDB() {
         contract: contract,
         outcome: outcome,
         players: players,
-        date: adjustedDates[date].date,
+        date: date,
       };
-      console.log(game);
+      //console.log(game);
       return game;
     }
 
