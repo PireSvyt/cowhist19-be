@@ -1,6 +1,6 @@
 require("@jest/globals");
 
-var { adjustProbabilities, pickOne } = require("./toolkit.js");
+var { adjustProbabilities, pickOne, getLastDates } = require("./toolkit.js");
 
 describe("TEST OF FUNCTION : adjustProbabilities ", () => {
   describe("When inputs are matching 100% probabilities", () => {
@@ -202,6 +202,75 @@ describe("TEST OF FUNCTION : pickOne ", () => {
       expect(dictPicked.fri).toBeCloseTo(dict.fri.proba, 1);
       expect(dictPicked.sat).toBeCloseTo(dict.sat.proba, 1);
       expect(dictPicked.sun).toBeCloseTo(dict.sun.proba, 1);
+    });
+  });
+});
+
+describe("TEST OF FUNCTION : getLastDates ", () => {
+  describe("When days are defined", () => {
+    let dateDict = getLastDates(7);
+    test("then the dates matches in number of days", () => {
+      expect(Object.keys(dateDict).length).toBe(7);
+    });
+  });
+  describe("When only days are defined", () => {
+    let dateDict = getLastDates(7);
+    let keys = Object.keys(dateDict);
+    test("then distribution is homogeneous", () => {
+      expect(dateDict[keys[0]].likelihood).toBeCloseTo(1 / 7, 5);
+      expect(dateDict[keys[1]].likelihood).toBeCloseTo(1 / 7, 5);
+      expect(dateDict[keys[2]].likelihood).toBeCloseTo(1 / 7, 5);
+      expect(dateDict[keys[3]].likelihood).toBeCloseTo(1 / 7, 5);
+      expect(dateDict[keys[4]].likelihood).toBeCloseTo(1 / 7, 5);
+      expect(dateDict[keys[5]].likelihood).toBeCloseTo(1 / 7, 5);
+      expect(dateDict[keys[6]].likelihood).toBeCloseTo(1 / 7, 5);
+    });
+  });
+  describe("When days come with a specific likelihood", () => {
+    test("then distribution follows the inputs", () => {
+      let likelihoods = {
+        mon: 0.025,
+        tue: 0.1,
+        wed: 0.8,
+        thu: 0.1,
+        fri: 0.025,
+        sat: 0.0,
+        sun: 0.0,
+      };
+      let dateDict = getLastDates(7, likelihoods);
+      let monday = Object.keys(dateDict).find(
+        (date) => dateDict[date].weekday === "mon"
+      );
+      let offset = Object.keys(dateDict).indexOf(monday);
+      let keys = Object.keys(dateDict);
+      expect(dateDict[keys[(offset - 0 +7) % 7]].likelihood).toBeCloseTo(
+        likelihoods.mon,
+        5
+      );
+      expect(dateDict[keys[(offset - 1 +7) % 7]].likelihood).toBeCloseTo(
+        likelihoods.tue,
+        5
+      );
+      expect(dateDict[keys[(offset - 2 +7) % 7]].likelihood).toBeCloseTo(
+        likelihoods.wed,
+        5
+      );
+      expect(dateDict[keys[(offset - 3 +7) % 7]].likelihood).toBeCloseTo(
+        likelihoods.thu,
+        5
+      );
+      expect(dateDict[keys[(offset - 4 +7) % 7]].likelihood).toBeCloseTo(
+        likelihoods.fri,
+        5
+      );
+      expect(dateDict[keys[(offset - 5 +7) % 7]].likelihood).toBeCloseTo(
+        likelihoods.sat,
+        5
+      );
+      expect(dateDict[keys[(offset - 6 +7) % 7]].likelihood).toBeCloseTo(
+        likelihoods.sun,
+        5
+      );
     });
   });
 });

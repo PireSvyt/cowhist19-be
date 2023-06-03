@@ -1,4 +1,3 @@
-const faker = require("@faker-js/faker");
 const MongoClient = require("mongodb").MongoClient;
 const contracts = require("../../../resources/contracts.json");
 var {
@@ -194,6 +193,7 @@ async function seedDB() {
 
     // Insert games
     console.log("Inserting games");
+    console.log(games);
     gameCollection.insertMany(games);
 
     // Close

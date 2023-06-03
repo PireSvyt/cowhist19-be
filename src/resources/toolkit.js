@@ -2,6 +2,7 @@ module.exports = {
   adjustProbabilities: adjustProbabilities,
   pickOne: pickOne,
   random_id: random_id,
+  getLastDates: getLastDates,
 };
 
 function adjustProbabilities(dict, field) {
@@ -61,4 +62,29 @@ function pickOne(input, field) {
 
 function random_id(length = 12) {
   return (temp_id = Math.random().toString(16).substr(2, length));
+}
+
+function getLastDates(days, weekdaysLikelihoods) {
+  const weekdays = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+
+  var dateDict = {};
+  var currentDate = new Date(Date.now());
+  for (var d = 0; d > -days; d--) {
+    let weekday = weekdays[currentDate.getDay()];
+    if (weekdaysLikelihoods === undefined) {
+      dateDict[random_id()] = {
+        date: new Date(currentDate),
+        weekday: weekday,
+        likelihood: 1 / days,
+      };
+    } else {
+      dateDict[random_id()] = {
+        date: new Date(currentDate),
+        weekday: weekday,
+        likelihood: weekdaysLikelihoods[weekday],
+      };
+    }
+    currentDate.setDate(currentDate.getDate() - 1);
+  }
+  return dateDict;
 }
