@@ -2,7 +2,11 @@
 const serviceTableDelete = require("../../table/services/serviceTableDelete.js");
 const serviceTableCreate = require("../../table/services/serviceTableCreate.js");
 const gameSave = require("../../game/gameSave.js");
-var { adjustProbabilities, pickOne, getLastDates } = require("../../../resources/toolkit.js");
+var {
+  adjustProbabilities,
+  pickOne,
+  getLastDates,
+} = require("../../../resources/toolkit.js");
 const contracts = require("../../../resources/contracts.json");
 
 module.exports = async function servicePopulate(reqInputs) {
@@ -61,10 +65,10 @@ module.exports = async function servicePopulate(reqInputs) {
     // Inputs adjustment per request
     if (reqInputs !== undefined) {
       if (reqInputs.weeks !== undefined) {
-        inputs.weeks = reqInputs.weeks
+        inputs.weeks = reqInputs.weeks;
       }
       if (reqInputs.nbgames !== undefined) {
-        inputs.nbgames = reqInputs.nbgames
+        inputs.nbgames = reqInputs.nbgames;
       }
     }
 
@@ -183,28 +187,35 @@ module.exports = async function servicePopulate(reqInputs) {
       useNewUrlParser: true,
       // useUnifiedTopology: true,
     });
-    await client.connect();
-    console.log("Connected correctly to server");
-    // Data reset
-    const gameCollection = client.db("test").collection("games");
-    gameCollection.drop();
-    console.log("Collections dropped");
+    client.connect().then(() => {
+      console.log("Connected correctly to server");
+      // Data reset
+      const gameCollection = client.db("test").collection("games");
+      gameCollection.drop();
+      console.log("Collections dropped");
 
-    // Insert games
-    console.log("Inserting games");
-    console.log(games);
-    gameCollection.insertMany(games);
+      // Insert games
+      console.log("Inserting games");
+      console.log(games);
+      gameCollection.insertMany(games);
+
+      // Outcome
+      if (allWentWell) {
+        resolve({
+          outcome: "success",
+        });
+      } else {
+        resolve({
+          outcome: "error",
+          error: "all went not well",
+        });
+      }
+    });
 
     // Outcome
-    if (allWentWell) {
-      resolve({
-        outcome: "success",
-      });
-    } else {
-      resolve({
-        outcome: "error",
-        error: "all went not well",
-      });
-    }
+    resolve({
+      outcome: "error",
+      error: "db connection failed",
+    });
   });
 };
