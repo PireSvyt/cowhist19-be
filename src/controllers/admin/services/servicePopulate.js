@@ -217,11 +217,5 @@ module.exports = async function servicePopulate(reqInputs) {
           error: err,
         });
       });
-
-    // Outcome
-    resolve({
-      outcome: "error",
-      error: "db connection failed",
-    });
   });
 };
