@@ -1,7 +1,4 @@
-// Services
-const serviceTableDelete = require("../../table/services/serviceTableDelete.js");
-const serviceTableCreate = require("../../table/services/serviceTableCreate.js");
-const gameSave = require("../../game/gameSave.js");
+const MongoClient = require("mongodb").MongoClient;
 var {
   adjustProbabilities,
   pickOne,
