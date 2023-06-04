@@ -184,35 +184,43 @@ module.exports = async function servicePopulate(reqInputs) {
       useNewUrlParser: true,
       // useUnifiedTopology: true,
     });
-    mongoClient.connect().then(function (err, mongoClient) {
-      console.log(err);
+    mongoClient
+      .connect()
+      .then((err) => {
+        console.log("Connected correctly to server");
 
-      console.log("Connected correctly to server");
+        console.log(err);
 
-      // Data reset
-      const gameCollection = mongoClient.db("test").collection("games");
-      gameCollection.drop();
-      console.log("Collections dropped");
+        // Data reset
+        const gameCollection = mongoClient.db("test").collection("games");
+        gameCollection.drop();
+        console.log("Collections dropped");
 
-      // Insert games
-      console.log("Inserting games");
-      //console.log(games);
-      gameCollection.insertMany(games);
+        // Insert games
+        console.log("Inserting games");
+        //console.log(games);
+        gameCollection.insertMany(games);
 
-      mongoClient.close();
+        mongoClient.close();
 
-      // Outcome
-      if (allWentWell) {
-        resolve({
-          outcome: "success",
-        });
-      } else {
+        // Outcome
+        if (allWentWell) {
+          resolve({
+            outcome: "success",
+          });
+        } else {
+          resolve({
+            outcome: "error",
+            error: "all went not well",
+          });
+        }
+      })
+      .catch((err) => {
         resolve({
           outcome: "error",
-          error: "all went not well",
+          error: err,
         });
-      }
-    });
+      });
 
     // Outcome
     resolve({
