@@ -181,7 +181,6 @@ module.exports = async function servicePopulate(reqInputs) {
     let DB_URL =
       "mongodb+srv://savoyatp:2PDJ9d6PrWEcPD8t@cluster0.0gnwxga.mongodb.net/?retryWrites=true&w=majority";
     let mongoClient = new MongoClient(DB_URL, { useNewUrlParser: true });
-    console.log(mongoClient);
     mongoClient
       .connect()
       .then((err) => {
@@ -196,8 +195,6 @@ module.exports = async function servicePopulate(reqInputs) {
         console.log("Inserting games");
         //console.log(games);
         gameCollection.insertMany(games);
-
-        mongoClient.close();
 
         // Outcome
         if (allWentWell) {
