@@ -42,7 +42,7 @@ module.exports = populate = (req, res, next) => {
             // Failed populated
             res.status(500).json({
               type: "admin.populate.error.failedpopulation",
-              error: access.reason,
+              error: population.error,
             });
           }
         });

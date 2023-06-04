@@ -180,14 +180,15 @@ module.exports = async function servicePopulate(reqInputs) {
     console.log("Openning server");
     let DB_URL =
       "mongodb+srv://savoyatp:2PDJ9d6PrWEcPD8t@cluster0.0gnwxga.mongodb.net/?retryWrites=true&w=majority";
-    const client = new MongoClient(DB_URL, {
+    const mongoClient = new MongoClient(DB_URL, {
       useNewUrlParser: true,
       // useUnifiedTopology: true,
     });
-    client.connect().then(() => {
+    mongoClient.open(function (err, mongoClient) {
       console.log("Connected correctly to server");
+
       // Data reset
-      const gameCollection = client.db("test").collection("games");
+      const gameCollection = mongoClient.db("test").collection("games");
       gameCollection.drop();
       console.log("Collections dropped");
 
@@ -195,6 +196,8 @@ module.exports = async function servicePopulate(reqInputs) {
       console.log("Inserting games");
       //console.log(games);
       gameCollection.insertMany(games);
+
+      mongoClient.close();
 
       // Outcome
       if (allWentWell) {
