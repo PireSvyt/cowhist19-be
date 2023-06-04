@@ -108,7 +108,7 @@ module.exports = async function servicePopulate(reqInputs) {
     let adjustedWeekdays = adjustProbabilities(inputs.likelihood.days);
     //console.log("adjustedWeekdays");
     //console.log(adjustedWeekdays);
-    let candidateDates = getDateDict(inputs.weeks, adjustedWeekdays);
+    let candidateDates = getLastDates(inputs.weeks * 7, adjustedWeekdays);
     let adjustedDates = adjustProbabilities(candidateDates, "likelihood");
     //console.log("adjustedDates");
     //console.log(adjustedDates);
@@ -196,7 +196,7 @@ module.exports = async function servicePopulate(reqInputs) {
 
       // Insert games
       console.log("Inserting games");
-      console.log(games);
+      //console.log(games);
       gameCollection.insertMany(games);
 
       // Outcome
