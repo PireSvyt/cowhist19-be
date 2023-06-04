@@ -184,7 +184,9 @@ module.exports = async function servicePopulate(reqInputs) {
       useNewUrlParser: true,
       // useUnifiedTopology: true,
     });
-    mongoClient.open(function (err, mongoClient) {
+    mongoClient.connect().then(function (err, mongoClient) {
+      console.log(err);
+
       console.log("Connected correctly to server");
 
       // Data reset
