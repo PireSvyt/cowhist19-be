@@ -32,7 +32,7 @@ module.exports = populate = (req, res, next) => {
           error: access.reason,
         });
       } else {
-        servicePopulate(req.headers["authorization"]).then((population) => {
+        servicePopulate(req.body).then((population) => {
           if (population.outcome === "success") {
             // Successful populated
             res.status(200).json({
