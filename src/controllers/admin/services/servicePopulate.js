@@ -180,9 +180,10 @@ module.exports = async function servicePopulate(reqInputs) {
     console.log("Openning server");
     let DB_URL =
       "mongodb+srv://savoyatp:2PDJ9d6PrWEcPD8t@cluster0.0gnwxga.mongodb.net/?retryWrites=true&w=majority";
-    let mongoClient = new MongoClient();
+    let mongoClient = new MongoClient(DB_URL, { useNewUrlParser: true });
+    console.log(mongoClient);
     mongoClient
-      .connect(DB_URL, { useNewUrlParser: true })
+      .connect()
       .then((err) => {
         console.log("Connected correctly to server");
 
