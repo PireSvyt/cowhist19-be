@@ -26,13 +26,42 @@ module.exports = tableSave = (req, res, next) => {
     delete req.body._id;
 
     // Save
-    serviceTableCreate({ ...req.body }).then((createOutcome) => {
-      if (createOutcome.type === "table.save.success.created") {
-        res.status(201).json(createOutcome);
-      } else {
-        res.status(400).json(createOutcome);
-      }
+    let tableToSave = { ...req.body };
+    let tableUsers = [];
+    tableToSave.users.forEach((user) => {
+      tableUsers.push(user._id);
     });
+    tableToSave.users = tableUsers;
+    tableToSave = new Table(tableToSave);
+    tableToSave.id = tableToSave._id;
+
+    // Save
+    tableToSave
+      .save()
+      .then(() => {
+        if (process.env.NODE_ENV !== "_production") {
+          console.log("table.serviceTableCreate success");
+        }
+        res.status(201).json({
+          type: "table.save.success.created",
+          data: {
+            id: tableToSave._id,
+          },
+        });
+      })
+      .catch((error) => {
+        if (process.env.NODE_ENV !== "_production") {
+          console.log("table.serviceTableCreate error");
+        }
+        console.log(error);
+        res.status(400).json({
+          type: "table.save.error.oncreate",
+          error: error,
+          data: {
+            id: null,
+          },
+        });
+      });
   } else {
     // Modify
 
