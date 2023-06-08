@@ -47,7 +47,7 @@ module.exports = tableDelete = (req, res, next) => {
           })
           .catch((error) => {
             res.status(400).json({
-              type: "table.delete.error.errorondelete",
+              type: "table.delete.error.ondeletetable",
               error: error,
             });
             console.error(error);
