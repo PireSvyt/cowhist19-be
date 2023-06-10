@@ -1,5 +1,5 @@
 const Table = require("../../models/Table.js");
-const contracts = require("./resources/contracts.json");
+const contracts = require("../../resources/contracts.json");
 const serviceCheckAccess = require("./services/serviceCheckAccess.js");
 
 module.exports = tableDetails = (req, res, next) => {
@@ -25,7 +25,7 @@ module.exports = tableDetails = (req, res, next) => {
       if (!access.outcome) {
         // Unauthorized
         res.status(401).json({
-          type: "table.details.error.deniedaccess",
+          type: "table.history.error.deniedaccess",
           error: access.reason,
         });
       } else {

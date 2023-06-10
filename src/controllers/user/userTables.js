@@ -1,3 +1,4 @@
+const jwt_decode = require("jwt-decode");
 const Table = require("../../models/Table.js");
 
 module.exports = userTables = (req, res, next) => {

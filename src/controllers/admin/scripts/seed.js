@@ -1,26 +1,32 @@
 const MongoClient = require("mongodb").MongoClient;
+const contracts = require("../../../resources/contracts.json");
 var {
   adjustProbabilities,
   pickOne,
-  getLastDates,
+  random_id,
 } = require("../../../resources/toolkit.js");
-const contracts = require("../../../resources/contracts.json");
 
-module.exports = async function servicePopulate(reqInputs) {
-  /*
-  
-  populate the database with mocked data
-  
-  */
+function getDateDict(lastWeeks, weekdaysLikelihoods) {
+  const weekdays = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 
-  console.log("admin.servicePopulate");
+  var dateDict = {};
+  var currentDate = new Date(Date.now());
+  for (var d = 0; d > -lastWeeks * 7; d--) {
+    let weekday = weekdays[currentDate.getDay()];
+    dateDict[random_id()] = {
+      date: new Date(currentDate),
+      weekday: weekday,
+      likelihood: weekdaysLikelihoods[weekday],
+    };
+    currentDate.setDate(currentDate.getDate() - 1);
+  }
+  return dateDict;
+}
 
-  return new Promise((resolve, reject) => {
-    let allWentWell = true;
-
-    // Inputs
+async function seedDB() {
+  try {
+    // inputs
     const inputs = {
-      tableid: "6d6f636b65647461626c6531",
       weeks: 10,
       nbgames: 10,
       likelihood: {
@@ -42,10 +48,10 @@ module.exports = async function servicePopulate(reqInputs) {
         },
         outcomes: {
           "by-2": { likelihood: 0.1, folds: -2 },
-          "by-1": { likelihood: 0.3, folds: -1 },
+          "by-1": { likelihood: 0.2, folds: -1 },
           "by+0": { likelihood: 0.4, folds: 0 },
-          "by+1": { likelihood: 0.15, folds: 1 },
-          "by+2": { likelihood: 0.05, folds: 2 },
+          "by+1": { likelihood: 0.2, folds: 1 },
+          "by+2": { likelihood: 0.1, folds: 2 },
         },
         contracts: {
           coop: 0.7,
@@ -59,20 +65,9 @@ module.exports = async function servicePopulate(reqInputs) {
         contracts: ["grandchelem", "grandemisereetalee", "grandemiserz"],
       },
     };
-    // Inputs adjustment per request
-    if (reqInputs !== undefined) {
-      if (reqInputs.weeks !== undefined) {
-        inputs.weeks = reqInputs.weeks;
-      }
-      if (reqInputs.nbgames !== undefined) {
-        inputs.nbgames = reqInputs.nbgames;
-      }
-    }
 
-    // Adjusting likelihoods
-    console.log("Adjusting likelihoods");
     // Adjust contract likelihoods
-    //console.log("Adjusting contacts");
+    console.log("Adjusting contacts");
     contracts.forEach((contract) => {
       if (inputs.locked.contracts.includes(contract.type)) {
         contract.likelihood = 0;
@@ -85,30 +80,33 @@ module.exports = async function servicePopulate(reqInputs) {
       }
     });
     let adjustedContracts = adjustProbabilities(contracts, "likelihood");
-    //console.log("adjustedContracts");
-    //console.log(adjustedContracts);
+    console.log("adjustedContracts");
+    console.log(adjustedContracts);
     // Adjust outcome likelihood
-    //console.log("Adjusting outcomes");
+    console.log("Adjusting outcomes");
     let adjustedOutcomes = adjustProbabilities(
       inputs.likelihood.outcomes,
       "likelihood"
     );
-    //console.log("adjustedOutcomes");
-    //console.log(adjustedOutcomes);
+    console.log("adjustedOutcomes");
+    console.log(adjustedOutcomes);
     // Adjust player likelihood
-    //console.log("Adjusting playuers");
+    console.log("Adjusting playuers");
     let adjustedPlayers = adjustProbabilities(inputs.likelihood.players);
-    //console.log("adjustedPlayers");
-    //console.log(adjustedPlayers);
+    console.log("adjustedPlayers");
+    console.log(adjustedPlayers);
     // Adjust date likelihood
-    //console.log("Adjusting dates");
+    console.log("Adjusting dates");
     let adjustedWeekdays = adjustProbabilities(inputs.likelihood.days);
-    //console.log("adjustedWeekdays");
-    //console.log(adjustedWeekdays);
-    let candidateDates = getLastDates(inputs.weeks * 7, adjustedWeekdays);
+    console.log("adjustedWeekdays");
+    console.log(adjustedWeekdays);
+    let candidateDates = getDateDict(inputs.weeks, adjustedWeekdays);
     let adjustedDates = adjustProbabilities(candidateDates, "likelihood");
-    //console.log("adjustedDates");
-    //console.log(adjustedDates);
+    console.log("adjustedDates");
+    console.log(adjustedDates);
+
+    // Game builder
+    let tableid = "6d6f636b65647461626c6531";
 
     function buildGame() {
       // Contract
@@ -159,7 +157,7 @@ module.exports = async function servicePopulate(reqInputs) {
 
       // build resulting game
       let game = {
-        table: inputs.tableid,
+        table: tableid,
         contract: contract,
         outcome: outcome,
         players: players,
@@ -176,44 +174,34 @@ module.exports = async function servicePopulate(reqInputs) {
       games.push(buildGame());
     }
 
-    // DB connection
-    console.log("Openning server");
+    // Connection URL
     let DB_URL =
       "mongodb+srv://savoyatp:2PDJ9d6PrWEcPD8t@cluster0.0gnwxga.mongodb.net/?retryWrites=true&w=majority";
-    let mongoClient = new MongoClient(DB_URL, { useNewUrlParser: true });
-    mongoClient
-      .connect()
-      .then((err) => {
-        console.log("Connected correctly to server");
+    const client = new MongoClient(DB_URL, {
+      useNewUrlParser: true,
+      // useUnifiedTopology: true,
+    });
 
-        // Data reset
-        const gameCollection = mongoClient.db("test").collection("games");
-        gameCollection.drop();
-        console.log("Collections dropped");
+    // Connection
+    console.log("Openning server");
+    await client.connect();
+    console.log("Connected correctly to server");
+    // Data reset
+    const gameCollection = client.db("test").collection("games");
+    gameCollection.drop();
+    console.log("Collections dropped");
 
-        // Insert games
-        console.log("Inserting games");
-        //console.log(games);
-        gameCollection.insertMany(games);
+    // Insert games
+    console.log("Inserting games");
+    console.log(games);
+    gameCollection.insertMany(games);
 
-        // Outcome
-        if (allWentWell) {
-          resolve({
-            outcome: "success",
-          });
-        } else {
-          resolve({
-            outcome: "error",
-            error: "all went not well",
-          });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        resolve({
-          outcome: "error",
-          error: err,
-        });
-      });
-  });
-};
+    // Close
+    console.log("Closing server");
+    //client.close();
+  } catch (err) {
+    console.log(err.stack);
+  }
+}
+
+seedDB();
