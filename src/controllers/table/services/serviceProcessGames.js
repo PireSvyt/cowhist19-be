@@ -28,35 +28,44 @@ module.exports = function serviceProcessGames(games, request) {
     if (serviceCheckContract(game)) {
       let gamePoints = serviceGamePoints(game);
       game.players.forEach((player) => {
-        // Add player to players if missing
-        if (!Object.keys(players).includes(player._id)) {
-          players[player._id] = {
-            _id: player._id,
-            attackWins: 0,
-            attackLoss: 0,
-            defenseWins: 0,
-            defenseLoss: 0,
-            cumulatedPoints: 0,
-          };
+        // Neglect is a guest
+        let nonguestplayer = true;
+        if (player.nonuser !== undefined) {
+          if (player.nonuser === "guest") {
+            nonguestplayer = false;
+          }
         }
-        // Record outcome
-        if (game.outcome < 0) {
-          if (player.role === "attack") {
-            players[player._id].attackLoss += 1;
-            players[player._id].cumulatedPoints += gamePoints.attack;
+        if (nonguestplayer) {
+          // Add player to players if missing
+          if (!Object.keys(players).includes(player._id)) {
+            players[player._id] = {
+              _id: player._id,
+              attackWins: 0,
+              attackLoss: 0,
+              defenseWins: 0,
+              defenseLoss: 0,
+              cumulatedPoints: 0,
+            };
           }
-          if (player.role === "defense") {
-            players[player._id].defenseWins += 1;
-            players[player._id].cumulatedPoints += gamePoints.defense;
-          }
-        } else {
-          if (player.role === "attack") {
-            players[player._id].attackWins += 1;
-            players[player._id].cumulatedPoints += gamePoints.attack;
-          }
-          if (player.role === "defense") {
-            players[player._id].defenseLoss += 1;
-            players[player._id].cumulatedPoints += gamePoints.defense;
+          // Record outcome
+          if (game.outcome < 0) {
+            if (player.role === "attack") {
+              players[player._id].attackLoss += 1;
+              players[player._id].cumulatedPoints += gamePoints.attack;
+            }
+            if (player.role === "defense") {
+              players[player._id].defenseWins += 1;
+              players[player._id].cumulatedPoints += gamePoints.defense;
+            }
+          } else {
+            if (player.role === "attack") {
+              players[player._id].attackWins += 1;
+              players[player._id].cumulatedPoints += gamePoints.attack;
+            }
+            if (player.role === "defense") {
+              players[player._id].defenseLoss += 1;
+              players[player._id].cumulatedPoints += gamePoints.defense;
+            }
           }
         }
       });

@@ -1,8 +1,9 @@
 const Table = require("../../models/Table.js");
 const contracts = require("../../resources/contracts.json");
+const { random_id } = require("../../resources/toolkit");
 const serviceCheckAccess = require("./services/serviceCheckAccess.js");
 
-module.exports = tableDetails = (req, res, next) => {
+module.exports = tableDetails_v2 = (req, res, next) => {
   /*
   
   provides the details of a table
@@ -64,7 +65,14 @@ module.exports = tableDetails = (req, res, next) => {
           .then((tables) => {
             if (tables.length === 1) {
               let table = tables[0];
-              // Package for front end
+              // Add guest players
+              for (var guest = 1; guest <= table.guests; guest++) {
+                table.players.push({
+                  _id: random_id(),
+                  status: "guest",
+                });
+              }
+              // Add contracts
               table.contracts = contracts;
               // Response
               res.status(200).json({
