@@ -140,6 +140,8 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                         if (player.noneuser === undefined) {
                           player.noneuser = [];
                         }
+                        console.log("player");
+                        console.log(player);
                         if (!player.noneuser.includes("guest")) {
                           // User is not a guest
                           let potentialPseudo = table.players.filter((p) => {
