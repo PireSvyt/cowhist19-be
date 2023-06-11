@@ -133,12 +133,12 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                     let newGames = [];
                     games.forEach((game) => {
                       let newGame = JSON.parse(JSON.stringify(game));
-                      newGame.attackPlayers = [];
-                      newGame.defensePlayers = [];
+                      newGame.attack = [];
+                      newGame.defense = [];
                       newGame.players.forEach((player) => {
                         let gamePlayer = JSON.parse(JSON.stringify(player));
                         if (gamePlayer.noneuser === undefined) {
-                          gamePlayer.noneuser = "";
+                          gamePlayer.noneuser = "na";
                         }
                         if (gamePlayer.noneuser !== "guest") {
                           // User is not a guest
@@ -154,7 +154,7 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                           }
                         }
                         delete gamePlayer.id;
-                        newGame[gamePlayer.role + "Players"].push(gamePlayer);
+                        newGame[gamePlayer.role].push(gamePlayer);
                       });
                       // Remove players
                       delete newGame.players;
