@@ -138,6 +138,8 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                       let newGame = { ...game };
                       newGame.attackPlayers = [];
                       newGame.defensePlayers = [];
+                      console.log("newGame");
+                      console.log(newGame);
                       newGame.players.forEach((player) => {
                         let newPlayer = { ...player };
                         if (newPlayer.noneuser === undefined) {
