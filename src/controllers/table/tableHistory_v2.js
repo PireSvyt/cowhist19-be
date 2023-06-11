@@ -154,7 +154,8 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                           }
                         }
                         delete gamePlayer.id;
-                        newGame[gamePlayer.role].push(gamePlayer);
+                        delete gamePlayer.role;
+                        newGame[player.role].push(gamePlayer);
                       });
                       // Remove players
                       delete newGame.players;
