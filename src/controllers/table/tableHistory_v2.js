@@ -136,29 +136,25 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                       let newGame = JSON.parse(JSON.stringify(game));
                       newGame.attackPlayers = [];
                       newGame.defensePlayers = [];
-                      console.log("newGame");
-                      console.log(newGame);
                       newGame.players.forEach((player) => {
-                        let newPlayer = JSON.parse(JSON.stringify(player));
-                        if (newPlayer.noneuser === undefined) {
-                          newPlayer.noneuser = "";
+                        let gamePlayer = JSON.parse(JSON.stringify(player));
+                        if (gamePlayer.noneuser === undefined) {
+                          gamePlayer.noneuser = "";
                         }
-                        if (newPlayer.noneuser !== "guest") {
+                        if (gamePlayer.noneuser !== "guest") {
                           // User is not a guest
-                          let potentialPseudo = table.players.filter((p) => {
-                            return p._id === newPlayer._id;
-                          });
-                          console.log("potentialPseudo");
-                          console.log(potentialPseudo);
+                          let potentialPseudo = table.players.filter(
+                            (tablePlayer) => tablePlayer._id === gamePlayer._id
+                          );
                           if (potentialPseudo.length > 0) {
                             // User is part of the table players
-                            newPlayer.pseudo = potentialPseudo[0];
+                            gamePlayer.pseudo = potentialPseudo[0];
                           } else {
                             // User is no longer part of the table players
-                            newPlayer.noneuser = "removeduser";
+                            gamePlayer.noneuser = "removeduser";
                           }
                         }
-                        newGame[newPlayer.role + "Players"].push(newPlayer);
+                        newGame[gamePlayer.role + "Players"].push(gamePlayer);
                       });
                       // Remove players
                       delete newGame.players;
