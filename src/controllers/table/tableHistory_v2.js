@@ -137,7 +137,7 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                       game.attackPlayers = [];
                       game.defensePlayers = [];
                       game.players.forEach((player) => {
-                        if (player.noneuser !== undefined) {
+                        if (player.noneuser === undefined) {
                           player.noneuser = [];
                         }
                         if (!player.noneuser.includes("guest")) {
