@@ -114,8 +114,6 @@ module.exports = tableHistory_v2 = (req, res, next) => {
             .then((tables) => {
               if (tables.length === 1) {
                 let table = tables[0];
-                console.log("table");
-                console.log(table);
                 // Find games
                 Game.find(filters, fields)
                   .then((games) => {
@@ -149,12 +147,13 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                           );
                           if (potentialPseudo.length > 0) {
                             // User is part of the table players
-                            gamePlayer.pseudo = potentialPseudo[0];
+                            gamePlayer.pseudo = potentialPseudo[0].pseudo;
                           } else {
                             // User is no longer part of the table players
                             gamePlayer.noneuser = "removeduser";
                           }
                         }
+                        delete gamePlayer.id;
                         newGame[gamePlayer.role + "Players"].push(gamePlayer);
                       });
                       // Remove players

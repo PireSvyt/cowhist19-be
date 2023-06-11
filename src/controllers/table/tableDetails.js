@@ -64,6 +64,7 @@ module.exports = tableDetails = (req, res, next) => {
           .then((tables) => {
             if (tables.length === 1) {
               let table = tables[0];
+              // Package for front end
               table.contracts = contracts;
               // Response
               res.status(200).json({
