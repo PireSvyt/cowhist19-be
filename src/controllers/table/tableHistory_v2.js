@@ -135,12 +135,12 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                     // Package data for front end
                     let newGames = [];
                     games.forEach((game) => {
-                      let newGame = { ...game };
-                      newGame.attackPlayers = [];
-                      newGame.defensePlayers = [];
-                      console.log("newGame");
-                      console.log(newGame);
-                      newGame.players.forEach((player) => {
+                      //let newGame = { ...game };
+                      game.attackPlayers = [];
+                      game.defensePlayers = [];
+                      console.log("game");
+                      console.log(game);
+                      game.players.forEach((player) => {
                         let newPlayer = { ...player };
                         if (newPlayer.noneuser === undefined) {
                           newPlayer.noneuser = [];
@@ -160,11 +160,13 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                             newPlayer.noneuser.push("removeduser");
                           }
                         }
-                        newGame[newPlayer.role + "Players"].push(newPlayer);
+                        game[newPlayer.role + "Players"].push(newPlayer);
                       });
-                      console.log("newGame");
-                      console.log(newGame);
-                      newGames.push(newGame);
+                      console.log("game");
+                      console.log(game);
+                      //console.log("newGame");
+                      //console.log(newGame);
+                      //newGames.push(newGame);
                     });
                     console.log("newGames");
                     console.log(newGames);
