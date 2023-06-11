@@ -113,6 +113,8 @@ module.exports = tableHistory_v2 = (req, res, next) => {
             .then((tables) => {
               if (tables.length === 1) {
                 let table = tables[0];
+                console.log("table");
+                console.log(table);
                 // Find games
                 Game.find(filters, fields)
                   .then((games) => {
@@ -128,11 +130,16 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                     if (more) {
                       games.pop();
                     }
+                    console.log("games");
+                    console.log(games);
                     // Package data for front end
                     games.forEach((game) => {
                       game.attackPlayers = [];
                       game.defensePlayers = [];
                       game.players.forEach((player) => {
+                        if (player.noneuser !== undefined) {
+                          player.noneuser = [];
+                        }
                         if (!player.noneuser.includes("guest")) {
                           // User is not a guest
                           let potentialPseudo = table.players.filter((p) => {
@@ -149,11 +156,11 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                         game[player.role + "Players"].push(player);
                       });
                     });
+                    console.log("games");
+                    console.log(games);
                     // Response
-                    status = 200;
-                    type = "table.history.success";
-                    res.status(status).json({
-                      type: type,
+                    res.status(200).json({
+                      type: "table.history.success",
                       data: {
                         games: games,
                         more: more,
@@ -161,17 +168,15 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                     });
                   })
                   .catch((error) => {
-                    status = 400;
-                    type = "table.history.error.findinggames";
-                    res.status(status).json({
-                      type: type,
+                    console.error(error);
+                    res.status(400).json({
+                      type: "table.history.error.findinggames",
                       data: {
                         games: [],
                         more: null,
                       },
                       error: error,
                     });
-                    console.error(error);
                   });
               } else {
                 res.status(400).json({
@@ -184,6 +189,7 @@ module.exports = tableHistory_v2 = (req, res, next) => {
               }
             })
             .catch((error) => {
+              console.error(error);
               res.status(400).json({
                 type: "table.history.error.onaggregate",
                 data: {
@@ -192,7 +198,6 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                 },
                 error: error,
               });
-              console.error(error);
             });
         }
       }
