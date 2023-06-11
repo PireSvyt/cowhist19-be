@@ -69,7 +69,6 @@ module.exports = tableDetails_v2 = (req, res, next) => {
               for (var guest = 1; guest <= table.guests; guest++) {
                 table.players.push({
                   _id: random_id(),
-                  pseudo: "guest",
                   status: "guest",
                 });
               }
