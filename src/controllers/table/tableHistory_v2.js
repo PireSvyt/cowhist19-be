@@ -137,10 +137,10 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                       newGame.defense = [];
                       newGame.players.forEach((player) => {
                         let gamePlayer = JSON.parse(JSON.stringify(player));
-                        if (gamePlayer.noneuser === undefined) {
-                          gamePlayer.noneuser = "na";
+                        if (gamePlayer.nonuser === undefined) {
+                          gamePlayer.nonuser = "na";
                         }
-                        if (gamePlayer.noneuser !== "guest") {
+                        if (gamePlayer.nonuser !== "guest") {
                           // User is not a guest
                           let potentialPseudo = table.players.filter(
                             (tablePlayer) => tablePlayer.id === gamePlayer._id
@@ -150,7 +150,7 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                             gamePlayer.pseudo = potentialPseudo[0].pseudo;
                           } else {
                             // User is no longer part of the table players
-                            gamePlayer.noneuser = "removeduser";
+                            gamePlayer.nonuser = "removeduser";
                           }
                         }
                         delete gamePlayer.id;
