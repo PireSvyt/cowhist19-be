@@ -130,8 +130,6 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                     if (more) {
                       games.pop();
                     }
-                    console.log("games");
-                    console.log(games);
                     // Package data for front end
                     let newGames = [];
                     games.forEach((game) => {
@@ -143,11 +141,11 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                       newGame.players.forEach((player) => {
                         let newPlayer = JSON.parse(JSON.stringify(player));
                         if (newPlayer.noneuser === undefined) {
-                          newPlayer.noneuser = [];
+                          newPlayer.noneuser = "";
                         }
                         console.log("newPlayer");
                         console.log(newPlayer);
-                        if (!newPlayer.noneuser.includes("guest")) {
+                        if (newPlayer.noneuser !== "guest") {
                           // User is not a guest
                           let potentialPseudo = table.players.filter((p) => {
                             return p._id === newPlayer._id;
@@ -157,17 +155,18 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                             newPlayer.pseudo = potentialPseudo[0];
                           } else {
                             // User is no longer part of the table players
-                            newPlayer.noneuser.push("removeduser");
+                            newPlayer.noneuser = "removeduser";
                           }
                         }
                         newGame[newPlayer.role + "Players"].push(newPlayer);
                       });
+                      // Remove players
+                      delete newGame.players;
+
                       console.log("newGame");
                       console.log(newGame);
                       newGames.push(newGame);
                     });
-                    console.log("newGames");
-                    console.log(newGames);
                     // Response
                     res.status(200).json({
                       type: "table.history.success",
