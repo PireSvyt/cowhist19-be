@@ -28,7 +28,9 @@ module.exports = tableSave = (req, res, next) => {
     let tableToSave = { ...req.body };
     let tableUsers = [];
     tableToSave.users.forEach((user) => {
-      tableUsers.push(user._id);
+      if (user.status !== "guest") {
+        tableUsers.push(user._id);
+      }
     });
     tableToSave.users = tableUsers;
     tableToSave = new Table(tableToSave);
