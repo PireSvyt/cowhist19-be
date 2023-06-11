@@ -133,38 +133,42 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                     console.log("games");
                     console.log(games);
                     // Package data for front end
+                    let newGames = [];
                     games.forEach((game) => {
-                      game.attackPlayers = [];
-                      game.defensePlayers = [];
-                      game.players.forEach((player) => {
-                        if (player.noneuser === undefined) {
-                          player.noneuser = [];
+                      let newGame = { ...game };
+                      newGame.attackPlayers = [];
+                      newGame.defensePlayers = [];
+                      newGame.players.forEach((player) => {
+                        let newPlayer = { ...player };
+                        if (newPlayer.noneuser === undefined) {
+                          newPlayer.noneuser = [];
                         }
-                        console.log("player");
-                        console.log(player);
-                        if (!player.noneuser.includes("guest")) {
+                        console.log("newPlayer");
+                        console.log(newPlayer);
+                        if (!newPlayer.noneuser.includes("guest")) {
                           // User is not a guest
                           let potentialPseudo = table.players.filter((p) => {
-                            return p._id === player._id;
+                            return p._id === newPlayer._id;
                           });
                           if (potentialPseudo.length > 0) {
                             // User is part of the table players
-                            player.pseudo = potentialPseudo[0];
+                            newPlayer.pseudo = potentialPseudo[0];
                           } else {
                             // User is no longer part of the table players
-                            player.noneuser.push("removeduser");
+                            newPlayer.noneuser.push("removeduser");
                           }
                         }
-                        game[player.role + "Players"].push(player);
+                        newGame[newPlayer.role + "Players"].push(newPlayer);
                       });
+                      newGames.push(newGame);
                     });
-                    console.log("games");
-                    console.log(games);
+                    console.log("newGames");
+                    console.log(newGames);
                     // Response
                     res.status(200).json({
                       type: "table.history.success",
                       data: {
-                        games: games,
+                        games: newGames,
                         more: more,
                       },
                     });
