@@ -148,6 +148,8 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                           let potentialPseudo = table.players.filter((p) => {
                             return p._id === newPlayer._id;
                           });
+                          console.log("potentialPseudo");
+                          console.log(potentialPseudo);
                           if (potentialPseudo.length > 0) {
                             // User is part of the table players
                             newPlayer.pseudo = potentialPseudo[0];
