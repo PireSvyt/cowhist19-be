@@ -56,6 +56,7 @@ module.exports = tableDetails = (req, res, next) => {
             $project: {
               _id: 1,
               name: 1,
+              guests: 1,
               players: 1,
             },
           },

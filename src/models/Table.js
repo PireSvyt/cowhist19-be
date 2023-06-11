@@ -9,6 +9,7 @@ const tableSchema = mongoose.Schema(
   {
     id: { type: String, required: true, unique: true },
     name: { type: String, required: false, unique: true },
+    guests: { type: Number, required: false },
     users: {
       type: [
         {
