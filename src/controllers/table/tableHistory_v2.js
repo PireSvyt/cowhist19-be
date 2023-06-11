@@ -143,8 +143,6 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                         if (newPlayer.noneuser === undefined) {
                           newPlayer.noneuser = "";
                         }
-                        console.log("newPlayer");
-                        console.log(newPlayer);
                         if (newPlayer.noneuser !== "guest") {
                           // User is not a guest
                           let potentialPseudo = table.players.filter((p) => {
@@ -162,9 +160,6 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                       });
                       // Remove players
                       delete newGame.players;
-
-                      console.log("newGame");
-                      console.log(newGame);
                       newGames.push(newGame);
                     });
                     // Response
