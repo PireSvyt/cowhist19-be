@@ -94,6 +94,7 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                   {
                     $project: {
                       _id: 1,
+                      id: 1,
                       pseudo: 1,
                       status: 1,
                     },
@@ -144,7 +145,7 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                         if (gamePlayer.noneuser !== "guest") {
                           // User is not a guest
                           let potentialPseudo = table.players.filter(
-                            (tablePlayer) => tablePlayer._id === gamePlayer._id
+                            (tablePlayer) => tablePlayer.id === gamePlayer._id
                           );
                           if (potentialPseudo.length > 0) {
                             // User is part of the table players
