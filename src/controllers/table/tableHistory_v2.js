@@ -160,6 +160,8 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                         }
                         newGame[newPlayer.role + "Players"].push(newPlayer);
                       });
+                      console.log("newGame");
+                      console.log(newGame);
                       newGames.push(newGame);
                     });
                     console.log("newGames");
