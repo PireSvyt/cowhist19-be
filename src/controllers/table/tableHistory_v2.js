@@ -135,13 +135,13 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                     // Package data for front end
                     let newGames = [];
                     games.forEach((game) => {
-                      let newGame = Object.assign({}, game);
+                      let newGame = JSON.parse(JSON.stringify(game));
                       newGame.attackPlayers = [];
                       newGame.defensePlayers = [];
                       console.log("newGame");
                       console.log(newGame);
                       newGame.players.forEach((player) => {
-                        let newPlayer = Object.assign({}, player);
+                        let newPlayer = JSON.parse(JSON.stringify(player));
                         if (newPlayer.noneuser === undefined) {
                           newPlayer.noneuser = [];
                         }
