@@ -77,9 +77,19 @@ module.exports = tableSave = (req, res, next) => {
           });
         } else {
           let tableToSave = { ...req.body };
+          
+          // Packaging for saving
           let tableUsers = [];
-          tableToSave.players.forEach((player) => {
-            tableUsers.push(player._id);
+          tableToSave.users.forEach((user) => {
+            let userToAdd = true;
+            if (user.status !== undefined) {
+              if (user.status === "guest") {
+                userToAdd = false;
+              }
+            }
+            if (userToAdd) {
+              tableUsers.push(user._id);
+            }
           });
           tableToSave.users = tableUsers;
 
