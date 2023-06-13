@@ -23,7 +23,7 @@ module.exports = authExistingPseudo = (req, res, next) => {
         });
       } else {
         // Pseudo is being used
-        res.status(404).json({
+        res.status(403).json({
           type: "auth.existingpseudo.true",
         });
       }

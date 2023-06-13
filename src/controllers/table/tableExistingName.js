@@ -23,7 +23,7 @@ module.exports = tableExistingName = (req, res, next) => {
         });
       } else {
         // Name is being used
-        res.status(404).json({
+        res.status(403).json({
           type: "table.existingname.true",
         });
       }
