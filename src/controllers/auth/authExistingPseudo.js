@@ -16,8 +16,7 @@ module.exports = authExistingPseudo = (req, res, next) => {
 
   User.findOne({ pseudo: req.body.pseudo })
     .then((user) => {
-      console.log(user);
-      if (user === undefined) {
+      if (!user) {
         // Pseudo is available
         res.status(200).json({
           type: "auth.existingpseudo.false",

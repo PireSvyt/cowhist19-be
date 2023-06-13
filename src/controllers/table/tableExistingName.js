@@ -16,7 +16,7 @@ module.exports = tableExistingName = (req, res, next) => {
 
   Table.findOne({ name: req.body.name })
     .then((table) => {
-      if (table === undefined) {
+      if (!table) {
         // Name is available
         res.status(200).json({
           type: "table.existingname.false",
