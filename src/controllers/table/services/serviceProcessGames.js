@@ -147,6 +147,7 @@ function neaterStats(players) {
   let neatPlayers = {};
   for (const [id, player] of Object.entries(players)) {
     neatPlayers[id] = {};
+    neatPlayers[id]._id = player._id;
     neatPlayers[id].games = player.games;
     neatPlayers[id].rateattack = player.rateattack;
     neatPlayers[id].ratevictory = player.ratevictory;
