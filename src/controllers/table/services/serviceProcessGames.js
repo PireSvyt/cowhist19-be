@@ -8,12 +8,7 @@ module.exports = function serviceProcessGames(games, request) {
   
   parameters
   * games to be processed
-  * request / NOT USED
-  
-  TODO
-  * only users from the table can do this
-    - ranking
-    - graph
+  * request : ranking, graph
   
   */
 
@@ -21,6 +16,7 @@ module.exports = function serviceProcessGames(games, request) {
 
   // Initialize
   let stats = {};
+  let graph = [];
   let players = {};
 
   // Summarize game outcomes per user
@@ -69,39 +65,19 @@ module.exports = function serviceProcessGames(games, request) {
           }
         }
       });
+      if (request.need === "graph") {
+        graph.push({
+          date: game.date,
+          players: neaterStats(statPlayers(players)),
+        });
+      }
     }
   });
 
-  // Compute a score
-  for (const [id, player] of Object.entries(players)) {
-    // Number of games
-    players[id].games =
-      player.attackWins +
-      player.attackLoss +
-      player.defenseWins +
-      player.defenseLoss;
-    // Attack rate
-    players[id].rateattack =
-      (player.attackWins + player.attackLoss) / player.games;
-    // Win rate
-    players[id].ratevictory =
-      (player.attackWins + player.defenseWins) / player.games;
-    // Cowhist19 V0 score
-    // 5+ROUND((0.75*defenseWins-0.75*defenseLoss+1.25*attackWins-1.25*attackLoss)/games*10,1)
-    players[id].scorev0 =
-      5 +
-      ((0.75 * (player.defenseWins - player.defenseLoss) +
-        1.25 * (player.attackWins - player.attackLoss)) /
-        player.games) *
-        10;
-    // Average points
-    players[id].averagepoints = player.cumulatedPoints / player.games;
-  }
-
-  // Make a sorted array
+  // Ranking
+  players = neaterStats(statPlayers(players));
   let playersArray = Object.values(players);
   playersArray.sort(function (a, b) {
-    // sorting field
     let f = "scorev0";
     if (a[f] > b[f]) {
       return -1;
@@ -111,9 +87,71 @@ module.exports = function serviceProcessGames(games, request) {
     }
     return 0;
   });
-
-  // Stats
   stats.ranking = playersArray;
+
+  // Additinal request
+  switch (request.need) {
+    case "ranking":
+      // Already done
+      break;
+    case "graph":
+      stats.graph = graph;
+      break;
+    default:
+    // :/
+  }
 
   return stats;
 };
+
+function statPlayers(players) {
+  // Constants
+  const scorev0Defense = 0.75;
+  const scorev0Attack = 1.25;
+  const scorev0Offset = 5;
+  const scorev0Factor = 10;
+
+  for (const [id, player] of Object.entries(players)) {
+    // Number of games
+    players[id].games =
+      player.attackWins +
+      player.attackLoss +
+      player.defenseWins +
+      player.defenseLoss;
+
+    // Attack rate
+    players[id].rateattack =
+      (player.attackWins + player.attackLoss) / player.games;
+
+    // Win rate
+    players[id].ratevictory =
+      (player.attackWins + player.defenseWins) / player.games;
+
+    // Cowhist19 V0 score
+    // 5+ROUND((0.75*defenseWins-0.75*defenseLoss+1.25*attackWins-1.25*attackLoss)/games*10,1)
+    players[id].scorev0 =
+      scorev0Offset +
+      scorev0Factor *
+        ((scorev0Defense * (player.defenseWins - player.defenseLoss) +
+          scorev0Attack * (player.attackWins - player.attackLoss)) /
+          player.games);
+
+    // Average points
+    players[id].averagepoints = player.cumulatedPoints / player.games;
+  }
+
+  return players;
+}
+
+function neaterStats(players) {
+  let neatPlayers = {};
+  for (const [id, player] of Object.entries(players)) {
+    neatPlayers[id] = {};
+    neatPlayers[id].games = player.games;
+    neatPlayers[id].rateattack = player.rateattack;
+    neatPlayers[id].ratevictory = player.ratevictory;
+    neatPlayers[id].scorev0 = player.scorev0;
+    neatPlayers[id].averagepoints = player.averagepoints;
+  }
+  return neatPlayers;
+}
