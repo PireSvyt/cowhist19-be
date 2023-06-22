@@ -8,7 +8,9 @@ module.exports = function serviceProcessGames(games, request) {
   
   parameters
   * games to be processed
-  * request : ranking, graph
+  * request.need : ranking, graph
+  * request.field : if request.need is graph, precise the field to process back
+    default is averagepoints
   
   */
 
@@ -68,14 +70,14 @@ module.exports = function serviceProcessGames(games, request) {
       if (request.need === "graph") {
         graph.push({
           date: game.date,
-          players: neaterStats(statPlayers(players)),
+          players: neaterStats(statPlayers(players), "graph", request.field),
         });
       }
     }
   });
 
   // Ranking
-  players = neaterStats(statPlayers(players));
+  players = neaterStats(statPlayers(players), "ranking");
   let playersArray = Object.values(players);
   playersArray.sort(function (a, b) {
     let f = "scorev0";
@@ -143,16 +145,25 @@ function statPlayers(players) {
   return players;
 }
 
-function neaterStats(players) {
+function neaterStats(players, target, field = "averagepoints") {
   let neatPlayers = {};
   for (const [id, player] of Object.entries(players)) {
-    neatPlayers[id] = {};
-    neatPlayers[id]._id = player._id;
-    neatPlayers[id].games = player.games;
-    neatPlayers[id].rateattack = player.rateattack;
-    neatPlayers[id].ratevictory = player.ratevictory;
-    neatPlayers[id].scorev0 = player.scorev0;
-    neatPlayers[id].averagepoints = player.averagepoints;
+    switch (target) {
+      case "ranking":
+        neatPlayers[id] = {};
+        neatPlayers[id]._id = player._id;
+        neatPlayers[id].games = player.games;
+        neatPlayers[id].rateattack = player.rateattack;
+        neatPlayers[id].ratevictory = player.ratevictory;
+        neatPlayers[id].scorev0 = player.scorev0;
+        neatPlayers[id].averagepoints = player.averagepoints;
+        break;
+      case "graph":
+        neatPlayers[id] = player[field];
+        break;
+      default:
+      //
+    }
   }
   return neatPlayers;
 }
