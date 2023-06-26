@@ -24,7 +24,7 @@ module.exports = userStats = (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const decodedToken = jwt_decode(token);
 
-  Game.find({ players: { _id: decodedToken.id } })
+  Game.find({ "players._id": decodedToken.id })
     .then((games) => {
       console.log(games);
 
