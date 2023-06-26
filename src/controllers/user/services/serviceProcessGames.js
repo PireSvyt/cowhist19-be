@@ -13,21 +13,21 @@ module.exports = function serviceProcessGames(games, userid) {
 
   // Initialize
   let stats = {
-    games: 0,
+    games: games.length,
     attack: 0,
     rateattack: 0,
     victory: 0,
     ratevictory: 0,
   };
 
-  if (games.length > 0) {
+  if (stats.games > 0) {
     // Summarize game outcomes
     games.forEach((game) => {
       stats.games = stats.games + 1;
       // Attack
       let player = game.players.filter(
         (gameplayer) => gameplayer._id === userid
-      );
+      )[0];
       if (player.role === attack) {
         stats.attack = stats.attack + 1;
         if (game.outcome >= 0) {

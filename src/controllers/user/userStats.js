@@ -26,8 +26,6 @@ module.exports = userStats = (req, res, next) => {
 
   Game.find({ "players._id": decodedToken.id })
     .then((games) => {
-      console.log(games);
-
       // Post process
       let stats = serviceProcessGames(games, decodedToken.id);
 
