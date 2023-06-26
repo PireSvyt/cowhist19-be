@@ -23,7 +23,6 @@ module.exports = function serviceProcessGames(games, userid) {
   if (stats.games > 0) {
     // Summarize game outcomes
     games.forEach((game) => {
-      stats.games = stats.games + 1;
       // Attack
       let player = game.players.filter(
         (gameplayer) => gameplayer._id === userid
