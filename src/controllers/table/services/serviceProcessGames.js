@@ -80,7 +80,7 @@ module.exports = function serviceProcessGames(games, request) {
   players = neaterStats(statPlayers(players), "ranking");
   let playersArray = Object.values(players);
   playersArray.sort(function (a, b) {
-    let f = "scorev0";
+    let f = "averagepoints";
     if (a[f] > b[f]) {
       return -1;
     }
