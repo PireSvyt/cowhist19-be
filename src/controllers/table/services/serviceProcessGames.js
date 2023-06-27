@@ -21,6 +21,11 @@ module.exports = function serviceProcessGames(games, request) {
   let graph = [];
   let players = {};
 
+  // Sort games
+  games.sort(function (first, second) {
+    return second.date - first.date;
+  });
+
   // Summarize game outcomes per user
   games.forEach((game) => {
     if (serviceCheckContract(game)) {
