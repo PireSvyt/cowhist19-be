@@ -23,7 +23,7 @@ module.exports = function serviceProcessGames(games, request) {
 
   // Sort games
   games.sort(function (first, second) {
-    return second.date - first.date;
+    return first.date - second.date;
   });
 
   // Summarize game outcomes per user
