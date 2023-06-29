@@ -72,7 +72,7 @@ module.exports = tableHistory_v3 = (req, res, next) => {
           switch (req.body.need) {
             case "list":
               filters = { table: req.params.id };
-              fields = "id contract outcome players date";
+              fields = "contract outcome players date";
               break;
             default:
               status = 403;
@@ -139,7 +139,7 @@ module.exports = tableHistory_v3 = (req, res, next) => {
                       console.log("lastid : " + req.body.games.lastid);
                       // Find last game loaded
                       lastidpos = games.findIndex((game) => {
-                        return game.id === req.body.games.lastid;
+                        return game._id.toString() === req.body.games.lastid;
                       });
                       console.log("lastidpos : ", lastidpos);
                       if (lastidpos === -1) {
