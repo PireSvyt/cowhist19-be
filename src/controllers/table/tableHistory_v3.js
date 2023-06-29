@@ -136,24 +136,31 @@ module.exports = tableHistory_v3 = (req, res, next) => {
                     // Are games already loaded
                     let lastidpos = 0;
                     if (req.body.games.lastid !== null) {
+                      console.log("lastid : " + req.body.games.lastid);
                       // Find last game loaded
                       let lastidposcandidates = games.findIndex(
                         (game) => game._id === req.body.games.lastid
                       );
                       if (lastidposcandidates.length === 0) {
+                        console.log("lastid not found");
                         // Last id not found :/
-                        action = "new";
+                        action = "error";
                         lastidpos = 0;
                       } else {
+                        console.log("lastid pos : " + lastidposcandidates[0]);
                         action = "append";
                         lastidpos = lastidposcandidates[0];
                       }
+                    } else {
+                      console.log("lastid null");
+                      action = "new";
                     }
                     // Shorten payload
                     games = games.slice(
                       lastidpos, // from N, ex. 0
                       lastidpos + req.body.games.number // to N+M, ex. 0+10
                     );
+                    console.log("games before slice : ", games);
                     // Check if more
                     // games [ N ... N+M ] length = M+1, ex. 0-10 -> 11 games
                     let more = games.length > req.body.games.number;
