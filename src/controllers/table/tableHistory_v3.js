@@ -160,11 +160,11 @@ module.exports = tableHistory_v3 = (req, res, next) => {
                       "slice ",
                       lastidpos,
                       " to ",
-                      lastidpos + req.body.games.number
+                      lastidpos + req.body.games.number + 1
                     );
                     games = games.slice(
                       lastidpos, // from N, ex. 0
-                      lastidpos + req.body.games.number // to N+M, ex. 0+10
+                      lastidpos + req.body.games.number + 1 // to N+M, ex. 0+10
                     );
                     console.log("games before slice : ", games);
                     // Check if more
