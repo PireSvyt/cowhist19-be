@@ -156,6 +156,12 @@ module.exports = tableHistory_v3 = (req, res, next) => {
                       action = "new";
                     }
                     // Shorten payload
+                    console.log(
+                      "slice ",
+                      lastidpos,
+                      " to ",
+                      lastidpos + req.body.games.number
+                    );
                     games = games.slice(
                       lastidpos, // from N, ex. 0
                       lastidpos + req.body.games.number // to N+M, ex. 0+10
