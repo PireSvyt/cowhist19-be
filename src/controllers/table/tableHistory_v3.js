@@ -138,22 +138,19 @@ module.exports = tableHistory_v3 = (req, res, next) => {
                     if (req.body.games.lastid !== null) {
                       console.log("lastid : " + req.body.games.lastid);
                       // Find last game loaded
-                      let lastidposcandidates = games.findIndex(
-                        (game) => game._id === req.body.games.lastid
-                      );
-                      console.log(
-                        "lastidposcandidates : ",
-                        lastidposcandidates
-                      );
-                      if (lastidposcandidates.length === 0) {
+                      lastidpos = games.findIndex((game) => {
+                        return game._id === req.body.games.lastid;
+                      });
+                      console.log("lastidpos : ", lastidpos);
+                      if (lastidpos === -1) {
                         console.log("lastid not found");
                         // Last id not found :/
                         action = "error";
                         lastidpos = 0;
                       } else {
-                        console.log("lastid pos : " + lastidposcandidates[0]);
+                        console.log("lastid pos : " + lastidpos);
                         action = "append";
-                        lastidpos = lastidposcandidates[0];
+                        lastidpos = lastidpos;
                       }
                     } else {
                       console.log("lastid null");
