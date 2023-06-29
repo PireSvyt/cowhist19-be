@@ -119,6 +119,7 @@ module.exports = tableHistory_v3 = (req, res, next) => {
             {
               $project: {
                 _id: 1,
+                id: 1,
                 name: 1,
                 guests: 1,
                 players: 1,
@@ -139,7 +140,7 @@ module.exports = tableHistory_v3 = (req, res, next) => {
                       console.log("lastid : " + req.body.games.lastid);
                       // Find last game loaded
                       lastidpos = games.findIndex((game) => {
-                        return game._id === req.body.games.lastid;
+                        return game.id === req.body.games.lastid;
                       });
                       console.log("lastidpos : ", lastidpos);
                       if (lastidpos === -1) {
