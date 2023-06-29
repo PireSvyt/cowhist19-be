@@ -72,7 +72,7 @@ module.exports = tableHistory_v3 = (req, res, next) => {
           switch (req.body.need) {
             case "list":
               filters = { table: req.params.id };
-              fields = "contract outcome players date";
+              fields = "id contract outcome players date";
               break;
             default:
               status = 403;
@@ -119,7 +119,6 @@ module.exports = tableHistory_v3 = (req, res, next) => {
             {
               $project: {
                 _id: 1,
-                id: 1,
                 name: 1,
                 guests: 1,
                 players: 1,
