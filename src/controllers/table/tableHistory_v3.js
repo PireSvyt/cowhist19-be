@@ -141,6 +141,10 @@ module.exports = tableHistory_v3 = (req, res, next) => {
                       let lastidposcandidates = games.findIndex(
                         (game) => game._id === req.body.games.lastid
                       );
+                      console.log(
+                        "lastidposcandidates : ",
+                        lastidposcandidates
+                      );
                       if (lastidposcandidates.length === 0) {
                         console.log("lastid not found");
                         // Last id not found :/
