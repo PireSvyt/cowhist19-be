@@ -12,16 +12,23 @@ module.exports = tableHistory_v3 = (req, res, next) => {
   * need : for post processing purpose
     - list : simple list of existing fields without post processing
   * games.lastid : id of the last game loaded, null meaning non are loaded
-  * games.number : number of games to retrive from games.index
+  * games.number : number of games to retrive from lastid
+  
+  outcomes
+  * type
+  * data
+    * games : array of games
+    * more : boolean indicating if there are more games to load
+    * action : string indicating if the games shall be considered as a new array or as a complementary array
+        * error : error during processing
+        * new : games are considered as a new payload (flush previous if any)
+        * append : games complement previous if any (consolidation needed between existing and payload)
   
   possible response types
   * table.history.success
   * table.history.accessdenied.noneed
   * table.history.accessdenied.needmissmatch
   * table.history.error.findinggames
-  
-  TODO
-  * only users from the table can do this
   
   */
 
@@ -49,6 +56,11 @@ module.exports = tableHistory_v3 = (req, res, next) => {
         // Unauthorized
         res.status(401).json({
           type: "table.history.error.deniedaccess",
+          data: {
+            games: [],
+            more: null,
+            action: null,
+          },
           error: access.reason,
         });
       } else {
@@ -74,6 +86,8 @@ module.exports = tableHistory_v3 = (req, res, next) => {
             type: type,
             data: {
               games: [],
+              more: null,
+              action: null,
             },
           });
         } else {
@@ -118,21 +132,30 @@ module.exports = tableHistory_v3 = (req, res, next) => {
                 Game.find(filters, fields)
                   .then((games) => {
                     games.sort(compare);
+                    let action = "error";
                     // Are games already loaded
                     let lastidpos = 0;
                     if (req.body.games.lastid !== null) {
                       // Find last game loaded
-                      lastidpos = games.findIndex(
+                      let lastidposcandidates = games.findIndex(
                         (game) => game._id === req.body.games.lastid
                       );
+                      if (lastidposcandidates.length === 0) {
+                        // Last id not found :/
+                        action = "new";
+                        lastidpos = 0;
+                      } else {
+                        action = "append";
+                        lastidpos = lastidposcandidates[0];
+                      }
                     }
                     // Shorten payload
                     games = games.slice(
-                      lastidpos, // from N
-                      lastidpos + req.body.games.number // to N+M
+                      lastidpos, // from N, ex. 0
+                      lastidpos + req.body.games.number // to N+M, ex. 0+10
                     );
                     // Check if more
-                    // games [ N ... N+M ] length = M+1
+                    // games [ N ... N+M ] length = M+1, ex. 0-10 -> 11 games
                     let more = games.length > req.body.games.number;
                     // Shorten to desired length
                     if (more) {
@@ -176,6 +199,7 @@ module.exports = tableHistory_v3 = (req, res, next) => {
                       data: {
                         games: newGames,
                         more: more,
+                        action: action,
                       },
                     });
                   })
@@ -186,6 +210,7 @@ module.exports = tableHistory_v3 = (req, res, next) => {
                       data: {
                         games: [],
                         more: null,
+                        action: null,
                       },
                       error: error,
                     });
@@ -196,6 +221,7 @@ module.exports = tableHistory_v3 = (req, res, next) => {
                   data: {
                     games: [],
                     more: null,
+                    action: null,
                   },
                 });
               }
@@ -207,6 +233,7 @@ module.exports = tableHistory_v3 = (req, res, next) => {
                 data: {
                   games: [],
                   more: null,
+                  action: null,
                 },
                 error: error,
               });
