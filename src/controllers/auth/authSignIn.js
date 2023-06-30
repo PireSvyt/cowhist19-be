@@ -70,6 +70,10 @@ module.exports = authSignIn = (req, res, next) => {
                 },
               });
             } else {
+              // Store sign in date
+              user.lastconnection = new Date();
+              user.save();
+              // Return response
               return res.status(200).json({
                 type: "auth.signin.success",
                 data: {

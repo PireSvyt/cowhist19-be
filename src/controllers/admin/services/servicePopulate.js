@@ -22,13 +22,13 @@ module.exports = async function servicePopulate(reqInputs) {
     const inputs = {
       tableid: "6d6f636b65647461626c6531",
       weeks: 10,
-      nbgames: 10,
+      nbgames: 50,
       likelihood: {
         players: {
           "6457f5b9746d3231b7dab2cc": 0.3,
-          "645f8bb50a53a91da62b31b0": 0.2,
-          "645f8bcd0a53a91da62b31b7": 0.2,
-          "645f8bdf0a53a91da62b31be": 0.1,
+          "645f8bb50a53a91da62b31b0": 0.25,
+          "645f8bcd0a53a91da62b31b7": 0.25,
+          "645f8bdf0a53a91da62b31be": 0.2,
           "6462e8de6e1746f44a560ed1": 0.2,
         },
         days: {
@@ -41,8 +41,8 @@ module.exports = async function servicePopulate(reqInputs) {
           sun: 0.0,
         },
         outcomes: {
-          "by-2": { likelihood: 0.1, folds: -2 },
-          "by-1": { likelihood: 0.3, folds: -1 },
+          "by-2": { likelihood: 0.2, folds: -2 },
+          "by-1": { likelihood: 0.4, folds: -1 },
           "by+0": { likelihood: 0.4, folds: 0 },
           "by+1": { likelihood: 0.15, folds: 1 },
           "by+2": { likelihood: 0.05, folds: 2 },

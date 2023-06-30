@@ -12,7 +12,8 @@ const userSchema = mongoose.Schema(
     login: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     status: { type: String, required: true },
-    activationtoken: { type: String, unique: true },
+    activationtoken: { type: String, unique: false },
+    lastconnection: { type: Date, required: false },
     priviledges: {
       type: [{ type: String }],
     },
