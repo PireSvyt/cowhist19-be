@@ -1,5 +1,5 @@
 const Notification = require("../../models/Notification.js");
-const serviceCheckAdmin = require("./services/serviceCheckAdmin.js");
+const serviceCheckAdmin = require("../admin/services/serviceCheckAdmin.js");
 
 module.exports = notificationCreate = (req, res, next) => {
   /*
