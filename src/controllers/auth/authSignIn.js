@@ -71,10 +71,10 @@ module.exports = authSignIn = (req, res, next) => {
               });
             } else {
               // Store sign in date
-              if (!user.connection) {
+              if (user.connection === undefined) {
                 user.connection = {};
               }
-              if (!user.connection.current) {
+              if (user.connection.current === undefined) {
                 user.connection.last = user.connection.current;
               }
               user.connection.current = new Date();
