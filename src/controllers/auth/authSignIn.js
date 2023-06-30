@@ -71,7 +71,14 @@ module.exports = authSignIn = (req, res, next) => {
               });
             } else {
               // Store sign in date
-              user.lastconnection = new Date();
+              if (!user.meta) {
+                user.meta = {};
+              }
+              if (!user.meta.connection) {
+                user.meta.connection = {};
+              }
+              user.meta.connection.last = user.meta.connection.current;
+              user.meta.connection.current = new Date();
               user.save();
               // Return response
               return res.status(200).json({

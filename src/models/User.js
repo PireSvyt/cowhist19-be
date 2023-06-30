@@ -13,11 +13,10 @@ const userSchema = mongoose.Schema(
     password: { type: String, required: true },
     status: { type: String, required: true },
     activationtoken: { type: String, unique: false },
-    lastconnection: { type: Date, required: false },
     priviledges: {
       type: [{ type: String }],
     },
-    meta: { type: Map, of: String },
+    meta: { type: Map },
   },
   { strict: true }
 );
