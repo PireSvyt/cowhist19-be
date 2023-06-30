@@ -17,6 +17,10 @@ const userSchema = mongoose.Schema(
       type: [{ type: String }],
     },
     meta: { type: Map },
+    connection: {
+      current: { type: Date, required: false },
+      last: { type: Date, required: false },
+    },
   },
   { strict: true }
 );
