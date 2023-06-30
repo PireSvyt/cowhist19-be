@@ -74,7 +74,7 @@ module.exports = authSignIn = (req, res, next) => {
               if (user.connection === undefined) {
                 user.connection = {};
               }
-              if (user.connection.current === undefined) {
+              if (user.connection.current !== undefined) {
                 user.connection.last = user.connection.current;
               }
               user.connection.current = new Date();
