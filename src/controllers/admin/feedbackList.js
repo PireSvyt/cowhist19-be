@@ -22,7 +22,6 @@ module.exports = feedbackList = (req, res, next) => {
   * admin.feedbacklist.error.deniedaccess
   * admin.feedbacklist.accessdenied.noneed
   * admin.feedbacklist.accessdenied.needmissmatch
-  * admin.feedbacklist.error.notfound
   * admin.feedbacklist.error.onfind
   
   */
