@@ -10,7 +10,6 @@ const notificationSchema = mongoose.Schema(
     date: { type: Date, required: true },
     title: { type: String, required: true },
     explanation: { type: String, required: false },
-    meta: { type: Map, required: false },
   },
   { strict: true }
 );

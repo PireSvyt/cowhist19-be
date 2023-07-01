@@ -16,6 +16,7 @@ module.exports = feedbackCreate = (req, res, next) => {
   // Create
   const feedbackToSave = new Feedback({ ...req.body });
   feedbackToSave.id = feedbackToSave._id;
+  feedbackToSave.status = "open";
   // Save
   feedbackToSave
     .save()
