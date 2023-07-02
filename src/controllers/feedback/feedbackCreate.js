@@ -17,6 +17,7 @@ module.exports = feedbackCreate = (req, res, next) => {
   const feedbackToSave = new Feedback({ ...req.body });
   feedbackToSave.id = feedbackToSave._id;
   feedbackToSave.status = "open";
+  feedbackToSave.date = new Date();
   // Save
   feedbackToSave
     .save()
