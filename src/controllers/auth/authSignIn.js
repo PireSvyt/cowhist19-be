@@ -33,10 +33,7 @@ module.exports = authSignIn = (req, res, next) => {
     ).toString(CryptoJS.enc.Utf8);
   }
 
-  User.findOne(
-    { login: attemptLogin },
-    "pseudo login status priviledges password"
-  )
+  User.findOne({ login: attemptLogin })
     .then((user) => {
       if (!user) {
         // Inexisting user
@@ -70,6 +67,16 @@ module.exports = authSignIn = (req, res, next) => {
                 },
               });
             } else {
+              // Store sign in date
+              if (user.connection === undefined) {
+                user.connection = {};
+              }
+              if (user.connection.current !== undefined) {
+                user.connection.last = user.connection.current;
+              }
+              user.connection.current = new Date();
+              user.save();
+              // Return response
               return res.status(200).json({
                 type: "auth.signin.success",
                 data: {

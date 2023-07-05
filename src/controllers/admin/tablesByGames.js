@@ -1,5 +1,3 @@
-const jwt_decode = require("jwt-decode");
-
 const Table = require("../../models/Table.js");
 const serviceCheckAdmin = require("./services/serviceCheckAdmin.js");
 

@@ -12,11 +12,15 @@ const userSchema = mongoose.Schema(
     login: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     status: { type: String, required: true },
-    activationtoken: { type: String, unique: true },
+    activationtoken: { type: String, unique: false },
     priviledges: {
       type: [{ type: String }],
     },
-    meta: { type: Map, of: String },
+    meta: { type: Map },
+    connection: {
+      current: { type: Date, required: false },
+      last: { type: Date, required: false },
+    },
   },
   { strict: true }
 );

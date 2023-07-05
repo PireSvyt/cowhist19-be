@@ -7,7 +7,9 @@ const authRoutes = require("./src/routes/auth.js");
 const userRoutes = require("./src/routes/user.js");
 const gameRoutes = require("./src/routes/game.js");
 const tableRoutes = require("./src/routes/table.js");
-const adminRoutes = require("./src/routes/admin");
+const adminRoutes = require("./src/routes/admin.js");
+const feedbackRoutes = require("./src/routes/feedback.js");
+const notificationRoutes = require("./src/routes/notification.js");
 
 // CONNECT MONGO
 serviceConnectMongoDB();
@@ -33,6 +35,8 @@ app.use("/user", userRoutes);
 app.use("/game", gameRoutes);
 app.use("/table", tableRoutes);
 app.use("/admin", adminRoutes);
+app.use("/feedback", feedbackRoutes);
+app.use("/notification", notificationRoutes);
 
 // Landing
 app.get("/", (req, res) => {
