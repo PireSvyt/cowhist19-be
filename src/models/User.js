@@ -8,7 +8,6 @@ if (process.env.MONGOOSE_DEBUG === "TRUE") {
 const userSchema = mongoose.Schema(
   {
     id: { type: String, unique: true },
-    alias: [{ type: String }],
     pseudo: { type: String, required: true, unique: true },
     login: { type: String, required: true, unique: true },
     password: { type: String, required: true },
@@ -17,6 +16,12 @@ const userSchema = mongoose.Schema(
     priviledges: {
       type: [{ type: String }],
     },
+    alias: [
+      {
+        id: { type: String },
+        login: { type: String },
+      },
+    ],
     meta: { type: Map },
     connection: {
       current: { type: Date, required: false },

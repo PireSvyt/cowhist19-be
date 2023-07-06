@@ -34,6 +34,7 @@ module.exports = userMerge = (req, res, next) => {
   * user.merge.error.onpasswordcompare
   * user.merge.error.onsaveuser
   * user.merge.error.onfindtables
+  * user.merge.error.onfindgames
   
   */
 
@@ -72,10 +73,18 @@ module.exports = userMerge = (req, res, next) => {
                     if (currentUser.alias === undefined) {
                       currentUser.alias = [mergeuser.id];
                     } else {
-                      if (currentUser.alias.includes(mergeuser.id)) {
-                        // ok but how the hell did this happened!
+                      if (
+                        currentUser.alias.filter(
+                          (alias) => alias.id === mergeuser.id
+                        ).length
+                      ) {
+                        // ok alias already stored
+                        // but how the hell did this happened!
                       } else {
-                        currentUser.alias.push(mergeuser.id);
+                        currentUser.alias.push({
+                          id: mergeuser.id,
+                          login: mergeuser.login,
+                        });
                       }
                     }
                     // Save current user
@@ -103,36 +112,36 @@ module.exports = userMerge = (req, res, next) => {
                               }
                               table.save();
                             });
-                            // Replace merged user in games
-                            Game.find({ "players._id": mergeuser.id })
-                              .then((games) => {
-                                games.forEach((game) => {
-                                  if (
-                                    Object.keys(game.players).includes(
-                                      currentUser.id
-                                    )
-                                  ) {
-                                    // See ubiquity management note
-                                  } else {
-                                    // Replace merge id
-                                    game.players[currentUser.id] =
-                                      game.players[mergeuser.id];
-                                    delete game.players[mergeuser.id];
-                                    game.save();
-                                  }
-                                });
-                              })
-                              .catch((error) => {
-                                res.status(400).json({
-                                  type: "user.merge.error.onfindtables",
-                                  error: error,
-                                });
-                                console.error(error);
-                              });
                           })
                           .catch((error) => {
                             res.status(400).json({
                               type: "user.merge.error.onfindtables",
+                              error: error,
+                            });
+                            console.error(error);
+                          });
+                        // Replace merged user in games
+                        Game.find({ "players._id": mergeuser.id })
+                          .then((games) => {
+                            games.forEach((game) => {
+                              if (
+                                Object.keys(game.players).includes(
+                                  currentUser.id
+                                )
+                              ) {
+                                // See ubiquity management note
+                              } else {
+                                // Replace merge id
+                                game.players[currentUser.id] =
+                                  game.players[mergeuser.id];
+                                delete game.players[mergeuser.id];
+                                game.save();
+                              }
+                            });
+                          })
+                          .catch((error) => {
+                            res.status(400).json({
+                              type: "user.merge.error.onfindgames",
                               error: error,
                             });
                             console.error(error);
