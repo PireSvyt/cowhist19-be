@@ -11,7 +11,9 @@ module.exports = authSignIn = (req, res, next) => {
   sign in a user
   sends back a jwt token
   
-  IMPORTANT NOTE : PASSWORD IS ENCRYPTED IN FE AND DECRYPTED FOR BCRYPT COMPARE
+  IMPORTANT NOTE : 
+    PASSWORD IS ENCRYPTED IN FRONTEND 
+    AND DECRYPTED FOR BCRYPT COMPARE HERE
   
   possible response types
   * auth.signin.success

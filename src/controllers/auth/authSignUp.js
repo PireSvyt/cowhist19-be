@@ -7,8 +7,12 @@ module.exports = authSignup = (req, res, next) => {
   signup a user
   
   IMPORTANT NOTE : 
-    AT SIGN UP ENCRYPTION IS DONE IN FRONTEND, PASSWORD IS SAVED AS IS
-    AT SIGN IN NO ENCRYPTION IS DONE, COMPARE HAPPENS IN BACKEND
+    ON SIGN UP,
+      ENCRYPTION IS DONE IN FRONTEND
+      PASSWORD IS SAVED AS IS
+    ON SIGN IN
+      NO ENCRYPTION IS DONE
+      COMPARE HAPPENS IN BACKEND
   
   possible response types
   * auth.signup.success.signedup

@@ -7,6 +7,14 @@ module.exports = userChangePassword = (req, res, next) => {
   
   enables to change password
   
+  inputs
+  * newpassword
+  
+  IMPORTANT NOTE : 
+    ON PASSWORD CHANGE,
+      ENCRYPTION IS DONE IN FRONTEND
+      PASSWORD IS UPDATED AS IS
+  
   possible response types
   * user.changepassword.success
   * user.changepassword.error.onfind
@@ -27,7 +35,7 @@ module.exports = userChangePassword = (req, res, next) => {
     .then((user) => {
       if (user) {
         if (req.body.newpassword) {
-          user.password = req.body.newpasswor;
+          user.password = req.body.newpassword;
           user
             .save()
             .then(() => {
