@@ -33,24 +33,26 @@ module.exports = async function serviceSendMail(mailDetails) {
 
   console.log("mail.sentmail");
 
-  transporter
-    .sendMail({
-      from: process.env.MAIL_ADDRESS,
-      to: mailDetails.to,
-      subject: mailDetails.subject,
-      text: mailDetails.text,
-      html: mailDetails.html,
-    })
-    .then((info) => {
-      return {
-        type: "mail.sentmail.success",
-        info: info,
-      };
-    })
-    .catch((err) => {
-      return {
-        type: "mail.sentmail.failure",
-        error: info,
-      };
-    });
+  return new Promise((resolve, reject) => {
+    transporter
+      .sendMail({
+        from: process.env.MAIL_ADDRESS,
+        to: mailDetails.to,
+        subject: mailDetails.subject,
+        text: mailDetails.text,
+        html: mailDetails.html,
+      })
+      .then((info) => {
+        resolve({
+          type: "mail.sentmail.success",
+          info: info,
+        });
+      })
+      .catch((err) => {
+        resolve({
+          type: "mail.sentmail.failure",
+          error: info,
+        });
+      });
+  });
 };

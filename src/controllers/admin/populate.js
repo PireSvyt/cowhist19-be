@@ -31,7 +31,7 @@ module.exports = populate = (req, res, next) => {
         });
       } else {
         servicePopulate(req.body).then((population) => {
-          if (population.outcome === "success") {
+          if (population.type === "admin.servicepopulate.success") {
             // Successful populated
             res.status(200).json({
               type: "admin.populate.success",
