@@ -35,6 +35,7 @@ module.exports = emailTest = (req, res, next) => {
         if (mail.type === "mail.sentmail.success") {
           res.status(200).json({
             type: "admin.emailtest.success",
+            info: mail.info,
           });
         } else {
           res.status(500).json({

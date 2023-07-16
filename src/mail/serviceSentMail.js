@@ -51,7 +51,7 @@ module.exports = async function serviceSendMail(mailDetails) {
       .catch((err) => {
         resolve({
           type: "mail.sentmail.failure",
-          error: info,
+          error: err,
         });
       });
   });
