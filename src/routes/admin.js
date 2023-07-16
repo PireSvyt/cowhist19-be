@@ -9,6 +9,7 @@ const objectCount = require("../controllers/admin/objectCount.js");
 const populate = require("../controllers/admin/populate.js");
 const feedbackList = require("../controllers/admin/feedbackList.js");
 const feedbackClose = require("../controllers/admin/feedbackClose.js");
+const emailTest = require("../controllers/admin/emailTest.js");
 
 router.get("/v1/tablesbyplayers", authAuthenticate, tablesByPlayers);
 router.get("/v1/tablesbygames", authAuthenticate, tablesByGames);
@@ -17,5 +18,6 @@ router.get("/v1/objectcount", authAuthenticate, objectCount);
 router.post("/v1/populate", authAuthenticate, populate);
 router.post("/v1/feedbacklist", authAuthenticate, feedbackList);
 router.post("/v1/feedbackclose", authAuthenticate, feedbackClose);
+router.get("/v1/emailtest", authAuthenticate, emailTest);
 
 module.exports = router;
