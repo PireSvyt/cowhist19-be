@@ -32,7 +32,7 @@ module.exports = emailTest = (req, res, next) => {
       });
     } else {
       serviceSendMail(testMail).then((mail) => {
-        if (mail.outcome === "success") {
+        if (mail.type === "mail.sentmail.success") {
           res.status(200).json({
             type: "admin.emailtest.success",
           });
