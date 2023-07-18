@@ -26,26 +26,19 @@ module.exports = async function serviceMailing(mail, details = {}) {
     let mailToSend = null;
     switch (mail) {
       case "signup":
-        // Merge data
+        let replacements = [
+          ["{{PSEUDO}}", details.pseudo],
+          [
+            "{{ACTIVATION_URL}}",
+            "https://cowhist19.vercel.app/activation/" +
+              details.activationtoken,
+          ],
+        ];
         mailToSend = {
           to: details.login,
           subject: mails.signup[lang].subject,
-          text: replaceTokens(mails.signup[lang].text, [
-            ["%%PSEUDO%%", details.pseudo],
-            [
-              "%%ACTIVATION_URL%%",
-              "https://cowhist19.vercel.app/activation/" +
-                details.activationtoken,
-            ],
-          ]),
-          html: replaceTokens(mails.signup[lang].html, [
-            ["%%PSEUDO%%", details.pseudo],
-            [
-              "%%ACTIVATION_URL%%",
-              "https://cowhist19.vercel.app/activation/" +
-                details.activationtoken,
-            ],
-          ]),
+          text: replaceTokens(mails.signup[lang].text, replacements),
+          html: replaceTokens(mails.signup[lang].html, replacements),
         };
         break;
       default:

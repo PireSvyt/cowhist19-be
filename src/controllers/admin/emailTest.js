@@ -29,7 +29,7 @@ module.exports = emailTest = (req, res, next) => {
         login: process.env.MAIL_ADDRESS,
         activationtoken: "TEST TOKEN",
       }).then((mail) => {
-        if (mail.type === "mail.sentmail.success") {
+        if (mail.type === "mail.mailing.success") {
           res.status(200).json({
             type: "admin.emailtest.success",
             info: mail.info,
