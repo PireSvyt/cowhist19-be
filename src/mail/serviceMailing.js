@@ -70,8 +70,8 @@ module.exports = async function serviceMailing(mail, details = {}) {
 function replaceTokens(text, tokenList) {
   let replacedText = text;
   if (replacedText) {
-    tokenList.forEach((token, replacer) => {
-      replacedText.replace(token, replacer);
+    tokenList.forEach((replacement) => {
+      replacedText.replace(replacement[0], replacement[1]);
     });
   }
   return replacedText;
