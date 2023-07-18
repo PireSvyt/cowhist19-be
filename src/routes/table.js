@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const authAuthenticate = require("../controllers/auth/authAuthenticate.js");
-const tableAuthenticate = require("../controllers/auth/tableAuthenticate.js");
+const tableAuthenticate = require("../controllers/table/tableAuthenticate.js");
 
 const tableCreate = require("../controllers/table/tableCreate.js");
 const tableSave = require("../controllers/table/tableSave.js");
