@@ -2,7 +2,7 @@
   "signup": {
     "en": {
       "subject": "CoWhist19 | Activate your account",
-      "text": "Hej {{PSEUDO}}!\r\rYour account is now created!\rActivate your account following this link:\r{{ACTIVATION_URL}}\r\rSee you soon,\r\rCoWhist19 team",
+      "text": "Hej {{PSEUDO}}!\r\rYour account is now created!\rActivate your account following this link:\r{{ACTIVATION_URL}}\r\rSee you soon,\r\rThe CoWhist19 team",
       "html": null
     },
     "fr": {

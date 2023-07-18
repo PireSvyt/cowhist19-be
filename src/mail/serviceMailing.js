@@ -27,12 +27,13 @@ module.exports = async function serviceMailing(mail, details = {}) {
     switch (mail) {
       case "signup":
         let replacements = [
-          ["{{PSEUDO}}", details.pseudo],
-          [
-            "{{ACTIVATION_URL}}",
-            "https://cowhist19.vercel.app/activation/" +
+          { token: "{{PSEUDO}}", value: details.pseudo },
+          {
+            token: "{{ACTIVATION_URL}}",
+            value:
+              "https://cowhist19.vercel.app/activation/" +
               details.activationtoken,
-          ],
+          },
         ];
         mailToSend = {
           to: details.login,
@@ -70,8 +71,11 @@ module.exports = async function serviceMailing(mail, details = {}) {
 function replaceTokens(text, tokenList) {
   let replacedText = text;
   if (replacedText) {
+    console.log(replacedText);
     tokenList.forEach((replacement) => {
-      replacedText.replace(replacement[0], replacement[1]);
+      console.log(replacement);
+      replacedText.replace(replacement.token, replacement.value);
+      console.log(replacedText);
     });
   }
   return replacedText;
