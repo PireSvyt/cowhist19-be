@@ -1,5 +1,4 @@
 const Game = require("../../models/Game.js");
-const serviceCheckAccess = require("./services/serviceCheckAccess.js");
 
 module.exports = tableHistory = (req, res, next) => {
   /*

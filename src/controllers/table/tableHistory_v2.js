@@ -1,5 +1,4 @@
 const Table = require("../../models/Table.js");
-const User = require("../../models/User.js");
 const Game = require("../../models/Game.js");
 
 module.exports = tableHistory_v2 = (req, res, next) => {
