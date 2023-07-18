@@ -30,7 +30,6 @@ module.exports = tableAuthenticate = (req, res, next) => {
     .then((table) => {
       if (table !== undefined) {
         if (table.users.includes(decodedToken.id)) {
-          req.user = user;
           next();
         } else {
           return res.status(403).json({

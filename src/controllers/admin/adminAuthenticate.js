@@ -24,7 +24,6 @@ module.exports = adminAuthenticate = (req, res, next) => {
     .then((user) => {
       if (user !== undefined) {
         if (user.priviledges.includes("admin")) {
-          req.user = user;
           next();
         } else {
           return res.status(403).json({
