@@ -1,7 +1,6 @@
-const serviceCheckAdmin = require("./services/serviceCheckAdmin.js");
 const servicePopulate = require("./services/servicePopulate");
 
-module.exports = populate = (req, res, next) => {
+module.exports = adminPopulate = (req, res, next) => {
   /*
   
   provides user details reporting

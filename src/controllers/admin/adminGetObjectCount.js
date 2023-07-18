@@ -2,9 +2,8 @@ const User = require("../../models/User.js");
 const Table = require("../../models/Table.js");
 const Game = require("../../models/Game.js");
 const Feedback = require("../../models/Feedback.js");
-const serviceCheckAdmin = require("./services/serviceCheckAdmin.js");
 
-module.exports = objectCount = (req, res, next) => {
+module.exports = adminGetObjectCount = (req, res, next) => {
   /*
   
   provides user details reporting

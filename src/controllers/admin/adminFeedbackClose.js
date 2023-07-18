@@ -1,7 +1,6 @@
 const Feedback = require("../../models/Feedback.js");
-const serviceCheckAdmin = require("./services/serviceCheckAdmin.js");
 
-module.exports = feedbackClose = (req, res, next) => {
+module.exports = adminFeedbackClose = (req, res, next) => {
   /*
   
   enables to close a feedback

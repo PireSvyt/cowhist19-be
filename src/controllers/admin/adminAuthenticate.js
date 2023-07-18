@@ -1,5 +1,5 @@
 const jwt_decode = require("jwt-decode");
-const User = require("../../../models/User.js");
+const User = require("../../models/User.js");
 
 module.exports = adminAuthenticate = (req, res, next) => {
   /*

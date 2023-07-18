@@ -1,7 +1,6 @@
 const Feedback = require("../../models/Feedback.js");
-const serviceCheckAdmin = require("./services/serviceCheckAdmin.js");
 
-module.exports = feedbackList = (req, res, next) => {
+module.exports = adminGetFeedbackList = (req, res, next) => {
   /*
   
   provides the list of feedback

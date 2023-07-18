@@ -1,7 +1,6 @@
 const Table = require("../../models/Table.js");
-const serviceCheckAdmin = require("./services/serviceCheckAdmin.js");
 
-module.exports = tablesByGames = (req, res, next) => {
+module.exports = adminGetTablesByGames = (req, res, next) => {
   /*
   
   provides user details reporting

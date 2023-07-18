@@ -1,7 +1,6 @@
-const serviceCheckAdmin = require("./services/serviceCheckAdmin.js");
 const serviceMailing = require("../../mail/serviceMailing");
 
-module.exports = emailTest = (req, res, next) => {
+module.exports = adminEmailTest = (req, res, next) => {
   /*
   
   test the mail service by self sending an email

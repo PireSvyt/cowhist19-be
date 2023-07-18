@@ -1,7 +1,6 @@
 const User = require("../../models/User.js");
-const serviceCheckAdmin = require("./services/serviceCheckAdmin.js");
 
-module.exports = usersByStatus = (req, res, next) => {
+module.exports = adminGetUsersByStatus = (req, res, next) => {
   /*
   
   provides user details reporting
