@@ -1,19 +1,5 @@
 const nodemailer = require("nodemailer");
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.office365.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.MAIL_ADDRESS,
-    pass: process.env.MAIL_PASSWORD,
-  },
-  tls: {
-    ciphers: "SSLv3",
-    rejectUnauthorized: false,
-  },
-});
-
 module.exports = async function serviceSendMail(mailDetails) {
   /*
     
@@ -57,3 +43,17 @@ module.exports = async function serviceSendMail(mailDetails) {
       });
   });
 };
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.office365.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.MAIL_ADDRESS,
+    pass: process.env.MAIL_PASSWORD,
+  },
+  tls: {
+    ciphers: "SSLv3",
+    rejectUnauthorized: false,
+  },
+});

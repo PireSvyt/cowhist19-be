@@ -1,4 +1,5 @@
 const User = require("../../models/User.js");
+const serviceMailing = require("../../mail/serviceMailing");
 var random_string = require("./services/random_string.js");
 
 module.exports = authSignup = (req, res, next) => {
@@ -40,6 +41,7 @@ module.exports = authSignup = (req, res, next) => {
           user
             .save()
             .then(() => {
+              serviceMailing("signup", user);
               res.status(200).json({
                 type: "auth.signup.success.signedup",
                 data: {
@@ -80,6 +82,7 @@ module.exports = authSignup = (req, res, next) => {
         user
           .save()
           .then(() => {
+            serviceMailing("signup", user);
             res.status(201).json({
               type: "auth.signup.success.signedup",
               data: {

@@ -1,13 +1,6 @@
 const serviceCheckAdmin = require("./services/serviceCheckAdmin.js");
 const serviceSendMail = require("../../mail/serviceSentMail.js");
 
-const testMail = {
-  to: process.env.MAIL_ADDRESS,
-  subject: "TEST " + new Date(),
-  text: "TEST " + new Date(),
-  html: null,
-};
-
 module.exports = emailTest = (req, res, next) => {
   /*
   
@@ -31,7 +24,11 @@ module.exports = emailTest = (req, res, next) => {
         error: access.reason,
       });
     } else {
-      serviceSendMail(testMail).then((mail) => {
+      serviceSendMail("signup", {
+        psuedo: "TEST PSEUDO",
+        login: process.env.MAIL_ADDRESS,
+        activationtoken: "TEST TOKEN",
+      }).then((mail) => {
         if (mail.type === "mail.sentmail.success") {
           res.status(200).json({
             type: "admin.emailtest.success",

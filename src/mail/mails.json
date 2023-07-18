@@ -1,0 +1,14 @@
+{
+  "signup": {
+    "en": {
+      "subject": "CoWhist19 | Activate your account",
+      "text": "Hej %%PSEUDO%%!\r\rYour account is now created!\rActivate your account following this link:\r%%ACTIVATION_URL%%\r\rSee you soon,\r\rCoWhist19 team",
+      "html": null
+    },
+    "fr": {
+      "subject": "CoWhist19 | Active ton compte",
+      "text": "Hej %%PSEUDO%%!\r\rCompte est maintenant créé!\rActive le grâce à ce lien:\r%%ACTIVATION_URL%%\r\rA bientôt,\r\rL'équipe CoWhist19",
+      "html": null
+    }
+  }
+}
