@@ -20,7 +20,13 @@ module.exports = tableAuthenticate = (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const decodedToken = jwt_decode(token);
 
-  Table.findOne({ _id: req.params.id })
+  // Prep
+  let tableid = req.params.id;
+  if (!tableid) {
+    tableid = req.body.id;
+  }
+
+  Table.findOne({ _id: tableid })
     .then((table) => {
       if (table !== undefined) {
         if (table.users.includes(decodedToken.id)) {
