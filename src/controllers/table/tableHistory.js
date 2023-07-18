@@ -40,82 +40,69 @@ module.exports = tableHistory = (req, res, next) => {
     }
   }
 
-  // Check access
-  serviceCheckAccess(req.params.id, req.headers["authorization"]).then(
-    (access) => {
-      if (!access.outcome) {
-        // Unauthorized
-        res.status(401).json({
-          type: "table.history.error.deniedaccess",
-          error: access.reason,
-        });
-      } else {
-        // Is need input relevant?
-        if (!req.body.need) {
-          status = 403;
-          type = "table.history.accessdenied.noneed";
-        } else {
-          switch (req.body.need) {
-            case "list":
-              filters = { table: req.params.id };
-              fields = "contract outcome players date";
-              break;
-            default:
-              status = 403;
-              type = "table.history.accessdenied.needmissmatch";
-          }
-        }
-
-        // Is need well captured?
-        if (status === 403) {
-          res.status(status).json({
-            type: type,
-            data: {
-              games: [],
-            },
-          });
-        } else {
-          // Find games
-          Game.find(filters, fields)
-            .then((games) => {
-              games.sort(compare);
-              games = games.slice(
-                req.body.games.index, // from 0
-                req.body.games.index + req.body.games.number // to 10
-              );
-              // Check if more
-              // games [ 0 ... 10 ] length = 11
-              let more = games.length > req.body.games.number;
-              // Shorten to desired length
-              if (more) {
-                games.pop();
-              }
-              // Response
-              else status = 200;
-              type = "table.history.success";
-              res.status(status).json({
-                type: type,
-                data: {
-                  games: games,
-                  more: more,
-                },
-              });
-            })
-            .catch((error) => {
-              status = 400;
-              type = "table.history.error.findinggames";
-              res.status(status).json({
-                type: type,
-                data: {
-                  games: [],
-                  more: null,
-                },
-                error: error,
-              });
-              console.error(error);
-            });
-        }
-      }
+  // Is need input relevant?
+  if (!req.body.need) {
+    status = 403;
+    type = "table.history.accessdenied.noneed";
+  } else {
+    switch (req.body.need) {
+      case "list":
+        filters = { table: req.params.id };
+        fields = "contract outcome players date";
+        break;
+      default:
+        status = 403;
+        type = "table.history.accessdenied.needmissmatch";
     }
-  );
+  }
+
+  // Is need well captured?
+  if (status === 403) {
+    res.status(status).json({
+      type: type,
+      data: {
+        games: [],
+      },
+    });
+  } else {
+    // Find games
+    Game.find(filters, fields)
+      .then((games) => {
+        games.sort(compare);
+        games = games.slice(
+          req.body.games.index, // from 0
+          req.body.games.index + req.body.games.number // to 10
+        );
+        // Check if more
+        // games [ 0 ... 10 ] length = 11
+        let more = games.length > req.body.games.number;
+        // Shorten to desired length
+        if (more) {
+          games.pop();
+        }
+        // Response
+        else status = 200;
+        type = "table.history.success";
+        res.status(status).json({
+          type: type,
+          data: {
+            games: games,
+            more: more,
+          },
+        });
+      })
+      .catch((error) => {
+        status = 400;
+        type = "table.history.error.findinggames";
+        res.status(status).json({
+          type: type,
+          data: {
+            games: [],
+            more: null,
+          },
+          error: error,
+        });
+        console.error(error);
+      });
+  }
 };

@@ -20,20 +20,20 @@ module.exports = adminAuthenticate = (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const decodedToken = jwt_decode(token);
 
-  User.findOne({ _id: decodedtoken.id })
+  User.findOne({ _id: decodedToken.id })
     .then((user) => {
       if (user !== undefined) {
         if (user.priviledges.includes("admin")) {
           req.user = user;
           next();
         } else {
-          return res.status(401).json({
+          return res.status(403).json({
             type: "admin.authenticate.error.isnotadmin",
             error: err,
           });
         }
       } else {
-        return res.status(401).json({
+        return res.status(403).json({
           type: "admin.authenticate.error.notfound",
           error: err,
         });
@@ -41,7 +41,7 @@ module.exports = adminAuthenticate = (req, res, next) => {
     })
     .catch((error) => {
       console.error(error);
-      return res.status(401).json({
+      return res.status(403).json({
         type: "admin.authenticate.error.erroronfind",
         error: err,
       });

@@ -1,7 +1,6 @@
 const Table = require("../../models/Table.js");
 const contracts = require("../../resources/contracts.json");
 const { random_id } = require("../../resources/toolkit");
-const serviceCheckAccess = require("./services/serviceCheckAccess.js");
 
 module.exports = tableDetails_v2 = (req, res, next) => {
   /*
@@ -20,87 +19,74 @@ module.exports = tableDetails_v2 = (req, res, next) => {
 
   console.log("table.details");
 
-  // Check access
-  serviceCheckAccess(req.params.id, req.headers["authorization"]).then(
-    (access) => {
-      if (!access.outcome) {
-        // Unauthorized
-        res.status(401).json({
-          type: "table.history.error.deniedaccess",
-          error: access.reason,
-        });
-      } else {
-        Table.aggregate([
-          {
-            $match: {
-              id: req.params.id,
-            },
-          },
-          {
-            $lookup: {
-              from: "users",
-              foreignField: "id",
-              localField: "users",
-              as: "players",
-              pipeline: [
-                {
-                  $project: {
-                    _id: 1,
-                    pseudo: 1,
-                    status: 1,
-                  },
-                },
-              ],
-            },
-          },
+  Table.aggregate([
+    {
+      $match: {
+        id: req.params.id,
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        foreignField: "id",
+        localField: "users",
+        as: "players",
+        pipeline: [
           {
             $project: {
               _id: 1,
-              name: 1,
-              guests: 1,
-              players: 1,
+              pseudo: 1,
+              status: 1,
             },
           },
-        ])
-          .then((tables) => {
-            if (tables.length === 1) {
-              let table = tables[0];
-              // Add guest players
-              for (var guest = 1; guest <= table.guests; guest++) {
-                table.players.push({
-                  _id: random_id(),
-                  status: "guest",
-                });
-              }
-              // Add contracts
-              table.contracts = contracts;
-              // Response
-              res.status(200).json({
-                type: "table.details.success",
-                data: {
-                  table: table,
-                },
-              });
-            } else {
-              res.status(400).json({
-                type: "table.details.error.onfind",
-                data: {
-                  table: {},
-                },
-              });
-            }
-          })
-          .catch((error) => {
-            res.status(400).json({
-              type: "table.details.error.onaggregate",
-              data: {
-                table: {},
-              },
-              error: error,
-            });
-            console.error(error);
+        ],
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        name: 1,
+        guests: 1,
+        players: 1,
+      },
+    },
+  ])
+    .then((tables) => {
+      if (tables.length === 1) {
+        let table = tables[0];
+        // Add guest players
+        for (var guest = 1; guest <= table.guests; guest++) {
+          table.players.push({
+            _id: random_id(),
+            status: "guest",
           });
+        }
+        // Add contracts
+        table.contracts = contracts;
+        // Response
+        res.status(200).json({
+          type: "table.details.success",
+          data: {
+            table: table,
+          },
+        });
+      } else {
+        res.status(400).json({
+          type: "table.details.error.onfind",
+          data: {
+            table: {},
+          },
+        });
       }
-    }
-  );
+    })
+    .catch((error) => {
+      res.status(400).json({
+        type: "table.details.error.onaggregate",
+        data: {
+          table: {},
+        },
+        error: error,
+      });
+      console.error(error);
+    });
 };
