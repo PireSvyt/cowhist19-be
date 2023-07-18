@@ -26,18 +26,26 @@ module.exports = async function serviceMailing(mail, details = {}) {
     let mailToSend = null;
     switch (mail) {
       case "signup":
-        mailToSend = {
-          to: details.login,
-          subject: mails.signup[lang].subject,
-          text: mails.signup[lang].text,
-          html: mails.signup[lang].html,
-        };
-        // Replace tokens
-        mailToSend.text.replace("%%PSEUDO%%", details.pseudo);
-        mailToSend.text.replace(
+        // Prep data
+        let text = mails.signup[lang].text;
+        text.replace("%%PSEUDO%%", details.pseudo);
+        text.replace(
           "%%ACTIVATION_URL%%",
           "https://cowhist19.vercel.app/activation/" + details.activationtoken
         );
+        let html = mails.signup[lang].html;
+        html.replace("%%PSEUDO%%", details.pseudo);
+        html.replace(
+          "%%ACTIVATION_URL%%",
+          "https://cowhist19.vercel.app/activation/" + details.activationtoken
+        );
+        // Merge data
+        mailToSend = {
+          to: details.login,
+          subject: mails.signup[lang].subject,
+          text: text,
+          html: html,
+        };
         break;
       default:
         // mail not found
