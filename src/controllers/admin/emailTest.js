@@ -15,31 +15,20 @@ module.exports = emailTest = (req, res, next) => {
 
   console.log("admin.emailtest");
 
-  // Check access
-  serviceCheckAdmin(req.headers["authorization"]).then((access) => {
-    if (!access.outcome) {
-      // Unauthorized
-      res.status(401).json({
-        type: "admin.emailtest.error.deniedaccess",
-        error: access.reason,
+  serviceMailing("signup", {
+    pseudo: "TESTPSEUDO",
+    login: process.env.MAIL_ADDRESS,
+    activationtoken: "TESTTOKEN",
+  }).then((mail) => {
+    if (mail.type === "mail.mailing.success") {
+      res.status(200).json({
+        type: "admin.emailtest.success",
+        info: mail.info,
       });
     } else {
-      serviceMailing("signup", {
-        pseudo: "TEST PSEUDO",
-        login: process.env.MAIL_ADDRESS,
-        activationtoken: "TEST TOKEN",
-      }).then((mail) => {
-        if (mail.type === "mail.mailing.success") {
-          res.status(200).json({
-            type: "admin.emailtest.success",
-            info: mail.info,
-          });
-        } else {
-          res.status(500).json({
-            type: "admin.emailtest.error.failure",
-            error: mail.error,
-          });
-        }
+      res.status(500).json({
+        type: "admin.emailtest.error.failure",
+        error: mail.error,
       });
     }
   });

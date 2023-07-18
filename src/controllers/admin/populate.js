@@ -21,28 +21,17 @@ module.exports = populate = (req, res, next) => {
       type: "admin.populate.error.unauthorized",
     });
   } else {
-    // Check access
-    serviceCheckAdmin(req.headers["authorization"]).then((access) => {
-      if (!access.outcome) {
-        // Unauthorized
-        res.status(401).json({
-          type: "admin.populate.error.deniedaccess",
-          error: access.reason,
+    servicePopulate(req.body).then((population) => {
+      if (population.type === "admin.servicepopulate.success") {
+        // Successful populated
+        res.status(200).json({
+          type: "admin.populate.success",
         });
       } else {
-        servicePopulate(req.body).then((population) => {
-          if (population.type === "admin.servicepopulate.success") {
-            // Successful populated
-            res.status(200).json({
-              type: "admin.populate.success",
-            });
-          } else {
-            // Failed populated
-            res.status(500).json({
-              type: "admin.populate.error.failedpopulation",
-              error: population.error,
-            });
-          }
+        // Failed populated
+        res.status(500).json({
+          type: "admin.populate.error.failedpopulation",
+          error: population.error,
         });
       }
     });

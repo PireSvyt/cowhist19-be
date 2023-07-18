@@ -21,44 +21,27 @@ module.exports = objectCount = (req, res, next) => {
 
   console.log("admin.objectcount");
 
-  // Check access
-  serviceCheckAdmin(req.headers["authorization"]).then((access) => {
-    if (!access.outcome) {
-      // Unauthorized
-      res.status(401).json({
-        type: "admin.objectcount.error.deniedaccess",
-        error: access.reason,
-      });
-    } else {
-      User.count()
-        .then((users) => {
-          Table.count()
-            .then((tables) => {
-              Game.count()
-                .then((games) => {
-                  Feedback.count()
-                    .then((feedbacks) => {
-                      res.status(200).json({
-                        type: "admin.objectcount.success",
-                        data: {
-                          users: users,
-                          tables: tables,
-                          games: games,
-                          feedbacks: feedbacks,
-                        },
-                      });
-                    })
-                    .catch((error) => {
-                      res.status(400).json({
-                        type: "admin.objectcount.error.oncountfeedbacks",
-                        error: error,
-                      });
-                      console.error(error);
-                    });
+  User.count()
+    .then((users) => {
+      Table.count()
+        .then((tables) => {
+          Game.count()
+            .then((games) => {
+              Feedback.count()
+                .then((feedbacks) => {
+                  res.status(200).json({
+                    type: "admin.objectcount.success",
+                    data: {
+                      users: users,
+                      tables: tables,
+                      games: games,
+                      feedbacks: feedbacks,
+                    },
+                  });
                 })
                 .catch((error) => {
                   res.status(400).json({
-                    type: "admin.objectcount.error.oncountgames",
+                    type: "admin.objectcount.error.oncountfeedbacks",
                     error: error,
                   });
                   console.error(error);
@@ -66,7 +49,7 @@ module.exports = objectCount = (req, res, next) => {
             })
             .catch((error) => {
               res.status(400).json({
-                type: "admin.objectcount.error.oncounttables",
+                type: "admin.objectcount.error.oncountgames",
                 error: error,
               });
               console.error(error);
@@ -74,11 +57,17 @@ module.exports = objectCount = (req, res, next) => {
         })
         .catch((error) => {
           res.status(400).json({
-            type: "admin.objectcount.error.oncountusers",
+            type: "admin.objectcount.error.oncounttables",
             error: error,
           });
           console.error(error);
         });
-    }
-  });
+    })
+    .catch((error) => {
+      res.status(400).json({
+        type: "admin.objectcount.error.oncountusers",
+        error: error,
+      });
+      console.error(error);
+    });
 };

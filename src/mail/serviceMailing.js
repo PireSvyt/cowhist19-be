@@ -71,11 +71,8 @@ module.exports = async function serviceMailing(mail, details = {}) {
 function replaceTokens(text, tokenList) {
   let replacedText = text;
   if (replacedText) {
-    console.log(replacedText);
     tokenList.forEach((replacement) => {
-      console.log(replacement);
       replacedText = replacedText.replace(replacement.token, replacement.value);
-      console.log(replacedText);
     });
   }
   return replacedText;

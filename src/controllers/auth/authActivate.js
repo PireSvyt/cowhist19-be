@@ -4,8 +4,9 @@ module.exports = authActivate = (req, res, next) => {
   /*
   
   activate a user
-  once signed up and he reached the url with the token
+  once signed up and he recieves an email to reach the url with the token
   then his status is switched to activated
+  (only activated user have access to the product capabilities)
   
   possible response types
   * auth.activate.success.activated

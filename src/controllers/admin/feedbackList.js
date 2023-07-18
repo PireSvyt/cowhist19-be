@@ -28,51 +28,40 @@ module.exports = feedbackList = (req, res, next) => {
 
   console.log("admin.feedbackList");
 
-  // Check access
-  serviceCheckAdmin(req.headers["authorization"]).then((access) => {
-    if (!access.outcome) {
-      // Unauthorized
-      res.status(401).json({
-        type: "admin.feedbacklist.error.deniedaccess",
-        error: access.reason,
-      });
-    } else {
-      // Is need input relevant?
-      if (!req.body.need) {
+  // Is need input relevant?
+  if (!req.body.need) {
+    status = 403;
+    type = "admin.feedbacklist.accessdenied.noneed";
+  } else {
+    switch (req.body.need) {
+      case "all":
+        filters = {};
+        fields = "id status date source tag text";
+        break;
+      case "allopen":
+        filters = { status: "open" };
+        fields = "id status date source tag text";
+        break;
+      default:
         status = 403;
-        type = "admin.feedbacklist.accessdenied.noneed";
-      } else {
-        switch (req.body.need) {
-          case "all":
-            filters = {};
-            fields = "id status date source tag text";
-            break;
-          case "allopen":
-            filters = { status: "open" };
-            fields = "id status date source tag text";
-            break;
-          default:
-            status = 403;
-            type = "admin.feedbacklist.accessdenied.needmissmatch";
-        }
-        //
-        Feedback.find(filters, fields)
-          .then((feedbacks) => {
-            res.status(200).json({
-              type: "admin.feedbacklist.success",
-              data: {
-                feedbacks: feedbacks,
-              },
-            });
-          })
-          .catch((error) => {
-            res.status(400).json({
-              type: "admin.feedbacklist.error.onfind",
-              error: error,
-            });
-            console.error(error);
-          });
-      }
+        type = "admin.feedbacklist.accessdenied.needmissmatch";
     }
-  });
+    //
+    Feedback.find(filters, fields)
+      .then((feedbacks) => {
+        res.status(200).json({
+          type: "admin.feedbacklist.success",
+          data: {
+            feedbacks: feedbacks,
+          },
+        });
+      })
+      .catch((error) => {
+        res.status(400).json({
+          type: "admin.feedbacklist.error.onfind",
+          error: error,
+        });
+        console.error(error);
+      });
+  }
 };

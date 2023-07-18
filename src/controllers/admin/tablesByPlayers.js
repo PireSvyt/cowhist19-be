@@ -16,41 +16,30 @@ module.exports = tablesByPlayers = (req, res, next) => {
 
   console.log("admin.tablesByPlayers");
 
-  // Check access
-  serviceCheckAdmin(req.headers["authorization"]).then((access) => {
-    if (!access.outcome) {
-      // Unauthorized
-      res.status(401).json({
-        type: "admin.tablesbyplayers.error.deniedaccess",
-        error: access.reason,
+  Table.aggregate([
+    {
+      $group: {
+        _id: { $size: "$users" },
+        nbtables: { $sum: 1 },
+      },
+    },
+    {
+      $sort: { _id: 1 },
+    },
+  ])
+    .then((tables) => {
+      res.status(200).json({
+        type: "admin.tablesbyplayers.success",
+        data: {
+          tables: tables,
+        },
       });
-    } else {
-      Table.aggregate([
-        {
-          $group: {
-            _id: { $size: "$users" },
-            nbtables: { $sum: 1 },
-          },
-        },
-        {
-          $sort: { _id: 1 },
-        },
-      ])
-        .then((tables) => {
-          res.status(200).json({
-            type: "admin.tablesbyplayers.success",
-            data: {
-              tables: tables,
-            },
-          });
-        })
-        .catch((error) => {
-          res.status(400).json({
-            type: "admin.tablesbyplayers.error.onaggregate",
-            error: error,
-          });
-          console.error(error);
-        });
-    }
-  });
+    })
+    .catch((error) => {
+      res.status(400).json({
+        type: "admin.tablesbyplayers.error.onaggregate",
+        error: error,
+      });
+      console.error(error);
+    });
 };
