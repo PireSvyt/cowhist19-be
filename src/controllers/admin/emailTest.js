@@ -25,7 +25,7 @@ module.exports = emailTest = (req, res, next) => {
       });
     } else {
       serviceMailing("signup", {
-        psuedo: "TEST PSEUDO",
+        pseudo: "TEST PSEUDO",
         login: process.env.MAIL_ADDRESS,
         activationtoken: "TEST TOKEN",
       }).then((mail) => {

@@ -74,7 +74,7 @@ function replaceTokens(text, tokenList) {
     console.log(replacedText);
     tokenList.forEach((replacement) => {
       console.log(replacement);
-      replacedText.replace(replacement.token, replacement.value);
+      replacedText = replacedText.replace(replacement.token, replacement.value);
       console.log(replacedText);
     });
   }
