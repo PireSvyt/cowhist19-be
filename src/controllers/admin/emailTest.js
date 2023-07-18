@@ -1,5 +1,5 @@
 const serviceCheckAdmin = require("./services/serviceCheckAdmin.js");
-const serviceSendMail = require("../../mail/serviceSentMail.js");
+const serviceMailing = require("../../mail/serviceMailing");
 
 module.exports = emailTest = (req, res, next) => {
   /*
@@ -24,7 +24,7 @@ module.exports = emailTest = (req, res, next) => {
         error: access.reason,
       });
     } else {
-      serviceSendMail("signup", {
+      serviceMailing("signup", {
         psuedo: "TEST PSEUDO",
         login: process.env.MAIL_ADDRESS,
         activationtoken: "TEST TOKEN",
