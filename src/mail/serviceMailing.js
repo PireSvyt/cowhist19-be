@@ -26,25 +26,26 @@ module.exports = async function serviceMailing(mail, details = {}) {
     let mailToSend = null;
     switch (mail) {
       case "signup":
-        // Prep data
-        let text = mails.signup[lang].text;
-        text.replace("%%PSEUDO%%", details.pseudo);
-        text.replace(
-          "%%ACTIVATION_URL%%",
-          "https://cowhist19.vercel.app/activation/" + details.activationtoken
-        );
-        let html = mails.signup[lang].html;
-        html.replace("%%PSEUDO%%", details.pseudo);
-        html.replace(
-          "%%ACTIVATION_URL%%",
-          "https://cowhist19.vercel.app/activation/" + details.activationtoken
-        );
         // Merge data
         mailToSend = {
           to: details.login,
           subject: mails.signup[lang].subject,
-          text: text,
-          html: html,
+          text: replaceTokens(mails.signup[lang].text, [
+            ["%%PSEUDO%%", details.pseudo],
+            [
+              "%%ACTIVATION_URL%%",
+              "https://cowhist19.vercel.app/activation/" +
+                details.activationtoken,
+            ],
+          ]),
+          html: replaceTokens(mails.signup[lang].html, [
+            ["%%PSEUDO%%", details.pseudo],
+            [
+              "%%ACTIVATION_URL%%",
+              "https://cowhist19.vercel.app/activation/" +
+                details.activationtoken,
+            ],
+          ]),
         };
         break;
       default:
@@ -72,3 +73,13 @@ module.exports = async function serviceMailing(mail, details = {}) {
     }
   });
 };
+
+function replaceTokens(text, tokenList) {
+  let replacedText = text;
+  if (replacedText) {
+    tokenList.forEach((token, replacer) => {
+      replacedText.replace(token, replacer);
+    });
+  }
+  return replacedText;
+}
