@@ -16,13 +16,12 @@ const tableStats = require("../controllers/table/tableStats.js");
 const tableExistingName = require("../controllers/table/tableExistingName.js");
 
 router.post("/v1/create", authAuthenticate, tableCreate);
-router.post("/v2/save", authAuthenticate, tableAuthenticate, tableSave);
+router.post("/v1/existingname", authAuthenticate, tableExistingName);
 
+router.post("/v2/save", authAuthenticate, tableAuthenticate, tableSave);
 //router.get("/v1/:id", authAuthenticate, tableDetails);
 router.get("/v2/:id", authAuthenticate, tableAuthenticate, tableDetails_v2);
-
 router.delete("/v1/:id", authAuthenticate, tableAuthenticate, tableDelete);
-
 //router.post("/v1/history/:id", authAuthenticate, tableHistory);
 //router.post("/v2/history/:id", authAuthenticate, tableHistory_v2);
 router.post(
@@ -31,9 +30,6 @@ router.post(
   tableAuthenticate,
   tableHistory_v3
 );
-
 router.post("/v1/stats/:id", authAuthenticate, tableAuthenticate, tableStats);
-
-router.post("/v1/existingname", authAuthenticate, tableExistingName);
 
 module.exports = router;
