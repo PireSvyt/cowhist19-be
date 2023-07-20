@@ -8,8 +8,8 @@ if (process.env.MONGOOSE_DEBUG === "TRUE") {
 const tableSchema = mongoose.Schema(
   {
     id: { type: String, required: true, unique: true },
-    name: { type: String, required: false, unique: true },
-    guests: { type: Number, required: false },
+    name: { type: String, required: true, unique: true },
+    guests: { type: Number, required: true },
     users: {
       type: [
         {

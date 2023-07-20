@@ -54,6 +54,7 @@ module.exports = authActivate = (req, res, next) => {
               },
             });
           } else {
+            // Non discolusre of acount existance
             return res.status(202).json({
               type: "auth.activate.error.notfound",
               data: {

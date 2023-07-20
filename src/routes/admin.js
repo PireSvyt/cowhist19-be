@@ -14,7 +14,6 @@ const adminPopulate = require("../controllers/admin/adminPopulate.js");
 const adminFeedbackClose = require("../controllers/admin/adminFeedbackClose.js");
 const adminEmailTest = require("../controllers/admin/adminEmailTest.js");
 
-// Get routes
 router.get(
   "/v1/tablesbyplayers",
   authAuthenticate,
@@ -45,8 +44,6 @@ router.post(
   adminAuthenticate,
   adminGetFeedbackList
 );
-
-// Action routes
 router.post("/v1/populate", authAuthenticate, adminAuthenticate, adminPopulate);
 router.post(
   "/v1/feedbackclose",

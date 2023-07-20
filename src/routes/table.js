@@ -19,11 +19,8 @@ router.post("/v1/create", authAuthenticate, tableCreate);
 router.post("/v1/existingname", authAuthenticate, tableExistingName);
 
 router.post("/v2/save", authAuthenticate, tableAuthenticate, tableSave);
-//router.get("/v1/:id", authAuthenticate, tableDetails);
 router.get("/v2/:id", authAuthenticate, tableAuthenticate, tableDetails_v2);
 router.delete("/v1/:id", authAuthenticate, tableAuthenticate, tableDelete);
-//router.post("/v1/history/:id", authAuthenticate, tableHistory);
-//router.post("/v2/history/:id", authAuthenticate, tableHistory_v2);
 router.post(
   "/v3/history/:id",
   authAuthenticate,
