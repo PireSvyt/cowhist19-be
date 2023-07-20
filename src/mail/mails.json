@@ -2,44 +2,24 @@
   "signup": {
     "en": {
       "subject": "CoWhist19 | Activate your account",
-      "text": "Hej {{PSEUDO}}!\r\r
-        Account created!\r
-        To activate it, let's go this way:\r
-        {{ACTIVATION_URL}}\r\r
-        See you soon,\r
-        The CoWhist19 team",
+      "text": "Hej {{PSEUDO}}!\r\rAccount created!\rTo activate it, let's go this way:\r{{ACTIVATION_URL}}\r\rSee you soon,\rThe CoWhist19 team",
       "html": null
     },
     "fr": {
       "subject": "CoWhist19 | Active ton compte",
-      "text": "Hej {{PSEUDO}}!\r\r
-        Compte créé!\r
-        Pour l'activer, c'est par ici:\r
-        {{ACTIVATION_URL}}\r\r
-        A bientôt,\r
-        L'équipe CoWhist19",
+      "text": "Hej {{PSEUDO}}!\r\rCompte créé!\rPour l'activer, c'est par ici:\r{{ACTIVATION_URL}}\r\rA bientôt,\rL'équipe CoWhist19",
       "html": null
     }
   },
   "passwordreset": {
     "en": {
       "subject": "CoWhist19 | Password reset",
-      "text": "Hej {{PSEUDO}}!\r\r
-        Password reset?\r
-        Here is a link you need for this:\r
-        {{PASSWORD_RESET_URL}}\r\r
-        See you soon,\r
-        The CoWhist19 team",
+      "text": "Hej {{PSEUDO}}!\r\rPassword reset?\rHere is a link you need for this:\r{{PASSWORD_RESET_URL}}\r\rSee you soon,\rThe CoWhist19 team",
       "html": null
     },
     "fr": {
       "subject": "CoWhist19 | Renouvellement de mot de passe",
-      "text": "Hej {{PSEUDO}}!\r\r
-        Renouvellement du mot de passe?\r
-        Voici un lien pour ça:\r
-        {{PASSWORD_RESET_URL}}\r\r
-        A bientôt,\r
-        L'équipe CoWhist19",
+      "text": "Hej {{PSEUDO}}!\r\r Renouvellement du mot de passe?\rVoici un lien pour ça:\r{{PASSWORD_RESET_URL}}\r\rA bientôt,\rL'équipe CoWhist19",
       "html": null
     }
   }
