@@ -24,9 +24,10 @@ module.exports = async function serviceMailing(mail, details = {}) {
   return new Promise((resolve, reject) => {
     // Prep email
     let mailToSend = null;
+    let replacements = [];
     switch (mail) {
       case "signup":
-        let replacements = [
+        replacements = [
           { token: "{{PSEUDO}}", value: details.pseudo },
           {
             token: "{{ACTIVATION_URL}}",
@@ -43,13 +44,13 @@ module.exports = async function serviceMailing(mail, details = {}) {
         };
         break;
       case "resetpassword":
-        let replacements = [
+        replacements = [
           { token: "{{PSEUDO}}", value: details.pseudo },
           {
             token: "{{PASSWORD_RESET_URL}}",
             value:
               "https://cowhist19.vercel.app/passwordreset/" +
-              details.activationtoken,
+              details.passwordresettoken,
           },
         ];
         mailToSend = {

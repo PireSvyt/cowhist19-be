@@ -11,8 +11,9 @@ const userSchema = mongoose.Schema(
     pseudo: { type: String, required: true, unique: true },
     login: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    status: { type: String, required: true }, // invited, signedup, activated 
+    status: { type: String, required: true }, // invited, signedup, activated
     activationtoken: { type: String, unique: false },
+    passwordresettoken: { type: String, unique: false },
     priviledges: {
       type: [{ type: String }],
     },
