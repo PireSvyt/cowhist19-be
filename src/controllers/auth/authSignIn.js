@@ -21,6 +21,8 @@ module.exports = authSignIn = (req, res, next) => {
   * auth.signin.error.onfind
   * auth.signin.error.invalidpassword
   * auth.signin.error.onpasswordcompare
+  * auth.signin.error.statussignedup
+  * auth.signin.error.statusunknown
   
   */
 
@@ -69,32 +71,53 @@ module.exports = authSignIn = (req, res, next) => {
                 },
               });
             } else {
-              // Store sign in date
-              if (user.connection === undefined) {
-                user.connection = {};
-              }
-              if (user.connection.current !== undefined) {
-                user.connection.last = user.connection.current;
-              }
-              user.connection.current = new Date();
-              user.save();
-              // Return response
-              return res.status(200).json({
-                type: "auth.signin.success",
-                data: {
-                  id: user._id,
-                  token: jwt.sign(
-                    {
+              switch (user.status) {
+                case "signedup":
+                  return res.status(401).json({
+                    type: "auth.signin.error.statussignedup",
+                    data: {
                       id: user._id,
-                      status: user.status,
+                      token: "",
                     },
-                    process.env.JWT_SECRET,
-                    {
-                      expiresIn: "24h",
+                  });
+                  break;
+                case "activated":
+                  // Store sign in date
+                  /*if (user.connection === undefined) {
+                      user.connection = {};
                     }
-                  ),
-                },
-              });
+                    if (user.connection.current !== undefined) {
+                      user.connection.last = user.connection.current;
+                    }
+                    user.connection.current = new Date();
+                    user.save();*/
+                  // Return response
+                  return res.status(200).json({
+                    type: "auth.signin.success",
+                    data: {
+                      id: user._id,
+                      token: jwt.sign(
+                        {
+                          id: user._id,
+                          status: user.status,
+                        },
+                        process.env.JWT_SECRET,
+                        {
+                          expiresIn: "72h",
+                        }
+                      ),
+                    },
+                  });
+                  break;
+                default:
+                  return res.status(401).json({
+                    type: "auth.signin.error.statusunknown",
+                    data: {
+                      id: user._id,
+                      token: "",
+                    },
+                  });
+              }
             }
           })
           .catch((error) => {

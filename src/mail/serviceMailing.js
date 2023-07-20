@@ -42,6 +42,23 @@ module.exports = async function serviceMailing(mail, details = {}) {
           html: replaceTokens(mails.signup[lang].html, replacements),
         };
         break;
+      case "resetpassword":
+        let replacements = [
+          { token: "{{PSEUDO}}", value: details.pseudo },
+          {
+            token: "{{PASSWORD_RESET_URL}}",
+            value:
+              "https://cowhist19.vercel.app/passwordreset/" +
+              details.activationtoken,
+          },
+        ];
+        mailToSend = {
+          to: details.login,
+          subject: mails.signup[lang].subject,
+          text: replaceTokens(mails.signup[lang].text, replacements),
+          html: replaceTokens(mails.signup[lang].html, replacements),
+        };
+        break;
       default:
         // mail not found
         break;
