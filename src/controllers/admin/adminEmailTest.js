@@ -1,4 +1,4 @@
-const serviceMailing = require("../../mail/serviceMailing");
+const serviceMailing = require("../../mails/serviceMailing.js");
 
 module.exports = adminEmailTest = (req, res, next) => {
   /*

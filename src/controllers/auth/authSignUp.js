@@ -1,5 +1,5 @@
 const User = require("../../models/User.js");
-const serviceMailing = require("../../mail/serviceMailing");
+const serviceMailing = require("../../mails/serviceMailing.js");
 var random_string = require("./services/random_string.js");
 
 module.exports = authSignup = (req, res, next) => {
