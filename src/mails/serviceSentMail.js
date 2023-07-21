@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 
-module.exports = function serviceSendMail(mailDetails) {
+module.exports = async function serviceSendMail(mailDetails) {
   /*
     
     service sending email

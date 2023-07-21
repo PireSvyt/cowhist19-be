@@ -12,6 +12,7 @@ module.exports = authResentActivation = (req, res, next) => {
   * auth.resentactivation.error.accountnotfound
   * auth.resentactivation.error.onfind
   * auth.resentactivation.error.updatingtoken
+  * auth.resentactivation.error.sendingemail
   
   */
 
@@ -24,10 +25,18 @@ module.exports = authResentActivation = (req, res, next) => {
         user
           .save()
           .then(() => {
-            serviceMailing("signup", user);
-            console.log("auth.resentactivation.success");
-            res.status(200).json({
-              type: "auth.resentactivation.success",
+            serviceMailing("signup", user).then((mailing) => {
+              if (mailing.type === "mail.mailing.success") {
+                console.log("auth.resentactivation.success");
+                res.status(200).json({
+                  type: "auth.resentactivation.success",
+                });
+              } else {
+                console.log("auth.resentactivation.error.sendingemail");
+                res.status(400).json({
+                  type: "auth.resentactivation.error.sendingemail",
+                });
+              }
             });
           })
           .catch((error) => {
