@@ -37,7 +37,7 @@ module.exports = async function serviceMailing(mail, details = {}) {
           },
         ];
         mailToSend = {
-          to: details.login,
+          to: "'" + details.pseudo + "<" + details.login + ">'",
           subject: mails.signup[lang].subject,
           text: replaceTokens(mails.signup[lang].text, replacements),
           html: replaceTokens(mails.signup[lang].html, replacements),
@@ -54,7 +54,7 @@ module.exports = async function serviceMailing(mail, details = {}) {
           },
         ];
         mailToSend = {
-          to: details.login,
+          to: "'" + details.pseudo + "<" + details.login + ">'",
           subject: mails.signup[lang].subject,
           text: replaceTokens(mails.signup[lang].text, replacements),
           html: replaceTokens(mails.signup[lang].html, replacements),

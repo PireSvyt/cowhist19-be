@@ -20,11 +20,9 @@ module.exports = authActivate = (req, res, next) => {
 
   User.findOne({ activationtoken: req.params.token })
     .then((user) => {
-      if (user !== undefined) {
-        // Signedup check
+      if (user) {
         if (user.status === "signedup") {
           user.status = "activated";
-
           // User saving
           user
             .save()
@@ -59,14 +57,14 @@ module.exports = authActivate = (req, res, next) => {
           } else {
             // Non discolusre of acount existance
             console.log("auth.activate.error.notfound");
-            return res.status(202).json({
+            res.status(503).json({
               type: "auth.activate.error.notfound",
             });
           }
         }
       } else {
         console.log("auth.activate.error.notfound");
-        return res.status(202).json({
+        res.status(404).json({
           type: "auth.activate.error.notfound",
         });
       }
