@@ -1,7 +1,7 @@
 const serviceSendMail = require("./serviceSentMail");
 const mails = require("./mails.json");
 
-module.exports = async function serviceMailing(mail, details = {}) {
+module.exports = function serviceMailing(mail, details = {}) {
   /*
     
     service sending email
