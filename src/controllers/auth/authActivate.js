@@ -18,7 +18,7 @@ module.exports = authActivate = (req, res, next) => {
 
   console.log("auth.activate");
 
-  User.findOne({ activationtoken: req.params.id })
+  User.findOne({ activationtoken: req.params.token })
     .then((user) => {
       if (user !== undefined) {
         // Signedup check
@@ -29,6 +29,7 @@ module.exports = authActivate = (req, res, next) => {
           user
             .save()
             .then(() => {
+              console.log("auth.activate.success.activated");
               res.status(200).json({
                 type: "auth.activate.success.activated",
                 data: {
@@ -37,6 +38,7 @@ module.exports = authActivate = (req, res, next) => {
               });
             })
             .catch((error) => {
+              console.log("auth.activate.error.onsave");
               res.status(400).json({
                 type: "auth.activate.error.onsave",
                 error: error,
@@ -47,6 +49,7 @@ module.exports = authActivate = (req, res, next) => {
             });
         } else {
           if (user.status === "activated") {
+            console.log("auth.activate.success.alreadyctivated");
             res.status(200).json({
               type: "auth.activate.success.alreadyctivated",
               data: {
@@ -55,30 +58,24 @@ module.exports = authActivate = (req, res, next) => {
             });
           } else {
             // Non discolusre of acount existance
+            console.log("auth.activate.error.notfound");
             return res.status(202).json({
               type: "auth.activate.error.notfound",
-              data: {
-                id: "",
-              },
             });
           }
         }
       } else {
+        console.log("auth.activate.error.notfound");
         return res.status(202).json({
           type: "auth.activate.error.notfound",
-          data: {
-            id: "",
-          },
         });
       }
     })
     .catch((error) => {
+      console.log("auth.activate.error.notfound");
       res.status(500).json({
         type: "auth.activate.error.notfound",
         error: error,
-        data: {
-          id: "",
-        },
       });
     });
 };

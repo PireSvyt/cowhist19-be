@@ -10,7 +10,7 @@ const authResentActivation = require("../controllers/auth/authResentActivation.j
 //const authResetPassword = require("../controllers/auth/authResetPassword.js");
 
 router.post("/v1/signup", authSignUp);
-router.post("/v1/activate", authActivate);
+router.post("/v1/activate/:token", authActivate);
 router.post("/v1/signin", authSignIn);
 router.post("/v1/assess", authAssess);
 router.post("/v1/existingpseudo", authExistingPseudo);
