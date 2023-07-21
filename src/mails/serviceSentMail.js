@@ -30,12 +30,14 @@ module.exports = async function serviceSendMail(mailDetails) {
         html: mailDetails.html,
       })
       .then((info) => {
+        console.log("mail.sentmail.success");
         resolve({
           type: "mail.sentmail.success",
           info: info,
         });
       })
       .catch((err) => {
+        console.log("mail.sentmail.failure");
         resolve({
           type: "mail.sentmail.failure",
           error: err,

@@ -68,10 +68,12 @@ module.exports = async function serviceMailing(mail, details = {}) {
     if (mailToSend) {
       serviceSendMail(mailToSend).then((outcome) => {
         if (outcome.type === "mail.sentmail.success") {
+          console.log("mail.mailing.success");
           resolve({
             type: "mail.mailing.success",
           });
         } else {
+          console.log("mail.mailing.error.onsend");
           resolve({
             type: "mail.mailing.error.onsend",
             error: outcome.error,
@@ -79,6 +81,7 @@ module.exports = async function serviceMailing(mail, details = {}) {
         }
       });
     } else {
+      console.log("mail.mailing.error.nomailtosend");
       resolve({
         type: "mail.mailing.error.nomailtosend",
       });
