@@ -58,29 +58,26 @@ module.exports = userDetails = (req, res, next) => {
   ])
     .then((user) => {
       if (user.length === 1) {
-        res.status(200).json({
+        console.log("user.details.success");
+        return res.status(200).json({
           type: "user.details.success",
           data: {
             user: user[0],
           },
         });
       } else {
-        res.status(403).json({
+        console.log("user.details.error.notfound");
+        return res.status(403).json({
           type: "user.details.error.notfound",
-          data: {
-            user: {},
-          },
         });
       }
     })
     .catch((error) => {
-      res.status(400).json({
+      console.log("user.details.error.onaggregate");
+      console.error(error);
+      return res.status(400).json({
         type: "user.details.error.onaggregate",
         error: error,
-        data: {
-          user: {},
-        },
       });
-      console.error(error);
     });
 };

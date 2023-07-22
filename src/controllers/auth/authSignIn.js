@@ -41,6 +41,7 @@ module.exports = authSignIn = (req, res, next) => {
     .then((user) => {
       if (!user) {
         // Inexisting user
+        console.log("auth.signin.error.notfound");
         return res.status(404).json({
           type: "auth.signin.error.notfound",
           data: {
@@ -73,6 +74,7 @@ module.exports = authSignIn = (req, res, next) => {
             } else {
               switch (user.status) {
                 case "signedup":
+                  console.log("auth.signin.error.statussignedup");
                   return res.status(401).json({
                     type: "auth.signin.error.statussignedup",
                     data: {
@@ -92,6 +94,7 @@ module.exports = authSignIn = (req, res, next) => {
                     user.connection.current = new Date();
                     user.save();*/
                   // Return response
+                  console.log("auth.signin.success");
                   return res.status(200).json({
                     type: "auth.signin.success",
                     data: {
@@ -110,6 +113,7 @@ module.exports = authSignIn = (req, res, next) => {
                   });
                   break;
                 default:
+                  console.log("auth.signin.error.statusunknown");
                   return res.status(401).json({
                     type: "auth.signin.error.statusunknown",
                     data: {
@@ -121,6 +125,7 @@ module.exports = authSignIn = (req, res, next) => {
             }
           })
           .catch((error) => {
+            console.log("auth.signin.error.onpasswordcompare");
             console.log(error);
             return res.status(500).json({
               type: "auth.signin.error.onpasswordcompare",
@@ -134,6 +139,7 @@ module.exports = authSignIn = (req, res, next) => {
       }
     })
     .catch((error) => {
+      console.log("auth.signin.error.onfind");
       return res.status(500).json({
         type: "auth.signin.error.onfind",
         error: error,

@@ -12,24 +12,26 @@ module.exports = tableExistingName = (req, res, next) => {
   
   */
 
-  console.log("auth.existingname");
+  console.log("table.existingname");
 
   Table.findOne({ name: req.body.name })
     .then((table) => {
       if (!table) {
-        // Name is available
-        res.status(200).json({
+        console.log("table.existingname.false");
+        return res.status(200).json({
           type: "table.existingname.false",
         });
       } else {
-        // Name is being used
-        res.status(403).json({
+        console.log("table.existingname.true");
+        return res.status(403).json({
           type: "table.existingname.true",
         });
       }
     })
     .catch((error) => {
-      res.status(500).json({
+      console.log("table.existingname.error.onfind");
+      console.error(error);
+      return res.status(500).json({
         type: "table.existingname.error.onfind",
         error: error,
       });

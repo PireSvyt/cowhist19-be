@@ -26,7 +26,7 @@ const userSchema = mongoose.Schema(
     // edition via auth/authActivate (if was "signedup") to "activated"
     activationtoken: { type: String },
     // filled at creation via auth/authSignUp as a random string
-    passwordresettoken: { type: String },
+    passwordtoken: { type: String },
     // filled on auth/authResetPassword as a random string
     // emptied on user/userResetPassword
     priviledges: {

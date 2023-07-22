@@ -180,7 +180,8 @@ module.exports = tableHistory_v3 = (req, res, next) => {
                 newGames.push(newGame);
               });
               // Response
-              res.status(200).json({
+              console.log("table.history.success");
+              return res.status(200).json({
                 type: "table.history.success",
                 data: {
                   games: newGames,
@@ -190,37 +191,25 @@ module.exports = tableHistory_v3 = (req, res, next) => {
               });
             })
             .catch((error) => {
+              console.log("table.history.error.findinggames");
               console.error(error);
-              res.status(400).json({
+              return res.status(400).json({
                 type: "table.history.error.findinggames",
-                data: {
-                  games: [],
-                  more: null,
-                  action: null,
-                },
                 error: error,
               });
             });
         } else {
-          res.status(400).json({
+          console.log("table.history.error.onfindtable");
+          return res.status(400).json({
             type: "table.history.error.onfindtable",
-            data: {
-              games: [],
-              more: null,
-              action: null,
-            },
           });
         }
       })
       .catch((error) => {
+        console.log("table.history.error.onaggregate");
         console.error(error);
         res.status(400).json({
           type: "table.history.error.onaggregate",
-          data: {
-            games: [],
-            more: null,
-            action: null,
-          },
           error: error,
         });
       });

@@ -30,7 +30,8 @@ module.exports = gameSave = (req, res, next) => {
     gameToSave
       .save()
       .then(() => {
-        res.status(201).json({
+        console.log("game.save.success.created");
+        return res.status(201).json({
           type: "game.save.success.created",
           data: {
             id: gameToSave._id,
@@ -38,14 +39,15 @@ module.exports = gameSave = (req, res, next) => {
         });
       })
       .catch((error) => {
-        res.status(400).json({
+        console.log("game.save.error.oncreate");
+        console.error(error);
+        return res.status(400).json({
           type: "game.save.error.oncreate",
           error: error,
           data: {
             id: "",
           },
         });
-        console.error(error);
       });
   } else {
     // Modify
@@ -54,7 +56,8 @@ module.exports = gameSave = (req, res, next) => {
     // Modify
     Game.updateOne({ _id: game._id }, game)
       .then(() => {
-        res.status(200).json({
+        console.log("game.save.success.modified");
+        return res.status(200).json({
           type: "game.save.success.modified",
           data: {
             id: game.id,
@@ -62,14 +65,15 @@ module.exports = gameSave = (req, res, next) => {
         });
       })
       .catch((error) => {
-        res.status(400).json({
+        console.log("game.save.error.onmodify");
+        console.error(error);
+        return res.status(400).json({
           type: "game.save.error.onmodify",
           error: error,
           data: {
             id: "",
           },
         });
-        console.error(error);
       });
   }
 };

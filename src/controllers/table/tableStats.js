@@ -28,7 +28,8 @@ module.exports = tableStats = (req, res, next) => {
       let stats = serviceProcessGames(games, req.body);
 
       // Response
-      res.status(200).json({
+      console.log("table.stats.success");
+      return res.status(200).json({
         type: "table.stats.success",
         data: {
           stats: stats,
@@ -36,13 +37,11 @@ module.exports = tableStats = (req, res, next) => {
       });
     })
     .catch((error) => {
+      console.log("table.stats.error");
       console.error(error);
-      res.status(400).json({
+      return res.status(400).json({
         type: "table.stats.error",
         error: error,
-        data: {
-          stats: {},
-        },
       });
     });
 };

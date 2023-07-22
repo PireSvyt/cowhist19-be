@@ -30,7 +30,8 @@ module.exports = userStats = (req, res, next) => {
       let stats = serviceProcessGames(games, decodedToken.id);
 
       // Response
-      res.status(200).json({
+      console.log("user.stats.success");
+      return res.status(200).json({
         type: "user.stats.success",
         data: {
           stats: stats,
@@ -38,13 +39,11 @@ module.exports = userStats = (req, res, next) => {
       });
     })
     .catch((error) => {
-      res.status(400).json({
+      console.log("user.stats.error.onfind");
+      console.error(error);
+      return res.status(400).json({
         type: "user.stats.error.onfind",
         error: error,
-        data: {
-          stats: {},
-        },
       });
-      console.error(error);
     });
 };

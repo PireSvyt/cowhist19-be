@@ -42,7 +42,8 @@ module.exports = authSignup = (req, res, next) => {
             .save()
             .then(() => {
               serviceMailing("signup", user);
-              res.status(200).json({
+              console.log("auth.signup.success.signedup");
+              return res.status(200).json({
                 type: "auth.signup.success.signedup",
                 data: {
                   id: user._id,
@@ -50,7 +51,8 @@ module.exports = authSignup = (req, res, next) => {
               });
             })
             .catch((error) => {
-              res.status(400).json({
+              console.log("auth.signup.error.savingfrominvited");
+              return res.status(400).json({
                 type: "auth.signup.error.savingfrominvited",
                 error: error,
                 data: {
@@ -60,6 +62,7 @@ module.exports = authSignup = (req, res, next) => {
             });
         } else {
           // Already existing
+          console.log("auth.signup.success.alreadysignedup");
           return res.status(409).json({
             type: "auth.signup.success.alreadysignedup",
             data: {
@@ -83,7 +86,8 @@ module.exports = authSignup = (req, res, next) => {
           .save()
           .then(() => {
             serviceMailing("signup", user);
-            res.status(201).json({
+            console.log("auth.signup.success.signedup");
+            return res.status(201).json({
               type: "auth.signup.success.signedup",
               data: {
                 id: user._id,
@@ -91,7 +95,8 @@ module.exports = authSignup = (req, res, next) => {
             });
           })
           .catch((error) => {
-            res.status(400).json({
+            console.log("auth.signup.error.savingoncreate");
+            return res.status(400).json({
               type: "auth.signup.error.savingoncreate",
               error: error,
               data: {
@@ -102,7 +107,8 @@ module.exports = authSignup = (req, res, next) => {
       }
     })
     .catch((error) => {
-      res.status(500).json({
+      console.log("auth.signup.error.notfound");
+      return res.status(500).json({
         type: "auth.signup.error.notfound",
         error: error,
         data: {

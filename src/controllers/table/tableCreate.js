@@ -38,10 +38,8 @@ module.exports = tableCreate = (req, res, next) => {
     tableToSave
       .save()
       .then(() => {
-        if (process.env.NODE_ENV !== "_production") {
-          console.log("table.serviceTableCreate success");
-        }
-        res.status(201).json({
+        console.log("table.create.success.created");
+        return res.status(201).json({
           type: "table.create.success.created",
           data: {
             id: tableToSave._id,
@@ -49,11 +47,9 @@ module.exports = tableCreate = (req, res, next) => {
         });
       })
       .catch((error) => {
-        if (process.env.NODE_ENV !== "_production") {
-          console.log("table.serviceTableCreate error");
-        }
+        console.log("table.create.error.oncreate");
         console.log(error);
-        res.status(400).json({
+        return res.status(400).json({
           type: "table.create.error.oncreate",
           error: error,
           data: {
@@ -62,7 +58,8 @@ module.exports = tableCreate = (req, res, next) => {
         });
       });
   } else {
-    res.status(403).json({
+    console.log("table.create.error.idprovided");
+    return res.status(403).json({
       type: "table.create.error.idprovided",
       data: {
         id: null,

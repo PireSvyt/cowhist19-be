@@ -32,17 +32,20 @@ module.exports = tableAuthenticate = (req, res, next) => {
         if (table.users.includes(decodedToken.id)) {
           next();
         } else {
+          console.log("table.authenticate.error.notamember");
           return res.status(403).json({
             type: "table.authenticate.error.notamember",
           });
         }
       } else {
+        console.log("table.authenticate.error.notfound");
         return res.status(403).json({
           type: "table.authenticate.error.notfound",
         });
       }
     })
     .catch((error) => {
+      console.log("table.authenticate.error.erroronfind");
       console.error(error);
       return res.status(403).json({
         type: "table.authenticate.error.erroronfind",

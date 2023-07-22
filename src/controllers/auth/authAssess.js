@@ -16,18 +16,21 @@ module.exports = authAssess = (req, res, next) => {
 
   // Assess
   if (req.body.token === null || req.body.token === undefined) {
+    console.log("auth.assess.error.nulltoken");
     return res.status(401).json({
       type: "auth.assess.error.nulltoken",
     });
   } else {
     jwt.verify(req.body.token, process.env.JWT_SECRET, (err) => {
       if (err) {
+        console.log("auth.assess.error.invalidtoken");
         return res.status(404).json({
           type: "auth.assess.error.invalidtoken",
           error: err,
         });
       }
       // Token is valid
+      console.log("auth.assess.success.validtoken");
       return res.status(200).json({
         type: "auth.assess.success.validtoken",
       });

@@ -20,7 +20,8 @@ module.exports = notificationCreate = (req, res, next) => {
   notificationToSave
     .save()
     .then(() => {
-      res.status(201).json({
+      console.log("notification.create.success");
+      return res.status(201).json({
         type: "notification.create.success",
         data: {
           id: notificationToSave._id,
@@ -28,13 +29,14 @@ module.exports = notificationCreate = (req, res, next) => {
       });
     })
     .catch((error) => {
-      res.status(400).json({
+      console.log("notification.create.error.oncreate");
+      console.error(error);
+      return res.status(400).json({
         type: "notification.create.error.oncreate",
         error: error,
         data: {
           id: "",
         },
       });
-      console.error(error);
     });
 };

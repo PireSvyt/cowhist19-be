@@ -64,14 +64,16 @@ module.exports = tableDetails_v2 = (req, res, next) => {
         // Add contracts
         table.contracts = contracts;
         // Response
-        res.status(200).json({
+        console.log("table.details.success");
+        return res.status(200).json({
           type: "table.details.success",
           data: {
             table: table,
           },
         });
       } else {
-        res.status(400).json({
+        console.log("table.details.error.onfind");
+        return res.status(400).json({
           type: "table.details.error.onfind",
           data: {
             table: {},
@@ -80,13 +82,14 @@ module.exports = tableDetails_v2 = (req, res, next) => {
       }
     })
     .catch((error) => {
-      res.status(400).json({
+      console.log("table.details.error.onfind");
+      console.error(error);
+      return res.status(400).json({
         type: "table.details.error.onaggregate",
         data: {
           table: {},
         },
         error: error,
       });
-      console.error(error);
     });
 };

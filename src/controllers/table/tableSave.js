@@ -16,15 +16,13 @@ module.exports = tableSave = (req, res, next) => {
   
   */
 
-  console.log("table.tableSave");
+  console.log("table.save");
 
   // Save
   if (req.body._id === "" || req.body._id === undefined) {
-    res.status(403).json({
-      type: "table.save.success.emptyid",
-      data: {
-        id: null,
-      },
+    console.log("table.save.error.emptyid");
+    return res.status(403).json({
+      type: "table.save.error.emptyid",
     });
   } else {
     // Modify
@@ -51,7 +49,8 @@ module.exports = tableSave = (req, res, next) => {
         // Save
         Table.updateOne({ _id: tableToSave._id }, tableToSave)
           .then(() => {
-            res.status(200).json({
+            console.log("table.save.success.modified");
+            return res.status(200).json({
               type: "table.save.success.modified",
               data: {
                 id: tableToSave._id,
@@ -59,25 +58,21 @@ module.exports = tableSave = (req, res, next) => {
             });
           })
           .catch((error) => {
-            res.status(400).json({
+            console.log("table.save.error.onmodify");
+            console.error(error);
+            return res.status(400).json({
               type: "table.save.error.onmodify",
               error: error,
-              data: {
-                id: null,
-              },
             });
-            console.error(error);
           });
       })
       .catch((error) => {
-        res.status(400).json({
+        console.log("table.save.error.onfindtable");
+        console.error(error);
+        return res.status(400).json({
           type: "table.save.error.onfindtable",
           error: error,
-          data: {
-            id: null,
-          },
         });
-        console.error(error);
       });
   }
 };

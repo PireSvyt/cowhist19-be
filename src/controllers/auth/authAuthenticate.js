@@ -18,12 +18,14 @@ module.exports = authAuthenticate = (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
 
   if (token === null) {
+    console.log("auth.authenticate.error.nulltoken");
     return res.status(403).json({
       type: "auth.authenticate.error.nulltoken",
     });
   } else {
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
       if (err) {
+        console.log("auth.authenticate.error.invalidtoken");
         return res.status(403).json({
           type: "auth.authenticate.error.invalidtoken",
           error: err,

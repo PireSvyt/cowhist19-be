@@ -39,33 +39,38 @@ module.exports = userChangePassword = (req, res, next) => {
           user
             .save()
             .then(() => {
-              res.status(200).json({
+              console.log("user.changepassword.success");
+              return res.status(200).json({
                 type: "user.changepassword.success",
               });
             })
             .catch((error) => {
-              res.status(400).json({
+              console.log("user.changepassword.error.onsave");
+              console.error(error);
+              return res.status(400).json({
                 type: "user.changepassword.error.onsave",
                 error: error,
               });
-              console.error(error);
             });
         } else {
-          res.status(403).json({
+          console.log("user.changepassword.error.missingnewpassword");
+          return res.status(403).json({
             type: "user.changepassword.error.missingnewpassword",
           });
         }
       } else {
-        res.status(403).json({
+        console.log("user.changepassword.error.notfound");
+        return res.status(403).json({
           type: "user.changepassword.error.notfound",
         });
       }
     })
     .catch((error) => {
-      res.status(400).json({
+      console.log("user.changepassword.error.onfind");
+      console.error(error);
+      return res.status(400).json({
         type: "user.changepassword.error.onfind",
         error: error,
       });
-      console.error(error);
     });
 };

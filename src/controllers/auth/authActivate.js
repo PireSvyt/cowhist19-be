@@ -18,7 +18,7 @@ module.exports = authActivate = (req, res, next) => {
 
   console.log("auth.activate");
 
-  User.findOne({ activationtoken: req.params.token })
+  User.findOne({ activationtoken: req.body.token })
     .then((user) => {
       if (user) {
         if (user.status === "signedup") {
@@ -28,7 +28,7 @@ module.exports = authActivate = (req, res, next) => {
             .save()
             .then(() => {
               console.log("auth.activate.success.activated");
-              res.status(200).json({
+              return res.status(200).json({
                 type: "auth.activate.success.activated",
                 data: {
                   id: user._id,
@@ -37,18 +37,16 @@ module.exports = authActivate = (req, res, next) => {
             })
             .catch((error) => {
               console.log("auth.activate.error.onsave");
-              res.status(400).json({
+              console.error.(error)
+              return res.status(400).json({
                 type: "auth.activate.error.onsave",
-                error: error,
-                data: {
-                  id: user._id,
-                },
+                error: error
               });
             });
         } else {
           if (user.status === "activated") {
             console.log("auth.activate.success.alreadyctivated");
-            res.status(200).json({
+            return res.status(200).json({
               type: "auth.activate.success.alreadyctivated",
               data: {
                 id: user._id,
@@ -57,21 +55,22 @@ module.exports = authActivate = (req, res, next) => {
           } else {
             // Non discolusre of acount existance
             console.log("auth.activate.error.notfound");
-            res.status(503).json({
+            return res.status(503).json({
               type: "auth.activate.error.notfound",
             });
           }
         }
       } else {
         console.log("auth.activate.error.notfound");
-        res.status(404).json({
+        return res.status(404).json({
           type: "auth.activate.error.notfound",
         });
       }
     })
     .catch((error) => {
       console.log("auth.activate.error.notfound");
-      res.status(500).json({
+      console.error.(error)
+      return res.status(500).json({
         type: "auth.activate.error.notfound",
         error: error,
       });

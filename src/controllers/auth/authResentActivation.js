@@ -28,12 +28,12 @@ module.exports = authResentActivation = (req, res, next) => {
             serviceMailing("signup", user).then((mailing) => {
               if (mailing.type === "mail.mailing.success") {
                 console.log("auth.resentactivation.success");
-                res.status(200).json({
+                return res.status(200).json({
                   type: "auth.resentactivation.success",
                 });
               } else {
                 console.log("auth.resentactivation.error.sendingemail");
-                res.status(400).json({
+                return res.status(400).json({
                   type: "auth.resentactivation.error.sendingemail",
                 });
               }
@@ -41,7 +41,8 @@ module.exports = authResentActivation = (req, res, next) => {
           })
           .catch((error) => {
             console.log("auth.resentactivation.error.updatingtoken");
-            res.status(400).json({
+            console.error.(error)
+            return res.status(400).json({
               type: "auth.resentactivation.error.updatingtoken",
               error: error,
             });
@@ -55,7 +56,8 @@ module.exports = authResentActivation = (req, res, next) => {
     })
     .catch((error) => {
       console.log("auth.resentactivation.error.onfind");
-      res.status(404).json({
+      console.error.(error)
+      return res.status(404).json({
         type: "auth.resentactivation.error.onfind",
         error: error,
       });

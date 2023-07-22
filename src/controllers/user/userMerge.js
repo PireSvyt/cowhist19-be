@@ -114,11 +114,12 @@ module.exports = userMerge = (req, res, next) => {
                             });
                           })
                           .catch((error) => {
-                            res.status(400).json({
+                            console.log("user.merge.error.onfindtables");
+                            console.error(error);
+                            return res.status(400).json({
                               type: "user.merge.error.onfindtables",
                               error: error,
                             });
-                            console.error(error);
                           });
                         // Replace merged user in games
                         Game.find({ "players._id": mergeuser.id })
@@ -140,53 +141,60 @@ module.exports = userMerge = (req, res, next) => {
                             });
                           })
                           .catch((error) => {
-                            res.status(400).json({
+                            console.log("user.merge.error.onfindgames");
+                            console.error(error);
+                            return res.status(400).json({
                               type: "user.merge.error.onfindgames",
                               error: error,
                             });
-                            console.error(error);
                           });
                       })
                       .catch((error) => {
-                        res.status(400).json({
+                        console.log("user.merge.error.onsaveuser");
+                        console.error(error);
+                        return res.status(400).json({
                           type: "user.merge.error.onsaveuser",
                           error: error,
                         });
-                        console.error(error);
                       });
                   }
                 })
                 .catch((error) => {
-                  res.status(500).json({
+                  console.log("user.merge.error.onpasswordcompare");
+                  console.log(error);
+                  return res.status(500).json({
                     type: "user.merge.error.onpasswordcompare",
                     error: error,
                   });
-                  console.log(error);
                 });
             } else {
-              res.status(403).json({
+              console.log("user.merge.error.notfoundmergeuser");
+              return res.status(403).json({
                 type: "user.merge.error.notfoundmergeuser",
               });
             }
           })
           .catch((error) => {
-            res.status(400).json({
+            console.log("user.merge.error.onfindmergeuser");
+            return res.status(400).json({
               type: "user.merge.error.onfindmergeuser",
               error: error,
             });
             console.error(error);
           });
       } else {
-        res.status(403).json({
+        console.log("user.merge.error.notfoundcurrentuser");
+        return res.status(403).json({
           type: "user.merge.error.notfoundcurrentuser",
         });
       }
     })
     .catch((error) => {
-      res.status(400).json({
+      console.log("user.merge.error.onfindcurrentuser");
+      console.error(error);
+      return res.status(400).json({
         type: "user.merge.error.onfindcurrentuser",
         error: error,
       });
-      console.error(error);
     });
 };

@@ -7,7 +7,7 @@ module.exports = gameDelete = (req, res, next) => {
   
   possible response types
   * game.delete.success
-  * game.delete.errorondelete
+  * game.delete.error.ondelete
   
   TODO
   * only users from the table can do this
@@ -18,15 +18,17 @@ module.exports = gameDelete = (req, res, next) => {
 
   Game.deleteOne({ _id: req.params.id })
     .then(() => {
-      res.status(200).json({
+      console.log("game.delete.success");
+      return res.status(200).json({
         type: "game.delete.success",
       });
     })
     .catch((error) => {
-      res.status(400).json({
-        type: "game.delete.errorondelete",
+      console.log("game.delete.error.ondelete");
+      console.error(error);
+      return res.status(400).json({
+        type: "game.delete.error.ondelete",
         error: error,
       });
-      console.error(error);
     });
 };

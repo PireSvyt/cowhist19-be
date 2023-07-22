@@ -11,7 +11,7 @@
       "html": null
     }
   },
-  "passwordreset": {
+  "resetpassword": {
     "en": {
       "subject": "CoWhist19 | Password reset",
       "text": "Hej {{PSEUDO}}!\r\rPassword reset?\rHere is a link you need for this:\r{{PASSWORD_RESET_URL}}\r\rSee you soon,\rThe CoWhist19 team",

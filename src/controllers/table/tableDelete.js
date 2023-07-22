@@ -20,25 +20,28 @@ module.exports = tableDelete = (req, res, next) => {
 
   // Delete table's games
   Game.deleteMany({ table: req.params.id }).catch((error) => {
-    res.status(400).json({
+    console.log("table.delete.error.ondeletegames");
+    console.error(error);
+    return res.status(400).json({
       type: "table.delete.error.ondeletegames",
       error: error,
     });
-    console.error(error);
   });
 
   // Delete table
   Table.deleteOne({ _id: req.params.id })
     .then(() => {
-      res.status(200).json({
+      console.log("table.delete.success");
+      return res.status(200).json({
         type: "table.delete.success",
       });
     })
     .catch((error) => {
-      res.status(400).json({
+      console.log("table.delete.error.ondeletetable");
+      console.error(error);
+      return res.status(400).json({
         type: "table.delete.error.ondeletetable",
         error: error,
       });
-      console.error(error);
     });
 };
