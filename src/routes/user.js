@@ -9,9 +9,7 @@ const userDetails = require("../controllers/user/userDetails.js");
 const userStats = require("../controllers/user/userStats.js");
 const userChangePassword = require("../controllers/user/userChangePassword.js");
 const userMerge = require("../controllers/user/userMerge.js");
-const userResetPassword = require("../controllers/user/userResetPassword.js");
 
-router.post("/v1/resetpassword", userResetPassword);
 
 router.post("/v1/invite", authAuthenticate, userInvite);
 router.delete("/v1", authAuthenticate, userDelete);

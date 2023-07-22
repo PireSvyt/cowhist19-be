@@ -37,10 +37,10 @@ module.exports = authActivate = (req, res, next) => {
             })
             .catch((error) => {
               console.log("auth.activate.error.onsave");
-              console.error.(error)
+              console.error(error);
               return res.status(400).json({
                 type: "auth.activate.error.onsave",
-                error: error
+                error: error,
               });
             });
         } else {
@@ -69,7 +69,7 @@ module.exports = authActivate = (req, res, next) => {
     })
     .catch((error) => {
       console.log("auth.activate.error.notfound");
-      console.error.(error)
+      console.error(error);
       return res.status(500).json({
         type: "auth.activate.error.notfound",
         error: error,

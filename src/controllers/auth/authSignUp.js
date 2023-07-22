@@ -85,13 +85,21 @@ module.exports = authSignup = (req, res, next) => {
         user
           .save()
           .then(() => {
-            serviceMailing("signup", user);
-            console.log("auth.signup.success.signedup");
-            return res.status(201).json({
-              type: "auth.signup.success.signedup",
-              data: {
-                id: user._id,
-              },
+            serviceMailing("signup", user).then((mailing) => {
+              if (mailing.type === "mail.mailing.success") {
+                console.log("auth.signup.success.signedup");
+                return res.status(201).json({
+                  type: "auth.signup.success.signedup",
+                  data: {
+                    id: user._id,
+                  },
+                });
+              } else {
+                console.log("auth.signup.error.sendingemail");
+                return res.status(400).json({
+                  type: "auth.signup.error.sendingemail",
+                });
+              }
             });
           })
           .catch((error) => {
