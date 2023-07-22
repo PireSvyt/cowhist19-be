@@ -8,15 +8,15 @@ const authAssess = require("../controllers/auth/authAssess.js");
 const authExistingPseudo = require("../controllers/auth/authExistingPseudo.js");
 const authSendActivation = require("../controllers/auth/authSendActivation.js");
 const authSendPassword = require("../controllers/auth/authSendPassword.js");
-const authResetPassword = require("../controllers/user/authResetPassword.js");
+const authPasswordReset = require("../controllers/user/authPasswordReset.js");
 
 router.post("/v1/signup", authSignUp);
 router.post("/v1/activate", authActivate);
 router.post("/v1/signin", authSignIn);
 router.post("/v1/assess", authAssess);
 router.post("/v1/existingpseudo", authExistingPseudo);
-router.post("/v1/resentactivation", authSendActivation);
-router.post("/v1/resetpassword", authSendPassword);
-router.post("/v1/resetpassword", authResetPassword);
+router.post("/v1/sendactivation", authSendActivation);
+router.post("/v1/sendpassword", authSendPassword);
+router.post("/v1/passwordreset", authPasswordReset);
 
 module.exports = router;
