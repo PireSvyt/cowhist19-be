@@ -1,4 +1,5 @@
 const Table = require("../../models/Table.js");
+const tableCreate = require("./tableCreate.js");
 
 module.exports = tableSave = (req, res, next) => {
   /*
@@ -6,9 +7,11 @@ module.exports = tableSave = (req, res, next) => {
   saves a table
   
   possible response types
-  * table.save.error.emptyid
+  * table.save.success.created
   * table.save.error.oncreate
   * table.save.success.modified
+  * table.save.error.onfindtable
+  * table.save.error.onmodify
   
   TODO
   * check user ids existance
@@ -20,9 +23,22 @@ module.exports = tableSave = (req, res, next) => {
 
   // Save
   if (req.body._id === "" || req.body._id === undefined) {
-    console.log("table.save.error.emptyid");
-    return res.status(403).json({
-      type: "table.save.error.emptyid",
+    // Create table
+    tableCreate(req.body).then((cres) => {
+      console.log("cres", cres);
+      switch (cres.data.type) {
+        case "table.create.success.created":
+          console.log("table.save.success.created");
+          return res.status(201).json({
+            type: "table.save.success.created",
+          });
+          break;
+        default:
+          console.log("table.create.error.oncreate");
+          return res.status(500).json({
+            type: "table.create.error.oncreate",
+          });
+      }
     });
   } else {
     // Modify

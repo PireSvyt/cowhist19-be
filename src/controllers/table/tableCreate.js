@@ -17,53 +17,42 @@ module.exports = tableCreate = (req, res, next) => {
 
   console.log("table.tableCreate");
 
+  // Prep
+  delete req.body._id;
+
   // Save
-  if (req.body._id === "" || req.body._id === undefined) {
-    // Prep
-    delete req.body._id;
+  let tableToSave = { ...req.body };
+  let tableUsers = [];
+  tableToSave.users.forEach((user) => {
+    if (user.status !== "guest") {
+      tableUsers.push(user._id);
+    }
+  });
+  tableToSave.users = tableUsers;
+  tableToSave = new Table(tableToSave);
+  tableToSave.id = tableToSave._id;
 
-    // Save
-    let tableToSave = { ...req.body };
-    let tableUsers = [];
-    tableToSave.users.forEach((user) => {
-      if (user.status !== "guest") {
-        tableUsers.push(user._id);
-      }
-    });
-    tableToSave.users = tableUsers;
-    tableToSave = new Table(tableToSave);
-    tableToSave.id = tableToSave._id;
-
-    // Save
-    tableToSave
-      .save()
-      .then(() => {
-        console.log("table.create.success.created");
-        return res.status(201).json({
-          type: "table.create.success.created",
-          data: {
-            id: tableToSave._id,
-          },
-        });
-      })
-      .catch((error) => {
-        console.log("table.create.error.oncreate");
-        console.log(error);
-        return res.status(400).json({
-          type: "table.create.error.oncreate",
-          error: error,
-          data: {
-            id: null,
-          },
-        });
+  // Save
+  tableToSave
+    .save()
+    .then(() => {
+      console.log("table.create.success.created");
+      return res.status(201).json({
+        type: "table.create.success.created",
+        data: {
+          id: tableToSave._id,
+        },
       });
-  } else {
-    console.log("table.create.error.idprovided");
-    return res.status(403).json({
-      type: "table.create.error.idprovided",
-      data: {
-        id: null,
-      },
+    })
+    .catch((error) => {
+      console.log("table.create.error.oncreate");
+      console.log(error);
+      return res.status(400).json({
+        type: "table.create.error.oncreate",
+        error: error,
+        data: {
+          id: null,
+        },
+      });
     });
-  }
 };
