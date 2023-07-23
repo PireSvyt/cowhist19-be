@@ -19,20 +19,21 @@ module.exports = authExistingPseudo = (req, res, next) => {
       if (!user) {
         // Pseudo is available
         console.log("auth.existingpseudo.false");
-        res.status(200).json({
+        return res.status(200).json({
           type: "auth.existingpseudo.false",
         });
       } else {
         // Pseudo is being used
         console.log("auth.existingpseudo.true");
-        res.status(403).json({
+        return res.status(403).json({
           type: "auth.existingpseudo.true",
         });
       }
     })
     .catch((error) => {
       console.log("auth.existingpseudo.error.onfind");
-      res.status(500).json({
+      console.error(error);
+      return res.status(500).json({
         type: "auth.existingpseudo.error.onfind",
         error: error,
       });
