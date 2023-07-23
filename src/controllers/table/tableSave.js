@@ -7,8 +7,7 @@ module.exports = tableSave = (req, res, next) => {
   saves a table
   
   possible response types
-  * table.save.success.created
-  * table.save.error.oncreate
+  * table.save.error.emptyid
   * table.save.success.modified
   * table.save.error.onfindtable
   * table.save.error.onmodify
@@ -23,22 +22,10 @@ module.exports = tableSave = (req, res, next) => {
 
   // Save
   if (req.body._id === "" || req.body._id === undefined) {
-    // Create table
-    tableCreate(req.body).then((cres) => {
-      console.log("cres", cres);
-      switch (cres.data.type) {
-        case "table.create.success.created":
-          console.log("table.save.success.created");
-          return res.status(201).json({
-            type: "table.save.success.created",
-          });
-          break;
-        default:
-          console.log("table.create.error.oncreate");
-          return res.status(500).json({
-            type: "table.create.error.oncreate",
-          });
-      }
+    console.log("table.save.error.emptyid");
+    return res.status(503).json({
+      type: "table.save.error.emptyid",
+      error: error,
     });
   } else {
     // Modify
