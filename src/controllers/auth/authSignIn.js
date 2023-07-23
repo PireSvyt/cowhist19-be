@@ -44,32 +44,21 @@ module.exports = authSignIn = (req, res, next) => {
         console.log("auth.signin.error.notfound");
         return res.status(404).json({
           type: "auth.signin.error.notfound",
-          data: {
-            id: "",
-            token: "",
-          },
         });
       } else {
         let attemptPassword = req.body.password;
-        // Password decrypt
         if (req.body.encryption === true) {
           attemptPassword = CryptoJS.AES.decrypt(
             attemptPassword,
             process.env.ENCRYPTION_KEY
           ).toString(CryptoJS.enc.Utf8);
         }
-
-        // Password compare
         bcrypt
           .compare(attemptPassword, user.password)
           .then((valid) => {
             if (!valid) {
               return res.status(401).json({
                 type: "auth.signin.error.invalidpassword",
-                data: {
-                  id: "",
-                  token: "",
-                },
               });
             } else {
               switch (user.status) {
@@ -77,10 +66,6 @@ module.exports = authSignIn = (req, res, next) => {
                   console.log("auth.signin.error.statussignedup");
                   return res.status(401).json({
                     type: "auth.signin.error.statussignedup",
-                    data: {
-                      id: user._id,
-                      token: "",
-                    },
                   });
                   break;
                 case "activated":
@@ -116,10 +101,6 @@ module.exports = authSignIn = (req, res, next) => {
                   console.log("auth.signin.error.statusunknown");
                   return res.status(401).json({
                     type: "auth.signin.error.statusunknown",
-                    data: {
-                      id: user._id,
-                      token: "",
-                    },
                   });
               }
             }
@@ -130,10 +111,6 @@ module.exports = authSignIn = (req, res, next) => {
             return res.status(500).json({
               type: "auth.signin.error.onpasswordcompare",
               error: error,
-              data: {
-                id: "",
-                token: "",
-              },
             });
           });
       }
@@ -143,10 +120,6 @@ module.exports = authSignIn = (req, res, next) => {
       return res.status(500).json({
         type: "auth.signin.error.onfind",
         error: error,
-        data: {
-          id: "",
-          token: "",
-        },
       });
     });
 };
