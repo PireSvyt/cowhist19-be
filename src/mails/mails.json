@@ -13,12 +13,12 @@
   },
   "resetpassword": {
     "en": {
-      "subject": "CoWhist19 | Password reset",
+      "subject": "CoWhist19 | Reset your password",
       "text": "Hej {{PSEUDO}}!\r\rPassword reset?\rHere is a link you need for this:\r{{PASSWORD_RESET_URL}}\r\rSee you soon,\rThe CoWhist19 team",
       "html": null
     },
     "fr": {
-      "subject": "CoWhist19 | Renouvellement de mot de passe",
+      "subject": "CoWhist19 | Renouvelle ton mot de passe",
       "text": "Hej {{PSEUDO}}!\r\r Renouvellement du mot de passe?\rVoici un lien pour ça:\r{{PASSWORD_RESET_URL}}\r\rA bientôt,\rL'équipe CoWhist19",
       "html": null
     }

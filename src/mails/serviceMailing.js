@@ -49,7 +49,7 @@ module.exports = async function serviceMailing(mail, details = {}) {
           {
             token: "{{PASSWORD_RESET_URL}}",
             value:
-              "https://cowhist19.vercel.app/resetpassword/" +
+              "https://cowhist19.vercel.app/passwordreset/" +
               details.passwordtoken,
           },
         ];
