@@ -17,17 +17,47 @@ const tableStats = require("../controllers/table/tableStats.js");
 const tableExistingName = require("../controllers/table/tableExistingName.js");
 
 router.post("/v1/create", authAuthenticate, userIsActivated, tableCreate);
-router.post("/v1/existingname", authAuthenticate, userIsActivated tableExistingName);
+router.post(
+  "/v1/existingname",
+  authAuthenticate,
+  userIsActivated,
+  tableExistingName
+);
 
-router.post("/v2/save", authAuthenticate, userIsActivated, tableAuthenticate, tableSave);
-router.get("/v2/:id", authAuthenticate, userIsActivated, tableAuthenticate, tableDetails_v2);
-router.delete("/v1/:id", authAuthenticate, userIsActivated, tableAuthenticate, tableDelete);
+router.post(
+  "/v2/save",
+  authAuthenticate,
+  userIsActivated,
+  tableAuthenticate,
+  tableSave
+);
+router.get(
+  "/v2/:id",
+  authAuthenticate,
+  userIsActivated,
+  tableAuthenticate,
+  tableDetails_v2
+);
+router.delete(
+  "/v1/:id",
+  authAuthenticate,
+  userIsActivated,
+  tableAuthenticate,
+  tableDelete
+);
 router.post(
   "/v3/history/:id",
-  authAuthenticate, userIsActivated,
+  authAuthenticate,
+  userIsActivated,
   tableAuthenticate,
   tableHistory_v3
 );
-router.post("/v1/stats/:id", authAuthenticate, userIsActivated, tableAuthenticate, tableStats);
+router.post(
+  "/v1/stats/:id",
+  authAuthenticate,
+  userIsActivated,
+  tableAuthenticate,
+  tableStats
+);
 
 module.exports = router;
