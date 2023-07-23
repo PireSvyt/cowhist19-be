@@ -9,7 +9,7 @@ module.exports = tableSave = (req, res, next) => {
   possible response types
   * table.save.error.emptyid
   * table.save.success.modified
-  * table.save.error.onfindtable
+  * table.save.error.onfind
   * table.save.error.onmodify
   
   TODO
@@ -70,10 +70,10 @@ module.exports = tableSave = (req, res, next) => {
           });
       })
       .catch((error) => {
-        console.log("table.save.error.onfindtable");
+        console.log("table.save.error.onfind");
         console.error(error);
         return res.status(400).json({
-          type: "table.save.error.onfindtable",
+          type: "table.save.error.onfind",
           error: error,
         });
       });
