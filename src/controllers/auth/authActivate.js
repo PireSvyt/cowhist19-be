@@ -18,7 +18,7 @@ module.exports = authActivate = (req, res, next) => {
 
   console.log("auth.activate");
 
-  User.findOne({ activationtoken: req.body.token })
+  User.findOne({ activationtoken: req.body.token, login: req.body.login })
     .then((user) => {
       if (user) {
         if (user.status === "signedup") {
