@@ -22,7 +22,8 @@ module.exports = feedbackCreate = (req, res, next) => {
   feedbackToSave
     .save()
     .then(() => {
-      res.status(201).json({
+      console.log("feedback.create.success");
+      return res.status(201).json({
         type: "feedback.create.success",
         data: {
           id: feedbackToSave._id,
@@ -30,7 +31,8 @@ module.exports = feedbackCreate = (req, res, next) => {
       });
     })
     .catch((error) => {
-      res.status(400).json({
+      console.log("feedback.create.error.oncreate");
+      return res.status(400).json({
         type: "feedback.create.error.oncreate",
         error: error,
         data: {

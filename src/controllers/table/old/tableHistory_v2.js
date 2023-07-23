@@ -1,8 +1,7 @@
 const Table = require("../../models/Table.js");
-const User = require("../../models/User.js");
 const Game = require("../../models/Game.js");
 
-module.exports = tableHistory_v3 = (req, res, next) => {
+module.exports = tableHistory_v2 = (req, res, next) => {
   /*
   
   provides a list of games sorted per date
@@ -10,18 +9,8 @@ module.exports = tableHistory_v3 = (req, res, next) => {
   body parameters
   * need : for post processing purpose
     - list : simple list of existing fields without post processing
-  * games.lastid : id of the last game loaded, null meaning non are loaded
-  * games.number : number of games to retrive from lastid
-  
-  outcomes
-  * type
-  * data
-    * games : array of games
-    * more : boolean indicating if there are more games to load
-    * action : string indicating if the games shall be considered as a new array or as a complementary array
-        * error : error during processing
-        * new : games are considered as a new payload (flush previous if any)
-        * append : games complement previous if any (consolidation needed between existing and payload)
+  * games.index : index of first to retrieve from last one (in time)
+  * games.number : number of games to retrive from games.index
   
   possible response types
   * table.history.success
@@ -29,9 +18,12 @@ module.exports = tableHistory_v3 = (req, res, next) => {
   * table.history.accessdenied.needmissmatch
   * table.history.error.findinggames
   
+  TODO
+  * only users from the table can do this
+  
   */
 
-  console.log("table.tableHistory_v3");
+  console.log("table.tableHistory_v2");
 
   // Initialize
   var status = 500;
@@ -70,8 +62,6 @@ module.exports = tableHistory_v3 = (req, res, next) => {
       type: type,
       data: {
         games: [],
-        more: null,
-        action: null,
       },
     });
   } else {
@@ -116,32 +106,12 @@ module.exports = tableHistory_v3 = (req, res, next) => {
           Game.find(filters, fields)
             .then((games) => {
               games.sort(compare);
-              let action = "error";
-              // Are games already loaded
-              let lastidpos = 0;
-              if (req.body.games.lastid !== null) {
-                // Find last game loaded
-                lastidpos = games.findIndex((game) => {
-                  return game._id.toString() === req.body.games.lastid;
-                });
-                if (lastidpos === -1) {
-                  // Last id not found :/
-                  action = "error";
-                  lastidpos = 0;
-                } else {
-                  action = "append";
-                  lastidpos = lastidpos + 1;
-                }
-              } else {
-                action = "new";
-              }
-              // Shorten payload
               games = games.slice(
-                lastidpos, // from N, ex. 0
-                lastidpos + req.body.games.number + 1 // to N+M, ex. 0+10
+                req.body.games.index, // from 0
+                req.body.games.index + req.body.games.number // to 10
               );
               // Check if more
-              // games [ N ... N+M ] length = M+1, ex. 0-10 -> 11 games
+              // games [ 0 ... 10 ] length = 11
               let more = games.length > req.body.games.number;
               // Shorten to desired length
               if (more) {
@@ -180,36 +150,43 @@ module.exports = tableHistory_v3 = (req, res, next) => {
                 newGames.push(newGame);
               });
               // Response
-              console.log("table.history.success");
-              return res.status(200).json({
+              res.status(200).json({
                 type: "table.history.success",
                 data: {
                   games: newGames,
                   more: more,
-                  action: action,
                 },
               });
             })
             .catch((error) => {
-              console.log("table.history.error.findinggames");
               console.error(error);
-              return res.status(400).json({
+              res.status(400).json({
                 type: "table.history.error.findinggames",
+                data: {
+                  games: [],
+                  more: null,
+                },
                 error: error,
               });
             });
         } else {
-          console.log("table.history.error.onfindtable");
-          return res.status(400).json({
+          res.status(400).json({
             type: "table.history.error.onfindtable",
+            data: {
+              games: [],
+              more: null,
+            },
           });
         }
       })
       .catch((error) => {
-        console.log("table.history.error.onaggregate");
         console.error(error);
         res.status(400).json({
           type: "table.history.error.onaggregate",
+          data: {
+            games: [],
+            more: null,
+          },
           error: error,
         });
       });

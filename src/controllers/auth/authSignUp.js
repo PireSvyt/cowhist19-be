@@ -1,4 +1,5 @@
 const User = require("../../models/User.js");
+const serviceMailing = require("../../mails/serviceMailing.js");
 var random_string = require("./services/random_string.js");
 
 module.exports = authSignup = (req, res, next) => {
@@ -7,8 +8,12 @@ module.exports = authSignup = (req, res, next) => {
   signup a user
   
   IMPORTANT NOTE : 
-    AT SIGN UP ENCRYPTION IS DONE IN FRONTEND, PASSWORD IS SAVED AS IS
-    AT SIGN IN NO ENCRYPTION IS DONE, COMPARE HAPPENS IN BACKEND
+    ON SIGN UP,
+      ENCRYPTION IS DONE IN FRONTEND
+      PASSWORD IS SAVED AS IS
+    ON SIGN IN
+      NO ENCRYPTION IS DONE
+      COMPARE HAPPENS IN BACKEND
   
   possible response types
   * auth.signup.success.signedup
@@ -36,7 +41,9 @@ module.exports = authSignup = (req, res, next) => {
           user
             .save()
             .then(() => {
-              res.status(200).json({
+              serviceMailing("signup", user);
+              console.log("auth.signup.success.signedup");
+              return res.status(200).json({
                 type: "auth.signup.success.signedup",
                 data: {
                   id: user._id,
@@ -44,7 +51,8 @@ module.exports = authSignup = (req, res, next) => {
               });
             })
             .catch((error) => {
-              res.status(400).json({
+              console.log("auth.signup.error.savingfrominvited");
+              return res.status(400).json({
                 type: "auth.signup.error.savingfrominvited",
                 error: error,
                 data: {
@@ -54,6 +62,7 @@ module.exports = authSignup = (req, res, next) => {
             });
         } else {
           // Already existing
+          console.log("auth.signup.success.alreadysignedup");
           return res.status(409).json({
             type: "auth.signup.success.alreadysignedup",
             data: {
@@ -76,15 +85,26 @@ module.exports = authSignup = (req, res, next) => {
         user
           .save()
           .then(() => {
-            res.status(201).json({
-              type: "auth.signup.success.signedup",
-              data: {
-                id: user._id,
-              },
+            serviceMailing("signup", user).then((mailing) => {
+              if (mailing.type === "mail.mailing.success") {
+                console.log("auth.signup.success.signedup");
+                return res.status(201).json({
+                  type: "auth.signup.success.signedup",
+                  data: {
+                    id: user._id,
+                  },
+                });
+              } else {
+                console.log("auth.signup.error.sendingemail");
+                return res.status(400).json({
+                  type: "auth.signup.error.sendingemail",
+                });
+              }
             });
           })
           .catch((error) => {
-            res.status(400).json({
+            console.log("auth.signup.error.savingoncreate");
+            return res.status(400).json({
               type: "auth.signup.error.savingoncreate",
               error: error,
               data: {
@@ -95,7 +115,8 @@ module.exports = authSignup = (req, res, next) => {
       }
     })
     .catch((error) => {
-      res.status(500).json({
+      console.log("auth.signup.error.notfound");
+      return res.status(500).json({
         type: "auth.signup.error.notfound",
         error: error,
         data: {

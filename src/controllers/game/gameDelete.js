@@ -1,5 +1,4 @@
 const Game = require("../../models/Game.js");
-const serviceCheckAccess = require("../table/services/serviceCheckAccess.js");
 
 module.exports = gameDelete = (req, res, next) => {
   /*
@@ -8,7 +7,7 @@ module.exports = gameDelete = (req, res, next) => {
   
   possible response types
   * game.delete.success
-  * game.delete.errorondelete
+  * game.delete.error.ondelete
   
   TODO
   * only users from the table can do this
@@ -17,35 +16,19 @@ module.exports = gameDelete = (req, res, next) => {
 
   console.log("game.delete");
 
-  Game.findOne({ _id: req.params.id }, "table contract outcome players").then(
-    (game) => {
-      // Check access
-      serviceCheckAccess(game.table, req.headers["authorization"]).then(
-        (access) => {
-          if (!access.outcome) {
-            // Unauthorized
-            res.status(401).json({
-              type: "game.delete.error.deniedaccess",
-              error: access.reason,
-            });
-          } else {
-            // Delete
-            Game.deleteOne({ _id: req.params.id })
-              .then(() => {
-                res.status(200).json({
-                  type: "game.delete.success",
-                });
-              })
-              .catch((error) => {
-                res.status(400).json({
-                  type: "game.delete.errorondelete",
-                  error: error,
-                });
-                console.error(error);
-              });
-          }
-        }
-      );
-    }
-  );
+  Game.deleteOne({ _id: req.params.id })
+    .then(() => {
+      console.log("game.delete.success");
+      return res.status(200).json({
+        type: "game.delete.success",
+      });
+    })
+    .catch((error) => {
+      console.log("game.delete.error.ondelete");
+      console.error(error);
+      return res.status(400).json({
+        type: "game.delete.error.ondelete",
+        error: error,
+      });
+    });
 };

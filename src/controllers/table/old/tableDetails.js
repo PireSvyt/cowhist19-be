@@ -1,8 +1,7 @@
 const Table = require("../../models/Table.js");
 const contracts = require("../../resources/contracts.json");
-const { random_id } = require("../../resources/toolkit");
 
-module.exports = tableDetails_v2 = (req, res, next) => {
+module.exports = tableDetails = (req, res, next) => {
   /*
   
   provides the details of a table
@@ -54,26 +53,17 @@ module.exports = tableDetails_v2 = (req, res, next) => {
     .then((tables) => {
       if (tables.length === 1) {
         let table = tables[0];
-        // Add guest players
-        for (var guest = 1; guest <= table.guests; guest++) {
-          table.players.push({
-            _id: random_id(),
-            status: "guest",
-          });
-        }
-        // Add contracts
+        // Package for front end
         table.contracts = contracts;
         // Response
-        console.log("table.details.success");
-        return res.status(200).json({
+        res.status(200).json({
           type: "table.details.success",
           data: {
             table: table,
           },
         });
       } else {
-        console.log("table.details.error.onfind");
-        return res.status(400).json({
+        res.status(400).json({
           type: "table.details.error.onfind",
           data: {
             table: {},
@@ -82,14 +72,13 @@ module.exports = tableDetails_v2 = (req, res, next) => {
       }
     })
     .catch((error) => {
-      console.log("table.details.error.onfind");
-      console.error(error);
-      return res.status(400).json({
+      res.status(400).json({
         type: "table.details.error.onaggregate",
         data: {
           table: {},
         },
         error: error,
       });
+      console.error(error);
     });
 };

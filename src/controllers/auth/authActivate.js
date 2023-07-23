@@ -4,8 +4,9 @@ module.exports = authActivate = (req, res, next) => {
   /*
   
   activate a user
-  once signed up and he reached the url with the token
+  once signed up and he recieves an email to reach the url with the token
   then his status is switched to activated
+  (only activated user have access to the product capabilities)
   
   possible response types
   * auth.activate.success.activated
@@ -17,18 +18,17 @@ module.exports = authActivate = (req, res, next) => {
 
   console.log("auth.activate");
 
-  User.findOne({ activationtoken: req.params.id })
+  User.findOne({ activationtoken: req.body.token, login: req.body.login })
     .then((user) => {
-      if (user !== undefined) {
-        // Signedup check
+      if (user) {
         if (user.status === "signedup") {
           user.status = "activated";
-
           // User saving
           user
             .save()
             .then(() => {
-              res.status(200).json({
+              console.log("auth.activate.success.activated");
+              return res.status(200).json({
                 type: "auth.activate.success.activated",
                 data: {
                   id: user._id,
@@ -36,47 +36,43 @@ module.exports = authActivate = (req, res, next) => {
               });
             })
             .catch((error) => {
-              res.status(400).json({
+              console.log("auth.activate.error.onsave");
+              console.error(error);
+              return res.status(400).json({
                 type: "auth.activate.error.onsave",
                 error: error,
-                data: {
-                  id: user._id,
-                },
               });
             });
         } else {
           if (user.status === "activated") {
-            res.status(200).json({
+            console.log("auth.activate.success.alreadyctivated");
+            return res.status(200).json({
               type: "auth.activate.success.alreadyctivated",
               data: {
                 id: user._id,
               },
             });
           } else {
-            return res.status(202).json({
+            // Non discolusre of acount existance
+            console.log("auth.activate.error.notfound");
+            return res.status(503).json({
               type: "auth.activate.error.notfound",
-              data: {
-                id: "",
-              },
             });
           }
         }
       } else {
-        return res.status(202).json({
+        console.log("auth.activate.error.notfound");
+        return res.status(404).json({
           type: "auth.activate.error.notfound",
-          data: {
-            id: "",
-          },
         });
       }
     })
     .catch((error) => {
-      res.status(500).json({
+      console.log("auth.activate.error.notfound");
+      console.error(error);
+      return res.status(500).json({
         type: "auth.activate.error.notfound",
         error: error,
-        data: {
-          id: "",
-        },
       });
     });
 };

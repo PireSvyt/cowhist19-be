@@ -21,7 +21,8 @@ module.exports = userTables = (req, res, next) => {
 
   Table.find({ users: decodedToken.id }, "name")
     .then((tables) => {
-      res.status(200).json({
+      console.log("user.tables.success");
+      return res.status(200).json({
         type: "user.tables.success",
         data: {
           tables: tables,
@@ -29,13 +30,14 @@ module.exports = userTables = (req, res, next) => {
       });
     })
     .catch((error) => {
-      res.status(400).json({
+      console.log("user.tables.error.onfind");
+      console.error(error);
+      return res.status(400).json({
         type: "user.tables.error.onfind",
         error: error,
         data: {
           tables: [],
         },
       });
-      console.error(error);
     });
 };

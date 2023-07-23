@@ -12,8 +12,8 @@ const feedbackSchema = mongoose.Schema(
     userid: { type: String, required: true },
     consent: { type: Boolean, required: true },
     source: { type: String, required: true },
-    tag: { type: String, required: false },
-    text: { type: String, required: false },
+    tag: { type: String },
+    text: { type: String },
   },
   { strict: true }
 );

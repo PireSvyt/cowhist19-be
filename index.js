@@ -40,7 +40,7 @@ app.use("/notification", notificationRoutes);
 
 // Landing
 app.get("/", (req, res) => {
-  res.send("<h1>Cowhist19-BE</h1>");
+  res.send("<h1>Cowhist19© back end</h1>");
 });
 
 module.exports = app;

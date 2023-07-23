@@ -2,20 +2,60 @@ const express = require("express");
 const router = express.Router();
 
 const authAuthenticate = require("../controllers/auth/authAuthenticate.js");
-const tablesByPlayers = require("../controllers/admin/tablesByPlayers.js");
-const tablesByGames = require("../controllers/admin/tablesByGames.js");
-const usersByStatus = require("../controllers/admin/usersByStatus.js");
-const objectCount = require("../controllers/admin/objectCount.js");
-const populate = require("../controllers/admin/populate.js");
-const feedbackList = require("../controllers/admin/feedbackList.js");
-const feedbackClose = require("../controllers/admin/feedbackClose.js");
+const adminAuthenticate = require("../controllers/admin/adminAuthenticate.js");
 
-router.get("/v1/tablesbyplayers", authAuthenticate, tablesByPlayers);
-router.get("/v1/tablesbygames", authAuthenticate, tablesByGames);
-router.get("/v1/usersbystatus", authAuthenticate, usersByStatus);
-router.get("/v1/objectcount", authAuthenticate, objectCount);
-router.post("/v1/populate", authAuthenticate, populate);
-router.post("/v1/feedbacklist", authAuthenticate, feedbackList);
-router.post("/v1/feedbackclose", authAuthenticate, feedbackClose);
+const adminGetTablesByPlayers = require("../controllers/admin/adminGetTablesByPlayers.js");
+const adminGetTablesByGames = require("../controllers/admin/adminGetTablesByGames.js");
+const adminGetUsersByStatus = require("../controllers/admin/adminGetUsersByStatus.js");
+const adminGetObjectCount = require("../controllers/admin/adminGetObjectCount.js");
+const adminGetFeedbackList = require("../controllers/admin/adminGetFeedbackList.js");
+
+const adminPopulate = require("../controllers/admin/adminPopulate.js");
+const adminFeedbackClose = require("../controllers/admin/adminFeedbackClose.js");
+const adminEmailTest = require("../controllers/admin/adminEmailTest.js");
+
+router.get(
+  "/v1/tablesbyplayers",
+  authAuthenticate,
+  adminAuthenticate,
+  adminGetTablesByPlayers
+);
+router.get(
+  "/v1/tablesbygames",
+  authAuthenticate,
+  adminAuthenticate,
+  adminGetTablesByGames
+);
+router.get(
+  "/v1/usersbystatus",
+  authAuthenticate,
+  adminAuthenticate,
+  adminGetUsersByStatus
+);
+router.get(
+  "/v1/objectcount",
+  authAuthenticate,
+  adminAuthenticate,
+  adminGetObjectCount
+);
+router.post(
+  "/v1/feedbacklist",
+  authAuthenticate,
+  adminAuthenticate,
+  adminGetFeedbackList
+);
+router.post("/v1/populate", authAuthenticate, adminAuthenticate, adminPopulate);
+router.post(
+  "/v1/feedbackclose",
+  authAuthenticate,
+  adminAuthenticate,
+  adminFeedbackClose
+);
+router.get(
+  "/v1/emailtest",
+  authAuthenticate,
+  adminAuthenticate,
+  adminEmailTest
+);
 
 module.exports = router;

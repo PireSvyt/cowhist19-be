@@ -9,7 +9,7 @@ const notificationSchema = mongoose.Schema(
     id: { type: String, required: true, unique: true },
     date: { type: Date, required: true },
     title: { type: String, required: true },
-    explanation: { type: String, required: false },
+    explanation: { type: String },
   },
   { strict: true }
 );

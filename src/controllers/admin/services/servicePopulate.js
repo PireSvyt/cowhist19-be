@@ -13,7 +13,7 @@ module.exports = async function servicePopulate(reqInputs) {
   
   */
 
-  console.log("admin.servicePopulate");
+  console.log("admin.servicepopulate");
 
   return new Promise((resolve, reject) => {
     let allWentWell = true;
@@ -199,11 +199,11 @@ module.exports = async function servicePopulate(reqInputs) {
         // Outcome
         if (allWentWell) {
           resolve({
-            outcome: "success",
+            type: "admin.servicepopulate.success",
           });
         } else {
           resolve({
-            outcome: "error",
+            type: "admin.servicepopulate.error",
             error: "all went not well",
           });
         }
@@ -211,7 +211,7 @@ module.exports = async function servicePopulate(reqInputs) {
       .catch((err) => {
         console.log(err);
         resolve({
-          outcome: "error",
+          type: "admin.servicepopulate.error",
           error: err,
         });
       });

@@ -11,7 +11,9 @@ module.exports = authSignIn = (req, res, next) => {
   sign in a user
   sends back a jwt token
   
-  IMPORTANT NOTE : PASSWORD IS ENCRYPTED IN FE AND DECRYPTED FOR BCRYPT COMPARE
+  IMPORTANT NOTE : 
+    PASSWORD IS ENCRYPTED IN FRONTEND 
+    AND DECRYPTED FOR BCRYPT COMPARE HERE
   
   possible response types
   * auth.signin.success
@@ -19,6 +21,8 @@ module.exports = authSignIn = (req, res, next) => {
   * auth.signin.error.onfind
   * auth.signin.error.invalidpassword
   * auth.signin.error.onpasswordcompare
+  * auth.signin.error.statussignedup
+  * auth.signin.error.statusunknown
   
   */
 
@@ -37,85 +41,85 @@ module.exports = authSignIn = (req, res, next) => {
     .then((user) => {
       if (!user) {
         // Inexisting user
+        console.log("auth.signin.error.notfound");
         return res.status(404).json({
           type: "auth.signin.error.notfound",
-          data: {
-            id: "",
-            token: "",
-          },
         });
       } else {
         let attemptPassword = req.body.password;
-        // Password decrypt
         if (req.body.encryption === true) {
           attemptPassword = CryptoJS.AES.decrypt(
             attemptPassword,
             process.env.ENCRYPTION_KEY
           ).toString(CryptoJS.enc.Utf8);
         }
-
-        // Password compare
         bcrypt
           .compare(attemptPassword, user.password)
           .then((valid) => {
             if (!valid) {
               return res.status(401).json({
                 type: "auth.signin.error.invalidpassword",
-                data: {
-                  id: "",
-                  token: "",
-                },
               });
             } else {
-              // Store sign in date
-              if (user.connection === undefined) {
-                user.connection = {};
-              }
-              if (user.connection.current !== undefined) {
-                user.connection.last = user.connection.current;
-              }
-              user.connection.current = new Date();
-              user.save();
-              // Return response
-              return res.status(200).json({
-                type: "auth.signin.success",
-                data: {
-                  id: user._id,
-                  token: jwt.sign(
-                    {
-                      id: user._id,
-                      status: user.status,
-                    },
-                    process.env.JWT_SECRET,
-                    {
-                      expiresIn: "24h",
+              switch (user.status) {
+                case "signedup":
+                  console.log("auth.signin.error.statussignedup");
+                  return res.status(401).json({
+                    type: "auth.signin.error.statussignedup",
+                  });
+                  break;
+                case "activated":
+                  // Store sign in date
+                  /*if (user.connection === undefined) {
+                      user.connection = {};
                     }
-                  ),
-                },
-              });
+                    if (user.connection.current !== undefined) {
+                      user.connection.last = user.connection.current;
+                    }
+                    user.connection.current = new Date();
+                    user.save();*/
+                  // Return response
+                  console.log("auth.signin.success");
+                  return res.status(200).json({
+                    type: "auth.signin.success",
+                    data: {
+                      id: user._id,
+                      token: jwt.sign(
+                        {
+                          id: user._id,
+                          status: user.status,
+                        },
+                        process.env.JWT_SECRET,
+                        {
+                          expiresIn: "72h",
+                        }
+                      ),
+                    },
+                  });
+                  break;
+                default:
+                  console.log("auth.signin.error.statusunknown");
+                  return res.status(401).json({
+                    type: "auth.signin.error.statusunknown",
+                  });
+              }
             }
           })
           .catch((error) => {
+            console.log("auth.signin.error.onpasswordcompare");
             console.log(error);
             return res.status(500).json({
               type: "auth.signin.error.onpasswordcompare",
               error: error,
-              data: {
-                id: "",
-                token: "",
-              },
             });
           });
       }
     })
     .catch((error) => {
+      console.log("auth.signin.error.onfind");
       return res.status(500).json({
         type: "auth.signin.error.onfind",
         error: error,
-        data: {
-          id: "",
-          token: "",
-        },
       });
     });
 };
