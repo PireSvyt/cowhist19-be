@@ -55,9 +55,9 @@ module.exports = async function serviceMailing(mail, details = {}) {
         ];
         mailToSend = {
           to: "'" + details.pseudo + "<" + details.login + ">'",
-          subject: mails.signup[lang].subject,
-          text: replaceTokens(mails.signup[lang].text, replacements),
-          html: replaceTokens(mails.signup[lang].html, replacements),
+          subject: mails.resetpassword[lang].subject,
+          text: replaceTokens(mails.resetpassword[lang].text, replacements),
+          html: replaceTokens(mails.resetpassword[lang].html, replacements),
         };
         break;
       default:
