@@ -14,48 +14,51 @@ const adminPopulate = require("../controllers/admin/adminPopulate.js");
 const adminFeedbackClose = require("../controllers/admin/adminFeedbackClose.js");
 const adminEmailTest = require("../controllers/admin/adminEmailTest.js");
 
+const adminUserDelete = require("../controllers/admin/adminUserDelete.js");
+
 router.get(
   "/v1/tablesbyplayers",
   authAuthenticate,
   adminAuthenticate,
-  adminGetTablesByPlayers
+  adminGetTablesByPlayers,
 );
 router.get(
   "/v1/tablesbygames",
   authAuthenticate,
   adminAuthenticate,
-  adminGetTablesByGames
+  adminGetTablesByGames,
 );
 router.get(
   "/v1/usersbystatus",
   authAuthenticate,
   adminAuthenticate,
-  adminGetUsersByStatus
+  adminGetUsersByStatus,
 );
 router.get(
   "/v1/objectcount",
   authAuthenticate,
   adminAuthenticate,
-  adminGetObjectCount
+  adminGetObjectCount,
 );
 router.post(
   "/v1/feedbacklist",
   authAuthenticate,
   adminAuthenticate,
-  adminGetFeedbackList
+  adminGetFeedbackList,
 );
 router.post("/v1/populate", authAuthenticate, adminAuthenticate, adminPopulate);
 router.post(
   "/v1/feedbackclose",
   authAuthenticate,
   adminAuthenticate,
-  adminFeedbackClose
+  adminFeedbackClose,
 );
 router.get(
   "/v1/emailtest",
   authAuthenticate,
   adminAuthenticate,
-  adminEmailTest
+  adminEmailTest,
 );
+router.delete("/v1/user/:id", authAuthenticate, adminAuthenticate, adminUserDelete);
 
 module.exports = router;
