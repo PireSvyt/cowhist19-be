@@ -16,9 +16,9 @@ describe("TEST OF API : auth", () => {
         pseudo: rid,
         password: rid,
       };
-      console.log("signUpInputs", signUpInputs);
+      //console.log("signUpInputs", signUpInputs);
       responses["apiAuthSignUp"] = await authAPI.apiAuthSignUp(signUpInputs);
-      console.log("responses.apiAuthSignUp", responses.apiAuthSignUp);
+      //console.log("responses.apiAuthSignUp", responses.apiAuthSignUp);
       expect(responses.apiAuthSignUp.type).toBe("auth.signup.success.signedup");
 
       // Clean
@@ -27,17 +27,19 @@ describe("TEST OF API : auth", () => {
         password: process.env.ADMIN_PASSWORD,
         encryption: false,
       };
-      console.log("adminSignInInputs", adminSignInInputs);
+      //console.log("adminSignInInputs", adminSignInInputs);
       responses["adminSignInResponse"] =
         await authAPI.apiAuthSignIn(adminSignInInputs);
-      console.log(
+      /*console.log(
         "responses.adminSignInResponse",
         responses.adminSignInResponse,
-      );
+      );*/
       let adminDatabaseCommandInputs = {
-        type: "delete",
-        collection: "users",
-        ids: [responses.apiAuthSignUp.data.id],
+        action: {
+          type: "delete",
+          collection: "users",
+          ids: [responses.apiAuthSignUp.data.id],
+        },
       };
       console.log("adminDatabaseCommandInputs", adminDatabaseCommandInputs);
       responses["adminDatabaseCommandResponse"] =
