@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwt_decode = require("jwt-decode");
 const bcrypt = require("bcrypt");
 // BCRYPT https://www.makeuseof.com/nodejs-bcrypt-hash-verify-salt-password/
@@ -38,7 +39,9 @@ module.exports = userMerge = (req, res, next) => {
   
   */
 
-  console.log("user.merge");
+  if (process.env.DEBUG) {
+    console.log("user.merge");
+  }
 
   // Initialise
   const authHeader = req.headers["authorization"];
@@ -57,7 +60,7 @@ module.exports = userMerge = (req, res, next) => {
               if (req.body.encryption === true) {
                 attemptPassword = CryptoJS.AES.decrypt(
                   attemptPassword,
-                  process.env.ENCRYPTION_KEY
+                  process.env.ENCRYPTION_KEY,
                 ).toString(CryptoJS.enc.Utf8);
               }
               // Password compare
@@ -75,7 +78,7 @@ module.exports = userMerge = (req, res, next) => {
                     } else {
                       if (
                         currentUser.alias.filter(
-                          (alias) => alias.id === mergeuser.id
+                          (alias) => alias.id === mergeuser.id,
                         ).length
                       ) {
                         // ok alias already stored
@@ -98,7 +101,7 @@ module.exports = userMerge = (req, res, next) => {
                               if (table.users.includes(currentUser.id)) {
                                 // Remove merged id
                                 table.users = table.users.filter(
-                                  (player) => player !== mergeuser.id
+                                  (player) => player !== mergeuser.id,
                                 );
                               } else {
                                 // Replace merge id
@@ -127,7 +130,7 @@ module.exports = userMerge = (req, res, next) => {
                             games.forEach((game) => {
                               if (
                                 Object.keys(game.players).includes(
-                                  currentUser.id
+                                  currentUser.id,
                                 )
                               ) {
                                 // See ubiquity management note

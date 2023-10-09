@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
 module.exports = authAssess = (req, res, next) => {
@@ -12,7 +13,9 @@ module.exports = authAssess = (req, res, next) => {
   
   */
 
-  console.log("auth.assess");
+  if (process.env.DEBUG) {
+    console.log("auth.assess");
+  }
 
   // Assess
   if (req.body.token === null || req.body.token === undefined) {

@@ -1,3 +1,4 @@
+require("dotenv").config();
 const User = require("../../models/User.js");
 
 module.exports = adminGetUsersByStatus = (req, res, next) => {
@@ -15,7 +16,9 @@ module.exports = adminGetUsersByStatus = (req, res, next) => {
   
   */
 
-  console.log("admin.usersByStatus");
+  if (process.env.DEBUG) {
+    console.log("admin.usersByStatus");
+  }
 
   User.aggregate([
     {

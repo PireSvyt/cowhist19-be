@@ -5,7 +5,7 @@ let apiURL = process.env.TESTSUITE_SERVER_URL;
 
 exports.apiAuthSignUp = async function (signUpInputs) {
   try {
-    const res = await axios.post(apiURL + "/auth/v1/signup", signUpInputs);
+    const res = await axios.post(apiURL + "auth/v1/signup", signUpInputs);
     return res.data;
   } catch (err) {
     return err.response.data;
@@ -16,7 +16,7 @@ exports.apiAuthSignUp = async function (signUpInputs) {
 exports.apiAuthSendActivation = async function (sendActivationInputs) {
   try {
     const res = await axios.post(
-      apiURL + "/auth/v1/sendactivation",
+      apiURL + "auth/v1/sendactivation",
       sendActivationInputs,
     );
     return res.data;
@@ -27,7 +27,7 @@ exports.apiAuthSendActivation = async function (sendActivationInputs) {
 
 exports.apAuthiActivate = async function (activateInputs) {
   try {
-    const res = await axios.post(apiURL + "/auth/v1/activate", activateInputs);
+    const res = await axios.post(apiURL + "auth/v1/activate", activateInputs);
     return res.data;
   } catch (err) {
     return err.response.data;
@@ -36,7 +36,7 @@ exports.apAuthiActivate = async function (activateInputs) {
 
 exports.apiAuthSignIn = async function (signInInputs) {
   try {
-    const res = await axios.post(apiURL + "/auth/v1/signin", signInInputs);
+    const res = await axios.post(apiURL + "auth/v1/signin", signInInputs);
     return res.data;
   } catch (err) {
     return err.response.data;
@@ -45,7 +45,7 @@ exports.apiAuthSignIn = async function (signInInputs) {
 
 exports.apiAuthAssess = async function (token) {
   try {
-    const res = await axios.post(apiURL + "/auth/v1/assess", { token: token });
+    const res = await axios.post(apiURL + "auth/v1/assess", { token: token });
     return res.data;
   } catch (err) {
     return err.response.data;
@@ -56,7 +56,7 @@ exports.apiAuthAssess = async function (token) {
 exports.apiAuthSendPassword = async function (sendPasswordInputs) {
   try {
     const res = await axios.post(
-      apiURL + "/auth/v1/sendpassword",
+      apiURL + "auth/v1/sendpassword",
       sendPasswordInputs,
     );
     return res.data;
@@ -68,7 +68,7 @@ exports.apiAuthSendPassword = async function (sendPasswordInputs) {
 exports.apiAuthExistingPseudo = async function (existingPseudoInput) {
   try {
     const res = await axios.post(
-      apiURL + "/auth/v1/existingpseudo",
+      apiURL + "auth/v1/existingpseudo",
       existingPseudoInput,
     );
     return res.data;

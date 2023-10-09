@@ -1,3 +1,4 @@
+require("dotenv").config();
 const servicePopulate = require("./services/servicePopulate");
 
 module.exports = adminPopulate = (req, res, next) => {
@@ -8,12 +9,13 @@ module.exports = adminPopulate = (req, res, next) => {
   possible response types
   * admin.populate.success
   * admin.populate.error.unauthorized (in prod)
-  * admin.populate.error.deniedaccess
   * admin.populate.error.failedpopulation
   
   */
 
-  console.log("admin.populate");
+  if (process.env.DEBUG) {
+    console.log("admin.populate");
+  }
 
   if (process.env.NODE_ENV === "_production") {
     res.status(401).json({

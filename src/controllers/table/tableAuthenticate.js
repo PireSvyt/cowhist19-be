@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwt_decode = require("jwt-decode");
 const Table = require("../../models/Table.js");
 
@@ -13,7 +14,9 @@ module.exports = tableAuthenticate = (req, res, next) => {
   
   */
 
-  console.log("table.authenticate");
+  if (process.env.DEBUG) {
+    console.log("table.authenticate");
+  }
 
   // Initialise
   const authHeader = req.headers["authorization"];

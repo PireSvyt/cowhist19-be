@@ -1,3 +1,4 @@
+require("dotenv").config();
 const Game = require("../../models/Game.js");
 const serviceProcessGames = require("./services/serviceProcessGames.js");
 
@@ -19,7 +20,9 @@ module.exports = tableStats = (req, res, next) => {
   
   */
 
-  console.log("table.stats");
+  if (process.env.DEBUG) {
+    console.log("table.stats");
+  }
 
   // Find tablegames
   Game.find({ table: req.params.id })

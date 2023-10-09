@@ -1,3 +1,4 @@
+require("dotenv").config();
 const Game = require("../../models/Game.js");
 
 module.exports = gameDelete = (req, res, next) => {
@@ -14,7 +15,9 @@ module.exports = gameDelete = (req, res, next) => {
   
   */
 
-  console.log("game.delete");
+  if (process.env.DEBUG) {
+    console.log("game.delete");
+  }
 
   Game.deleteOne({ _id: req.params.id })
     .then(() => {

@@ -1,3 +1,4 @@
+require("dotenv").config();
 const Table = require("../../models/Table.js");
 const User = require("../../models/User.js");
 const Game = require("../../models/Game.js");
@@ -31,7 +32,9 @@ module.exports = tableHistory_v3 = (req, res, next) => {
   
   */
 
-  console.log("table.tableHistory_v3");
+  if (process.env.DEBUG) {
+    console.log("table.tableHistory_v3");
+  }
 
   // Initialize
   var status = 500;
@@ -138,7 +141,7 @@ module.exports = tableHistory_v3 = (req, res, next) => {
               // Shorten payload
               games = games.slice(
                 lastidpos, // from N, ex. 0
-                lastidpos + req.body.games.number + 1 // to N+M, ex. 0+10
+                lastidpos + req.body.games.number + 1, // to N+M, ex. 0+10
               );
               // Check if more
               // games [ N ... N+M ] length = M+1, ex. 0-10 -> 11 games
@@ -161,7 +164,7 @@ module.exports = tableHistory_v3 = (req, res, next) => {
                   if (gamePlayer.nonuser !== "guest") {
                     // User is not a guest
                     let potentialPseudo = table.players.filter(
-                      (tablePlayer) => tablePlayer.id === gamePlayer._id
+                      (tablePlayer) => tablePlayer.id === gamePlayer._id,
                     );
                     if (potentialPseudo.length > 0) {
                       // User is part of the table players

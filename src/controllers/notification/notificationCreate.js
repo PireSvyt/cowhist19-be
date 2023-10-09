@@ -1,3 +1,4 @@
+require("dotenv").config();
 const Notification = require("../../models/Notification.js");
 
 module.exports = notificationCreate = (req, res, next) => {
@@ -12,7 +13,9 @@ module.exports = notificationCreate = (req, res, next) => {
   
   */
 
-  console.log("notification.create");
+  if (process.env.DEBUG) {
+    console.log("notification.create");
+  }
 
   const notificationToSave = new Notification({ ...req.body });
   notificationToSave.id = notificationToSave._id;

@@ -1,3 +1,4 @@
+require("dotenv").config();
 const Table = require("../../models/Table.js");
 const contracts = require("../../resources/contracts.json");
 const { random_id } = require("../../resources/toolkit");
@@ -17,7 +18,9 @@ module.exports = tableDetails_v2 = (req, res, next) => {
   
   */
 
-  console.log("table.details");
+  if (process.env.DEBUG) {
+    console.log("table.details");
+  }
 
   Table.aggregate([
     {

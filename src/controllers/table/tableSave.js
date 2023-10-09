@@ -1,3 +1,4 @@
+require("dotenv").config();
 const Table = require("../../models/Table.js");
 const tableCreate = require("./tableCreate.js");
 
@@ -18,7 +19,9 @@ module.exports = tableSave = (req, res, next) => {
   
   */
 
-  console.log("table.save");
+  if (process.env.DEBUG) {
+    console.log("table.save");
+  }
 
   // Save
   if (req.body._id === "" || req.body._id === undefined) {

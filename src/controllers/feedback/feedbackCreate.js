@@ -1,3 +1,4 @@
+require("dotenv").config();
 const Feedback = require("../../models/Feedback.js");
 
 module.exports = feedbackCreate = (req, res, next) => {
@@ -11,7 +12,9 @@ module.exports = feedbackCreate = (req, res, next) => {
   
   */
 
-  console.log("feedback.create");
+  if (process.env.DEBUG) {
+    console.log("feedback.create");
+  }
 
   // Create
   const feedbackToSave = new Feedback({ ...req.body });

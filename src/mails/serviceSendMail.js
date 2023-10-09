@@ -1,3 +1,4 @@
+require("dotenv").config();
 const nodemailer = require("nodemailer");
 
 module.exports = async function serviceSendMail(mailDetails) {
@@ -18,7 +19,9 @@ module.exports = async function serviceSendMail(mailDetails) {
     
     */
 
-  console.log("mail.sentmail");
+  if (process.env.DEBUG) {
+    console.log("mail.sentmail");
+  }
 
   return new Promise((resolve, reject) => {
     transporter
@@ -38,6 +41,7 @@ module.exports = async function serviceSendMail(mailDetails) {
       })
       .catch((err) => {
         console.log("mail.sentmail.failure");
+        console.log("err", err);
         resolve({
           type: "mail.sentmail.failure",
           error: err,

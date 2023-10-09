@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwt_decode = require("jwt-decode");
 const Game = require("../../models/Game.js");
 
@@ -17,7 +18,9 @@ module.exports = userStats = (req, res, next) => {
   
   */
 
-  console.log("user.stats");
+  if (process.env.DEBUG) {
+    console.log("user.stats");
+  }
 
   // Initialise
   const authHeader = req.headers["authorization"];

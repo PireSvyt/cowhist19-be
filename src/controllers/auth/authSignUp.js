@@ -1,3 +1,4 @@
+require("dotenv").config();
 const User = require("../../models/User.js");
 const serviceMailing = require("../../mails/serviceMailing.js");
 var random_string = require("./services/random_string.js");
@@ -24,7 +25,9 @@ module.exports = authSignup = (req, res, next) => {
   
   */
 
-  console.log("auth.signup");
+  if (process.env.DEBUG) {
+    console.log("auth.signup");
+  }
 
   User.findOne({ login: req.body.login })
     .then((user) => {

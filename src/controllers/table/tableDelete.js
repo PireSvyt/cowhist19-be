@@ -1,3 +1,4 @@
+require("dotenv").config();
 const Game = require("../../models/Game.js");
 const Table = require("../../models/Table.js");
 
@@ -16,7 +17,9 @@ module.exports = tableDelete = (req, res, next) => {
   
   */
 
-  console.log("table.delete");
+  if (process.env.DEBUG) {
+    console.log("table.delete");
+  }
 
   // Delete table's games
   Game.deleteMany({ table: req.params.id }).catch((error) => {

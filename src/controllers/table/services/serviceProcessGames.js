@@ -1,3 +1,4 @@
+require("dotenv").config();
 const serviceCheckContract = require("./serviceCheckContract.js");
 const serviceGamePoints = require("./serviceGamePoints.js");
 
@@ -14,7 +15,9 @@ module.exports = function serviceProcessGames(games, request) {
   
   */
 
-  console.log("table.serviceProcessGames");
+  if (process.env.DEBUG) {
+    console.log("table.serviceProcessGames");
+  }
 
   // Initialize
   let stats = {};

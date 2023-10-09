@@ -1,4 +1,5 @@
-const serviceSendMail = require("./serviceSentMail");
+require("dotenv").config();
+const serviceSendMail = require("./serviceSendMail");
 const mails = require("./mails.json");
 
 module.exports = async function serviceMailing(mail, details = {}) {
@@ -17,7 +18,9 @@ module.exports = async function serviceMailing(mail, details = {}) {
     
     */
 
-  console.log("mail.mailing");
+  if (process.env.DEBUG) {
+    console.log("mail.mailing");
+  }
 
   const lang = "en";
 

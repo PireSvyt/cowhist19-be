@@ -1,3 +1,4 @@
+require("dotenv").config();
 const Game = require("../../models/Game.js");
 
 module.exports = gameDetails = (req, res, next) => {
@@ -13,7 +14,9 @@ module.exports = gameDetails = (req, res, next) => {
   
   */
 
-  console.log("game.details");
+  if (process.env.DEBUG) {
+    console.log("game.details");
+  }
 
   Game.findOne({ _id: req.params.id }, "table contract outcome players")
     .then((game) => {

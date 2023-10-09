@@ -1,3 +1,4 @@
+require("dotenv").config();
 const contracts = require("../../../resources/contracts.json");
 
 module.exports = function serviceGamePoints(game) {
@@ -10,7 +11,9 @@ module.exports = function serviceGamePoints(game) {
   
   */
 
-  console.log("table.serviceGamePoints");
+  if (process.env.DEBUG) {
+    console.log("table.serviceGamePoints");
+  }
 
   // Initialize
   let compliance = true;
@@ -20,7 +23,7 @@ module.exports = function serviceGamePoints(game) {
 
   // Find the contract requirements
   let contractList = contracts.filter(
-    (contract) => contract.key === game.contract
+    (contract) => contract.key === game.contract,
   );
   let contract = contractList[0];
   if (contract === undefined) {

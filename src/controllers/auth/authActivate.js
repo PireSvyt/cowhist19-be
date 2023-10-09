@@ -1,3 +1,4 @@
+require("dotenv").config();
 const User = require("../../models/User.js");
 
 module.exports = authActivate = (req, res, next) => {
@@ -16,7 +17,9 @@ module.exports = authActivate = (req, res, next) => {
   
   */
 
-  console.log("auth.activate");
+  if (process.env.DEBUG) {
+    console.log("auth.activate");
+  }
 
   User.findOne({ activationtoken: req.body.token, login: req.body.login })
     .then((user) => {

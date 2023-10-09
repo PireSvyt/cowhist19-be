@@ -1,3 +1,4 @@
+require("dotenv").config();
 const MongoClient = require("mongodb").MongoClient;
 var {
   adjustProbabilities,
@@ -13,7 +14,9 @@ module.exports = async function servicePopulate(reqInputs) {
   
   */
 
-  console.log("admin.servicepopulate");
+  if (process.env.DEBUG) {
+    console.log("admin.servicepopulate");
+  }
 
   return new Promise((resolve, reject) => {
     let allWentWell = true;
@@ -91,7 +94,7 @@ module.exports = async function servicePopulate(reqInputs) {
     //console.log("Adjusting outcomes");
     let adjustedOutcomes = adjustProbabilities(
       inputs.likelihood.outcomes,
-      "likelihood"
+      "likelihood",
     );
     //console.log("adjustedOutcomes");
     //console.log(adjustedOutcomes);
@@ -141,8 +144,8 @@ module.exports = async function servicePopulate(reqInputs) {
         Object.fromEntries(
           Object.entries(inputs.likelihood.players).filter(([key, value]) => {
             return !attack.includes(key);
-          })
-        )
+          }),
+        ),
       );
       let defense = [];
       for (let p = 1; p <= adjustedContracts[contractId].defense; p++) {
@@ -179,7 +182,11 @@ module.exports = async function servicePopulate(reqInputs) {
     // DB connection
     console.log("Openning server");
     let DB_URL =
-      "mongodb+srv://savoyatp:2PDJ9d6PrWEcPD8t@cluster0.0gnwxga.mongodb.net/?retryWrites=true&w=majority";
+      "mongodb+srv://savoyatp:" +
+      process.env.DB_PW +
+      "@" +
+      process.env.DB_CLUSTER +
+      "?retryWrites=true&w=majority";
     let mongoClient = new MongoClient(DB_URL, { useNewUrlParser: true });
     mongoClient
       .connect()

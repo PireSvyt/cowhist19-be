@@ -1,3 +1,4 @@
+require("dotenv").config();
 const User = require("../../models/User.js");
 
 module.exports = userInvite = (req, res, next) => {
@@ -13,7 +14,9 @@ module.exports = userInvite = (req, res, next) => {
   
   */
 
-  console.log("user.invite");
+  if (process.env.DEBUG) {
+    console.log("user.invite");
+  }
 
   // User existence check
   User.findOne({ login: req.body.login }, "pseudo status")

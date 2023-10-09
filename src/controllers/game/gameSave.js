@@ -1,3 +1,4 @@
+require("dotenv").config();
 const Game = require("../../models/Game.js");
 
 module.exports = gameSave = (req, res, next) => {
@@ -16,7 +17,9 @@ module.exports = gameSave = (req, res, next) => {
   
   */
 
-  console.log("game.save");
+  if (process.env.DEBUG) {
+    console.log("game.save");
+  }
 
   if (req.body._id === "" || req.body._id === undefined) {
     // Create

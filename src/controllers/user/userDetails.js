@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwt_decode = require("jwt-decode");
 
 const User = require("../../models/User.js");
@@ -16,7 +17,9 @@ module.exports = userDetails = (req, res, next) => {
   
   */
 
-  console.log("user.details");
+  if (process.env.DEBUG) {
+    console.log("user.details");
+  }
 
   // Initialise
   const authHeader = req.headers["authorization"];

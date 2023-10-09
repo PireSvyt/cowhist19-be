@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwt_decode = require("jwt-decode");
 
 const User = require("../../models/User.js");
@@ -15,7 +16,9 @@ module.exports = adminUserDelete = (req, res, next) => {
   
   */
 
-  console.log("user.delete");
+  if (process.env.DEBUG) {
+    console.log("user.delete");
+  }
 
   // Delete user
   User.deleteOne({ id: req.params.id })

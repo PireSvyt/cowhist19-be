@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwt_decode = require("jwt-decode");
 const Table = require("../../models/Table.js");
 
@@ -12,7 +13,9 @@ module.exports = userTables = (req, res, next) => {
   
   */
 
-  console.log("user.tables");
+  if (process.env.DEBUG) {
+    console.log("user.tables");
+  }
 
   // Initialise
   const authHeader = req.headers["authorization"];

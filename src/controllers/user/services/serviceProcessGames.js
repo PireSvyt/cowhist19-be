@@ -1,3 +1,4 @@
+require("dotenv").config();
 module.exports = function serviceProcessGames(games, userid) {
   /*
   
@@ -9,7 +10,9 @@ module.exports = function serviceProcessGames(games, userid) {
   
   */
 
-  console.log("user.serviceProcessGames");
+  if (process.env.DEBUG) {
+    console.log("user.serviceProcessGames");
+  }
 
   // Initialize
   let stats = {
@@ -25,7 +28,7 @@ module.exports = function serviceProcessGames(games, userid) {
     games.forEach((game) => {
       // Attack
       let player = game.players.filter(
-        (gameplayer) => gameplayer._id === userid
+        (gameplayer) => gameplayer._id === userid,
       )[0];
       if (player.role === "attack") {
         stats.attack = stats.attack + 1;

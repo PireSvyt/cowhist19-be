@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
 module.exports = authAuthenticate = (req, res, next) => {
@@ -11,7 +12,9 @@ module.exports = authAuthenticate = (req, res, next) => {
   
   */
 
-  console.log("auth.authenticate");
+  if (process.env.DEBUG) {
+    console.log("auth.authenticate");
+  }
 
   // Prep
   const authHeader = req.headers["authorization"];

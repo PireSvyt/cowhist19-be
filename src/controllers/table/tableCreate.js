@@ -1,3 +1,4 @@
+require("dotenv").config();
 const Table = require("../../models/Table.js");
 
 module.exports = tableCreate = (req, res, next) => {
@@ -15,7 +16,9 @@ module.exports = tableCreate = (req, res, next) => {
   
   */
 
-  console.log("table.tableCreate");
+  if (process.env.DEBUG) {
+    console.log("table.tableCreate");
+  }
 
   // Prep
   delete req.body._id;

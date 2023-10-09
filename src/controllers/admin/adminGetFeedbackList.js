@@ -1,3 +1,4 @@
+require("dotenv").config();
 const Feedback = require("../../models/Feedback.js");
 
 module.exports = adminGetFeedbackList = (req, res, next) => {
@@ -25,7 +26,9 @@ module.exports = adminGetFeedbackList = (req, res, next) => {
   
   */
 
-  console.log("admin.feedbackList");
+  if (process.env.DEBUG) {
+    console.log("admin.feedbackList");
+  }
 
   // Is need input relevant?
   if (!req.body.need) {
