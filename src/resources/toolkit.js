@@ -61,7 +61,9 @@ function pickOne(input, field) {
 }
 
 function random_id(length = 12) {
-  return (temp_id = Math.random().toString(16).substr(2, length));
+  return (temp_id = Math.random()
+    .toString(2 * length)
+    .substr(2, length));
 }
 
 function getLastDates(days, weekdaysLikelihoods) {

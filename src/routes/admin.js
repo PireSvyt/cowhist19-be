@@ -14,8 +14,7 @@ const adminPopulate = require("../controllers/admin/adminPopulate.js");
 const adminFeedbackClose = require("../controllers/admin/adminFeedbackClose.js");
 const adminEmailTest = require("../controllers/admin/adminEmailTest.js");
 
-const adminUserDelete = require("../controllers/admin/adminUserDelete.js");
-const adminResetDatabase = require("../controllers/admin/adminResetDatabase");
+const adminDatabaseCommand = require("../controllers/admin/adminDatabaseCommand");
 
 router.get(
   "/v1/tablesbyplayers",
@@ -60,17 +59,11 @@ router.get(
   adminAuthenticate,
   adminEmailTest,
 );
-router.delete(
-  "/v1/user/:id",
-  authAuthenticate,
-  adminAuthenticate,
-  adminUserDelete,
-);
 router.post(
-  "/v1/user/:id",
+  "/v1/databasecommand",
   authAuthenticate,
   adminAuthenticate,
-  adminResetDatabase,
+  adminDatabaseCommand,
 );
 
 module.exports = router;

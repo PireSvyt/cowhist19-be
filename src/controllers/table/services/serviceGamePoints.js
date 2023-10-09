@@ -11,7 +11,7 @@ module.exports = function serviceGamePoints(game) {
   
   */
 
-  if (process.env.DEBUG) {
+  if (process.env.DEBUG === true) {
     console.log("table.serviceGamePoints");
   }
 

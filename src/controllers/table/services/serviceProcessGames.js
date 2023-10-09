@@ -15,7 +15,7 @@ module.exports = function serviceProcessGames(games, request) {
   
   */
 
-  if (process.env.DEBUG) {
+  if (process.env.DEBUG === true) {
     console.log("table.serviceProcessGames");
   }
 

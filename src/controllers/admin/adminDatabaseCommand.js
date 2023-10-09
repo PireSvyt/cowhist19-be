@@ -1,0 +1,192 @@
+require("dotenv").config();
+const MongoClient = require("mongodb").MongoClient;
+const servicePerformAction = require("./services/servicePerformAction");
+
+module.exports = async function adminDatabaseCommand(req, res, next) {
+  /*
+  
+ provides a number of services to set the test database on certain state
+ (for testing purpose only)
+
+    * admin.databasecommand.failedconnection
+    * admin.databasecommand.error.unmatchedtype
+    * admin.databasecommand.missingaction
+    * admin.databasecommand.missingcollection
+    * admin.databasecommand.missingtype
+    * admin.databasecommand.insertone.success
+    * admin.databasecommand.insertone.missingitem
+    * admin.databasecommand.insertone.error.oninstert
+    * admin.databasecommand.delete.success
+    * admin.databasecommand.delete.missingids
+    * admin.databasecommand.delete.error.ondelete
+    * admin.databasecommand.drop.success
+    * admin.databasecommand.drop.error.ondrop
+  
+  */
+
+  if (process.env.DEBUG === true) {
+    console.log("admin.databasecommand");
+  }
+
+  return new Promise((resolve, reject) => {
+    let allWentWell = true;
+    let errors = [];
+
+    // DB connection
+    if (process.env.DEBUG === true) {
+      console.log("Openning server");
+    }
+    let DB_URL =
+      "mongodb+srv://savoyatp:" +
+      process.env.DB_PW +
+      "@" +
+      process.env.DB_CLUSTER +
+      "?retryWrites=true&w=majority";
+    let mongoClient = new MongoClient(DB_URL, { useNewUrlParser: true });
+    mongoClient
+      .connect()
+      .then((err) => {
+        if (process.env.DEBUG === true) {
+          console.log("Connected correctly to server");
+        }
+
+        // Action
+        if (req.body.action != undefined) {
+          // Collection
+          if (req.body.action.collection != undefined) {
+            collection = mongoClient
+              .db("test")
+              .collection(req.body.action.collection);
+            // Type
+            if (req.body.action.type != undefined) {
+              switch (req.body.action.type) {
+                case "insertone":
+                  // Type
+                  if (req.body.action.item != undefined) {
+                    collection
+                      .insertOne(req.body.action.item)
+                      .then((insertOneResponse) => {
+                        if (process.env.DEBUG === true) {
+                          console.log(
+                            "admin.databasecommand.insertone.success",
+                          );
+                        }
+                        resolve({
+                          type: "admin.databasecommand.insertone.success",
+                          res: insertOneResponse,
+                        });
+                      })
+                      .catch((error) => {
+                        console.log(
+                          "admin.databasecommand.insertone.error.oninstert",
+                        );
+                        console.error(error);
+                        resolve({
+                          type: "admin.databasecommand.insertone.error.oninstert",
+                          error: error,
+                          action: req.body.action,
+                        });
+                      });
+                  } else {
+                    console.log("admin.databasecommand.insertone.missingitem");
+                    resolve({
+                      type: "admin.databasecommand.insertone.missingitem",
+                      action: req.body.action,
+                    });
+                  }
+                  break;
+                case "delete":
+                  // Type
+                  if (req.body.action.ids != undefined) {
+                    collection
+                      .deleteMany({ id: req.body.action.ids })
+                      .then((deleteResponse) => {
+                        if (process.env.DEBUG === true) {
+                          console.log("admin.databasecommand.delete.success");
+                        }
+                        resolve({
+                          type: "admin.databasecommand.delete.success",
+                          res: deleteResponse,
+                        });
+                      })
+                      .catch((error) => {
+                        console.log(
+                          "admin.databasecommand.delete.error.ondelete",
+                        );
+                        console.error(error);
+                        resolve({
+                          type: "admin.databasecommand.delete.error.ondelete",
+                          error: error,
+                          res: deleteResponse,
+                        });
+                      });
+                  } else {
+                    console.log("admin.databasecommand.delete.missingids");
+                    resolve({
+                      type: "admin.databasecommand.delete.missingids",
+                      action: req.body.action,
+                    });
+                  }
+                  break;
+                case "drop":
+                  collection
+                    .drop()
+                    .then((dropResponse) => {
+                      if (process.env.DEBUG === true) {
+                        console.log("admin.databasecommand.drop.success");
+                      }
+                      resolve({
+                        type: "admin.databasecommand.drop.success",
+                        res: dropResponse,
+                      });
+                    })
+                    .catch((error) => {
+                      console.log("admin.databasecommand.drop.error.ondrop");
+                      console.error(error);
+                      resolve({
+                        type: "admin.databasecommand.drop.error.ondrop",
+                        error: error,
+                        res: dropResponse,
+                      });
+                    });
+                  break;
+                default:
+                  log.push("ERROR > action type not switched", req.body.action);
+                  console.log("admin.databasecommand.error.unmatchedtype");
+                  console.error(error);
+                  resolve({
+                    type: "admin.databasecommand.error.unmatchedtype",
+                    error: error,
+                  });
+              }
+            } else {
+              console.log("admin.databasecommand.missingtype");
+              resolve({
+                type: "admin.databasecommand.missingtype",
+                action: req.body.action,
+              });
+            }
+          } else {
+            console.log("admin.databasecommand.missingcollection");
+            resolve({
+              type: "admin.databasecommand.missingcollection",
+              action: req.body.action,
+            });
+          }
+        } else {
+          console.log("admin.databasecommand.missingaction");
+          resolve({
+            type: "admin.databasecommand.missingaction",
+            action: req.body,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        resolve({
+          type: "admin.databasecommand.failedconnection",
+          error: err,
+        });
+      });
+  });
+};
