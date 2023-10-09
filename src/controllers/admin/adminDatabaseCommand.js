@@ -65,6 +65,46 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
         // Type
         if (req.body.action.type != undefined) {
           switch (req.body.action.type) {
+            case "get":
+              // Type
+              if (req.body.action.ids != undefined) {
+                collection
+                  .find({ id: req.body.action.ids })
+                  .then((itemList) => {
+                    if (itemList.length === req.body.action.ids.length) {
+                      if (process.env.DEBUG === true) {
+                        console.log("admin.databasecommand.get.success");
+                      }
+                      return res.status(200).json({
+                        type: "admin.databasecommand.get.success",
+                        data: { items: itemList },
+                      });
+                    } else {
+                      return res.status(400).json({
+                        type: "admin.databasecommand.get.error.partialmatch",
+                        data: { items: itemList },
+                      });
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(
+                      "admin.databasecommand.insertone.error.oninstert",
+                    );
+                    console.error(error);
+                    return res.status(500).json({
+                      type: "admin.databasecommand.insertone.error.oninstert",
+                      error: error,
+                      data: {},
+                    });
+                  });
+              } else {
+                console.log("admin.databasecommand.get.missingids");
+                return res.status(400).json({
+                  type: "admin.databasecommand.get.missingids",
+                  data: {},
+                });
+              }
+              break;
             case "insertone":
               // Type
               if (req.body.action.item != undefined) {

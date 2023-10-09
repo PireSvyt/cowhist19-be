@@ -21,7 +21,7 @@ describe("TEST OF API : auth", () => {
       //console.log("responses.apiAuthSignUp", responses.apiAuthSignUp);
       expect(responses.apiAuthSignUp.type).toBe("auth.signup.success.signedup");
 
-      // Clean
+      // Checks
       let adminSignInInputs = {
         login: process.env.ADMIN_LOGIN,
         password: process.env.ADMIN_PASSWORD,
@@ -34,6 +34,23 @@ describe("TEST OF API : auth", () => {
         "responses.adminSignInResponse",
         responses.adminSignInResponse,
       );*/
+      responses["check"] = await adminAPI.adminDatabaseCommand(
+        {
+          action: {
+            type: "get",
+            collection: "users",
+            ids: [responses.apiAuthSignUp.data.id],
+          },
+        },
+        responses.adminSignInResponse.data.token,
+      );
+      //console.log("responses.check", responses.check);
+      expect(responses.check.type).toBe("admin.databasecommand.get.success");
+      expect(responses.check.data.users[0].login).toBe(rid + "@yopmail.com");
+      expect(responses.check.data.users[0].password).toBe(rid);
+      expect(responses.check.data.users[0].pseudo).toBe(rid);
+
+      // Clean
       let adminDatabaseCommandInputs = {
         action: {
           type: "delete",
