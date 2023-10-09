@@ -1,6 +1,5 @@
 require("dotenv").config();
 const MongoClient = require("mongodb").MongoClient;
-const servicePerformAction = require("./services/servicePerformAction");
 
 module.exports = async function adminDatabaseCommand(req, res, next) {
   /*
