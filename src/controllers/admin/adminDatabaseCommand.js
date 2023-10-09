@@ -28,9 +28,6 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
   }
 
   return new Promise((resolve, reject) => {
-    let allWentWell = true;
-    let errors = [];
-
     // DB connection
     if (process.env.DEBUG === true) {
       console.log("Openning server");
@@ -72,7 +69,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                         }
                         return res.status(200).json({
                           type: "admin.databasecommand.insertone.success",
-                          res: insertOneResponse,
+                          data: insertOneResponse,
                         });
                       })
                       .catch((error) => {
@@ -83,14 +80,14 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                         return res.status(500).json({
                           type: "admin.databasecommand.insertone.error.oninstert",
                           error: error,
-                          action: req.body.action,
+                          data: {},
                         });
                       });
                   } else {
                     console.log("admin.databasecommand.insertone.missingitem");
                     return res.status(400).json({
                       type: "admin.databasecommand.insertone.missingitem",
-                      action: req.body.action,
+                      data: {},
                     });
                   }
                   break;
@@ -105,7 +102,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                         }
                         return res.status(200).json({
                           type: "admin.databasecommand.delete.success",
-                          res: deleteResponse,
+                          data: deleteResponse,
                         });
                       })
                       .catch((error) => {
@@ -116,14 +113,14 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                         return res.status(500).json({
                           type: "admin.databasecommand.delete.error.ondelete",
                           error: error,
-                          res: deleteResponse,
+                          data: {},
                         });
                       });
                   } else {
                     console.log("admin.databasecommand.delete.missingids");
                     return res.status(400).json({
                       type: "admin.databasecommand.delete.missingids",
-                      action: req.body.action,
+                      data: {},
                     });
                   }
                   break;
@@ -136,7 +133,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                       }
                       return res.status(200).json({
                         type: "admin.databasecommand.drop.success",
-                        res: dropResponse,
+                        data: dropResponse,
                       });
                     })
                     .catch((error) => {
@@ -145,7 +142,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                       return res.status(500).json({
                         type: "admin.databasecommand.drop.error.ondrop",
                         error: error,
-                        res: dropResponse,
+                        data: dropResponse,
                       });
                     });
                   break;
@@ -156,6 +153,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                   return res.status(400).json({
                     type: "admin.databasecommand.error.unmatchedtype",
                     error: error,
+                    data: {},
                   });
               }
             } else {
@@ -169,7 +167,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
             console.log("admin.databasecommand.missingcollection");
             return res.status(400).json({
               type: "admin.databasecommand.missingcollection",
-              action: req.body.action,
+              data: {},
             });
           }
         } else {
@@ -185,6 +183,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
         return res.status(500).json({
           type: "admin.databasecommand.failedconnection",
           error: err,
+          data: {},
         });
       });
   });
