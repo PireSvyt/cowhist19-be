@@ -1,5 +1,9 @@
 require("dotenv").config();
-const MongoClient = require("mongodb").MongoClient;
+const User = require("../../models/User.js");
+const Game = require("../../models/Game.js");
+const Table = require("../../models/Table.js");
+const Feedback = require("../../models/Feedback.js");
+const Notification = require("../../models/Notification.js");
 
 module.exports = async function adminDatabaseCommand(req, res, next) {
   /*
@@ -10,6 +14,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
     * admin.databasecommand.failedconnection
     * admin.databasecommand.error.unmatchedtype
     * admin.databasecommand.missingaction
+    * admin.databasecommand.collectionmistmatch
     * admin.databasecommand.missingcollection
     * admin.databasecommand.missingtype
     * admin.databasecommand.insertone.success
@@ -28,163 +33,154 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
   }
 
   return new Promise((resolve, reject) => {
-    // DB connection
-    if (process.env.DEBUG === true) {
-      console.log("Openning server");
-    }
-    let DB_URL =
-      "mongodb+srv://savoyatp:" +
-      process.env.DB_PW +
-      "@" +
-      process.env.DB_CLUSTER +
-      "?retryWrites=true&w=majority";
-    let mongoClient = new MongoClient(DB_URL, { useNewUrlParser: true });
-    mongoClient
-      .connect()
-      .then((err) => {
-        if (process.env.DEBUG === true) {
-          console.log("Connected correctly to server");
-        }
-
-        // Action
-        if (req.body.action != undefined) {
-          // Collection
-          if (req.body.action.collection != undefined) {
-            collection = mongoClient
-              .db("test")
-              .collection(req.body.action.collection);
-            // Type
-            if (req.body.action.type != undefined) {
-              switch (req.body.action.type) {
-                case "insertone":
-                  // Type
-                  if (req.body.action.item != undefined) {
-                    collection
-                      .insertOne(req.body.action.item)
-                      .then((insertOneResponse) => {
-                        if (process.env.DEBUG === true) {
-                          console.log(
-                            "admin.databasecommand.insertone.success",
-                          );
-                        }
-                        return res.status(200).json({
-                          type: "admin.databasecommand.insertone.success",
-                          data: insertOneResponse,
-                        });
-                      })
-                      .catch((error) => {
-                        console.log(
-                          "admin.databasecommand.insertone.error.oninstert",
-                        );
-                        console.error(error);
-                        return res.status(500).json({
-                          type: "admin.databasecommand.insertone.error.oninstert",
-                          error: error,
-                          data: {},
-                        });
-                      });
-                  } else {
-                    console.log("admin.databasecommand.insertone.missingitem");
-                    return res.status(400).json({
-                      type: "admin.databasecommand.insertone.missingitem",
-                      data: {},
-                    });
-                  }
-                  break;
-                case "delete":
-                  // Type
-                  if (req.body.action.ids != undefined) {
-                    collection
-                      .deleteMany({ _id: req.body.action.ids })
-                      .then((deleteResponse) => {
-                        if (process.env.DEBUG === true) {
-                          console.log("admin.databasecommand.delete.success");
-                        }
-                        return res.status(200).json({
-                          type: "admin.databasecommand.delete.success",
-                          data: deleteResponse,
-                        });
-                      })
-                      .catch((error) => {
-                        console.log(
-                          "admin.databasecommand.delete.error.ondelete",
-                        );
-                        console.error(error);
-                        return res.status(500).json({
-                          type: "admin.databasecommand.delete.error.ondelete",
-                          error: error,
-                          data: {},
-                        });
-                      });
-                  } else {
-                    console.log("admin.databasecommand.delete.missingids");
-                    return res.status(400).json({
-                      type: "admin.databasecommand.delete.missingids",
-                      data: {},
-                    });
-                  }
-                  break;
-                case "drop":
-                  collection
-                    .drop()
-                    .then((dropResponse) => {
-                      if (process.env.DEBUG === true) {
-                        console.log("admin.databasecommand.drop.success");
-                      }
-                      return res.status(200).json({
-                        type: "admin.databasecommand.drop.success",
-                        data: dropResponse,
-                      });
-                    })
-                    .catch((error) => {
-                      console.log("admin.databasecommand.drop.error.ondrop");
-                      console.error(error);
-                      return res.status(500).json({
-                        type: "admin.databasecommand.drop.error.ondrop",
-                        error: error,
-                        data: dropResponse,
-                      });
-                    });
-                  break;
-                default:
-                  log.push("ERROR > action type not switched", req.body.action);
-                  console.log("admin.databasecommand.error.unmatchedtype");
-                  console.error(error);
-                  return res.status(400).json({
-                    type: "admin.databasecommand.error.unmatchedtype",
-                    error: error,
-                    data: {},
-                  });
-              }
-            } else {
-              console.log("admin.databasecommand.missingtype");
-              resolve({
-                type: "admin.databasecommand.missingtype",
-                action: req.body.action,
-              });
-            }
-          } else {
-            console.log("admin.databasecommand.missingcollection");
+    let collection = undefined;
+    // Action
+    if (req.body.action != undefined) {
+      // Collection
+      if (req.body.action.collection != undefined) {
+        switch (req.body.action.collection) {
+          case "users":
+            collection = User;
+            break;
+          case "games":
+            collection = Game;
+            break;
+          case "tables":
+            collection = Table;
+            break;
+          case "notifications":
+            collection = Notification;
+            break;
+          case "feedbacks":
+            collection = Feedback;
+            break;
+          default:
+            //
+            console.log("admin.databasecommand.collectionmistmatch");
             return res.status(400).json({
-              type: "admin.databasecommand.missingcollection",
+              type: "admin.databasecommand.collectionmistmatch",
               data: {},
             });
+        }
+        // Type
+        if (req.body.action.type != undefined) {
+          switch (req.body.action.type) {
+            case "insertone":
+              // Type
+              if (req.body.action.item != undefined) {
+                collection
+                  .insertOne(req.body.action.item)
+                  .then((insertOneResponse) => {
+                    if (process.env.DEBUG === true) {
+                      console.log("admin.databasecommand.insertone.success");
+                    }
+                    return res.status(200).json({
+                      type: "admin.databasecommand.insertone.success",
+                      data: insertOneResponse,
+                    });
+                  })
+                  .catch((error) => {
+                    console.log(
+                      "admin.databasecommand.insertone.error.oninstert",
+                    );
+                    console.error(error);
+                    return res.status(500).json({
+                      type: "admin.databasecommand.insertone.error.oninstert",
+                      error: error,
+                      data: {},
+                    });
+                  });
+              } else {
+                console.log("admin.databasecommand.insertone.missingitem");
+                return res.status(400).json({
+                  type: "admin.databasecommand.insertone.missingitem",
+                  data: {},
+                });
+              }
+              break;
+            case "delete":
+              // Type
+              if (req.body.action.ids != undefined) {
+                collection
+                  .deleteMany({ id: req.body.action.ids })
+                  .then((deleteResponse) => {
+                    if (process.env.DEBUG === true) {
+                      console.log("admin.databasecommand.delete.success");
+                    }
+                    return res.status(200).json({
+                      type: "admin.databasecommand.delete.success",
+                      data: deleteResponse,
+                    });
+                  })
+                  .catch((error) => {
+                    console.log("admin.databasecommand.delete.error.ondelete");
+                    console.error(error);
+                    return res.status(500).json({
+                      type: "admin.databasecommand.delete.error.ondelete",
+                      error: error,
+                      data: {},
+                    });
+                  });
+              } else {
+                console.log("admin.databasecommand.delete.missingids");
+                return res.status(400).json({
+                  type: "admin.databasecommand.delete.missingids",
+                  data: {},
+                });
+              }
+              break;
+            case "drop":
+              collection
+                .drop()
+                .then((dropResponse) => {
+                  if (process.env.DEBUG === true) {
+                    console.log("admin.databasecommand.drop.success");
+                  }
+                  return res.status(200).json({
+                    type: "admin.databasecommand.drop.success",
+                    data: dropResponse,
+                  });
+                })
+                .catch((error) => {
+                  console.log("admin.databasecommand.drop.error.ondrop");
+                  console.error(error);
+                  return res.status(500).json({
+                    type: "admin.databasecommand.drop.error.ondrop",
+                    error: error,
+                    data: dropResponse,
+                  });
+                });
+              break;
+            default:
+              log.push("ERROR > action type not switched", req.body.action);
+              console.log("admin.databasecommand.error.unmatchedtype");
+              console.error(error);
+              return res.status(400).json({
+                type: "admin.databasecommand.error.unmatchedtype",
+                error: error,
+                data: {},
+              });
           }
         } else {
-          console.log("admin.databasecommand.missingaction");
+          console.log("admin.databasecommand.missingtype");
           resolve({
-            type: "admin.databasecommand.missingaction",
-            action: req.body,
+            type: "admin.databasecommand.missingtype",
+            action: req.body.action,
           });
         }
-      })
-      .catch((err) => {
-        console.log(err);
-        return res.status(500).json({
-          type: "admin.databasecommand.failedconnection",
-          error: err,
+      } else {
+        console.log("admin.databasecommand.missingcollection");
+        return res.status(400).json({
+          type: "admin.databasecommand.missingcollection",
           data: {},
         });
+      }
+    } else {
+      console.log("admin.databasecommand.missingaction");
+      resolve({
+        type: "admin.databasecommand.missingaction",
+        action: req.body,
       });
+    }
   });
 };
