@@ -95,7 +95,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                   // Type
                   if (req.body.action.ids != undefined) {
                     collection
-                      .remove({ id: req.body.action.ids })
+                      .deleteMany({ _id: req.body.action.ids })
                       .then((deleteResponse) => {
                         if (process.env.DEBUG === true) {
                           console.log("admin.databasecommand.delete.success");
