@@ -70,7 +70,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                             "admin.databasecommand.insertone.success",
                           );
                         }
-                        resolve({
+                        return res.status(200).json({
                           type: "admin.databasecommand.insertone.success",
                           res: insertOneResponse,
                         });
@@ -80,7 +80,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                           "admin.databasecommand.insertone.error.oninstert",
                         );
                         console.error(error);
-                        resolve({
+                        return res.status(500).json({
                           type: "admin.databasecommand.insertone.error.oninstert",
                           error: error,
                           action: req.body.action,
@@ -88,7 +88,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                       });
                   } else {
                     console.log("admin.databasecommand.insertone.missingitem");
-                    resolve({
+                    return res.status(400).json({
                       type: "admin.databasecommand.insertone.missingitem",
                       action: req.body.action,
                     });
@@ -103,7 +103,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                         if (process.env.DEBUG === true) {
                           console.log("admin.databasecommand.delete.success");
                         }
-                        resolve({
+                        return res.status(200).json({
                           type: "admin.databasecommand.delete.success",
                           res: deleteResponse,
                         });
@@ -113,7 +113,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                           "admin.databasecommand.delete.error.ondelete",
                         );
                         console.error(error);
-                        resolve({
+                        return res.status(500).json({
                           type: "admin.databasecommand.delete.error.ondelete",
                           error: error,
                           res: deleteResponse,
@@ -121,7 +121,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                       });
                   } else {
                     console.log("admin.databasecommand.delete.missingids");
-                    resolve({
+                    return res.status(400).json({
                       type: "admin.databasecommand.delete.missingids",
                       action: req.body.action,
                     });
@@ -134,7 +134,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                       if (process.env.DEBUG === true) {
                         console.log("admin.databasecommand.drop.success");
                       }
-                      resolve({
+                      return res.status(200).json({
                         type: "admin.databasecommand.drop.success",
                         res: dropResponse,
                       });
@@ -142,7 +142,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                     .catch((error) => {
                       console.log("admin.databasecommand.drop.error.ondrop");
                       console.error(error);
-                      resolve({
+                      return res.status(500).json({
                         type: "admin.databasecommand.drop.error.ondrop",
                         error: error,
                         res: dropResponse,
@@ -153,7 +153,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                   log.push("ERROR > action type not switched", req.body.action);
                   console.log("admin.databasecommand.error.unmatchedtype");
                   console.error(error);
-                  resolve({
+                  return res.status(400).json({
                     type: "admin.databasecommand.error.unmatchedtype",
                     error: error,
                   });
@@ -167,7 +167,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
             }
           } else {
             console.log("admin.databasecommand.missingcollection");
-            resolve({
+            return res.status(400).json({
               type: "admin.databasecommand.missingcollection",
               action: req.body.action,
             });
@@ -182,7 +182,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
       })
       .catch((err) => {
         console.log(err);
-        resolve({
+        return res.status(500).json({
           type: "admin.databasecommand.failedconnection",
           error: err,
         });

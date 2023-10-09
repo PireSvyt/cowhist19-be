@@ -34,17 +34,20 @@ describe("TEST OF API : auth", () => {
         "responses.adminSignInResponse",
         responses.adminSignInResponse,
       );
-      responses["adminDatabaseCommand"] = await adminAPI.adminDatabaseCommand(
-        {
-          type: "delete",
-          collection: "users",
-          ids: [responses.apiAuthSignUp.data.id],
-        },
-        responses.adminSignInResponse.data.token,
-      );
+      let adminDatabaseCommandInputs = {
+        type: "delete",
+        collection: "users",
+        ids: [responses.apiAuthSignUp.data.id],
+      };
+      console.log("adminDatabaseCommandInputs", adminDatabaseCommandInputs);
+      responses["adminDatabaseCommandResponse"] =
+        await adminAPI.adminDatabaseCommand(
+          adminDatabaseCommandInputs,
+          responses.adminSignInResponse.data.token,
+        );
       console.log(
-        "responses.adminDatabaseCommand",
-        responses.adminDatabaseCommand,
+        "responses.adminDatabaseCommandResponse",
+        responses.adminDatabaseCommandResponse,
       );
     });
     test.skip("successful: already signedup", async () => {
