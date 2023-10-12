@@ -25,7 +25,7 @@ exports.apiAuthSendActivation = async function (sendActivationInputs) {
   }
 };
 
-exports.apAuthiActivate = async function (activateInputs) {
+exports.apiAuthActivate = async function (activateInputs) {
   try {
     const res = await axios.post(apiURL + "auth/v1/activate", activateInputs);
     return res.data;
