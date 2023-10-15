@@ -22,7 +22,7 @@ describe("TEST OF API : auth", () => {
   describe("Assessment admin tools", () => {
     test("successful", async () => {
       adminSignInResponse = await authAPI.apiAuthSignIn(adminSignInInputs);
-      console.log("adminSignInResponse", adminSignInResponse);
+      //console.log("adminSignInResponse", adminSignInResponse);
       expect(adminSignInResponse.type).toBe("auth.signin.success");
     });
     test("clean up database", async () => {
@@ -39,7 +39,7 @@ describe("TEST OF API : auth", () => {
         },
         adminSignInResponse.data.token,
       );
-      //console.log("adminCleanUpResponse", adminCleanUpResponse);
+      console.log("adminCleanUpResponse", adminCleanUpResponse);
       expect(adminCleanUpResponse.type).toBe(
         "admin.databasecommand.cleanup.success",
       );
