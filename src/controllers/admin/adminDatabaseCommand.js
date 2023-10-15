@@ -39,6 +39,9 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
     if (req.body.action != undefined) {
       // Collection
       if (req.body.action.collection != undefined) {
+        if (process.env.DEBUG === true) {
+          console.log("action", req.body.action);
+        }
         switch (req.body.action.collection) {
           case "users":
             collection = User;
