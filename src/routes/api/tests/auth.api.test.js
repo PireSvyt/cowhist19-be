@@ -1,4 +1,5 @@
 require("@jest/globals");
+const jwt_decode = require("jwt-decode");
 const bcrypt = require("bcrypt");
 const authAPI = require("../auth.js");
 const adminAPI = require("../admin.js");
@@ -25,16 +26,20 @@ describe("TEST OF API : auth", () => {
       expect(adminSignInResponse.type).toBe("auth.signin.success");
     });
     test("clean up database", async () => {
+      const authHeader = req.headers["authorization"];
+      const token = authHeader && authHeader.split(" ")[1];
+      const decodedToken = jwt_decode(token);
       adminCleanUpResponse = await adminAPI.adminDatabaseCommand(
         {
           action: {
-            type: "cleanup",
-            collection: "all",
+            type: "delete",
+            collection: "users",
+            ids: { $ne: decodedToken.id },
           },
         },
         adminSignInResponse.data.token,
       );
-      console.log("adminCleanUpResponse", adminCleanUpResponse);
+      //console.log("adminCleanUpResponse", adminCleanUpResponse);
       expect(adminCleanUpResponse.type).toBe(
         "admin.databasecommand.cleanup.success",
       );

@@ -39,7 +39,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
     if (req.body.action != undefined) {
       // Collection
       if (req.body.action.collection != undefined) {
-        if (process.env.DEBUG === true) {
+        if (process.env.DEBUG === TRUE) {
           console.log("action", req.body.action);
         }
         switch (req.body.action.collection) {
@@ -79,7 +79,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                   .find({ id: req.body.action.ids })
                   .then((itemList) => {
                     if (itemList.length === req.body.action.ids.length) {
-                      if (process.env.DEBUG === true) {
+                      if (process.env.DEBUG === TRUE) {
                         console.log("admin.databasecommand.get.success");
                       }
                       return res.status(200).json({
@@ -118,7 +118,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                 collection
                   .insertOne(req.body.action.item)
                   .then((insertOneResponse) => {
-                    if (process.env.DEBUG === true) {
+                    if (process.env.DEBUG === TRUE) {
                       console.log("admin.databasecommand.insertone.success");
                     }
                     return res.status(200).json({
@@ -148,26 +148,42 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
             case "delete":
               // Type
               if (req.body.action.ids != undefined) {
-                collection
-                  .deleteMany({ id: req.body.action.ids })
-                  .then((deleteResponse) => {
-                    if (process.env.DEBUG === true) {
-                      console.log("admin.databasecommand.delete.success");
-                    }
-                    return res.status(200).json({
-                      type: "admin.databasecommand.delete.success",
-                      data: deleteResponse,
-                    });
-                  })
-                  .catch((error) => {
-                    console.log("admin.databasecommand.delete.error.ondelete");
-                    console.error(error);
-                    return res.status(500).json({
-                      type: "admin.databasecommand.delete.error.ondelete",
-                      error: error,
-                      data: {},
-                    });
+                if (
+                  process.env.NODE_ENV === "_production" &&
+                  (req.body.action.ids.length > 5 ||
+                    req.body.action.ids.length === 0)
+                ) {
+                  if (process.env.DEBUG === TRUE) {
+                    console.log("admin.databasecommand.delete.denied");
+                  }
+                  return res.status(403).json({
+                    type: "admin.databasecommand.delete.denied",
+                    message: "command unauthorized in production above 5 ids",
                   });
+                } else {
+                  collection
+                    .deleteMany({ id: req.body.action.ids })
+                    .then((deleteResponse) => {
+                      if (process.env.DEBUG === TRUE) {
+                        console.log("admin.databasecommand.delete.success");
+                      }
+                      return res.status(200).json({
+                        type: "admin.databasecommand.delete.success",
+                        data: deleteResponse,
+                      });
+                    })
+                    .catch((error) => {
+                      console.log(
+                        "admin.databasecommand.delete.error.ondelete",
+                      );
+                      console.error(error);
+                      return res.status(500).json({
+                        type: "admin.databasecommand.delete.error.ondelete",
+                        error: error,
+                        data: {},
+                      });
+                    });
+                }
               } else {
                 console.log("admin.databasecommand.delete.missingids");
                 return res.status(400).json({
@@ -177,46 +193,66 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
               }
               break;
             case "drop":
-              collection
-                .drop()
-                .then((dropResponse) => {
-                  if (process.env.DEBUG === true) {
-                    console.log("admin.databasecommand.drop.success");
-                  }
-                  return res.status(200).json({
-                    type: "admin.databasecommand.drop.success",
-                    data: dropResponse,
-                  });
-                })
-                .catch((error) => {
-                  console.log("admin.databasecommand.drop.error.ondrop");
-                  console.error(error);
-                  return res.status(500).json({
-                    type: "admin.databasecommand.drop.error.ondrop",
-                    error: error,
-                    data: dropResponse,
-                  });
+              if (process.env.NODE_ENV === "_production") {
+                if (process.env.DEBUG === TRUE) {
+                  console.log("admin.databasecommand.drop.denied");
+                }
+                return res.status(403).json({
+                  type: "admin.databasecommand.drop.denied",
+                  message: "command unauthorized in production",
                 });
+              } else {
+                collection
+                  .drop()
+                  .then((dropResponse) => {
+                    if (process.env.DEBUG === TRUE) {
+                      console.log("admin.databasecommand.drop.success");
+                    }
+                    return res.status(200).json({
+                      type: "admin.databasecommand.drop.success",
+                      data: dropResponse,
+                    });
+                  })
+                  .catch((error) => {
+                    console.log("admin.databasecommand.drop.error.ondrop");
+                    console.error(error);
+                    return res.status(500).json({
+                      type: "admin.databasecommand.drop.error.ondrop",
+                      error: error,
+                      data: dropResponse,
+                    });
+                  });
+              }
               break;
             case "cleanup":
-              const authHeader = req.headers["authorization"];
-              const token = authHeader && authHeader.split(" ")[1];
-              const decodedToken = jwt_decode(token);
+              if (process.env.NODE_ENV === "_production") {
+                if (process.env.DEBUG === TRUE) {
+                  console.log("admin.databasecommand.cleanup.denied");
+                }
+                return res.status(403).json({
+                  type: "admin.databasecommand.cleanup.denied",
+                  message: "command unauthorized in production",
+                });
+              } else {
+                const authHeader = req.headers["authorization"];
+                const token = authHeader && authHeader.split(" ")[1];
+                const decodedToken = jwt_decode(token);
 
-              let deletes = {};
-              Game.deleteMany()
-                .then((gameOutcome) => {
-                  deletes["game"] = gameOutcome;
-                  Table.deleteMany().then((tableOutcome) => {
-                    deletes["table"] = tableOutcome;
-                    Notification.deleteMany().then((notifOutcome) => {
-                      deletes["notif"] = notifOutcome;
-                      Feedback.deleteMany().then((feedOutcome) => {
-                        deletes["feed"] = feedOutcome;
-                        User.deleteMany({ id: { $ne: decodedToken.id } }).then(
-                          (userOutcome) => {
+                let deletes = {};
+                Game.deleteMany()
+                  .then((gameOutcome) => {
+                    deletes["game"] = gameOutcome;
+                    Table.deleteMany().then((tableOutcome) => {
+                      deletes["table"] = tableOutcome;
+                      Notification.deleteMany().then((notifOutcome) => {
+                        deletes["notif"] = notifOutcome;
+                        Feedback.deleteMany().then((feedOutcome) => {
+                          deletes["feed"] = feedOutcome;
+                          User.deleteMany({
+                            id: { $ne: decodedToken.id },
+                          }).then((userOutcome) => {
                             deletes["user"] = userOutcome;
-                            if (process.env.DEBUG === true) {
+                            if (process.env.DEBUG === TRUE) {
                               console.log(
                                 "admin.databasecommand.cleanup.success",
                               );
@@ -225,22 +261,21 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                               type: "admin.databasecommand.cleanup.success",
                               data: deletes,
                             });
-                          },
-                        );
+                          });
+                        });
                       });
                     });
+                  })
+                  .catch((error) => {
+                    console.log("admin.databasecommand.cleanup.error");
+                    console.error(error);
+                    return res.status(500).json({
+                      type: "admin.databasecommand.cleanup.error",
+                      error: error,
+                      data: drops,
+                    });
                   });
-                })
-                .catch((error) => {
-                  console.log("admin.databasecommand.cleanup.error");
-                  console.error(error);
-                  return res.status(500).json({
-                    type: "admin.databasecommand.cleanup.error",
-                    error: error,
-                    data: drops,
-                  });
-                });
-              break;
+              }
               break;
             default:
               log.push("ERROR > action type not switched", req.body.action);
