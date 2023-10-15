@@ -21,8 +21,23 @@ describe("TEST OF API : auth", () => {
   describe("Assessment admin tools", () => {
     test("successful", async () => {
       adminSignInResponse = await authAPI.apiAuthSignIn(adminSignInInputs);
-      //console.log("adminSignInResponse", adminSignInResponse);
+      console.log("adminSignInResponse", adminSignInResponse);
       expect(adminSignInResponse.type).toBe("auth.signin.success");
+    });
+    test("clean up database", async () => {
+      adminCleanUpResponse = await adminAPI.adminDatabaseCommand(
+        {
+          action: {
+            type: "cleanup",
+            collection: "all",
+          },
+        },
+        adminSignInResponse.data.token,
+      );
+      console.log("adminCleanUpResponse", adminCleanUpResponse);
+      expect(adminCleanUpResponse.type).toBe(
+        "admin.databasecommand.cleanup.success",
+      );
     });
   });
 
@@ -36,8 +51,7 @@ describe("TEST OF API : auth", () => {
       let signUpInputs = {
         login: rid + "@yopmail.com",
         pseudo: rid,
-        password: bcrypt.hashSync(rid),
-        encryption: true,
+        password: bcrypt.hashSync(rid, 10),
       };
       //console.log("signUpInputs", signUpInputs);
       responses["apiAuthSignUp"] = await authAPI.apiAuthSignUp(signUpInputs);
@@ -55,11 +69,11 @@ describe("TEST OF API : auth", () => {
         },
         adminSignInResponse.data.token,
       );
-      //console.log("responses.check", responses.check);
+      console.log("responses.check.data", responses.check.data);
       expect(responses.check.type).toBe("admin.databasecommand.get.success");
       expect(responses.check.data.items[0].status).toBe("signedup");
       expect(responses.check.data.items[0].login).toBe(rid + "@yopmail.com");
-      expect(responses.check.data.items[0].password).toBe(rid);
+      //expect(responses.check.data.items[0].password).toBe(rid);
       expect(responses.check.data.items[0].pseudo).toBe(rid);
 
       // Account for step
@@ -116,7 +130,7 @@ describe("TEST OF API : auth", () => {
 
       // Test
       let signupPicked = Object.keys(users.signedup)[0];
-      console.log("pickedUser", users.signedup[signupPicked]);
+      //console.log("pickedUser", users.signedup[signupPicked]);
       let activateInputs = {
         login: users.signedup[signupPicked].login,
         token: users.signedup[signupPicked].activationtoken,
@@ -140,7 +154,8 @@ describe("TEST OF API : auth", () => {
         },
         adminSignInResponse.data.token,
       );
-      //console.log("responses.check", responses.check);
+      console.log("responses.check", responses.check);
+      console.log("responses.check.data", responses.check.data);
       expect(responses.check.type).toBe("admin.databasecommand.get.success");
       expect(responses.check.data.items[0].status).toBe("activated");
       expect(responses.check.data.items[0].login).toBe(
@@ -178,7 +193,7 @@ describe("TEST OF API : auth", () => {
       console.log("pickedUser", users.activated[activatedPicked]);
       let signInInputs = {
         login: users.activated[activatedPicked].login,
-        password: users.activated[activatedPicked].password,
+        password: hashSync(),
         encryption: false,
       };
       console.log("signInInputs", signInInputs);

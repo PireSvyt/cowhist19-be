@@ -1,4 +1,5 @@
 require("dotenv").config();
+const jwt_decode = require("jwt-decode");
 const User = require("../../models/User.js");
 const Game = require("../../models/Game.js");
 const Table = require("../../models/Table.js");
@@ -53,6 +54,9 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
             break;
           case "feedbacks":
             collection = Feedback;
+            break;
+          case "all":
+            // see action.type case "clean up all"
             break;
           default:
             //
@@ -190,6 +194,49 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                     data: dropResponse,
                   });
                 });
+              break;
+            case "cleanup":
+              const authHeader = req.headers["authorization"];
+              const token = authHeader && authHeader.split(" ")[1];
+              const decodedToken = jwt_decode(token);
+
+              let drops = {};
+              Game.drop()
+                .then((gameOutcome) => {
+                  drops["game"] = gameOutcome;
+                  Table.drop().then((tableOutcome) => {
+                    drops["table"] = tableOutcome;
+                    Notification.drop().then((notifOutcome) => {
+                      Feedback.drop().then(() => {
+                        drops["notif"] = notifOutcome;
+                        User.delete({ id: { $ne: decodedToken.id } }).then(
+                          (userOutcome) => {
+                            drops["user"] = userOutcome;
+                            if (process.env.DEBUG === true) {
+                              console.log(
+                                "admin.databasecommand.cleanup.success",
+                              );
+                            }
+                            return res.status(200).json({
+                              type: "admin.databasecommand.cleanup.success",
+                              data: drops,
+                            });
+                          },
+                        );
+                      });
+                    });
+                  });
+                })
+                .catch((error) => {
+                  console.log("admin.databasecommand.cleanup.error");
+                  console.error(error);
+                  return res.status(500).json({
+                    type: "admin.databasecommand.cleanup.error",
+                    error: error,
+                    data: drops,
+                  });
+                });
+              break;
               break;
             default:
               log.push("ERROR > action type not switched", req.body.action);

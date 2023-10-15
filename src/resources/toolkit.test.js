@@ -65,31 +65,31 @@ describe("TEST OF FUNCTION : adjustProbabilities ", () => {
     test("then propabilities are adjusted", () => {
       expect(adjustedDict.mon.proba).toBeCloseTo(
         toAdjustDict.mon.proba / 100,
-        5
+        5,
       );
       expect(adjustedDict.tue.proba).toBeCloseTo(
         toAdjustDict.tue.proba / 100,
-        5
+        5,
       );
       expect(adjustedDict.wed.proba).toBeCloseTo(
         toAdjustDict.wed.proba / 100,
-        5
+        5,
       );
       expect(adjustedDict.thu.proba).toBeCloseTo(
         toAdjustDict.thu.proba / 100,
-        5
+        5,
       );
       expect(adjustedDict.fri.proba).toBeCloseTo(
         toAdjustDict.fri.proba / 100,
-        5
+        5,
       );
       expect(adjustedDict.sat.proba).toBeCloseTo(
         toAdjustDict.sat.proba / 100,
-        5
+        5,
       );
       expect(adjustedDict.sun.proba).toBeCloseTo(
         toAdjustDict.sun.proba / 100,
-        5
+        5,
       );
     });
   });
@@ -239,37 +239,37 @@ describe("TEST OF FUNCTION : getLastDates ", () => {
       };
       let dateDict = getLastDates(7, likelihoods);
       let monday = Object.keys(dateDict).find(
-        (date) => dateDict[date].weekday === "mon"
+        (date) => dateDict[date].weekday === "mon",
       );
       let offset = Object.keys(dateDict).indexOf(monday);
       let keys = Object.keys(dateDict);
-      expect(dateDict[keys[(offset - 0 +7) % 7]].likelihood).toBeCloseTo(
+      expect(dateDict[keys[(offset - 0 + 7) % 7]].likelihood).toBeCloseTo(
         likelihoods.mon,
-        5
+        5,
       );
-      expect(dateDict[keys[(offset - 1 +7) % 7]].likelihood).toBeCloseTo(
+      expect(dateDict[keys[(offset - 1 + 7) % 7]].likelihood).toBeCloseTo(
         likelihoods.tue,
-        5
+        5,
       );
-      expect(dateDict[keys[(offset - 2 +7) % 7]].likelihood).toBeCloseTo(
+      expect(dateDict[keys[(offset - 2 + 7) % 7]].likelihood).toBeCloseTo(
         likelihoods.wed,
-        5
+        5,
       );
-      expect(dateDict[keys[(offset - 3 +7) % 7]].likelihood).toBeCloseTo(
+      expect(dateDict[keys[(offset - 3 + 7) % 7]].likelihood).toBeCloseTo(
         likelihoods.thu,
-        5
+        5,
       );
-      expect(dateDict[keys[(offset - 4 +7) % 7]].likelihood).toBeCloseTo(
+      expect(dateDict[keys[(offset - 4 + 7) % 7]].likelihood).toBeCloseTo(
         likelihoods.fri,
-        5
+        5,
       );
-      expect(dateDict[keys[(offset - 5 +7) % 7]].likelihood).toBeCloseTo(
+      expect(dateDict[keys[(offset - 5 + 7) % 7]].likelihood).toBeCloseTo(
         likelihoods.sat,
-        5
+        5,
       );
-      expect(dateDict[keys[(offset - 6 +7) % 7]].likelihood).toBeCloseTo(
+      expect(dateDict[keys[(offset - 6 + 7) % 7]].likelihood).toBeCloseTo(
         likelihoods.sun,
-        5
+        5,
       );
     });
   });
