@@ -200,18 +200,19 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
               const token = authHeader && authHeader.split(" ")[1];
               const decodedToken = jwt_decode(token);
 
-              let drops = {};
-              Game.drop()
+              let deletes = {};
+              Game.delete()
                 .then((gameOutcome) => {
-                  drops["game"] = gameOutcome;
-                  Table.drop().then((tableOutcome) => {
-                    drops["table"] = tableOutcome;
-                    Notification.drop().then((notifOutcome) => {
-                      Feedback.drop().then(() => {
-                        drops["notif"] = notifOutcome;
+                  deletes["game"] = gameOutcome;
+                  Table.delete().then((tableOutcome) => {
+                    deletes["table"] = tableOutcome;
+                    Notification.delete().then((notifOutcome) => {
+                      deletes["notif"] = notifOutcome;
+                      Feedback.drop().then((feedOutcome) => {
+                        deletes["feed"] = feedOutcome;
                         User.delete({ id: { $ne: decodedToken.id } }).then(
                           (userOutcome) => {
-                            drops["user"] = userOutcome;
+                            deletes["user"] = userOutcome;
                             if (process.env.DEBUG === true) {
                               console.log(
                                 "admin.databasecommand.cleanup.success",
@@ -219,7 +220,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                             }
                             return res.status(200).json({
                               type: "admin.databasecommand.cleanup.success",
-                              data: drops,
+                              data: deletes,
                             });
                           },
                         );
