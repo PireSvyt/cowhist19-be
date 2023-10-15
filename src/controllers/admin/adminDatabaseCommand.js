@@ -201,16 +201,16 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
               const decodedToken = jwt_decode(token);
 
               let deletes = {};
-              Game.delete()
+              Game.deleteMany()
                 .then((gameOutcome) => {
                   deletes["game"] = gameOutcome;
-                  Table.delete().then((tableOutcome) => {
+                  Table.deleteMany().then((tableOutcome) => {
                     deletes["table"] = tableOutcome;
-                    Notification.delete().then((notifOutcome) => {
+                    Notification.deleteMany().then((notifOutcome) => {
                       deletes["notif"] = notifOutcome;
-                      Feedback.drop().then((feedOutcome) => {
+                      Feedback.deleteMany().then((feedOutcome) => {
                         deletes["feed"] = feedOutcome;
-                        User.delete({ id: { $ne: decodedToken.id } }).then(
+                        User.deleteMany({ id: { $ne: decodedToken.id } }).then(
                           (userOutcome) => {
                             deletes["user"] = userOutcome;
                             if (process.env.DEBUG === true) {
