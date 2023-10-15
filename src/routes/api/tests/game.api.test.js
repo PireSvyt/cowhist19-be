@@ -69,25 +69,31 @@ describe("TEST OF API : game", () => {
     });
   });
 
-  describe.skip("Assessment POST apiGameSave", () => {
+  describe("Assessment POST apiGameSave", () => {
     test("set the scene", async () => {
+      // Prep
+      let responses = {};
+
       // Users
       responses["insertUsers"] = await adminAPI.adminDatabaseCommand(
         {
           action: {
             type: "insertmany",
             collection: "users",
-            items: toolkit.objectGenerator({ type: "user", count: 4 }),
+            items: toolkit.objectGenerator({
+              type: "activated user",
+              count: 4,
+            }),
           },
         },
         adminSignInResponse.data.token,
       );
-      //console.log("responses.insertUsers.data", responses.insertUsers.data);
+      console.log("responses.insertUsers.data", responses.insertUsers.data);
       expect(responses.insertUsers.type).toBe(
         "admin.databasecommand.insertmany.success",
       );
     });
-    test("successful", async () => {
+    test.skip("successful", async () => {
       // Prep
       let responses = {};
 
