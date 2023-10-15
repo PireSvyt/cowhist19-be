@@ -79,7 +79,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                   .find({ id: req.body.action.ids })
                   .then((itemList) => {
                     if (itemList.length === req.body.action.ids.length) {
-                      if (process.env.DEBUG === TRUE) {
+                      if (process.env.DEBUG === true) {
                         console.log("admin.databasecommand.get.success");
                       }
                       return res.status(200).json({
@@ -118,7 +118,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                 collection
                   .insertOne(req.body.action.item)
                   .then((insertOneResponse) => {
-                    if (process.env.DEBUG === TRUE) {
+                    if (process.env.DEBUG === true) {
                       console.log("admin.databasecommand.insertone.success");
                     }
                     return res.status(200).json({
@@ -153,7 +153,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                   (req.body.action.ids.length > 5 ||
                     req.body.action.ids.length === 0)
                 ) {
-                  if (process.env.DEBUG === TRUE) {
+                  if (process.env.DEBUG === true) {
                     console.log("admin.databasecommand.delete.denied");
                   }
                   return res.status(403).json({
@@ -164,7 +164,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                   collection
                     .deleteMany({ id: req.body.action.ids })
                     .then((deleteResponse) => {
-                      if (process.env.DEBUG === TRUE) {
+                      if (process.env.DEBUG === true) {
                         console.log("admin.databasecommand.delete.success");
                       }
                       return res.status(200).json({
@@ -194,7 +194,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
               break;
             case "drop":
               if (process.env.NODE_ENV === "_production") {
-                if (process.env.DEBUG === TRUE) {
+                if (process.env.DEBUG === true) {
                   console.log("admin.databasecommand.drop.denied");
                 }
                 return res.status(403).json({
@@ -205,7 +205,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                 collection
                   .drop()
                   .then((dropResponse) => {
-                    if (process.env.DEBUG === TRUE) {
+                    if (process.env.DEBUG === true) {
                       console.log("admin.databasecommand.drop.success");
                     }
                     return res.status(200).json({
@@ -226,7 +226,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
               break;
             case "cleanup":
               if (process.env.NODE_ENV === "_production") {
-                if (process.env.DEBUG === TRUE) {
+                if (process.env.DEBUG === true) {
                   console.log("admin.databasecommand.cleanup.denied");
                 }
                 return res.status(403).json({
@@ -252,7 +252,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                             id: { $ne: decodedToken.id },
                           }).then((userOutcome) => {
                             deletes["user"] = userOutcome;
-                            if (process.env.DEBUG === TRUE) {
+                            if (process.env.DEBUG === true) {
                               console.log(
                                 "admin.databasecommand.cleanup.success",
                               );
