@@ -1,16 +1,14 @@
 require("@jest/globals");
-const bcrypt = require("bcrypt");
-const CryptoJS = require("crypto-js");
 const authAPI = require("../auth.js");
 const adminAPI = require("../admin.js");
+const gameAPI = require("../game.js");
 const toolkit = require("../../../resources/toolkit.js");
 
-describe("TEST OF API : auth", () => {
+describe("TEST OF API : game", () => {
   // Pool of resources
-  let users = {
-    signedup: {},
-    activated: {},
-  };
+  let users = [];
+  let table = undefined;
+  let games = [];
 
   let adminSignInResponse = undefined;
   describe("Assessment admin tools", () => {
@@ -26,7 +24,7 @@ describe("TEST OF API : auth", () => {
       expect(adminSignInResponse.type).toBe("auth.signin.success");
     });
     test("clean up database", async () => {
-      adminDeleteResponse = await adminAPI.adminDatabaseCommand(
+      adminDeleteUsersResponse = await adminAPI.adminDatabaseCommand(
         {
           action: {
             type: "delete",
@@ -36,14 +34,59 @@ describe("TEST OF API : auth", () => {
         },
         adminSignInResponse.data.token,
       );
-      //console.log("adminDeleteResponse", adminDeleteResponse);
-      expect(adminDeleteResponse.type).toBe(
+      //console.log("adminDeleteUsersResponse", adminDeleteUsersResponse);
+      expect(adminDeleteUsersResponse.type).toBe(
+        "admin.databasecommand.delete.success",
+      );
+      adminDeleteGamesResponse = await adminAPI.adminDatabaseCommand(
+        {
+          action: {
+            type: "delete",
+            collection: "games",
+            ids: [],
+          },
+        },
+        adminSignInResponse.data.token,
+      );
+      //console.log("adminDeleteGamesResponse", adminDeleteGamesResponse);
+      expect(adminDeleteGamesResponse.type).toBe(
+        "admin.databasecommand.delete.success",
+      );
+      adminDeleteTablesResponse = await adminAPI.adminDatabaseCommand(
+        {
+          action: {
+            type: "delete",
+            collection: "tables",
+            ids: [],
+          },
+        },
+        adminSignInResponse.data.token,
+      );
+      //console.log("adminDeleteTablesResponse", adminDeleteTablesResponse);
+      expect(adminDeleteTablesResponse.type).toBe(
         "admin.databasecommand.delete.success",
       );
     });
   });
 
-  describe("Assessment POST apiAuthSignUp", () => {
+  describe.skip("Assessment POST apiGameSave", () => {
+    test("set the scene", async () => {
+      // Users
+      responses["insertUsers"] = await adminAPI.adminDatabaseCommand(
+        {
+          action: {
+            type: "insertmany",
+            collection: "users",
+            items: toolkit.objectGenerator({ type: "user", count: 4 }),
+          },
+        },
+        adminSignInResponse.data.token,
+      );
+      //console.log("responses.insertUsers.data", responses.insertUsers.data);
+      expect(responses.insertUsers.type).toBe(
+        "admin.databasecommand.insertmany.success",
+      );
+    });
     test("successful", async () => {
       // Prep
       let responses = {};
@@ -82,7 +125,7 @@ describe("TEST OF API : auth", () => {
       users.signedup[responses.apiAuthSignUp.data.id] =
         responses.check.data.items[0];
     });
-    test("successful: already signedup", async () => {
+    test.skip("successful: already signedup", async () => {
       // Prep
       let responses = {};
 
@@ -128,7 +171,7 @@ describe("TEST OF API : auth", () => {
     });
   });
 
-  describe("Assessment POST apiAuthActivate", () => {
+  describe.skip("Assessment POST apiGameDelete", () => {
     test("successful", async () => {
       // Prep
       let responses = {};
@@ -187,8 +230,8 @@ describe("TEST OF API : auth", () => {
     });
   });
 
-  describe("Assessment POST apiAuthSignIn", () => {
-    test("successful without encryption", async () => {
+  describe.skip("Assessment POST apiGameSave", () => {
+    test("successful", async () => {
       // Prep
       let responses = {};
 
@@ -207,31 +250,6 @@ describe("TEST OF API : auth", () => {
 
       // checks
     });
-    test("successful with encryption", async () => {
-      // Prep
-      let responses = {};
-
-      // Test
-      let activatedPicked = Object.keys(users.activated)[0];
-      //console.log("pickedUser", users.activated[activatedPicked]);
-      let signInInputs = {
-        login: CryptoJS.AES.encrypt(
-          users.activated[activatedPicked].login,
-          process.env.ENCRYPTION_KEY,
-        ).toString(),
-        password: CryptoJS.AES.encrypt(
-          users.activated[activatedPicked].pseudo,
-          process.env.ENCRYPTION_KEY,
-        ).toString(),
-        encryption: true,
-      };
-      //console.log("signInInputs", signInInputs);
-      responses["apiAuthSignIn"] = await authAPI.apiAuthSignIn(signInInputs);
-      //console.log("responses.apiAuthSignIn", responses.apiAuthSignIn);
-      expect(responses.apiAuthSignIn.type).toBe("auth.signin.success");
-
-      // checks
-    });
     test.skip("unsuccessful: not existing", async () => {
       expect(true).toBe(false);
     });
@@ -239,24 +257,6 @@ describe("TEST OF API : auth", () => {
       expect(true).toBe(false);
     });
     test.skip("unsuccessful: wrong password", async () => {
-      expect(true).toBe(false);
-    });
-  });
-
-  describe("Assessment POST apiAuthAssess", () => {
-    test.skip("successful", async () => {
-      expect(true).toBe(false);
-    });
-    test.skip("unsuccessful: wrong token", async () => {
-      expect(true).toBe(false);
-    });
-  });
-
-  describe("Assessment POST apiAuthExistingPseudo", () => {
-    test.skip("existing", async () => {
-      expect(true).toBe(false);
-    });
-    test.skip("not existing", async () => {
       expect(true).toBe(false);
     });
   });

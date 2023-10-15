@@ -3,6 +3,7 @@ module.exports = {
   pickOne: pickOne,
   random_id: random_id,
   getLastDates: getLastDates,
+  objectGenerator: objectGenerator,
 };
 
 function adjustProbabilities(dict, field) {
@@ -89,4 +90,27 @@ function getLastDates(days, weekdaysLikelihoods) {
     currentDate.setDate(currentDate.getDate() - 1);
   }
   return dateDict;
+}
+
+function objectGenerator(command) {
+  if (command.count > 0) {
+    let list = [];
+    for (let i = 0; i < command.count; i++) {
+      list.push(objectGenerator({ type: command.type }));
+    }
+    return list;
+  } else {
+    let rid = random_id(16);
+    switch (command.type) {
+      case "activated user":
+        return {
+          login: rid + "@yopmail.com",
+          password: bcrypt.hashSync(rid, 10),
+          pseudo: rid,
+          status: "activated",
+        };
+      default:
+        return undefined;
+    }
+  }
 }

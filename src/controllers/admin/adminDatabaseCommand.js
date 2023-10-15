@@ -18,9 +18,9 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
     * admin.databasecommand.collectionmistmatch
     * admin.databasecommand.missingcollection
     * admin.databasecommand.missingtype
-    * admin.databasecommand.insertone.success
-    * admin.databasecommand.insertone.missingitem
-    * admin.databasecommand.insertone.error.oninstert
+    * admin.databasecommand.insertmany.success
+    * admin.databasecommand.insertmany.missingitem
+    * admin.databasecommand.insertmany.error.oninstert
     * admin.databasecommand.delete.success
     * admin.databasecommand.delete.missingids
     * admin.databasecommand.delete.error.ondelete
@@ -95,11 +95,11 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                   })
                   .catch((error) => {
                     console.log(
-                      "admin.databasecommand.insertone.error.oninstert",
+                      "admin.databasecommand.insertmany.error.oninstert",
                     );
                     console.error(error);
                     return res.status(500).json({
-                      type: "admin.databasecommand.insertone.error.oninstert",
+                      type: "admin.databasecommand.insertmany.error.oninstert",
                       error: error,
                       data: {},
                     });
@@ -112,35 +112,35 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                 });
               }
               break;
-            case "insertone":
+            case "insertmany":
               // Type
-              if (req.body.action.item != undefined) {
+              if (req.body.action.items != undefined) {
                 collection
-                  .insertOne(req.body.action.item)
-                  .then((insertOneResponse) => {
+                  .insertMany(req.body.action.items)
+                  .then((insertManyResponse) => {
                     if (process.env.DEBUG === true) {
-                      console.log("admin.databasecommand.insertone.success");
+                      console.log("admin.databasecommand.insertmany.success");
                     }
                     return res.status(200).json({
-                      type: "admin.databasecommand.insertone.success",
-                      data: insertOneResponse,
+                      type: "admin.databasecommand.insertmany.success",
+                      data: insertManyResponse,
                     });
                   })
                   .catch((error) => {
                     console.log(
-                      "admin.databasecommand.insertone.error.oninstert",
+                      "admin.databasecommand.insertmany.error.oninstert",
                     );
                     console.error(error);
                     return res.status(500).json({
-                      type: "admin.databasecommand.insertone.error.oninstert",
+                      type: "admin.databasecommand.insertmany.error.oninstert",
                       error: error,
                       data: {},
                     });
                   });
               } else {
-                console.log("admin.databasecommand.insertone.missingitem");
+                console.log("admin.databasecommand.insertmany.missingitems");
                 return res.status(400).json({
-                  type: "admin.databasecommand.insertone.missingitem",
+                  type: "admin.databasecommand.insertmany.missingitems",
                   data: {},
                 });
               }
