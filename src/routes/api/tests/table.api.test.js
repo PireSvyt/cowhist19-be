@@ -123,7 +123,7 @@ describe("TEST OF API : game", () => {
       tableInputs.users = users.map((u) => {
         return u.id;
       });
-      //console.log("tableInputs", tableInputs);
+      console.log("tableInputs", tableInputs);
       responses["apiTableCreate"] = await tableAPI.apiTableCreate(
         tableInputs,
         userSignInResponse.data.token,
@@ -143,7 +143,10 @@ describe("TEST OF API : game", () => {
         tableAction,
         adminSignInResponse.data.token,
       );
-      //console.log("responses.check.data", responses.check.data);
+      console.log(
+        "responses.check.data.items[0]",
+        responses.check.data.items[0],
+      );
       expect(responses.check.type).toBe("admin.databasecommand.get.success");
       // Account for step
       tables.push(responses.check.data.items[0]);
@@ -157,9 +160,11 @@ describe("TEST OF API : game", () => {
       let responses = {};
 
       // Test
+      console.log("tables[0]", tables[0]);
+      console.log("userSignInResponse.data", userSignInResponse.data);
       responses["getDetailsInputs"] = await tableAPI.apiTableGetDetails(
         tables[0].id,
-        pickedUser.id,
+        userSignInResponse.data.token,
       );
       //console.log("responses.getDetailsInputs", responses.getDetailsInputs);
       expect(responses.getDetailsInputs.type).toBe("table.getdetails.success");
