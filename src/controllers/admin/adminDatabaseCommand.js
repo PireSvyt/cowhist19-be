@@ -28,7 +28,6 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
 
   return new Promise((resolve, reject) => {
     let collection = undefined;
-    let idkey = undefined;
     // Action
     if (req.body.action != undefined) {
       // Collection
@@ -39,23 +38,18 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
         switch (req.body.action.collection) {
           case "users":
             collection = User;
-            idkey = "userid";
             break;
           case "games":
             collection = Game;
-            idkey = "gameid";
             break;
           case "tables":
             collection = Table;
-            idkey = "tableid";
             break;
           case "notifications":
             collection = Notification;
-            idkey = "id";
             break;
           case "feedbacks":
             collection = Feedback;
-            idkey = "id";
             break;
           case "all":
             // see action.type case "clean up all"
@@ -146,22 +140,18 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
               break;
             case "delete":
               // Type
-              if (req.body.action.ids != undefined) {
-                if (
-                  process.env.NODE_ENV === "_production" &&
-                  (req.body.action.ids.length > 5 ||
-                    req.body.action.ids.length === 0)
-                ) {
+              if (req.body.action.filter != undefined) {
+                if (process.env.NODE_ENV === "_production") {
                   if (process.env.DEBUG === true) {
                     console.log("admin.databasecommand.delete.denied");
                   }
                   return res.status(403).json({
                     type: "admin.databasecommand.delete.denied",
-                    message: "command unauthorized in production above 5 ids",
+                    message: "command unauthorized in production",
                   });
                 } else {
                   collection
-                    .deleteMany({ idkey: req.body.action.ids })
+                    .deleteMany(req.body.action.filter)
                     .then((deleteResponse) => {
                       if (process.env.DEBUG === true) {
                         console.log("admin.databasecommand.delete.success");

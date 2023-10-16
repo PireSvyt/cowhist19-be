@@ -32,7 +32,7 @@ describe.skip("TEST OF API : game", () => {
           action: {
             type: "delete",
             collection: "users",
-            ids: { $ne: adminSignInResponse.data.userid },
+            filter: { userid: { $ne: adminSignInResponse.data.userid } },
           },
         },
         adminSignInResponse.data.token,
@@ -46,7 +46,7 @@ describe.skip("TEST OF API : game", () => {
           action: {
             type: "delete",
             collection: "tables",
-            ids: { $ne: "" },
+            filter: { tableid: { $ne: "" } },
           },
         },
         adminSignInResponse.data.token,
@@ -60,7 +60,7 @@ describe.skip("TEST OF API : game", () => {
           action: {
             type: "delete",
             collection: "games",
-            ids: { $ne: "" },
+            filter: { gameid: { $ne: "" } },
           },
         },
         adminSignInResponse.data.token,
@@ -205,7 +205,7 @@ describe.skip("TEST OF API : game", () => {
         {
           type: "delete",
           collection: "users",
-          ids: [responses.first_apiAuthSignUp.data.userid],
+          filter: { userid: [responses.first_apiAuthSignUp.data.userid] },
         },
       ]);
       //console.log("responses.testServices", responses.testServices);
