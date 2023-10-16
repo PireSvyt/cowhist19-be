@@ -37,7 +37,7 @@ module.exports = userInvite = (req, res, next) => {
           password: "NONE SO FAR",
           status: "invited",
         });
-        user.id = user._id;
+        user.userid = user._id;
         // Saving
         user
           .save()
@@ -47,7 +47,7 @@ module.exports = userInvite = (req, res, next) => {
               type: "user.invite.success.created",
               data: {
                 user: {
-                  _id: user._id,
+                  userid: user.userid,
                   pseudo: user.pseudo,
                   status: user.status,
                 },

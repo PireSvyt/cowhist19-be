@@ -23,7 +23,7 @@ module.exports = userIsActivated = (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const decodedToken = jwt_decode(token);
 
-  User.findOne({ id: decodedToken.id })
+  User.findOne({ userid: decodedToken.userid })
     .then((user) => {
       if (user !== undefined) {
         if (user.status === "activated") {

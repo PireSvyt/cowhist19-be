@@ -34,7 +34,7 @@ module.exports = authActivate = (req, res, next) => {
               return res.status(200).json({
                 type: "auth.activate.success.activated",
                 data: {
-                  id: user._id,
+                  userid: user.userid,
                 },
               });
             })
@@ -52,7 +52,7 @@ module.exports = authActivate = (req, res, next) => {
             return res.status(200).json({
               type: "auth.activate.success.alreadyctivated",
               data: {
-                id: user._id,
+                userid: user.userid,
               },
             });
           } else {

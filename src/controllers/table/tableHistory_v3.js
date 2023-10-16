@@ -58,7 +58,7 @@ module.exports = tableHistory_v3 = (req, res, next) => {
   } else {
     switch (req.body.need) {
       case "list":
-        filters = { table: req.params.id };
+        filters = { tableid: req.params.id };
         fields = "contract outcome players date";
         break;
       default:
@@ -82,20 +82,19 @@ module.exports = tableHistory_v3 = (req, res, next) => {
     Table.aggregate([
       {
         $match: {
-          id: req.params.id,
+          tableid: req.params.id,
         },
       },
       {
         $lookup: {
           from: "users",
-          foreignField: "id",
+          foreignField: "userid",
           localField: "users",
           as: "players",
           pipeline: [
             {
               $project: {
-                _id: 1,
-                id: 1,
+                userid: 1,
                 pseudo: 1,
                 status: 1,
               },
@@ -105,7 +104,7 @@ module.exports = tableHistory_v3 = (req, res, next) => {
       },
       {
         $project: {
-          _id: 1,
+          tableid: 1,
           name: 1,
           guests: 1,
           players: 1,
@@ -125,7 +124,7 @@ module.exports = tableHistory_v3 = (req, res, next) => {
               if (req.body.games.lastid !== null) {
                 // Find last game loaded
                 lastidpos = games.findIndex((game) => {
-                  return game._id.toString() === req.body.games.lastid;
+                  return game.gameid.toString() === req.body.games.lastid;
                 });
                 if (lastidpos === -1) {
                   // Last id not found :/
@@ -164,7 +163,7 @@ module.exports = tableHistory_v3 = (req, res, next) => {
                   if (gamePlayer.nonuser !== "guest") {
                     // User is not a guest
                     let potentialPseudo = table.players.filter(
-                      (tablePlayer) => tablePlayer.id === gamePlayer._id,
+                      (tablePlayer) => tablePlayer.userid === gamePlayer.userid,
                     );
                     if (potentialPseudo.length > 0) {
                       // User is part of the table players
@@ -174,7 +173,6 @@ module.exports = tableHistory_v3 = (req, res, next) => {
                       gamePlayer.nonuser = "removeduser";
                     }
                   }
-                  delete gamePlayer.id;
                   delete gamePlayer.role;
                   newGame[player.role].push(gamePlayer);
                 });

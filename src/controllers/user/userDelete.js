@@ -26,14 +26,14 @@ module.exports = userDelete = (req, res, next) => {
   const decodedToken = jwt_decode(token);
 
   // Delete user
-  User.deleteOne({ id: decodedToken.id })
+  User.deleteOne({ userid: decodedToken.userid })
     .then(() => {
       // Delete user from tables
       Table.updateMany(
-        { users: decodedToken.id },
+        { users: decodedToken.userid },
         {
           $pullAll: {
-            users: [decodedToken.id],
+            users: [decodedToken.userid],
           },
         },
       )

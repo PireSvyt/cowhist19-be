@@ -22,7 +22,7 @@ module.exports = userTables = (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const decodedToken = jwt_decode(token);
 
-  Table.find({ users: decodedToken.id }, "name")
+  Table.find({ users: decodedToken.userid }, "name")
     .then((tables) => {
       console.log("user.tables.success");
       return res.status(200).json({

@@ -19,7 +19,7 @@ module.exports = gameDelete = (req, res, next) => {
     console.log("game.delete");
   }
 
-  Game.deleteOne({ _id: req.params.id })
+  Game.deleteOne({ gameid: req.params.id })
     .then(() => {
       console.log("game.delete.success");
       return res.status(200).json({

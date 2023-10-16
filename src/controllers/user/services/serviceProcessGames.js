@@ -28,7 +28,7 @@ module.exports = function serviceProcessGames(games, userid) {
     games.forEach((game) => {
       // Attack
       let player = game.players.filter(
-        (gameplayer) => gameplayer._id === userid,
+        (gameplayer) => gameplayer.userid === userid,
       )[0];
       if (player.role === "attack") {
         stats.attack = stats.attack + 1;

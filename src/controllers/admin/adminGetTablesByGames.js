@@ -23,7 +23,7 @@ module.exports = adminGetTablesByGames = (req, res, next) => {
       $lookup: {
         from: "games",
         foreignField: "table",
-        localField: "id",
+        localField: "tableid",
         as: "games",
       },
     },

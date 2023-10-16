@@ -18,7 +18,7 @@ module.exports = gameDetails = (req, res, next) => {
     console.log("game.details");
   }
 
-  Game.findOne({ _id: req.params.id }, "table contract outcome players")
+  Game.findOne({ gameid: req.params.id }, "tableid contract outcome players")
     .then((game) => {
       if (game !== undefined) {
         console.log("game.details.success");

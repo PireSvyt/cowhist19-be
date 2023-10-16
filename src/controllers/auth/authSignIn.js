@@ -86,10 +86,10 @@ module.exports = authSignIn = (req, res, next) => {
                   return res.status(200).json({
                     type: "auth.signin.success",
                     data: {
-                      id: user.id,
+                      userid: user.userid,
                       token: jwt.sign(
                         {
-                          id: user.id,
+                          userid: user.userid,
                           status: user.status,
                         },
                         process.env.JWT_SECRET,

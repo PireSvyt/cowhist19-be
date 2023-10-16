@@ -86,7 +86,7 @@ async function seedDB() {
     console.log("Adjusting outcomes");
     let adjustedOutcomes = adjustProbabilities(
       inputs.likelihood.outcomes,
-      "likelihood"
+      "likelihood",
     );
     console.log("adjustedOutcomes");
     console.log(adjustedOutcomes);
@@ -130,7 +130,7 @@ async function seedDB() {
       }
       attack.forEach((attackant) => {
         players.push({
-          _id: attackant,
+          userid: attackant,
           role: "attack",
         });
       });
@@ -139,8 +139,8 @@ async function seedDB() {
         Object.fromEntries(
           Object.entries(inputs.likelihood.players).filter(([key, value]) => {
             return !attack.includes(key);
-          })
-        )
+          }),
+        ),
       );
       let defense = [];
       for (let p = 1; p <= adjustedContracts[contractId].defense; p++) {
@@ -148,7 +148,7 @@ async function seedDB() {
       }
       defense.forEach((defenser) => {
         players.push({
-          _id: defenser,
+          userid: defenser,
           role: "defense",
         });
       });
@@ -157,7 +157,7 @@ async function seedDB() {
 
       // build resulting game
       let game = {
-        table: tableid,
+        tableid: tableid,
         contract: contract,
         outcome: outcome,
         players: players,

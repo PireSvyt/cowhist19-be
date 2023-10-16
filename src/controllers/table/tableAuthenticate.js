@@ -26,15 +26,15 @@ module.exports = tableAuthenticate = (req, res, next) => {
   // Prep
   let tableid = req.params.id;
   if (!tableid) {
-    tableid = req.body.id;
+    tableid = req.body.tableid;
   }
 
   console.log("tableid", tableid);
 
-  Table.findOne({ id: tableid })
+  Table.findOne({ tableid: tableid })
     .then((table) => {
       if (table !== null) {
-        if (table.users.includes(decodedToken.id)) {
+        if (table.users.includes(decodedToken.userid)) {
           next();
         } else {
           console.log("table.authenticate.error.notamember");

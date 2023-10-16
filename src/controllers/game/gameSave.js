@@ -21,12 +21,12 @@ module.exports = gameSave = (req, res, next) => {
     console.log("game.save");
   }
 
-  if (req.body._id === "" || req.body._id === undefined) {
+  if (req.body.gameid === "" || req.body.gameid === undefined) {
     // Create
     delete req.body._id;
     const gameToSave = new Game({ ...req.body });
-    if (gameToSave.id === undefined) {
-      gameToSave.id = gameToSave._id;
+    if (gameToSave.gameid === undefined) {
+      gameToSave.gameid = gameToSave._id;
     }
     if (gameToSave.date === undefined) {
       gameToSave.date = new Date();
@@ -39,7 +39,7 @@ module.exports = gameSave = (req, res, next) => {
         return res.status(201).json({
           type: "game.save.success.created",
           data: {
-            id: gameToSave.id,
+            gameid: gameToSave.gameid,
           },
         });
       })
@@ -50,24 +50,24 @@ module.exports = gameSave = (req, res, next) => {
           type: "game.save.error.oncreate",
           error: error,
           data: {
-            id: "",
+            gameid: "",
           },
         });
       });
   } else {
     // Modify
     let game = new Game({ ...req.body });
-    if (game.id === undefined) {
-      game.id = game._id;
+    if (game.gameid === undefined) {
+      game.gameid = game._id;
     }
     // Modify
-    Game.updateOne({ id: game.id }, game)
+    Game.updateOne({ gameid: game.gameid }, game)
       .then(() => {
         console.log("game.save.success.modified");
         return res.status(200).json({
           type: "game.save.success.modified",
           data: {
-            id: game.id,
+            gameid: game.gameid,
           },
         });
       })
@@ -78,7 +78,7 @@ module.exports = gameSave = (req, res, next) => {
           type: "game.save.error.onmodify",
           error: error,
           data: {
-            id: "",
+            gameid: "",
           },
         });
       });

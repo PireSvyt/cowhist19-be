@@ -121,9 +121,9 @@ describe("TEST OF API : game", () => {
       // Test
       let tableInputs = toolkit.objectGenerator("table");
       tableInputs.users = users.map((u) => {
-        return u.id;
+        return { id: u.id };
       });
-      console.log("tableInputs", tableInputs);
+      //console.log("tableInputs", tableInputs);
       responses["apiTableCreate"] = await tableAPI.apiTableCreate(
         tableInputs,
         userSignInResponse.data.token,
@@ -143,10 +143,10 @@ describe("TEST OF API : game", () => {
         tableAction,
         adminSignInResponse.data.token,
       );
-      console.log(
+      /*console.log(
         "responses.check.data.items[0]",
         responses.check.data.items[0],
-      );
+      );*/
       expect(responses.check.type).toBe("admin.databasecommand.get.success");
       // Account for step
       tables.push(responses.check.data.items[0]);
@@ -160,13 +160,11 @@ describe("TEST OF API : game", () => {
       let responses = {};
 
       // Test
-      console.log("tables[0]", tables[0]);
-      console.log("userSignInResponse.data", userSignInResponse.data);
       responses["getDetailsInputs"] = await tableAPI.apiTableGetDetails(
         tables[0].id,
         userSignInResponse.data.token,
       );
-      //console.log("responses.getDetailsInputs", responses.getDetailsInputs);
+      console.log("responses.getDetailsInputs", responses.getDetailsInputs);
       expect(responses.getDetailsInputs.type).toBe("table.getdetails.success");
 
       // Checks
@@ -174,8 +172,8 @@ describe("TEST OF API : game", () => {
         {
           action: {
             type: "get",
-            collection: "users",
-            ids: [signupPicked],
+            collection: "tables",
+            ids: [tables[0].id],
           },
         },
         adminSignInResponse.data.token,
@@ -187,6 +185,51 @@ describe("TEST OF API : game", () => {
       expect(responses.check.data.items[0].users.length).toBe(
         tables[0].users.length,
       );
+    });
+  });
+
+  describe("Assessment GET apiTableSave", () => {
+    test("successful", async () => {
+      // Prep
+      let responses = {};
+
+      // Test
+      let tableToSave = tables[0].id;
+      tableToSave.guest = 1;
+      let shortenedUsers = tableToSave.users;
+      shortenedUsers
+        .filter((u) => {
+          return u.id !== userSignInResponse.data.id;
+        })
+        .map((u) => {
+          return { id: u.id };
+        });
+      tableToSave.users = shortenedUsers;
+      responses["getDetailsInputs"] = await tableAPI.apiTableSave(
+        tableToSave,
+        userSignInResponse.data.token,
+      );
+      console.log("responses.getDetailsInputs", responses.getDetailsInputs);
+      expect(responses.getDetailsInputs.type).toBe("table.getdetails.success");
+
+      // Checks
+      responses["check"] = await adminAPI.adminDatabaseCommand(
+        {
+          action: {
+            type: "get",
+            collection: "tables",
+            ids: [tableToSave.id],
+          },
+        },
+        adminSignInResponse.data.token,
+      );
+      //console.log("responses.check.data", responses.check.data);
+      expect(responses.check.type).toBe("admin.databasecommand.get.success");
+      expect(responses.check.data.items[0].guests).toBe(tableToSave.guests);
+      expect(responses.check.data.items[0].users.length).toBe(
+        tables[0].users.length - 1,
+      );
+      tables[0] = responses.check.data.items[0];
     });
   });
 });

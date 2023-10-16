@@ -25,7 +25,7 @@ module.exports = tableStats = (req, res, next) => {
   }
 
   // Find tablegames
-  Game.find({ table: req.params.id })
+  Game.find({ tableid: req.params.id })
     .then((games) => {
       // Post process
       let stats = serviceProcessGames(games, req.body);

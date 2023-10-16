@@ -29,19 +29,19 @@ module.exports = userDetails = (req, res, next) => {
   User.aggregate([
     {
       $match: {
-        id: decodedToken.id,
+        userid: decodedToken.userid,
       },
     },
     {
       $lookup: {
         from: "tables",
         foreignField: "users",
-        localField: "id",
+        localField: "userid",
         as: "tables",
         pipeline: [
           {
             $project: {
-              _id: 1,
+              tableid: 1,
               name: 1,
             },
           },
@@ -50,7 +50,7 @@ module.exports = userDetails = (req, res, next) => {
     },
     {
       $project: {
-        _id: 1,
+        userid: 1,
         pseudo: 1,
         login: 1,
         status: 1,

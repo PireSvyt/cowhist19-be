@@ -48,7 +48,7 @@ module.exports = userMerge = (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const decodedToken = jwt_decode(token);
 
-  User.findOne({ id: decodedToken.id })
+  User.findOne({ userid: decodedToken.userid })
     .then((currentUser) => {
       if (currentUser) {
         User.findOne({ login: req.body.mergelogin })
@@ -74,18 +74,18 @@ module.exports = userMerge = (req, res, next) => {
                   } else {
                     // Store alias
                     if (currentUser.alias === undefined) {
-                      currentUser.alias = [mergeuser.id];
+                      currentUser.alias = [mergeuser.userid];
                     } else {
                       if (
                         currentUser.alias.filter(
-                          (alias) => alias.id === mergeuser.id,
+                          (alias) => alias.userid === mergeuser.userid,
                         ).length
                       ) {
                         // ok alias already stored
                         // but how the hell did this happened!
                       } else {
                         currentUser.alias.push({
-                          id: mergeuser.id,
+                          userid: mergeuser.userid,
                           login: mergeuser.login,
                         });
                       }
@@ -95,21 +95,21 @@ module.exports = userMerge = (req, res, next) => {
                       .save()
                       .then(() => {
                         // Replace merged user in tables
-                        Table.find({ users: mergeuser.id })
+                        Table.find({ users: mergeuser.userid })
                           .then((tables) => {
                             tables.forEach((table) => {
-                              if (table.users.includes(currentUser.id)) {
-                                // Remove merged id
+                              if (table.users.includes(currentUser.userid)) {
+                                // Remove merged userid
                                 table.users = table.users.filter(
-                                  (player) => player !== mergeuser.id,
+                                  (player) => player !== mergeuser.userid,
                                 );
                               } else {
-                                // Replace merge id
+                                // Replace merge userid
                                 table.users = table.users.map((player) => {
-                                  if (player !== mergeuser.id) {
+                                  if (player !== mergeuser.userid) {
                                     return player;
                                   } else {
-                                    return currentUser.id;
+                                    return currentUser.userid;
                                   }
                                 });
                               }
@@ -125,20 +125,20 @@ module.exports = userMerge = (req, res, next) => {
                             });
                           });
                         // Replace merged user in games
-                        Game.find({ "players._id": mergeuser.id })
+                        Game.find({ "players.userid": mergeuser.userid })
                           .then((games) => {
                             games.forEach((game) => {
                               if (
                                 Object.keys(game.players).includes(
-                                  currentUser.id,
+                                  currentUser.userid,
                                 )
                               ) {
                                 // See ubiquity management note
                               } else {
-                                // Replace merge id
-                                game.players[currentUser.id] =
-                                  game.players[mergeuser.id];
-                                delete game.players[mergeuser.id];
+                                // Replace merge userid
+                                game.players[currentUser.userid] =
+                                  game.players[mergeuser.userid];
+                                delete game.players[mergeuser.userid];
                                 game.save();
                               }
                             });

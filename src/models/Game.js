@@ -6,15 +6,15 @@ if (process.env.MONGOOSE_DEBUG === "TRUE") {
 
 const gameSchema = mongoose.Schema(
   {
-    id: { type: String, required: true, unique: true },
-    table: { type: String, required: true },
+    gameid: { type: String, required: true, unique: true },
+    tableid: { type: String, required: true },
     date: { type: Date, required: true },
     contract: { type: String, required: true },
     outcome: { type: Number, required: true },
     players: {
       type: [
         {
-          _id: { type: String, required: true },
+          userid: { type: String, required: true },
           role: { type: String, required: true },
           nonuser: { type: String },
         },
@@ -22,7 +22,7 @@ const gameSchema = mongoose.Schema(
     },
     meta: { type: Map, of: String },
   },
-  { strict: true }
+  { strict: true },
 );
 
 module.exports = mongoose.model("Game", gameSchema);

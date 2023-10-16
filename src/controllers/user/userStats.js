@@ -27,10 +27,10 @@ module.exports = userStats = (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const decodedToken = jwt_decode(token);
 
-  Game.find({ "players._id": decodedToken.id })
+  Game.find({ "players.userid": decodedToken.userid })
     .then((games) => {
       // Post process
-      let stats = serviceProcessGames(games, decodedToken.id);
+      let stats = serviceProcessGames(games, decodedToken.userid);
 
       // Response
       console.log("user.stats.success");

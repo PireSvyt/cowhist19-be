@@ -21,20 +21,20 @@ module.exports = tableCreate = (req, res, next) => {
   }
 
   // Prep
-  delete req.body._id;
+  delete req.body.tableid;
 
   // Save
   let tableToSave = { ...req.body };
   let tableUsers = [];
   tableToSave.users.forEach((user) => {
     if (user.status !== "guest") {
-      tableUsers.push(user.id);
+      tableUsers.push(user.userid);
     }
   });
   tableToSave.users = tableUsers;
   tableToSave = new Table(tableToSave);
-  if (tableToSave.id === undefined) {
-    tableToSave.id = tableToSave._id;
+  if (tableToSave.tableid === undefined) {
+    tableToSave.tableid = tableToSave._id;
   }
 
   // Save
@@ -45,7 +45,7 @@ module.exports = tableCreate = (req, res, next) => {
       return res.status(201).json({
         type: "table.create.success",
         data: {
-          id: tableToSave._id,
+          tableid: tableToSave._id,
         },
       });
     })
@@ -56,7 +56,7 @@ module.exports = tableCreate = (req, res, next) => {
         type: "table.create.error.oncreate",
         error: error,
         data: {
-          id: null,
+          tableid: null,
         },
       });
     });

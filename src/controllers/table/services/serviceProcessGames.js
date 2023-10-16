@@ -43,9 +43,9 @@ module.exports = function serviceProcessGames(games, request) {
         }
         if (nonguestplayer) {
           // Add player to players if missing
-          if (!Object.keys(players).includes(player._id)) {
-            players[player._id] = {
-              _id: player._id,
+          if (!Object.keys(players).includes(player.userid)) {
+            players[player.userid] = {
+              userid: player.userid,
               attackWins: 0,
               attackLoss: 0,
               defenseWins: 0,
@@ -56,21 +56,21 @@ module.exports = function serviceProcessGames(games, request) {
           // Record outcome
           if (game.outcome < 0) {
             if (player.role === "attack") {
-              players[player._id].attackLoss += 1;
-              players[player._id].cumulatedPoints += gamePoints.attack;
+              players[player.userid].attackLoss += 1;
+              players[player.userid].cumulatedPoints += gamePoints.attack;
             }
             if (player.role === "defense") {
-              players[player._id].defenseWins += 1;
-              players[player._id].cumulatedPoints += gamePoints.defense;
+              players[player.userid].defenseWins += 1;
+              players[player.userid].cumulatedPoints += gamePoints.defense;
             }
           } else {
             if (player.role === "attack") {
-              players[player._id].attackWins += 1;
-              players[player._id].cumulatedPoints += gamePoints.attack;
+              players[player.userid].attackWins += 1;
+              players[player.userid].cumulatedPoints += gamePoints.attack;
             }
             if (player.role === "defense") {
-              players[player._id].defenseLoss += 1;
-              players[player._id].cumulatedPoints += gamePoints.defense;
+              players[player.userid].defenseLoss += 1;
+              players[player.userid].cumulatedPoints += gamePoints.defense;
             }
           }
         }
@@ -121,25 +121,25 @@ function statPlayers(players) {
   const scorev0Offset = 5;
   const scorev0Factor = 10;
 
-  for (const [id, player] of Object.entries(players)) {
+  for (const [userid, player] of Object.entries(players)) {
     // Number of games
-    players[id].games =
+    players[userid].games =
       player.attackWins +
       player.attackLoss +
       player.defenseWins +
       player.defenseLoss;
 
     // Attack rate
-    players[id].rateattack =
+    players[userid].rateattack =
       (player.attackWins + player.attackLoss) / player.games;
 
     // Win rate
-    players[id].ratevictory =
+    players[userid].ratevictory =
       (player.attackWins + player.defenseWins) / player.games;
 
     // Cowhist19 V0 score
     // 5+ROUND((0.75*defenseWins-0.75*defenseLoss+1.25*attackWins-1.25*attackLoss)/games*10,1)
-    players[id].scorev0 =
+    players[userid].scorev0 =
       scorev0Offset +
       scorev0Factor *
         ((scorev0Defense * (player.defenseWins - player.defenseLoss) +
@@ -147,7 +147,7 @@ function statPlayers(players) {
           player.games);
 
     // Average points
-    players[id].averagepoints = player.cumulatedPoints / player.games;
+    players[userid].averagepoints = player.cumulatedPoints / player.games;
   }
 
   return players;
@@ -155,19 +155,19 @@ function statPlayers(players) {
 
 function neaterStats(players, target, field = "averagepoints") {
   let neatPlayers = {};
-  for (const [id, player] of Object.entries(players)) {
+  for (const [userid, player] of Object.entries(players)) {
     switch (target) {
       case "ranking":
-        neatPlayers[id] = {};
-        neatPlayers[id]._id = player._id;
-        neatPlayers[id].games = player.games;
-        neatPlayers[id].rateattack = player.rateattack;
-        neatPlayers[id].ratevictory = player.ratevictory;
-        neatPlayers[id].scorev0 = player.scorev0;
-        neatPlayers[id].averagepoints = player.averagepoints;
+        neatPlayers[userid] = {};
+        neatPlayers[userid].userid = player.userid;
+        neatPlayers[userid].games = player.games;
+        neatPlayers[userid].rateattack = player.rateattack;
+        neatPlayers[userid].ratevictory = player.ratevictory;
+        neatPlayers[userid].scorev0 = player.scorev0;
+        neatPlayers[userid].averagepoints = player.averagepoints;
         break;
       case "graph":
-        neatPlayers[id] = player[field];
+        neatPlayers[userid] = player[field];
         break;
       default:
       //

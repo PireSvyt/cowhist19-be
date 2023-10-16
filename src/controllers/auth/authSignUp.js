@@ -49,7 +49,7 @@ module.exports = authSignup = (req, res, next) => {
               return res.status(200).json({
                 type: "auth.signup.success.signedup",
                 data: {
-                  id: user._id,
+                  userid: user.userid,
                 },
               });
             })
@@ -59,7 +59,7 @@ module.exports = authSignup = (req, res, next) => {
                 type: "auth.signup.error.savingfrominvited",
                 error: error,
                 data: {
-                  id: "",
+                  userid: "",
                 },
               });
             });
@@ -69,7 +69,7 @@ module.exports = authSignup = (req, res, next) => {
           return res.status(409).json({
             type: "auth.signup.success.alreadysignedup",
             data: {
-              id: user.id,
+              userid: user.userid,
             },
           });
         }
@@ -83,7 +83,7 @@ module.exports = authSignup = (req, res, next) => {
           activationtoken: random_string(20),
         });
         if (user.id === undefined) {
-          user.id = user._id;
+          user.userid = user._id;
         }
 
         // User saving
@@ -96,7 +96,7 @@ module.exports = authSignup = (req, res, next) => {
                 return res.status(201).json({
                   type: "auth.signup.success.signedup",
                   data: {
-                    id: user.id,
+                    userid: user.userid,
                   },
                 });
               } else {
@@ -113,7 +113,7 @@ module.exports = authSignup = (req, res, next) => {
               type: "auth.signup.error.savingoncreate",
               error: error,
               data: {
-                id: "",
+                userid: "",
               },
             });
           });
@@ -125,7 +125,7 @@ module.exports = authSignup = (req, res, next) => {
         type: "auth.signup.error.notfound",
         error: error,
         data: {
-          id: "",
+          userid: "",
         },
       });
     });

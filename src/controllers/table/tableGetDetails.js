@@ -25,19 +25,19 @@ module.exports = tableGetDetails = (req, res, next) => {
   Table.aggregate([
     {
       $match: {
-        id: req.params.id,
+        tableid: req.params.id,
       },
     },
     {
       $lookup: {
         from: "users",
-        foreignField: "id",
+        foreignField: "userid",
         localField: "users",
         as: "players",
         pipeline: [
           {
             $project: {
-              _id: 1,
+              userid: 1,
               pseudo: 1,
               status: 1,
             },
@@ -47,7 +47,7 @@ module.exports = tableGetDetails = (req, res, next) => {
     },
     {
       $project: {
-        _id: 1,
+        tableid: 1,
         name: 1,
         guests: 1,
         players: 1,
@@ -60,7 +60,7 @@ module.exports = tableGetDetails = (req, res, next) => {
         // Add guest players
         for (var guest = 1; guest <= table.guests; guest++) {
           table.players.push({
-            _id: random_id(),
+            userid: random_id(),
             status: "guest",
           });
         }

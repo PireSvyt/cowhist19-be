@@ -24,7 +24,7 @@ module.exports = tableSave = (req, res, next) => {
   }
 
   // Save
-  if (req.body._id === "" || req.body._id === undefined) {
+  if (req.body.tableid === "" || req.body.tableid === undefined) {
     console.log("table.save.error.emptyid");
     return res.status(503).json({
       type: "table.save.error.emptyid",
@@ -44,22 +44,22 @@ module.exports = tableSave = (req, res, next) => {
         }
       }
       if (userToAdd) {
-        tableUsers.push(user._id);
+        tableUsers.push(user.userid);
       }
     });
     tableToSave.users = tableUsers;
 
     // Manage table to users
-    Table.findOne({ _id: tableToSave._id })
+    Table.findOne({ tableid: tableToSave.tableid })
       .then(() => {
         // Save
-        Table.updateOne({ _id: tableToSave._id }, tableToSave)
+        Table.updateOne({ tableid: tableToSave.tableid }, tableToSave)
           .then(() => {
             console.log("table.save.success.modified");
             return res.status(200).json({
               type: "table.save.success.modified",
               data: {
-                id: tableToSave._id,
+                tableid: tableToSave.tableid,
               },
             });
           })

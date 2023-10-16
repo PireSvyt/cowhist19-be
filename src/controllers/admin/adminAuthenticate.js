@@ -23,7 +23,7 @@ module.exports = adminAuthenticate = (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const decodedToken = jwt_decode(token);
 
-  User.findOne({ _id: decodedToken.id })
+  User.findOne({ userid: decodedToken.userid })
     .then((user) => {
       if (user !== undefined) {
         if (user.priviledges.includes("admin")) {

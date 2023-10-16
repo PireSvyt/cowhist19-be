@@ -135,7 +135,7 @@ module.exports = async function servicePopulate(reqInputs) {
       }
       attack.forEach((attackant) => {
         players.push({
-          _id: attackant,
+          userid: attackant,
           role: "attack",
         });
       });
@@ -153,7 +153,7 @@ module.exports = async function servicePopulate(reqInputs) {
       }
       defense.forEach((defenser) => {
         players.push({
-          _id: defenser,
+          userid: defenser,
           role: "defense",
         });
       });
@@ -162,7 +162,7 @@ module.exports = async function servicePopulate(reqInputs) {
 
       // build resulting game
       let game = {
-        table: inputs.tableid,
+        tableid: inputs.tableid,
         contract: contract,
         outcome: outcome,
         players: players,

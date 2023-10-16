@@ -35,6 +35,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
 
   return new Promise((resolve, reject) => {
     let collection = undefined;
+    let idkey = undefined;
     // Action
     if (req.body.action != undefined) {
       // Collection
@@ -45,12 +46,15 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
         switch (req.body.action.collection) {
           case "users":
             collection = User;
+            idkey = userid;
             break;
           case "games":
             collection = Game;
+            idkey = gameid;
             break;
           case "tables":
             collection = Table;
+            idkey = tableid;
             break;
           case "notifications":
             collection = Notification;
@@ -76,7 +80,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
               // Type
               if (req.body.action.ids != undefined) {
                 collection
-                  .find({ id: req.body.action.ids })
+                  .find({ idkey: req.body.action.ids })
                   .then((itemList) => {
                     if (itemList.length === req.body.action.ids.length) {
                       if (process.env.DEBUG === true) {
@@ -162,7 +166,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                   });
                 } else {
                   collection
-                    .deleteMany({ id: req.body.action.ids })
+                    .deleteMany({ idkey: req.body.action.ids })
                     .then((deleteResponse) => {
                       if (process.env.DEBUG === true) {
                         console.log("admin.databasecommand.delete.success");
@@ -249,7 +253,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                         Feedback.deleteMany().then((feedOutcome) => {
                           deletes["feed"] = feedOutcome;
                           User.deleteMany({
-                            id: { $ne: decodedToken.id },
+                            userid: { $ne: decodedToken.userid },
                           }).then((userOutcome) => {
                             deletes["user"] = userOutcome;
                             if (process.env.DEBUG === true) {

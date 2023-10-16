@@ -123,7 +123,7 @@ function objectGenerator(type, count = 1, forcedfields = []) {
     switch (type) {
       case "user":
         result = {
-          id: rstring,
+          userid: rstring,
           login: rid + "@yopmail.com",
           password: bcrypt.hashSync(rid, 10),
           pseudo: rid,
@@ -132,16 +132,16 @@ function objectGenerator(type, count = 1, forcedfields = []) {
         break;
       case "table":
         result = {
-          id: rstring,
+          tableid: rstring,
           name: rstring,
           guests: 0,
-          users: [],
+          userids: [],
         };
         break;
       case "game":
         result = {
-          id: rstring,
-          table: rstring,
+          gameid: rstring,
+          tableid: rstring,
           date: new Date(),
           contract: "none",
           outcome: 0,
