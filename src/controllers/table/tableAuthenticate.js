@@ -32,6 +32,7 @@ module.exports = tableAuthenticate = (req, res, next) => {
   Table.findOne({ id: tableid })
     .then((table) => {
       if (table !== undefined) {
+        console.log("table", table);
         if (table.users.includes(decodedToken.id)) {
           next();
         } else {
