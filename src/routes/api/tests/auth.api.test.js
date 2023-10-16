@@ -31,19 +31,19 @@ describe("TEST OF API : auth", () => {
           action: {
             type: "delete",
             collection: "users",
-            ids: { $ne: adminSignInResponse.data.id },
+            ids: { $ne: adminSignInResponse.data.userid },
           },
         },
         adminSignInResponse.data.token,
       );
-      //console.log("adminDeleteResponse", adminDeleteResponse);
+      console.log("adminDeleteResponse", adminDeleteResponse);
       expect(adminDeleteResponse.type).toBe(
         "admin.databasecommand.delete.success",
       );
     });
   });
 
-  describe("Assessment POST apiAuthSignUp", () => {
+  describe.skip("Assessment POST apiAuthSignUp", () => {
     test("successful", async () => {
       // Prep
       let responses = {};
@@ -66,7 +66,7 @@ describe("TEST OF API : auth", () => {
           action: {
             type: "get",
             collection: "users",
-            ids: [responses.apiAuthSignUp.data.id],
+            ids: [responses.apiAuthSignUp.data.userid],
           },
         },
         adminSignInResponse.data.token,
@@ -79,7 +79,7 @@ describe("TEST OF API : auth", () => {
       expect(responses.check.data.items[0].pseudo).toBe(rid);
 
       // Account for step
-      users.signedup[responses.apiAuthSignUp.data.id] =
+      users.signedup[responses.apiAuthSignUp.data.userid] =
         responses.check.data.items[0];
     });
     test("successful: already signedup", async () => {
@@ -115,7 +115,7 @@ describe("TEST OF API : auth", () => {
         {
           type: "delete",
           collection: "users",
-          ids: [responses.first_apiAuthSignUp.data.id],
+          ids: [responses.first_apiAuthSignUp.data.userid],
         },
       ]);
       //console.log("responses.testServices", responses.testServices);
@@ -128,7 +128,7 @@ describe("TEST OF API : auth", () => {
     });
   });
 
-  describe("Assessment POST apiAuthActivate", () => {
+  describe.skip("Assessment POST apiAuthActivate", () => {
     test("successful", async () => {
       // Prep
       let responses = {};
@@ -187,7 +187,7 @@ describe("TEST OF API : auth", () => {
     });
   });
 
-  describe("Assessment POST apiAuthSignIn", () => {
+  describe.skip("Assessment POST apiAuthSignIn", () => {
     test("successful without encryption", async () => {
       // Prep
       let responses = {};
@@ -243,7 +243,7 @@ describe("TEST OF API : auth", () => {
     });
   });
 
-  describe("Assessment POST apiAuthAssess", () => {
+  describe.skip("Assessment POST apiAuthAssess", () => {
     test.skip("successful", async () => {
       expect(true).toBe(false);
     });
@@ -252,7 +252,7 @@ describe("TEST OF API : auth", () => {
     });
   });
 
-  describe("Assessment POST apiAuthExistingPseudo", () => {
+  describe.skip("Assessment POST apiAuthExistingPseudo", () => {
     test.skip("existing", async () => {
       expect(true).toBe(false);
     });

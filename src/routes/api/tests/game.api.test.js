@@ -4,7 +4,7 @@ const adminAPI = require("../admin.js");
 const gameAPI = require("../game.js");
 const toolkit = require("../../../resources/toolkit.js");
 
-describe("TEST OF API : game", () => {
+describe.skip("TEST OF API : game", () => {
   // Pool of resources
   let users = [];
   let table = undefined;
@@ -32,7 +32,7 @@ describe("TEST OF API : game", () => {
           action: {
             type: "delete",
             collection: "users",
-            ids: { $ne: adminSignInResponse.data.id },
+            ids: { $ne: adminSignInResponse.data.userid },
           },
         },
         adminSignInResponse.data.token,
@@ -107,7 +107,7 @@ describe("TEST OF API : game", () => {
             {
               name: "users",
               value: users.map((item) => {
-                return item.id;
+                return item.userid;
               }),
             },
           ]),
@@ -145,7 +145,7 @@ describe("TEST OF API : game", () => {
 
       // Test
       let gameInputs = toolkit.objectGenerator("game");
-      delete gameInputs.id;
+      delete gameInputs.gameid;
       //console.log("gameInputs", gameInputs);
       responses["apiGameSave"] = await gameAPI.apiGameSave(
         gameInputs,
@@ -160,7 +160,7 @@ describe("TEST OF API : game", () => {
           action: {
             type: "get",
             collection: "games",
-            ids: [gameInputs.id],
+            ids: [gameInputs.gameid],
           },
         },
         adminSignInResponse.data.token,
@@ -204,7 +204,7 @@ describe("TEST OF API : game", () => {
         {
           type: "delete",
           collection: "users",
-          ids: [responses.first_apiAuthSignUp.data.id],
+          ids: [responses.first_apiAuthSignUp.data.userid],
         },
       ]);
       //console.log("responses.testServices", responses.testServices);

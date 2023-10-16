@@ -46,21 +46,23 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
         switch (req.body.action.collection) {
           case "users":
             collection = User;
-            idkey = userid;
+            idkey = "userid";
             break;
           case "games":
             collection = Game;
-            idkey = gameid;
+            idkey = "gameid";
             break;
           case "tables":
             collection = Table;
-            idkey = tableid;
+            idkey = "tableid";
             break;
           case "notifications":
             collection = Notification;
+            idkey = "id";
             break;
           case "feedbacks":
             collection = Feedback;
+            idkey = "id";
             break;
           case "all":
             // see action.type case "clean up all"
