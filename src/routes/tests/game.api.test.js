@@ -1,8 +1,8 @@
 require("@jest/globals");
-const authAPI = require("../auth.js");
-const adminAPI = require("../admin.js");
-const gameAPI = require("../game.js");
-const toolkit = require("../../../resources/toolkit.js");
+const authAPI = require("../api/auth.js");
+const adminAPI = require("../api/admin.js");
+const gameAPI = require("../api/game.js");
+const toolkit = require("../../resources/toolkit.js");
 
 describe.skip("TEST OF API : game", () => {
   // Pool of resources

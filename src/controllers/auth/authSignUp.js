@@ -82,7 +82,7 @@ module.exports = authSignup = (req, res, next) => {
           status: "signedup",
           activationtoken: random_string(20),
         });
-        if (user.id === undefined) {
+        if (user.userid === undefined) {
           user.userid = user._id;
         }
 

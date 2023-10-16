@@ -175,8 +175,7 @@ async function seedDB() {
     }
 
     // Connection URL
-    let DB_URL =
-      "mongodb+srv://savoyatp:2PDJ9d6PrWEcPD8t@cluster0.0gnwxga.mongodb.net/?retryWrites=true&w=majority";
+    let DB_URL = "TYPE THE URL";
     const client = new MongoClient(DB_URL, {
       useNewUrlParser: true,
       // useUnifiedTopology: true,

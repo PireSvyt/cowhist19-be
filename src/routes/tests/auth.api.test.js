@@ -1,9 +1,9 @@
 require("@jest/globals");
 const bcrypt = require("bcrypt");
 const CryptoJS = require("crypto-js");
-const authAPI = require("../auth.js");
-const adminAPI = require("../admin.js");
-const toolkit = require("../../../resources/toolkit.js");
+const authAPI = require("../api/auth.js");
+const adminAPI = require("../api/admin.js");
+const toolkit = require("../../resources/toolkit.js");
 
 describe("TEST OF API : auth", () => {
   // Pool of resources
@@ -43,7 +43,7 @@ describe("TEST OF API : auth", () => {
     });
   });
 
-  describe.skip("Assessment POST apiAuthSignUp", () => {
+  describe("Assessment POST apiAuthSignUp", () => {
     test("successful", async () => {
       // Prep
       let responses = {};
@@ -82,7 +82,7 @@ describe("TEST OF API : auth", () => {
       users.signedup[responses.apiAuthSignUp.data.userid] =
         responses.check.data.items[0];
     });
-    test("successful: already signedup", async () => {
+    test.skip("successful: already signedup", async () => {
       // Prep
       let responses = {};
 
