@@ -110,16 +110,6 @@ describe("TEST OF API : auth", () => {
       expect(responses.second_apiAuthSignUp.type).toBe(
         "auth.signup.success.alreadysignedup",
       );
-
-      // Clean
-      responses["testServices"] = await adminAPI.adminDatabaseCommand([
-        {
-          type: "delete",
-          collection: "users",
-          ids: [responses.first_apiAuthSignUp.data.userid],
-        },
-      ]);
-      //console.log("responses.testServices", responses.testServices);
     });
     test.skip("unsuccessful: existing login", async () => {
       expect(true).toBe(false);

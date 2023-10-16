@@ -34,6 +34,7 @@ module.exports = authSignup = (req, res, next) => {
       if (!user) {
         // Prep
         var user = new User({
+          userid: random_string(24),
           pseudo: req.body.pseudo,
           login: req.body.login,
           password: req.body.password,
