@@ -36,7 +36,7 @@ describe("TEST OF API : auth", () => {
         },
         adminSignInResponse.data.token,
       );
-      console.log("adminDeleteResponse", adminDeleteResponse);
+      //console.log("adminDeleteResponse", adminDeleteResponse);
       expect(adminDeleteResponse.type).toBe(
         "admin.databasecommand.delete.success",
       );
@@ -54,10 +54,11 @@ describe("TEST OF API : auth", () => {
         login: rid + "@yopmail.com",
         pseudo: rid,
         password: bcrypt.hashSync(rid, 10),
+        mailing: "none"
       };
-      //console.log("signUpInputs", signUpInputs);
+      console.log("signUpInputs", signUpInputs);
       responses["apiAuthSignUp"] = await authAPI.apiAuthSignUp(signUpInputs);
-      //console.log("responses.apiAuthSignUp", responses.apiAuthSignUp);
+      console.log("responses.apiAuthSignUp", responses.apiAuthSignUp);
       expect(responses.apiAuthSignUp.type).toBe("auth.signup.success.signedup");
 
       // Checks
@@ -71,7 +72,7 @@ describe("TEST OF API : auth", () => {
         },
         adminSignInResponse.data.token,
       );
-      //console.log("responses.check.data", responses.check.data);
+      console.log("responses.check.data", responses.check.data);
       expect(responses.check.type).toBe("admin.databasecommand.get.success");
       expect(responses.check.data.items[0].status).toBe("signedup");
       expect(responses.check.data.items[0].login).toBe(rid + "@yopmail.com");
