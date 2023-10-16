@@ -161,7 +161,7 @@ describe.skip("TEST OF API : game", () => {
           action: {
             type: "get",
             collection: "games",
-            ids: [gameInputs.gameid],
+            filter: { userid: gameInputs.gameid },
           },
         },
         adminSignInResponse.data.token,
@@ -244,7 +244,7 @@ describe.skip("TEST OF API : game", () => {
           action: {
             type: "get",
             collection: "users",
-            ids: [signupPicked],
+            filter: { userid: signupPicked },
           },
         },
         adminSignInResponse.data.token,

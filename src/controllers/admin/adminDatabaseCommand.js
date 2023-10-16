@@ -18,14 +18,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
     * admin.databasecommand.collectionmistmatch
     * admin.databasecommand.missingcollection
     * admin.databasecommand.missingtype
-    * admin.databasecommand.insertmany.success
-    * admin.databasecommand.insertmany.missingitem
-    * admin.databasecommand.insertmany.error.oninstert
-    * admin.databasecommand.delete.success
-    * admin.databasecommand.delete.missingids
-    * admin.databasecommand.delete.error.ondelete
-    * admin.databasecommand.drop.success
-    * admin.databasecommand.drop.error.ondrop
+    * ...
   
   */
 
@@ -80,9 +73,9 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
           switch (req.body.action.type) {
             case "get":
               // Type
-              if (req.body.action.ids != undefined) {
+              if (req.body.action.filter != undefined) {
                 collection
-                  .find({ idkey: req.body.action.ids })
+                  .find(req.body.action.filter)
                   .then((itemList) => {
                     if (itemList.length === req.body.action.ids.length) {
                       if (process.env.DEBUG === true) {
@@ -111,9 +104,9 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                     });
                   });
               } else {
-                console.log("admin.databasecommand.get.missingids");
+                console.log("admin.databasecommand.get.missingfilter");
                 return res.status(400).json({
-                  type: "admin.databasecommand.get.missingids",
+                  type: "admin.databasecommand.get.missingfilter",
                   data: {},
                 });
               }

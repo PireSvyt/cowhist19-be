@@ -136,7 +136,7 @@ describe.skip("TEST OF API : game", () => {
         action: {
           type: "get",
           collection: "tables",
-          ids: [tableInputs.tableid],
+          filter: { tableid: tableInputs.tableid },
         },
       };
       responses["check"] = await adminAPI.adminDatabaseCommand(
@@ -173,7 +173,7 @@ describe.skip("TEST OF API : game", () => {
           action: {
             type: "get",
             collection: "tables",
-            ids: [tables[0].tableid],
+            filter: { tableid: tables[0].tableid },
           },
         },
         adminSignInResponse.data.token,
@@ -218,7 +218,7 @@ describe.skip("TEST OF API : game", () => {
           action: {
             type: "get",
             collection: "tables",
-            ids: [tableToSave.tableid],
+            filter: { tableid: tableToSave.tableid },
           },
         },
         adminSignInResponse.data.token,
