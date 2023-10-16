@@ -87,6 +87,7 @@ module.exports = authSignup = (req, res, next) => {
         }
 
         // User saving
+        console.log("user to save", user);
         user
           .save()
           .then(() => {
