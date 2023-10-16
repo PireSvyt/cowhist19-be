@@ -7,7 +7,7 @@ module.exports = tableCreate = (req, res, next) => {
   creates a table
   
   possible response types
-  * table.create.success.created
+  * table.create.success
   * table.create.error.oncreate
   * table.create.error.idprovided
   
@@ -41,9 +41,9 @@ module.exports = tableCreate = (req, res, next) => {
   tableToSave
     .save()
     .then(() => {
-      console.log("table.create.success.created");
+      console.log("table.create.success");
       return res.status(201).json({
-        type: "table.create.success.created",
+        type: "table.create.success",
         data: {
           id: tableToSave._id,
         },

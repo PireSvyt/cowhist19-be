@@ -1,17 +1,19 @@
 require("@jest/globals");
 const authAPI = require("../auth.js");
 const adminAPI = require("../admin.js");
-const gameAPI = require("../game.js");
+const tableAPI = require("../table.js");
 const toolkit = require("../../../resources/toolkit.js");
 
 describe("TEST OF API : game", () => {
   // Pool of resources
   let users = [];
-  let table = undefined;
+  let tables = [];
   let games = [];
 
   let adminSignInResponse = undefined;
   let userSignInResponse = undefined;
+  let pickedUser = undefined;
+
   describe("Assessment admin tools", () => {
     let adminSignInInputs = {
       login: process.env.ADMIN_LOGIN,
@@ -70,7 +72,7 @@ describe("TEST OF API : game", () => {
     });
   });
 
-  describe("Assessment POST apiGameSave", () => {
+  describe("Assessment POST apiTableCreate", () => {
     test("set the scene", async () => {
       // Prep
       let responses = {};
@@ -96,75 +98,53 @@ describe("TEST OF API : game", () => {
       //console.log("users", users);
       expect(users.length).toBe(userAction.action.items.length);
 
-      // Table
-      let tableAction = {
-        action: {
-          type: "insertmany",
-          collection: "tables",
-          items: toolkit.objectGenerator("table", 1, [
-            {
-              name: "users",
-              value: users.map((item) => {
-                return item.id;
-              }),
-            },
-          ]),
-        },
-      };
-      responses["insertTable"] = await adminAPI.adminDatabaseCommand(
-        tableAction,
-        adminSignInResponse.data.token,
-      );
-      expect(responses.insertTable.type).toBe(
-        "admin.databasecommand.insertmany.success",
-      );
-      table = responses.insertTable.data[0];
-      //console.log("table", table);
-    });
-    test.skip("successful", async () => {
-      // Prep
-      let responses = {};
-
       // picked user
-      let user = users[Math.floor(Math.random() * users.length)];
-      console.log("user", user);
+      pickedUser = users[Math.floor(Math.random() * users.length)];
+      //console.log("pickedUser", pickedUser);
       let userSignInInputs = {
-        login: user.login,
-        password: user.pseudo,
+        login: pickedUser.login,
+        password: pickedUser.pseudo,
         encryption: false,
       };
       //console.log("userSignInInputs", userSignInInputs);
       userSignInResponse = await authAPI.apiAuthSignIn(userSignInInputs);
       //console.log("userSignInResponse", userSignInResponse);
       expect(userSignInResponse.type).toBe("auth.signin.success");
+    });
+    test("successful", async () => {
+      // Prep
+      let responses = {};
 
       // Test
-      let gameInputs = toolkit.objectGenerator("game");
-      delete gameInputs.id;
-      //console.log("gameInputs", gameInputs);
-      responses["apiGameSave"] = await gameAPI.apiGameSave(
-        gameInputs,
+      let tableInputs = toolkit.objectGenerator("table");
+      tableInputs.users = users.map((u) => {
+        return u.id;
+      });
+      console.log("tableInputs", tableInputs);
+      responses["apiTableCreate"] = await tableAPI.apiTableCreate(
+        tableInputs,
         userSignInResponse.data.token,
       );
-      console.log("responses.apiGameSave", responses.apiGameSave);
-      expect(responses.apiGameSave.type).toBe("game.save.success");
+      console.log("responses.apiTableCreate", responses.apiTableCreate);
+      expect(responses.apiTableCreate.type).toBe("table.create.success");
 
       // Checks
-      responses["check"] = await adminAPI.adminDatabaseCommand(
-        {
-          action: {
-            type: "get",
-            collection: "games",
-            ids: [gameInputs.id],
-          },
+      let tableAction = {
+        action: {
+          type: "get",
+          collection: "tables",
+          ids: [tableInputs.id],
         },
+      };
+      responses["check"] = await adminAPI.adminDatabaseCommand(
+        tableAction,
         adminSignInResponse.data.token,
       );
       console.log("responses.check.data", responses.check.data);
       expect(responses.check.type).toBe("admin.databasecommand.get.success");
-
       // Account for step
-      games.push(responses.check.data.items[0]);
+      tables.push(responses.check.data.items[0]);
+      expect(responses.check.data.items.length).toBe(1);
     });
     test.skip("successful: already signedup", async () => {
       // Prep
@@ -204,16 +184,10 @@ describe("TEST OF API : game", () => {
       ]);
       //console.log("responses.testServices", responses.testServices);
     });
-    test.skip("unsuccessful: existing login", async () => {
-      expect(true).toBe(false);
-    });
-    test.skip("unsuccessful: existing pseudo", async () => {
-      expect(true).toBe(false);
-    });
   });
 
   describe.skip("Assessment POST apiGameDelete", () => {
-    test("successful", async () => {
+    /*test("successful", async () => {
       // Prep
       let responses = {};
 
@@ -268,11 +242,11 @@ describe("TEST OF API : game", () => {
     });
     test.skip("unsuccessful: already activated", async () => {
       expect(true).toBe(false);
-    });
+    });*/
   });
 
   describe.skip("Assessment POST apiGameSave", () => {
-    test("successful", async () => {
+    /*test("successful", async () => {
       // Prep
       let responses = {};
 
@@ -300,5 +274,6 @@ describe("TEST OF API : game", () => {
     test.skip("unsuccessful: wrong password", async () => {
       expect(true).toBe(false);
     });
+  });*/
   });
 });

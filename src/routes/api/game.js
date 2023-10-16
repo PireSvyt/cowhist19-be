@@ -17,9 +17,9 @@ exports.apiGameSave = async function (saveInputs, token) {
   }
 };
 
-exports.apiGameDelete = async function (deleteId, token) {
+exports.apiGameGet = async function (getId, token) {
   try {
-    const res = await axios.delete(apiURL + "game/v1/" + deleteId, {
+    const res = await axios.get(apiURL + "game/v1/" + getId, {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -30,9 +30,9 @@ exports.apiGameDelete = async function (deleteId, token) {
   }
 };
 
-exports.apiGameGet = async function (getId, token) {
+exports.apiGameDelete = async function (deleteId, token) {
   try {
-    const res = await axios.get(apiURL + "game/v1/" + getId, {
+    const res = await axios.delete(apiURL + "game/v1/" + deleteId, {
       headers: {
         Authorization: "Bearer " + token,
       },
