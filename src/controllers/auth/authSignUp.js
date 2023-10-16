@@ -112,6 +112,9 @@ module.exports = authSignup = (req, res, next) => {
               return res.status(201).json({
                 type: "auth.signup.success.signedup",
                 note: "no mail sent",
+                data: {
+                  userid: user.userid,
+                },
               });
             }
           })

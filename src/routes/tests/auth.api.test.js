@@ -56,9 +56,9 @@ describe("TEST OF API : auth", () => {
         password: bcrypt.hashSync(rid, 10),
         mailing: "none"
       };
-      console.log("signUpInputs", signUpInputs);
+      //console.log("signUpInputs", signUpInputs);
       responses["apiAuthSignUp"] = await authAPI.apiAuthSignUp(signUpInputs);
-      console.log("responses.apiAuthSignUp", responses.apiAuthSignUp);
+      //console.log("responses.apiAuthSignUp", responses.apiAuthSignUp);
       expect(responses.apiAuthSignUp.type).toBe("auth.signup.success.signedup");
 
       // Checks
