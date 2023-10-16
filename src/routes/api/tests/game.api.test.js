@@ -12,6 +12,8 @@ describe("TEST OF API : game", () => {
 
   let adminSignInResponse = undefined;
   let userSignInResponse = undefined;
+  let pickedUser = undefined;
+
   describe("Assessment admin tools", () => {
     let adminSignInInputs = {
       login: process.env.ADMIN_LOGIN,
@@ -70,7 +72,7 @@ describe("TEST OF API : game", () => {
     });
   });
 
-  describe("Assessment POST apiGameSave", () => {
+  describe("Assessment set the scene", () => {
     test("set the scene", async () => {
       // Prep
       let responses = {};
@@ -120,23 +122,26 @@ describe("TEST OF API : game", () => {
       );
       table = responses.insertTable.data[0];
       //console.log("table", table);
-    });
-    test.skip("successful", async () => {
-      // Prep
-      let responses = {};
 
       // picked user
-      let user = users[Math.floor(Math.random() * users.length)];
-      console.log("user", user);
+      pickedUser = users[Math.floor(Math.random() * users.length)];
+      //console.log("pickedUser", pickedUser);
       let userSignInInputs = {
-        login: user.login,
-        password: user.pseudo,
+        login: pickedUser.login,
+        password: pickedUser.pseudo,
         encryption: false,
       };
       //console.log("userSignInInputs", userSignInInputs);
       userSignInResponse = await authAPI.apiAuthSignIn(userSignInInputs);
       //console.log("userSignInResponse", userSignInResponse);
       expect(userSignInResponse.type).toBe("auth.signin.success");
+    });
+  });
+
+  describe("Assessment POST apiGameSave", () => {
+    test.skip("successful", async () => {
+      // Prep
+      let responses = {};
 
       // Test
       let gameInputs = toolkit.objectGenerator("game");
@@ -144,7 +149,7 @@ describe("TEST OF API : game", () => {
       //console.log("gameInputs", gameInputs);
       responses["apiGameSave"] = await gameAPI.apiGameSave(
         gameInputs,
-        userSignInResponse.data.token,
+        pickedUser.token,
       );
       console.log("responses.apiGameSave", responses.apiGameSave);
       expect(responses.apiGameSave.type).toBe("game.save.success");

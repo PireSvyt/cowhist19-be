@@ -8,7 +8,8 @@ const tableAuthenticate = require("../controllers/table/tableAuthenticate.js");
 const tableCreate = require("../controllers/table/tableCreate.js");
 const tableSave = require("../controllers/table/tableSave.js");
 //const tableDetails = require("../controllers/table/tableDetails.js");
-const tableDetails_v2 = require("../controllers/table/tableDetails_v2.js");
+//const tableDetails_V2 = require("../controllers/table/tableDetails_V2.js");
+const tableGetDetails = require("../controllers/table/tableGetDetails.js");
 const tableDelete = require("../controllers/table/tableDelete.js");
 //const tableHistory = require("../controllers/table/tableHistory.js");
 //const tableHistory_v2 = require("../controllers/table/tableHistory_v2.js");
@@ -21,7 +22,7 @@ router.post(
   "/v1/existingname",
   authAuthenticate,
   userIsActivated,
-  tableExistingName
+  tableExistingName,
 );
 
 router.post(
@@ -29,35 +30,42 @@ router.post(
   authAuthenticate,
   userIsActivated,
   tableAuthenticate,
-  tableSave
+  tableSave,
 );
 router.get(
   "/v2/:id",
   authAuthenticate,
   userIsActivated,
   tableAuthenticate,
-  tableDetails_v2
+  tableDetails_v2,
+);
+router.get(
+  "/v3/:id",
+  authAuthenticate,
+  userIsActivated,
+  tableAuthenticate,
+  tableGetDetails,
 );
 router.delete(
   "/v1/:id",
   authAuthenticate,
   userIsActivated,
   tableAuthenticate,
-  tableDelete
+  tableDelete,
 );
 router.post(
   "/v3/history/:id",
   authAuthenticate,
   userIsActivated,
   tableAuthenticate,
-  tableHistory_v3
+  tableHistory_v3,
 );
 router.post(
   "/v1/stats/:id",
   authAuthenticate,
   userIsActivated,
   tableAuthenticate,
-  tableStats
+  tableStats,
 );
 
 module.exports = router;

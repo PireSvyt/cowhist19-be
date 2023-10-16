@@ -3,15 +3,15 @@ const Table = require("../../models/Table.js");
 const contracts = require("../../resources/contracts.json");
 const { random_id } = require("../../resources/toolkit");
 
-module.exports = tableDetails_v2 = (req, res, next) => {
+module.exports = tableGetDetails = (req, res, next) => {
   /*
   
   provides the details of a table
   
   possible response types
-  * table.details.success
-  * table.details.error.onaggregate
-  * table.details.error.onfind
+  * table.getdetails.success
+  * table.getdetails.error.onaggregate
+  * table.getdetails.error.onfind
   
   TODO
   * only users from the table can do this
@@ -19,7 +19,7 @@ module.exports = tableDetails_v2 = (req, res, next) => {
   */
 
   if (process.env.DEBUG) {
-    console.log("table.details");
+    console.log("table.getdetails");
   }
 
   Table.aggregate([
@@ -67,17 +67,17 @@ module.exports = tableDetails_v2 = (req, res, next) => {
         // Add contracts
         table.contracts = contracts;
         // Response
-        console.log("table.details.success");
+        console.log("table.getdetails.success");
         return res.status(200).json({
-          type: "table.details.success",
+          type: "table.getdetails.success",
           data: {
             table: table,
           },
         });
       } else {
-        console.log("table.details.error.onfind");
+        console.log("table.getdetails.error.onfind");
         return res.status(400).json({
-          type: "table.details.error.onfind",
+          type: "table.getdetails.error.onfind",
           data: {
             table: {},
           },
@@ -85,10 +85,10 @@ module.exports = tableDetails_v2 = (req, res, next) => {
       }
     })
     .catch((error) => {
-      console.log("table.details.error.onfind");
+      console.log("table.getdetails.error.onfind");
       console.error(error);
       return res.status(400).json({
-        type: "table.details.error.onaggregate",
+        type: "table.getdetails.error.onaggregate",
         data: {
           table: {},
         },

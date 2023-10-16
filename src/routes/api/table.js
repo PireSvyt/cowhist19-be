@@ -18,7 +18,7 @@ exports.apiTableCreate = async function (table, token) {
 
 exports.apiTableGetDetails = async function (id, token) {
   try {
-    const res = await axios.get(apiURL + "/table/v2/" + id, {
+    const res = await axios.get(apiURL + "/table/v3/" + id, {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -59,7 +59,7 @@ exports.apiTableGetStats = async function (id, parameters, token) {
   }
 };
 
-exports.apiTableSave = async function     apiTableSave(table, token) {
+exports.apiTableSave = async function apiTableSave(table, token) {
   try {
     const res = await axios.post(
       process.env.REACT_APP_SERVER_URL + "/table/v2/save",
@@ -74,9 +74,9 @@ exports.apiTableSave = async function     apiTableSave(table, token) {
   } catch (err) {
     return err.response.data;
   }
-}
+};
 
-exports.apiTableDelete = async function    (id, token) {
+exports.apiTableDelete = async function (id, token) {
   try {
     const res = await axios.delete(token + "/table/v1/" + id, {
       headers: {
@@ -87,4 +87,4 @@ exports.apiTableDelete = async function    (id, token) {
   } catch (err) {
     return err.response.data;
   }
-}
+};

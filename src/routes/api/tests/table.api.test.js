@@ -72,7 +72,7 @@ describe("TEST OF API : game", () => {
     });
   });
 
-  describe("Assessment POST apiTableCreate", () => {
+  describe("Assessment set the scene", () => {
     test("set the scene", async () => {
       // Prep
       let responses = {};
@@ -111,6 +111,9 @@ describe("TEST OF API : game", () => {
       //console.log("userSignInResponse", userSignInResponse);
       expect(userSignInResponse.type).toBe("auth.signin.success");
     });
+  });
+
+  describe("Assessment POST apiTableCreate", () => {
     test("successful", async () => {
       // Prep
       let responses = {};
@@ -120,12 +123,12 @@ describe("TEST OF API : game", () => {
       tableInputs.users = users.map((u) => {
         return u.id;
       });
-      console.log("tableInputs", tableInputs);
+      //console.log("tableInputs", tableInputs);
       responses["apiTableCreate"] = await tableAPI.apiTableCreate(
         tableInputs,
         userSignInResponse.data.token,
       );
-      console.log("responses.apiTableCreate", responses.apiTableCreate);
+      //console.log("responses.apiTableCreate", responses.apiTableCreate);
       expect(responses.apiTableCreate.type).toBe("table.create.success");
 
       // Checks
@@ -140,71 +143,26 @@ describe("TEST OF API : game", () => {
         tableAction,
         adminSignInResponse.data.token,
       );
-      console.log("responses.check.data", responses.check.data);
+      //console.log("responses.check.data", responses.check.data);
       expect(responses.check.type).toBe("admin.databasecommand.get.success");
       // Account for step
       tables.push(responses.check.data.items[0]);
       expect(responses.check.data.items.length).toBe(1);
     });
-    test.skip("successful: already signedup", async () => {
-      // Prep
-      let responses = {};
-
-      // Test
-      let rid = toolkit.random_id(16);
-      let first_signUpInputs = {
-        login: rid + "@yopmail.com",
-        pseudo: rid,
-        password: rid,
-      };
-      //console.log("first_signUpInputs", first_signUpInputs);
-      responses["first_apiAuthSignUp"] =
-        await authAPI.apiAuthSignUp(first_signUpInputs);
-      //console.log("responses.first_apiAuthSignUp", responses.first_apiAuthSignUp);
-      let second_signUpInputs = {
-        login: first_signUpInputs.login,
-        pseudo: toolkit.random_id(),
-        password: toolkit.random_id(),
-      };
-      //console.log("second_signUpInputs", second_signUpInputs);
-      responses["second_apiAuthSignUp"] =
-        await authAPI.apiAuthSignUp(second_signUpInputs);
-      //console.log("responses.second_apiAuthSignUp", responses.second_apiAuthSignUp);
-      expect(responses.second_apiAuthSignUp.type).toBe(
-        "auth.signup.success.alreadysignedup",
-      );
-
-      // Clean
-      responses["testServices"] = await adminAPI.adminDatabaseCommand([
-        {
-          type: "delete",
-          collection: "users",
-          ids: [responses.first_apiAuthSignUp.data.id],
-        },
-      ]);
-      //console.log("responses.testServices", responses.testServices);
-    });
   });
 
-  describe.skip("Assessment POST apiGameDelete", () => {
-    /*test("successful", async () => {
+  describe("Assessment GET apiTableGetDetails", () => {
+    test("successful", async () => {
       // Prep
       let responses = {};
 
       // Test
-      let signupPicked = Object.keys(users.signedup)[0];
-      //console.log("pickedUser", users.signedup[signupPicked]);
-      let activateInputs = {
-        login: users.signedup[signupPicked].login,
-        token: users.signedup[signupPicked].activationtoken,
-      };
-      //console.log("activateInputs", activateInputs);
-      responses["apiAuthActivate"] =
-        await authAPI.apiAuthActivate(activateInputs);
-      //console.log("responses.apiAuthActivate", responses.apiAuthActivate);
-      expect(responses.apiAuthActivate.type).toBe(
-        "auth.activate.success.activated",
+      responses["getDetailsInputs"] = await tableAPI.apiTableGetDetails(
+        tables[0].id,
+        pickedUser.id,
       );
+      //console.log("responses.getDetailsInputs", responses.getDetailsInputs);
+      expect(responses.getDetailsInputs.type).toBe("table.getdetails.success");
 
       // Checks
       responses["check"] = await adminAPI.adminDatabaseCommand(
@@ -219,61 +177,11 @@ describe("TEST OF API : game", () => {
       );
       //console.log("responses.check.data", responses.check.data);
       expect(responses.check.type).toBe("admin.databasecommand.get.success");
-      expect(responses.check.data.items[0].status).toBe("activated");
-      expect(responses.check.data.items[0].login).toBe(
-        users.signedup[signupPicked].login,
+      expect(responses.check.data.items[0].name).toBe(tables[0].name);
+      expect(responses.check.data.items[0].guests).toBe(tables[0].guests);
+      expect(responses.check.data.items[0].users.length).toBe(
+        tables[0].users.length,
       );
-      expect(responses.check.data.items[0].password).toBe(
-        users.signedup[signupPicked].password,
-      );
-      expect(responses.check.data.items[0].pseudo).toBe(
-        users.signedup[signupPicked].pseudo,
-      );
-
-      // Account for step
-      delete users.signedup[signupPicked];
-      users.activated[signupPicked] = responses.check.data.items[0];
     });
-    test.skip("unsuccessful: not existing", async () => {
-      expect(true).toBe(false);
-    });
-    test.skip("unsuccessful: wrong token", async () => {
-      expect(true).toBe(false);
-    });
-    test.skip("unsuccessful: already activated", async () => {
-      expect(true).toBe(false);
-    });*/
-  });
-
-  describe.skip("Assessment POST apiGameSave", () => {
-    /*test("successful", async () => {
-      // Prep
-      let responses = {};
-
-      // Test
-      let activatedPicked = Object.keys(users.activated)[0];
-      //console.log("pickedUser", users.activated[activatedPicked]);
-      let signInInputs = {
-        login: users.activated[activatedPicked].login,
-        password: users.activated[activatedPicked].pseudo,
-        encryption: false,
-      };
-      //console.log("signInInputs", signInInputs);
-      responses["apiAuthSignIn"] = await authAPI.apiAuthSignIn(signInInputs);
-      //console.log("responses.apiAuthSignIn", responses.apiAuthSignIn);
-      expect(responses.apiAuthSignIn.type).toBe("auth.signin.success");
-
-      // checks
-    });
-    test.skip("unsuccessful: not existing", async () => {
-      expect(true).toBe(false);
-    });
-    test.skip("unsuccessful: not activated", async () => {
-      expect(true).toBe(false);
-    });
-    test.skip("unsuccessful: wrong password", async () => {
-      expect(true).toBe(false);
-    });
-  });*/
   });
 });
