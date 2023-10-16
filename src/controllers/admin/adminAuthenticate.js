@@ -31,13 +31,11 @@ module.exports = adminAuthenticate = (req, res, next) => {
         } else {
           return res.status(403).json({
             type: "admin.authenticate.error.isnotadmin",
-            error: err,
           });
         }
       } else {
         return res.status(403).json({
           type: "admin.authenticate.error.notfound",
-          error: err,
         });
       }
     })
@@ -45,7 +43,7 @@ module.exports = adminAuthenticate = (req, res, next) => {
       console.error(error);
       return res.status(403).json({
         type: "admin.authenticate.error.erroronfind",
-        error: err,
+        error: error,
       });
     });
 };
