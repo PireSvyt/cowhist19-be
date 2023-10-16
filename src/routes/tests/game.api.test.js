@@ -91,6 +91,7 @@ describe.skip("TEST OF API : game", () => {
         userAction,
         adminSignInResponse.data.token,
       );
+      console.log("responses.insertUsers", responses.insertUsers);
       expect(responses.insertUsers.type).toBe(
         "admin.databasecommand.insertmany.success",
       );

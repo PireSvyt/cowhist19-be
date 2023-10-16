@@ -31,49 +31,7 @@ module.exports = authSignup = (req, res, next) => {
 
   User.findOne({ login: req.body.login })
     .then((user) => {
-      if (user) {
-        // Invited
-        if (user.status === "invited") {
-          // User edit
-          user.pseudo = req.body.pseudo;
-          user.status = "signedup";
-          user.password = req.body.password;
-          user.activationtoken = random_string(20);
-
-          // User saving
-          user
-            .save()
-            .then(() => {
-              serviceMailing("signup", user);
-              console.log("auth.signup.success.signedup");
-              return res.status(200).json({
-                type: "auth.signup.success.signedup",
-                data: {
-                  userid: user.userid,
-                },
-              });
-            })
-            .catch((error) => {
-              console.log("auth.signup.error.savingfrominvited");
-              return res.status(400).json({
-                type: "auth.signup.error.savingfrominvited",
-                error: error,
-                data: {
-                  userid: "",
-                },
-              });
-            });
-        } else {
-          // Already existing
-          console.log("auth.signup.success.alreadysignedup");
-          return res.status(409).json({
-            type: "auth.signup.success.alreadysignedup",
-            data: {
-              userid: user.userid,
-            },
-          });
-        }
-      } else {
+      if (!user) {
         // Prep
         var user = new User({
           pseudo: req.body.pseudo,
@@ -87,7 +45,6 @@ module.exports = authSignup = (req, res, next) => {
         }
 
         // User saving
-        console.log("user to save", user);
         user
           .save()
           .then(() => {
@@ -129,6 +86,48 @@ module.exports = authSignup = (req, res, next) => {
               },
             });
           });
+      } else {
+        // Invited
+        if (user.status === "invited") {
+          // User edit
+          user.pseudo = req.body.pseudo;
+          user.status = "signedup";
+          user.password = req.body.password;
+          user.activationtoken = random_string(20);
+
+          // User saving
+          user
+            .save()
+            .then(() => {
+              serviceMailing("signup", user);
+              console.log("auth.signup.success.signedup");
+              return res.status(200).json({
+                type: "auth.signup.success.signedup",
+                data: {
+                  userid: user.userid,
+                },
+              });
+            })
+            .catch((error) => {
+              console.log("auth.signup.error.savingfrominvited");
+              return res.status(400).json({
+                type: "auth.signup.error.savingfrominvited",
+                error: error,
+                data: {
+                  userid: "",
+                },
+              });
+            });
+        } else {
+          // Already existing
+          console.log("auth.signup.success.alreadysignedup");
+          return res.status(409).json({
+            type: "auth.signup.success.alreadysignedup",
+            data: {
+              userid: user.userid,
+            },
+          });
+        }
       }
     })
     .catch((error) => {
