@@ -11,6 +11,7 @@ describe("TEST OF API : game", () => {
   let games = [];
 
   let adminSignInResponse = undefined;
+  let userSignInResponse = undefined;
   describe("Assessment admin tools", () => {
     let adminSignInInputs = {
       login: process.env.ADMIN_LOGIN,
@@ -75,61 +76,96 @@ describe("TEST OF API : game", () => {
       let responses = {};
 
       // Users
-      responses["insertUsers"] = await adminAPI.adminDatabaseCommand(
-        {
-          action: {
-            type: "insertmany",
-            collection: "users",
-            items: toolkit.objectGenerator({
-              type: "activated user",
-              count: 4,
-            }),
-          },
+      let userAction = {
+        action: {
+          type: "insertmany",
+          collection: "users",
+          items: toolkit.objectGenerator("user", 4, [
+            { name: "status", value: "activated" },
+          ]),
         },
+      };
+      responses["insertUsers"] = await adminAPI.adminDatabaseCommand(
+        userAction,
         adminSignInResponse.data.token,
       );
-      console.log("responses.insertUsers.data", responses.insertUsers.data);
       expect(responses.insertUsers.type).toBe(
         "admin.databasecommand.insertmany.success",
       );
+      users = responses.insertUsers.data;
+      //console.log("users", users);
+      expect(users.length).toBe(userAction.action.items.length);
+
+      // Table
+      let tableAction = {
+        action: {
+          type: "insertmany",
+          collection: "tables",
+          items: toolkit.objectGenerator("table", 1, [
+            {
+              name: "users",
+              value: users.map((item) => {
+                return item.id;
+              }),
+            },
+          ]),
+        },
+      };
+      responses["insertTable"] = await adminAPI.adminDatabaseCommand(
+        tableAction,
+        adminSignInResponse.data.token,
+      );
+      expect(responses.insertTable.type).toBe(
+        "admin.databasecommand.insertmany.success",
+      );
+      table = responses.insertTable.data[0];
+      //console.log("table", table);
     });
-    test.skip("successful", async () => {
+    test("successful", async () => {
       // Prep
       let responses = {};
 
-      // Test
-      let rid = toolkit.random_id(16);
-      let signUpInputs = {
-        login: rid + "@yopmail.com",
-        pseudo: rid,
-        password: bcrypt.hashSync(rid, 10),
+      // picked user
+      let user = users[Math.floor(Math.random() * users.length)];
+      console.log("user", user);
+      let userSignInInputs = {
+        login: user.login,
+        password: user.pseudo,
+        encryption: false,
       };
-      //console.log("signUpInputs", signUpInputs);
-      responses["apiAuthSignUp"] = await authAPI.apiAuthSignUp(signUpInputs);
-      //console.log("responses.apiAuthSignUp", responses.apiAuthSignUp);
-      expect(responses.apiAuthSignUp.type).toBe("auth.signup.success.signedup");
+      //console.log("userSignInInputs", userSignInInputs);
+      userSignInResponse = await authAPI.apiAuthSignIn(userSignInInputs);
+      //console.log("userSignInResponse", userSignInResponse);
+      expect(userSignInResponse.type).toBe("auth.signin.success");
+
+      // Test
+      let gameInputs = toolkit.objectGenerator("game");
+      delete gameInputs.id;
+      delete gameInputs.date;
+      //console.log("gameInputs", gameInputs);
+      responses["apiGameSave"] = await gameAPI.apiGameSave(
+        gameInputs,
+        userSignInResponse.data.token,
+      );
+      console.log("responses.apiGameSave", responses.apiGameSave);
+      expect(responses.apiGameSave.type).toBe("game.save.success");
 
       // Checks
       responses["check"] = await adminAPI.adminDatabaseCommand(
         {
           action: {
             type: "get",
-            collection: "users",
-            ids: [responses.apiAuthSignUp.data.id],
+            collection: "games",
+            ids: [gameInputs.id],
           },
         },
         adminSignInResponse.data.token,
       );
-      //console.log("responses.check.data", responses.check.data);
+      console.log("responses.check.data", responses.check.data);
       expect(responses.check.type).toBe("admin.databasecommand.get.success");
-      expect(responses.check.data.items[0].status).toBe("signedup");
-      expect(responses.check.data.items[0].login).toBe(rid + "@yopmail.com");
-      //expect(responses.check.data.items[0].password).toBe(rid);
-      expect(responses.check.data.items[0].pseudo).toBe(rid);
 
       // Account for step
-      users.signedup[responses.apiAuthSignUp.data.id] =
-        responses.check.data.items[0];
+      games.push(responses.check.data.items[0]);
     });
     test.skip("successful: already signedup", async () => {
       // Prep
