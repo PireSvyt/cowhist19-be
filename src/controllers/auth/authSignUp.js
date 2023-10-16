@@ -69,7 +69,7 @@ module.exports = authSignup = (req, res, next) => {
           return res.status(409).json({
             type: "auth.signup.success.alreadysignedup",
             data: {
-              id: user._id,
+              id: user.id,
             },
           });
         }
@@ -82,7 +82,9 @@ module.exports = authSignup = (req, res, next) => {
           status: "signedup",
           activationtoken: random_string(20),
         });
-        user.id = user._id;
+        if (user.id === undefined) {
+          user.id = user._id;
+        }
 
         // User saving
         user
@@ -94,7 +96,7 @@ module.exports = authSignup = (req, res, next) => {
                 return res.status(201).json({
                   type: "auth.signup.success.signedup",
                   data: {
-                    id: user._id,
+                    id: user.id,
                   },
                 });
               } else {

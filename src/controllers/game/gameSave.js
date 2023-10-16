@@ -25,7 +25,9 @@ module.exports = gameSave = (req, res, next) => {
     // Create
     delete req.body._id;
     const gameToSave = new Game({ ...req.body });
-    gameToSave.id = gameToSave._id;
+    if (gameToSave.id === undefined) {
+      gameToSave.id = gameToSave._id;
+    }
     if (gameToSave.date === undefined) {
       gameToSave.date = new Date();
     }
@@ -37,7 +39,7 @@ module.exports = gameSave = (req, res, next) => {
         return res.status(201).json({
           type: "game.save.success.created",
           data: {
-            id: gameToSave._id,
+            id: gameToSave.id,
           },
         });
       })
@@ -55,9 +57,11 @@ module.exports = gameSave = (req, res, next) => {
   } else {
     // Modify
     let game = new Game({ ...req.body });
-    game.id = game._id;
+    if (game.id === undefined) {
+      game.id = game._id;
+    }
     // Modify
-    Game.updateOne({ _id: game._id }, game)
+    Game.updateOne({ id: game.id }, game)
       .then(() => {
         console.log("game.save.success.modified");
         return res.status(200).json({

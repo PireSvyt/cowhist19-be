@@ -33,7 +33,9 @@ module.exports = tableCreate = (req, res, next) => {
   });
   tableToSave.users = tableUsers;
   tableToSave = new Table(tableToSave);
-  tableToSave.id = tableToSave._id;
+  if (tableToSave.id === undefined) {
+    tableToSave.id = tableToSave._id;
+  }
 
   // Save
   tableToSave
