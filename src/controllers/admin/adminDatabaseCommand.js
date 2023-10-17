@@ -69,6 +69,9 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
             case "get":
               // Type
               if (req.body.action.filter != undefined) {
+                filter = {};
+                filter[req.body.action.filter.key] =
+                  req.body.action.filter.value;
                 collection
                   .find()
                   .where(req.body.action.filter)
