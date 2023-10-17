@@ -25,6 +25,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
   if (process.env.DEBUG === true) {
     console.log("admin.databasecommand");
   }
+  console.log("action", req.body.action);
 
   return new Promise((resolve, reject) => {
     let collection = undefined;
@@ -91,7 +92,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                     console.log("admin.databasecommand.get.error.onfind");
                     console.error(error);
                     return res.status(500).json({
-                      type: "admin.databasecommand.insertmany.error.oninstert",
+                      type: "admin.databasecommand.get.error.onfind",
                       error: error,
                       data: {},
                     });
