@@ -70,10 +70,7 @@ describe("TEST OF API : auth", () => {
           action: {
             type: "get",
             collection: "users",
-            filter: {
-              key: "userid",
-              value: responses.apiAuthSignUp.data.userid,
-            },
+            filter: { userid: responses.apiAuthSignUp.data.userid },
           },
         },
         adminSignInResponse.data.token,
