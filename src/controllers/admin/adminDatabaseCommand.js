@@ -153,8 +153,12 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                     message: "command unauthorized in production",
                   });
                 } else {
+                  filter = {};
+                  filter[req.body.action.filter.key] =
+                    req.body.action.filter.value;
                   collection
-                    .deleteMany(req.body.action.filter)
+                    .deleteMany()
+                    .where(filter)
                     .then((deleteResponse) => {
                       if (process.env.DEBUG === true) {
                         console.log("admin.databasecommand.delete.success");

@@ -39,7 +39,7 @@ describe("TEST OF API : auth", () => {
         },
         adminSignInResponse.data.token,
       );
-      //console.log("adminDeleteResponse", adminDeleteResponse);
+      console.log("adminDeleteResponse", adminDeleteResponse);
       expect(adminDeleteResponse.type).toBe(
         "admin.databasecommand.delete.success",
       );

@@ -32,7 +32,10 @@ describe.skip("TEST OF API : game", () => {
           action: {
             type: "delete",
             collection: "users",
-            filter: { userid: { $ne: adminSignInResponse.data.userid } },
+            filter: {
+              key: "userid",
+              value: { $ne: adminSignInResponse.data.userid },
+            },
           },
         },
         adminSignInResponse.data.token,
@@ -46,7 +49,10 @@ describe.skip("TEST OF API : game", () => {
           action: {
             type: "delete",
             collection: "tables",
-            filter: { tableid: { $ne: "" } },
+            filter: {
+              key: "tableid",
+              value: { $ne: "delete all" },
+            },
           },
         },
         adminSignInResponse.data.token,
@@ -60,7 +66,10 @@ describe.skip("TEST OF API : game", () => {
           action: {
             type: "delete",
             collection: "games",
-            filter: { gameid: { $ne: "" } },
+            filter: {
+              key: "gameid",
+              value: { $ne: "delete all" },
+            },
           },
         },
         adminSignInResponse.data.token,
