@@ -71,7 +71,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                 collection
                   //.find(req.body.action.filter)
                   .aggregate([{ $match: req.body.action.filter }])
-                  .thenMany((itemList) => {
+                  .then((itemList) => {
                     if (itemList.length === req.body.action.ids.length) {
                       if (process.env.DEBUG === true) {
                         console.log("admin.databasecommand.get.success");
