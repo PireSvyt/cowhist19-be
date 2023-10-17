@@ -70,7 +70,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
               if (req.body.action.filter != undefined) {
                 collection
                   .find(req.body.action.filter)
-                  .then((itemList) => {
+                  .thenMany((itemList) => {
                     if (itemList.length === req.body.action.ids.length) {
                       if (process.env.DEBUG === true) {
                         console.log("admin.databasecommand.get.success");
@@ -87,9 +87,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                     }
                   })
                   .catch((error) => {
-                    console.log(
-                      "admin.databasecommand.insertmany.error.oninstert",
-                    );
+                    console.log("admin.databasecommand.get.error.onfind");
                     console.error(error);
                     return res.status(500).json({
                       type: "admin.databasecommand.insertmany.error.oninstert",
