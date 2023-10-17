@@ -74,6 +74,12 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                   req.body.action.filter.value;
                 collection
                   .find(filter)
+                  .exec(function (err, docs) {
+                    // If there is an error, return the error and no results
+                    if (err) return callback(err, null);
+                    // No error, return the docs
+                    callback(null, docs);
+                  })
                   .then((itemList) => {
                     if (itemList.length === req.body.action.ids.length) {
                       if (process.env.DEBUG === true) {

@@ -31,7 +31,10 @@ describe("TEST OF API : auth", () => {
           action: {
             type: "delete",
             collection: "users",
-            filter: { userid: { $ne: adminSignInResponse.data.userid } },
+            filter: {
+              key: "userid",
+              value: { $ne: adminSignInResponse.data.userid },
+            },
           },
         },
         adminSignInResponse.data.token,
@@ -68,7 +71,8 @@ describe("TEST OF API : auth", () => {
             type: "get",
             collection: "users",
             filter: {
-              userid: [responses.apiAuthSignUp.data.userid],
+              key: "userid",
+              value: responses.apiAuthSignUp.data.userid,
             },
           },
         },
