@@ -24,7 +24,7 @@ module.exports = tableGetDetails = (req, res, next) => {
   Table.aggregate([
     {
       $match: {
-        tableid: req.params.id,
+        tableid: req.params.tableid,
       },
     },
     {
