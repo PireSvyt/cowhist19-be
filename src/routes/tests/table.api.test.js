@@ -32,10 +32,7 @@ describe.skip("TEST OF API : game", () => {
           action: {
             type: "delete",
             collection: "users",
-            filter: {
-              key: "userid",
-              value: { $ne: adminSignInResponse.data.userid },
-            },
+            match: { userid: { $ne: adminSignInResponse.data.userid } },
           },
         },
         adminSignInResponse.data.token,
@@ -49,10 +46,7 @@ describe.skip("TEST OF API : game", () => {
           action: {
             type: "delete",
             collection: "tables",
-            filter: {
-              key: "tableid",
-              value: { $ne: "delete all" },
-            },
+            match: { tableid: { $ne: "delete all" } },
           },
         },
         adminSignInResponse.data.token,
@@ -66,10 +60,7 @@ describe.skip("TEST OF API : game", () => {
           action: {
             type: "delete",
             collection: "games",
-            filter: {
-              key: "gameid",
-              value: { $ne: "delete all" },
-            },
+            match: { gameid: { $ne: "delete all" } },
           },
         },
         adminSignInResponse.data.token,
@@ -145,7 +136,11 @@ describe.skip("TEST OF API : game", () => {
         action: {
           type: "get",
           collection: "tables",
-          filter: { tableid: tableInputs.tableid },
+          condition: {
+            field: "tableid",
+            value: tableInputs.tableid,
+            filter: "in",
+          },
         },
       };
       responses["check"] = await adminAPI.adminDatabaseCommand(
@@ -182,7 +177,11 @@ describe.skip("TEST OF API : game", () => {
           action: {
             type: "get",
             collection: "tables",
-            filter: { tableid: tables[0].tableid },
+            condition: {
+              field: "tableid",
+              value: tables[0].tableid,
+              filter: "in",
+            },
           },
         },
         adminSignInResponse.data.token,
@@ -227,7 +226,11 @@ describe.skip("TEST OF API : game", () => {
           action: {
             type: "get",
             collection: "tables",
-            filter: { tableid: tableToSave.tableid },
+            condition: {
+              field: "tableid",
+              value: tableToSave.tableid,
+              filter: "in",
+            },
           },
         },
         adminSignInResponse.data.token,

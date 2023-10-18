@@ -168,9 +168,9 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                   message: "command unauthorized in production",
                 });
               } else {
-                if (req.body.action.condition != undefined) {
+                if (req.body.action.match != undefined) {
                   collection
-                    .deleteMany(req.body.action.condition)
+                    .deleteMany(req.body.action.match)
                     .then((deleteResponse) => {
                       if (process.env.DEBUG === true) {
                         console.log("admin.databasecommand.delete.success");
@@ -192,9 +192,9 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                       });
                     });
                 } else {
-                  console.log("admin.databasecommand.delete.missingcondition");
+                  console.log("admin.databasecommand.delete.missingmatch");
                   return res.status(400).json({
-                    type: "admin.databasecommand.delete.missingcondition",
+                    type: "admin.databasecommand.delete.missingmatch",
                     data: {},
                   });
                 }

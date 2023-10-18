@@ -31,11 +31,7 @@ describe("TEST OF API : auth", () => {
           action: {
             type: "delete",
             collection: "users",
-            condition: {
-              field: "userid",
-              value: adminSignInResponse.data.userid,
-              filter: "nin",
-            },
+            match: { userid: { $ne: adminSignInResponse.data.userid } },
           },
         },
         adminSignInResponse.data.token,

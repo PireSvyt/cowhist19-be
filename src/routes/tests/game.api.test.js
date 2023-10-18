@@ -4,7 +4,7 @@ const adminAPI = require("../api/admin.js");
 const gameAPI = require("../api/game.js");
 const toolkit = require("../../resources/toolkit.js");
 
-describe.skip("TEST OF API : game", () => {
+describe("TEST OF API : game", () => {
   // Pool of resources
   let users = [];
   let table = undefined;
@@ -32,10 +32,7 @@ describe.skip("TEST OF API : game", () => {
           action: {
             type: "delete",
             collection: "users",
-            filter: {
-              key: "userid",
-              value: { $ne: adminSignInResponse.data.userid },
-            },
+            match: { userid: { $ne: adminSignInResponse.data.userid } },
           },
         },
         adminSignInResponse.data.token,
@@ -49,10 +46,7 @@ describe.skip("TEST OF API : game", () => {
           action: {
             type: "delete",
             collection: "tables",
-            filter: {
-              key: "tableid",
-              value: { $ne: "delete all" },
-            },
+            match: { tableid: { $ne: "delete all" } },
           },
         },
         adminSignInResponse.data.token,
@@ -66,10 +60,7 @@ describe.skip("TEST OF API : game", () => {
           action: {
             type: "delete",
             collection: "games",
-            filter: {
-              key: "gameid",
-              value: { $ne: "delete all" },
-            },
+            match: { gameid: { $ne: "delete all" } },
           },
         },
         adminSignInResponse.data.token,
@@ -100,7 +91,7 @@ describe.skip("TEST OF API : game", () => {
         userAction,
         adminSignInResponse.data.token,
       );
-      console.log("responses.insertUsers", responses.insertUsers);
+      //console.log("responses.insertUsers", responses.insertUsers);
       expect(responses.insertUsers.type).toBe(
         "admin.databasecommand.insertmany.success",
       );
@@ -170,7 +161,11 @@ describe.skip("TEST OF API : game", () => {
           action: {
             type: "get",
             collection: "games",
-            filter: { userid: gameInputs.gameid },
+            condition: {
+              field: "gameid",
+              value: gameInputs.gameid,
+              filter: "in",
+            },
           },
         },
         adminSignInResponse.data.token,
@@ -208,19 +203,6 @@ describe.skip("TEST OF API : game", () => {
       expect(responses.second_apiAuthSignUp.type).toBe(
         "auth.signup.success.alreadysignedup",
       );
-
-      // Clean
-      responses["testServices"] = await adminAPI.adminDatabaseCommand([
-        {
-          type: "delete",
-          collection: "users",
-          filter: {
-            key: "userid",
-            value: [responses.first_apiAuthSignUp.data.userid],
-          },
-        },
-      ]);
-      //console.log("responses.testServices", responses.testServices);
     });
     test.skip("unsuccessful: existing login", async () => {
       expect(true).toBe(false);
@@ -256,7 +238,11 @@ describe.skip("TEST OF API : game", () => {
           action: {
             type: "get",
             collection: "users",
-            filter: { userid: signupPicked },
+            condition: {
+              field: "userid",
+              value: signupPicked,
+              filter: "in",
+            },
           },
         },
         adminSignInResponse.data.token,
