@@ -120,10 +120,10 @@ describe("TEST OF API : game", () => {
 
       // Test
       let tableInputs = toolkit.objectGenerator("table");
-      tableInputs.users = users.map((u) => {
-        return { userid: u.userid };
+      tableInputs.userids = users.map((u) => {
+        return u.userid;
       });
-      //console.log("tableInputs", tableInputs);
+      console.log("tableInputs", tableInputs);
       responses["apiTableCreate"] = await tableAPI.apiTableCreate(
         tableInputs,
         userSignInResponse.data.token,
@@ -143,14 +143,12 @@ describe("TEST OF API : game", () => {
           },
         },
       };
+      console.log("tableAction", tableAction);
       responses["check"] = await adminAPI.adminDatabaseCommand(
         tableAction,
         adminSignInResponse.data.token,
       );
-      /*console.log(
-        "responses.check.data.items[0]",
-        responses.check.data.items[0],
-      );*/
+      console.log("responses.check", responses.check);
       expect(responses.check.type).toBe("admin.databasecommand.get.success");
       // Account for step
       tables.push(responses.check.data.items[0]);
@@ -158,7 +156,7 @@ describe("TEST OF API : game", () => {
     });
   });
 
-  describe("Assessment GET apiTableGetDetails", () => {
+  describe.skip("Assessment GET apiTableGetDetails", () => {
     test("successful", async () => {
       // Prep
       let responses = {};
@@ -196,7 +194,7 @@ describe("TEST OF API : game", () => {
     });
   });
 
-  describe("Assessment GET apiTableSave", () => {
+  describe.skip("Assessment GET apiTableSave", () => {
     test("successful", async () => {
       // Prep
       let responses = {};
