@@ -1,0 +1,77 @@
+require("dotenv").config();
+const Game = require("../../models/Game.js");
+
+module.exports = gameCreate = (req, res, next) => {
+  /*
+  
+  create a game
+  
+  possible response types
+  * game.create.success.created
+  * game.create.error.oncreate
+  * game.create.success.modified
+  * game.create.error.onmodify
+  
+  TODO
+  * only users from the table can do this
+  
+  */
+
+  if (process.env.DEBUG) {
+    console.log("game.create");
+  }
+
+  // Initialise
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  const decodedToken = jwt_decode(token);
+
+  const gameToSave = new Game({ ...req.body });
+  if (gameToSave.gameid === undefined) {
+    gameToSave.gameid = gameToSave._id;
+  }
+  if (gameToSave.date === undefined) {
+    gameToSave.date = new Date();
+  }
+
+  // Check memebership
+  if (
+    gameToSave.players
+      .map((player) => player.userid)
+      .includes(decodedToken.userid)
+  ) {
+    // Save
+    gameToSave
+      .save()
+      .then(() => {
+        console.log("game.create.success.created");
+        return res.status(201).json({
+          type: "game.create.success.created",
+          data: {
+            gameid: gameToSave.gameid,
+          },
+        });
+      })
+      .catch((error) => {
+        console.log("game.create.error.oncreate");
+        console.error(error);
+        return res.status(400).json({
+          type: "game.create.error.oncreate",
+          error: error,
+          data: {
+            gameid: "",
+          },
+        });
+      });
+  } else {
+    console.log("game.create.error.ownership");
+    console.error(error);
+    return res.status(400).json({
+      type: "game.create.error.ownership",
+      details: "user at command origin is not among userids",
+      data: {
+        gameid: "",
+      },
+    });
+  }
+};

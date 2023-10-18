@@ -28,6 +28,7 @@ module.exports = tableAuthenticate = (req, res, next) => {
   if (tableid === undefined) {
     tableid = req.body.tableid;
   }
+  console.log("tableid", tableid);
 
   Table.findOne({ tableid: tableid })
     .then((table) => {
