@@ -4,7 +4,7 @@ const adminAPI = require("../api/admin.js");
 const gameAPI = require("../api/game.js");
 const toolkit = require("../../resources/toolkit.js");
 
-describe.skip("TEST OF API : game", () => {
+describe("TEST OF API : game", () => {
   // Pool of resources
   let users = [];
   let table = undefined;
@@ -139,7 +139,7 @@ describe.skip("TEST OF API : game", () => {
     });
   });
 
-  describe.skip("Assessment POST apiGameSave", () => {
+  describe("Assessment POST apiGameSave", () => {
     test("successful", async () => {
       // Prep
       let responses = {};
@@ -147,10 +147,13 @@ describe.skip("TEST OF API : game", () => {
       // Test
       let gameInputs = toolkit.objectGenerator("game");
       delete gameInputs.gameid;
-      //console.log("gameInputs", gameInputs);
+      gameInputs.players = users.map((u) => {
+        return { userid: u.userid, role: "ROLE" };
+      });
+      console.log("gameInputs", gameInputs);
       responses["apiGameSave"] = await gameAPI.apiGameSave(
         gameInputs,
-        pickedUser.token,
+        userSignInResponse.data.token,
       );
       console.log("responses.apiGameSave", responses.apiGameSave);
       expect(responses.apiGameSave.type).toBe("game.save.success");

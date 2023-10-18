@@ -61,15 +61,11 @@ exports.apiTableGetStats = async function (id, parameters, token) {
 
 exports.apiTableSave = async function apiTableSave(table, token) {
   try {
-    const res = await axios.post(
-      process.env.REACT_APP_SERVER_URL + "/table/v2/save",
-      table,
-      {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
+    const res = await axios.post(apiURL + "/table/v2/save", table, {
+      headers: {
+        Authorization: "Bearer " + token,
       },
-    );
+    });
     return res.data;
   } catch (err) {
     return err.response.data;

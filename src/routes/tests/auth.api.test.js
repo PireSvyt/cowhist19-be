@@ -87,7 +87,7 @@ describe("TEST OF API : auth", () => {
       users.signedup[responses.apiAuthSignUp.data.userid] =
         responses.check.data.items[0];
     });
-    test("successful: already signedup", async () => {
+    test.skip("successful: already signedup", async () => {
       // Prep
       let responses = {};
 

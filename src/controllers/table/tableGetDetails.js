@@ -54,7 +54,6 @@ module.exports = tableGetDetails = (req, res, next) => {
     },
   ])
     .then((tables) => {
-      console.log("tables", tables);
       if (tables.length === 1) {
         let table = tables[0];
         // Add guest players
