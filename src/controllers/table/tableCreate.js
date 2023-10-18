@@ -45,7 +45,7 @@ module.exports = tableCreate = (req, res, next) => {
       return res.status(201).json({
         type: "table.create.success",
         data: {
-          tableid: tableToSave._id,
+          tableid: tableToSave.tableid,
         },
       });
     })

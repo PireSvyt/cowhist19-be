@@ -4,7 +4,7 @@ const adminAPI = require("../api/admin.js");
 const tableAPI = require("../api/table.js");
 const toolkit = require("../../resources/toolkit.js");
 
-describe.skip("TEST OF API : game", () => {
+describe("TEST OF API : game", () => {
   // Pool of resources
   let users = [];
   let tables = [];
@@ -23,7 +23,7 @@ describe.skip("TEST OF API : game", () => {
     //console.log("adminSignInInputs", adminSignInInputs);
     test("successful", async () => {
       adminSignInResponse = await authAPI.apiAuthSignIn(adminSignInInputs);
-      console.log("adminSignInResponse", adminSignInResponse);
+      //console.log("adminSignInResponse", adminSignInResponse);
       expect(adminSignInResponse.type).toBe("auth.signin.success");
     });
     test("clean up database", async () => {

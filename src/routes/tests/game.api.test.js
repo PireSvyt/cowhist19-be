@@ -139,8 +139,8 @@ describe("TEST OF API : game", () => {
     });
   });
 
-  describe("Assessment POST apiGameSave", () => {
-    test.skip("successful", async () => {
+  describe.skip("Assessment POST apiGameSave", () => {
+    test("successful", async () => {
       // Prep
       let responses = {};
 
