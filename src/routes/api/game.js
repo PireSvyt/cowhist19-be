@@ -16,7 +16,7 @@ exports.apiGameCreate = async function (saveInputs, token) {
   }
 };
 
-exports.apiGameGet = async function (getId, token) {
+/*exports.apiGameGet = async function (getId, token) {
   try {
     const res = await axios.get(apiURL + "game/v1/" + getId, {
       headers: {
@@ -27,7 +27,7 @@ exports.apiGameGet = async function (getId, token) {
   } catch (err) {
     return err.response.data;
   }
-};
+};*/
 
 exports.apiGameDelete = async function (deleteId, token) {
   try {

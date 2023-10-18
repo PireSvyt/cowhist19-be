@@ -157,6 +157,7 @@ describe("TEST OF API : game", () => {
       );
       //console.log("responses.apiGameCreate", responses.apiGameCreate);
       expect(responses.apiGameCreate.type).toBe("game.create.success");
+      expect(typeof responses.apiGameCreate.data.gameid).toBe("string");
 
       // Checks
       responses["check"] = await adminAPI.adminDatabaseCommand(
@@ -166,51 +167,7 @@ describe("TEST OF API : game", () => {
             collection: "games",
             condition: {
               field: "gameid",
-              value: gameInputs.gameid,
-              filter: "in",
-            },
-          },
-        },
-        adminSignInResponse.data.token,
-      );
-      console.log("responses.check.data", responses.check.data);
-      expect(responses.check.type).toBe("admin.databasecommand.get.success");
-      expect(responses.check.data.gameid).toBe(gameInputs.gameid);
-
-      // Account for step
-      games.push(responses.check.data.items[0]);
-    });
-  });
-
-  describe.skip("Assessment POST apiGameDelete", () => {
-    test("successful", async () => {
-      // Prep
-      let responses = {};
-
-      // Test
-      let signupPicked = Object.keys(users.signedup)[0];
-      //console.log("pickedUser", users.signedup[signupPicked]);
-      let activateInputs = {
-        login: users.signedup[signupPicked].login,
-        token: users.signedup[signupPicked].activationtoken,
-      };
-      //console.log("activateInputs", activateInputs);
-      responses["apiAuthActivate"] =
-        await authAPI.apiAuthActivate(activateInputs);
-      //console.log("responses.apiAuthActivate", responses.apiAuthActivate);
-      expect(responses.apiAuthActivate.type).toBe(
-        "auth.activate.success.activated",
-      );
-
-      // Checks
-      responses["check"] = await adminAPI.adminDatabaseCommand(
-        {
-          action: {
-            type: "get",
-            collection: "users",
-            condition: {
-              field: "userid",
-              value: signupPicked,
+              value: responses.apiGameCreate.data.gameid,
               filter: "in",
             },
           },
@@ -219,29 +176,56 @@ describe("TEST OF API : game", () => {
       );
       //console.log("responses.check.data", responses.check.data);
       expect(responses.check.type).toBe("admin.databasecommand.get.success");
-      expect(responses.check.data.items[0].status).toBe("activated");
-      expect(responses.check.data.items[0].login).toBe(
-        users.signedup[signupPicked].login,
-      );
-      expect(responses.check.data.items[0].password).toBe(
-        users.signedup[signupPicked].password,
-      );
-      expect(responses.check.data.items[0].pseudo).toBe(
-        users.signedup[signupPicked].pseudo,
+      expect(responses.check.data.items[0].gameid).toBe(
+        responses.apiGameCreate.data.gameid,
       );
 
       // Account for step
-      delete users.signedup[signupPicked];
-      users.activated[signupPicked] = responses.check.data.items[0];
+      gameInputs.gameid = responses.apiGameCreate.data.gameid;
+      games.push(gameInputs);
     });
-    test.skip("unsuccessful: not existing", async () => {
-      expect(true).toBe(false);
+  });
+
+  describe.skip("Assessment GET apiGameGet", () => {
+    test("successful", async () => {
+      // Prep
+      let responses = {};
+
+      // test
+      //console.log("games[0].gameid", games[0].gameid);
+      responses["apiGameGet"] = await gameAPI.apiGameGet(
+        games[0].gameid,
+        userSignInResponse.data.token,
+      );
+      console.log("responses.apiGameGet", responses.apiGameGet);
+      expect(responses.apiGameGet.type).toBe("game.get.success");
+      expect(responses.apiGameGet.data.game.name).toBe(tables[0].name);
+      expect(responses.apiGameGet.data.game.guests).toBe(tables[0].guests);
+      expect(responses.apiGameGet.data.game.players.length).toBe(
+        tables[0].userids.length,
+      );
+      expect(
+        responses.apiGameGet.data.game.contracts.length,
+      ).toBeGreaterThanOrEqual(1);
     });
-    test.skip("unsuccessful: wrong token", async () => {
-      expect(true).toBe(false);
-    });
-    test.skip("unsuccessful: already activated", async () => {
-      expect(true).toBe(false);
+  });
+
+  describe("Assessment POST apiGameDelete", () => {
+    test("successful", async () => {
+      // Prep
+      let responses = {};
+
+      // Test
+      //console.log("games[0].gameid", games[0].gameid);
+      responses["apiGameDelete"] = await gameAPI.apiGameDelete(
+        games[0].gameid,
+        userSignInResponse.data.token,
+      );
+      console.log("responses.apiGameDelete", responses.apiGameDelete);
+      expect(responses.apiGameDelete.type).toBe("game.delete.success");
+
+      // Account for step
+      delete games[0];
     });
   });
 });
