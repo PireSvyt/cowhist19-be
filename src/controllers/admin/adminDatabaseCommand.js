@@ -71,17 +71,18 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
             case "get":
               if (req.body.action.filter != undefined) {
                 let match = {};
+                let arrayValue = Array.isArray(req.body.action.filter.value)
+                  ? req.body.action.filter.value
+                  : [req.body.action.filter.value];
                 switch (req.body.action.filter.operator) {
                   case "in":
                     match[req.body.action.filter.key] = {
-                      $in: Array.isArray(req.body.action.filter.value)
-                        ? req.body.action.filter.value
-                        : [req.body.action.filter.value],
+                      $in: arrayValue,
                     };
                     break;
                   case "nin":
                     match[req.body.action.filter.key] = {
-                      $ne: req.body.action.filter.value,
+                      $ne: arrayValue,
                     };
                     break;
                   case "none":
@@ -98,7 +99,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                   //.aggregate()
                   //.match(filter)
                   .then((itemList) => {
-                    if (itemList.length === req.body.action.ids.length) {
+                    if (itemList.length === arrayValue.length) {
                       if (process.env.DEBUG === true) {
                         console.log("admin.databasecommand.get.success");
                       }
