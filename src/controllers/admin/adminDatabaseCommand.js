@@ -255,7 +255,10 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                                 "admin.databasecommand.cleanup.success",
                               );
                             }
-                            console.log("admin.databasecommand.cleanup deletes", deletes)
+                            console.log(
+                              "admin.databasecommand.cleanup deletes",
+                              deletes,
+                            );
                             return res.status(200).json({
                               type: "admin.databasecommand.cleanup.success",
                               data: deletes,
