@@ -86,8 +86,8 @@ module.exports = tableGetDetails = (req, res, next) => {
       }
     })
     .catch((error) => {
-      console.log("table.getdetails.error.onfind");
-      console.error(error);
+      console.log("table.getdetails.error.onaggregate");
+      console.log(error);
       return res.status(400).json({
         type: "table.getdetails.error.onaggregate",
         data: {
