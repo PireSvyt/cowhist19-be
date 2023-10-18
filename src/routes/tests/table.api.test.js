@@ -128,7 +128,7 @@ describe("TEST OF API : game", () => {
         tableInputs,
         userSignInResponse.data.token,
       );
-      //console.log("responses.apiTableCreate", responses.apiTableCreate);
+      console.log("responses.apiTableCreate", responses.apiTableCreate);
       expect(responses.apiTableCreate.type).toBe("table.create.success");
 
       // Checks

@@ -20,9 +20,6 @@ module.exports = tableCreate = (req, res, next) => {
     console.log("table.tableCreate");
   }
 
-  // Prep
-  delete req.body.tableid;
-
   // Save
   let tableToSave = { ...req.body };
   /*let tableUsers = [];
