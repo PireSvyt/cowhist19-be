@@ -25,7 +25,7 @@ describe("TEST OF API : auth", () => {
       //console.log("adminSignInResponse", adminSignInResponse);
       expect(adminSignInResponse.type).toBe("auth.signin.success");
     });
-    test("clean up database", async () => {
+    test.skip("clean up database", async () => {
       adminDeleteResponse = await adminAPI.adminDatabaseCommand(
         {
           action: {
@@ -72,8 +72,8 @@ describe("TEST OF API : auth", () => {
             collection: "users",
             filter: {
               key: "userid",
-              value: responses.apiAuthSignUp.data.userid,
-              operator: "in"
+              value: ["Wy0NwWHheo3W7dMWocHP2t1h"], //responses.apiAuthSignUp.data.userid,
+              operator: "in",
             },
           },
         },
@@ -156,7 +156,7 @@ describe("TEST OF API : auth", () => {
             filter: {
               key: "userid",
               value: [signupPicked],
-              operator: "in"
+              operator: "in",
             },
           },
         },

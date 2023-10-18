@@ -75,7 +75,6 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                   case "in":
                     match[req.body.action.filter.key] =
                       req.body.action.filter.value;
-                    collection.find().where(match);
                     break;
                   case "nin":
                     match[req.body.action.filter.key] = {
@@ -92,8 +91,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                 //filter[req.body.action.filter.key] =
                 //  req.body.action.filter.value;
                 collection
-                  .find()
-                  .where(match)
+                  .find(match)
                   //.aggregate()
                   //.match(filter)
                   .then((itemList) => {
