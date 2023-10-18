@@ -24,8 +24,8 @@ module.exports = tableAuthenticate = (req, res, next) => {
   const decodedToken = jwt_decode(token);
 
   // Prep
-  let tableid = req.params.id;
-  if (!tableid) {
+  let tableid = req.params.tableid;
+  if (tableid === undefined) {
     tableid = req.body.tableid;
   }
 

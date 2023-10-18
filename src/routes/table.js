@@ -29,7 +29,7 @@ router.post(
   tableSave,
 );
 router.get(
-  "/v3/:id",
+  "/v3/:tableid",
   authAuthenticate,
   userIsActivated,
   tableAuthenticate,

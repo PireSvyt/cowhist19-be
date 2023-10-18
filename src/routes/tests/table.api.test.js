@@ -123,12 +123,12 @@ describe("TEST OF API : game", () => {
       tableInputs.userids = users.map((u) => {
         return u.userid;
       });
-      console.log("tableInputs", tableInputs);
+      //console.log("tableInputs", tableInputs);
       responses["apiTableCreate"] = await tableAPI.apiTableCreate(
         tableInputs,
         userSignInResponse.data.token,
       );
-      console.log("responses.apiTableCreate", responses.apiTableCreate);
+      //console.log("responses.apiTableCreate", responses.apiTableCreate);
       expect(responses.apiTableCreate.type).toBe("table.create.success");
 
       // Checks
@@ -143,12 +143,12 @@ describe("TEST OF API : game", () => {
           },
         },
       };
-      console.log("tableAction", tableAction);
+      //console.log("tableAction", tableAction);
       responses["check"] = await adminAPI.adminDatabaseCommand(
         tableAction,
         adminSignInResponse.data.token,
       );
-      console.log("responses.check", responses.check);
+      //console.log("responses.check", responses.check);
       expect(responses.check.type).toBe("admin.databasecommand.get.success");
       // Account for step
       tables.push(responses.check.data.items[0]);
@@ -156,12 +156,13 @@ describe("TEST OF API : game", () => {
     });
   });
 
-  describe.skip("Assessment GET apiTableGetDetails", () => {
+  describe("Assessment GET apiTableGetDetails", () => {
     test("successful", async () => {
       // Prep
       let responses = {};
 
       // Test
+      console.log("tables[0]", tables[0]);
       responses["getDetailsInputs"] = await tableAPI.apiTableGetDetails(
         tables[0].tableid,
         userSignInResponse.data.token,
