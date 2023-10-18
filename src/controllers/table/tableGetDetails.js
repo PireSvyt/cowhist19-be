@@ -49,7 +49,6 @@ module.exports = tableGetDetails = (req, res, next) => {
         tableid: 1,
         name: 1,
         guests: 1,
-        userids: 1,
         players: 1,
       },
     },

@@ -124,12 +124,12 @@ describe("TEST OF API : game", () => {
       tableInputs.userids = users.map((u) => {
         return u.userid;
       });
-      console.log("tableInputs", tableInputs);
+      //console.log("tableInputs", tableInputs);
       responses["apiTableCreate"] = await tableAPI.apiTableCreate(
         tableInputs,
         userSignInResponse.data.token,
       );
-      console.log("responses.apiTableCreate", responses.apiTableCreate);
+      //console.log("responses.apiTableCreate", responses.apiTableCreate);
       expect(responses.apiTableCreate.type).toBe("table.create.success");
 
       // Checks
@@ -144,19 +144,19 @@ describe("TEST OF API : game", () => {
           },
         },
       };
-      console.log("tableAction", tableAction);
+      //console.log("tableAction", tableAction);
       responses["check"] = await adminAPI.adminDatabaseCommand(
         tableAction,
         adminSignInResponse.data.token,
       );
-      console.log("responses.check", responses.check);
+      //console.log("responses.check", responses.check);
       expect(responses.check.type).toBe("admin.databasecommand.get.success");
       expect(responses.check.data.items.length).toBe(1);
       expect(responses.check.data.items[0].userids.length).toBe(4);
       expect(responses.check.data.items[0].guests).toBe(0);
       // Account for step
       tables.push(responses.check.data.items[0]);
-      console.log("tables", tables);
+      //console.log("tables", tables);
     });
   });
 
@@ -166,12 +166,12 @@ describe("TEST OF API : game", () => {
       let responses = {};
 
       // Test
-      console.log("tables[0].tableid", tables[0].tableid);
+      //console.log("tables[0].tableid", tables[0].tableid);
       responses["getDetailsInputs"] = await tableAPI.apiTableGetDetails(
         tables[0].tableid,
         userSignInResponse.data.token,
       );
-      console.log("responses.getDetailsInputs", responses.getDetailsInputs);
+      //console.log("responses.getDetailsInputs", responses.getDetailsInputs);
       expect(responses.getDetailsInputs.type).toBe("table.getdetails.success");
 
       // Checks
@@ -189,17 +189,20 @@ describe("TEST OF API : game", () => {
         },
         adminSignInResponse.data.token,
       );
-      //console.log("responses.check.data", responses.check.data);
+      console.log(
+        "responses.check.data.items[0]",
+        responses.check.data.items[0],
+      );
       expect(responses.check.type).toBe("admin.databasecommand.get.success");
       expect(responses.check.data.items[0].name).toBe(tables[0].name);
       expect(responses.check.data.items[0].guests).toBe(tables[0].guests);
-      expect(responses.check.data.items[0].users.length).toBe(
-        tables[0].users.length,
+      expect(responses.check.data.items[0].userids.length).toBe(
+        tables[0].userids.length,
       );
     });
   });
 
-  describe.skip("Assessment GET apiTableSave", () => {
+  describe("Assessment GET apiTableSave", () => {
     test("successful", async () => {
       // Prep
       let responses = {};
@@ -207,7 +210,7 @@ describe("TEST OF API : game", () => {
       // Test
       let tableToSave = tables[0].tableid;
       tableToSave.guest = 1;
-      let shortenedUsers = tableToSave.users;
+      let shortenedUserids = tableToSave.userids;
       shortenedUsers
         .filter((u) => {
           return u.userid !== userSignInResponse.data.userid;
