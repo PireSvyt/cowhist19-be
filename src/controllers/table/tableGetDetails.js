@@ -11,7 +11,6 @@ module.exports = tableGetDetails = (req, res, next) => {
   possible response types
   * table.getdetails.success
   * table.getdetails.error.onaggregate
-  * table.getdetails.error.onfind
   
   TODO
   * only users from the table can do this
@@ -56,6 +55,7 @@ module.exports = tableGetDetails = (req, res, next) => {
     },
   ])
     .then((tables) => {
+      console.log("tables", tables);
       if (tables.length === 1) {
         let table = tables[0];
         // Add guest players
