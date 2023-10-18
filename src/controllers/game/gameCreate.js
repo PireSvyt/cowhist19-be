@@ -45,9 +45,9 @@ module.exports = gameCreate = (req, res, next) => {
     gameToSave
       .save()
       .then(() => {
-        console.log("game.create.success.created");
+        console.log("game.create.success");
         return res.status(201).json({
-          type: "game.create.success.created",
+          type: "game.create.success",
           data: {
             gameid: gameToSave.gameid,
           },
