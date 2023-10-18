@@ -150,12 +150,12 @@ describe("TEST OF API : game", () => {
       gameInputs.players = users.map((u) => {
         return { userid: u.userid, role: "ROLE" };
       });
-      console.log("gameInputs", gameInputs);
+      //console.log("gameInputs", gameInputs);
       responses["apiGameCreate"] = await gameAPI.apiGameCreate(
         gameInputs,
         userSignInResponse.data.token,
       );
-      console.log("responses.apiGameCreate", responses.apiGameCreate);
+      //console.log("responses.apiGameCreate", responses.apiGameCreate);
       expect(responses.apiGameCreate.type).toBe("game.create.success");
 
       // Checks
@@ -175,43 +175,10 @@ describe("TEST OF API : game", () => {
       );
       console.log("responses.check.data", responses.check.data);
       expect(responses.check.type).toBe("admin.databasecommand.get.success");
+      expect(responses.check.data.gameid).toBe(gameInputs.gameid);
 
       // Account for step
       games.push(responses.check.data.items[0]);
-    });
-    test.skip("successful: already signedup", async () => {
-      // Prep
-      let responses = {};
-
-      // Test
-      let rid = toolkit.random_id(16);
-      let first_signUpInputs = {
-        login: rid + "@yopmail.com",
-        pseudo: rid,
-        password: rid,
-      };
-      //console.log("first_signUpInputs", first_signUpInputs);
-      responses["first_apiAuthSignUp"] =
-        await authAPI.apiAuthSignUp(first_signUpInputs);
-      //console.log("responses.first_apiAuthSignUp", responses.first_apiAuthSignUp);
-      let second_signUpInputs = {
-        login: first_signUpInputs.login,
-        pseudo: toolkit.random_id(),
-        password: toolkit.random_id(),
-      };
-      //console.log("second_signUpInputs", second_signUpInputs);
-      responses["second_apiAuthSignUp"] =
-        await authAPI.apiAuthSignUp(second_signUpInputs);
-      //console.log("responses.second_apiAuthSignUp", responses.second_apiAuthSignUp);
-      expect(responses.second_apiAuthSignUp.type).toBe(
-        "auth.signup.success.alreadysignedup",
-      );
-    });
-    test.skip("unsuccessful: existing login", async () => {
-      expect(true).toBe(false);
-    });
-    test.skip("unsuccessful: existing pseudo", async () => {
-      expect(true).toBe(false);
     });
   });
 
@@ -274,37 +241,6 @@ describe("TEST OF API : game", () => {
       expect(true).toBe(false);
     });
     test.skip("unsuccessful: already activated", async () => {
-      expect(true).toBe(false);
-    });
-  });
-
-  describe.skip("Assessment POST apiGameSave", () => {
-    test("successful", async () => {
-      // Prep
-      let responses = {};
-
-      // Test
-      let activatedPicked = Object.keys(users.activated)[0];
-      //console.log("pickedUser", users.activated[activatedPicked]);
-      let signInInputs = {
-        login: users.activated[activatedPicked].login,
-        password: users.activated[activatedPicked].pseudo,
-        encryption: false,
-      };
-      //console.log("signInInputs", signInInputs);
-      responses["apiAuthSignIn"] = await authAPI.apiAuthSignIn(signInInputs);
-      //console.log("responses.apiAuthSignIn", responses.apiAuthSignIn);
-      expect(responses.apiAuthSignIn.type).toBe("auth.signin.success");
-
-      // checks
-    });
-    test.skip("unsuccessful: not existing", async () => {
-      expect(true).toBe(false);
-    });
-    test.skip("unsuccessful: not activated", async () => {
-      expect(true).toBe(false);
-    });
-    test.skip("unsuccessful: wrong password", async () => {
       expect(true).toBe(false);
     });
   });
