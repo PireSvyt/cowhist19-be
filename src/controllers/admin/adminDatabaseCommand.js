@@ -78,7 +78,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                     collection.find().where(match);
                     break;
                   case "nin":
-                    match[req.body.action.filter.field] = {
+                    match[req.body.action.filter.key] = {
                       $ne: req.body.action.filter.value,
                     };
                     break;
