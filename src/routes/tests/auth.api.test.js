@@ -73,6 +73,7 @@ describe("TEST OF API : auth", () => {
             filter: {
               key: "userid",
               value: responses.apiAuthSignUp.data.userid,
+              operator: "in"
             },
           },
         },
@@ -155,6 +156,7 @@ describe("TEST OF API : auth", () => {
             filter: {
               key: "userid",
               value: [signupPicked],
+              operator: "in"
             },
           },
         },

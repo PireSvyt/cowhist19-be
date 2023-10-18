@@ -29,6 +29,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
 
   return new Promise((resolve, reject) => {
     let collection = undefined;
+
     // Action
     if (req.body.action != undefined) {
       // Collection
@@ -63,20 +64,35 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
               data: {},
             });
         }
+
         // Type
         if (req.body.action.type != undefined) {
           switch (req.body.action.type) {
             case "get":
-              // Type
               if (req.body.action.filter != undefined) {
-                filter = {};
-                filter[req.body.action.filter.key] =
-                  req.body.action.filter.value;
+                let match = {};
+                switch (req.body.action.filter.operator) {
+                  case "in":
+                    match[condition.field] = condition.value;
+                    collection.find().where(match);
+                    break;
+                  case "nin":
+                    match[condition.field] = { $ne: condition.value };
+                    break;
+                  case "none":
+                    break;
+                  default:
+                  //
+                }
+                console.log("match", match);
+                //filter = {};
+                //filter[req.body.action.filter.key] =
+                //  req.body.action.filter.value;
                 collection
-                  //.find()
-                  //.where(filter)
-                  .aggregate()
-                  .match(filter)
+                  .find()
+                  .where(match)
+                  //.aggregate()
+                  //.match(filter)
                   .then((itemList) => {
                     if (itemList.length === req.body.action.ids.length) {
                       if (process.env.DEBUG === true) {
