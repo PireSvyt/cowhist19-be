@@ -139,7 +139,7 @@ describe("TEST OF API : game", () => {
     });
   });
 
-  describe("Assessment POST apiGameSave", () => {
+  describe("Assessment POST apiGameCreate", () => {
     test("successful", async () => {
       // Prep
       let responses = {};
@@ -151,12 +151,12 @@ describe("TEST OF API : game", () => {
         return { userid: u.userid, role: "ROLE" };
       });
       console.log("gameInputs", gameInputs);
-      responses["apiGameSave"] = await gameAPI.apiGameSave(
+      responses["apiGameCreate"] = await gameAPI.apiGameCreate(
         gameInputs,
         userSignInResponse.data.token,
       );
-      console.log("responses.apiGameSave", responses.apiGameSave);
-      expect(responses.apiGameSave.type).toBe("game.save.success");
+      console.log("responses.apiGameCreate", responses.apiGameCreate);
+      expect(responses.apiGameCreate.type).toBe("game.create.success");
 
       // Checks
       responses["check"] = await adminAPI.adminDatabaseCommand(

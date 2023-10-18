@@ -3,9 +3,9 @@ const axios = require("axios");
 
 let apiURL = process.env.TESTSUITE_SERVER_URL;
 
-exports.apiGameSave = async function (saveInputs, token) {
+exports.apiGameCreate = async function (saveInputs, token) {
   try {
-    const res = await axios.post(apiURL + "game/v1/save", saveInputs, {
+    const res = await axios.post(apiURL + "game/v1/create", saveInputs, {
       headers: {
         Authorization: "Bearer " + token,
       },

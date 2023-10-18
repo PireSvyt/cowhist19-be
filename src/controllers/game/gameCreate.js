@@ -1,4 +1,5 @@
 require("dotenv").config();
+const jwt_decode = require("jwt-decode");
 const Game = require("../../models/Game.js");
 
 module.exports = gameCreate = (req, res, next) => {
