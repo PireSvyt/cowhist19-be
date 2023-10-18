@@ -34,11 +34,22 @@ module.exports = tableDelete = (req, res, next) => {
   // Delete table
   Table.deleteOne({ tableid: req.params.id })
     .then((deleteOutcome) => {
-      console.log("table.delete.success");
-      return res.status(200).json({
-        type: "table.delete.success",
-        data: deleteOutcome,
-      });
+      if (
+        deleteOutcome.acknowledged === true &&
+        deleteOutcome.deletedCount === 1
+      ) {
+        console.log("table.delete.success");
+        return res.status(200).json({
+          type: "table.delete.success",
+          data: deleteOutcome,
+        });
+      } else {
+        console.log("table.delete.error.outcome");
+        return res.status(400).json({
+          type: "table.delete.error.outcome",
+          data: deleteOutcome,
+        });
+      }
     })
     .catch((error) => {
       console.log("table.delete.error.ondeletetable");
