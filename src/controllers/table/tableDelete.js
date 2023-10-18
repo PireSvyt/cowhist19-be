@@ -32,7 +32,7 @@ module.exports = tableDelete = (req, res, next) => {
   });
 
   // Delete table
-  Table.deleteOne({ tableid: req.params.id })
+  Table.deleteOne({ tableid: req.params.tableid })
     .then((deleteOutcome) => {
       if (
         deleteOutcome.acknowledged === true &&
