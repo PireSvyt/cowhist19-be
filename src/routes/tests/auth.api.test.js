@@ -25,21 +25,22 @@ describe("TEST OF API : auth", () => {
       //console.log("adminSignInResponse", adminSignInResponse);
       expect(adminSignInResponse.type).toBe("auth.signin.success");
     });
-    test.skip("clean up database", async () => {
+    test("clean up database", async () => {
       adminDeleteResponse = await adminAPI.adminDatabaseCommand(
         {
           action: {
             type: "delete",
             collection: "users",
-            filter: {
-              key: "userid",
-              value: { $ne: adminSignInResponse.data.userid },
+            condition: {
+              field: "userid",
+              value: adminSignInResponse.data.userid,
+              filter: "nin",
             },
           },
         },
         adminSignInResponse.data.token,
       );
-      console.log("adminDeleteResponse", adminDeleteResponse);
+      //console.log("adminDeleteResponse", adminDeleteResponse);
       expect(adminDeleteResponse.type).toBe(
         "admin.databasecommand.delete.success",
       );
@@ -61,7 +62,7 @@ describe("TEST OF API : auth", () => {
       };
       //console.log("signUpInputs", signUpInputs);
       responses["apiAuthSignUp"] = await authAPI.apiAuthSignUp(signUpInputs);
-      console.log("responses.apiAuthSignUp", responses.apiAuthSignUp);
+      //console.log("responses.apiAuthSignUp", responses.apiAuthSignUp);
       expect(responses.apiAuthSignUp.type).toBe("auth.signup.success.signedup");
 
       // Checks
@@ -70,16 +71,16 @@ describe("TEST OF API : auth", () => {
           action: {
             type: "get",
             collection: "users",
-            filter: {
-              key: "userid",
-              value: ["Wy0NwWHheo3W7dMWocHP2t1h"], //responses.apiAuthSignUp.data.userid,
-              operator: "in",
+            condition: {
+              field: "userid",
+              value: responses.apiAuthSignUp.data.userid,
+              filter: "in",
             },
           },
         },
         adminSignInResponse.data.token,
       );
-      console.log("responses.check", responses.check);
+      //console.log("responses.check", responses.check);
       expect(responses.check.type).toBe("admin.databasecommand.get.success");
       expect(responses.check.data.items[0].status).toBe("signedup");
       expect(responses.check.data.items[0].login).toBe(rid + "@yopmail.com");
@@ -90,7 +91,7 @@ describe("TEST OF API : auth", () => {
       users.signedup[responses.apiAuthSignUp.data.userid] =
         responses.check.data.items[0];
     });
-    test.skip("successful: already signedup", async () => {
+    test("successful: already signedup", async () => {
       // Prep
       let responses = {};
 
@@ -126,7 +127,7 @@ describe("TEST OF API : auth", () => {
     });
   });
 
-  describe.skip("Assessment POST apiAuthActivate", () => {
+  describe("Assessment POST apiAuthActivate", () => {
     test("successful", async () => {
       // Prep
       let responses = {};
@@ -152,11 +153,10 @@ describe("TEST OF API : auth", () => {
           action: {
             type: "get",
             collection: "users",
-            //filter: { userid: signupPicked },
-            filter: {
-              key: "userid",
+            condition: {
+              field: "userid",
               value: [signupPicked],
-              operator: "in",
+              filter: "in",
             },
           },
         },
@@ -190,7 +190,7 @@ describe("TEST OF API : auth", () => {
     });
   });
 
-  describe.skip("Assessment POST apiAuthSignIn", () => {
+  describe("Assessment POST apiAuthSignIn", () => {
     test("successful without encryption", async () => {
       // Prep
       let responses = {};

@@ -67,37 +67,31 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
 
         // Type
         if (req.body.action.type != undefined) {
+          let match = {};
+          let arrayValue = Array.isArray(req.body.action.condition.value)
+            ? req.body.action.condition.value
+            : [req.body.action.condition.value];
+          switch (req.body.action.condition.operator) {
+            case "in":
+              match[req.body.action.condition.key] = {
+                $in: arrayValue,
+              };
+              break;
+            case "nin":
+              match[req.body.action.condition.key] = {
+                $ne: arrayValue,
+              };
+              break;
+            case "none":
+              break;
+            default:
+            //
+          }
           switch (req.body.action.type) {
             case "get":
-              if (req.body.action.filter != undefined) {
-                let match = {};
-                let arrayValue = Array.isArray(req.body.action.filter.value)
-                  ? req.body.action.filter.value
-                  : [req.body.action.filter.value];
-                switch (req.body.action.filter.operator) {
-                  case "in":
-                    match[req.body.action.filter.key] = {
-                      $in: arrayValue,
-                    };
-                    break;
-                  case "nin":
-                    match[req.body.action.filter.key] = {
-                      $ne: arrayValue,
-                    };
-                    break;
-                  case "none":
-                    break;
-                  default:
-                  //
-                }
-                console.log("match", match);
-                //filter = {};
-                //filter[req.body.action.filter.key] =
-                //  req.body.action.filter.value;
+              if (req.body.action.condition != undefined) {
                 collection
                   .find(match)
-                  //.aggregate()
-                  //.match(filter)
                   .then((itemList) => {
                     if (itemList.length === arrayValue.length) {
                       if (process.env.DEBUG === true) {
@@ -124,9 +118,9 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                     });
                   });
               } else {
-                console.log("admin.databasecommand.get.missingfilter");
+                console.log("admin.databasecommand.get.missingcondition");
                 return res.status(400).json({
-                  type: "admin.databasecommand.get.missingfilter",
+                  type: "admin.databasecommand.get.missingcondition",
                   data: {},
                 });
               }
@@ -165,50 +159,35 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
               }
               break;
             case "delete":
-              // Type
-              if (req.body.action.filter != undefined) {
-                if (process.env.NODE_ENV === "_production") {
-                  if (process.env.DEBUG === true) {
-                    console.log("admin.databasecommand.delete.denied");
-                  }
-                  return res.status(403).json({
-                    type: "admin.databasecommand.delete.denied",
-                    message: "command unauthorized in production",
-                  });
-                } else {
-                  filter = {};
-                  filter[req.body.action.filter.key] =
-                    req.body.action.filter.value;
-                  collection
-                    .deleteMany()
-                    .where(filter)
-                    .then((deleteResponse) => {
-                      if (process.env.DEBUG === true) {
-                        console.log("admin.databasecommand.delete.success");
-                      }
-                      return res.status(200).json({
-                        type: "admin.databasecommand.delete.success",
-                        data: deleteResponse,
-                      });
-                    })
-                    .catch((error) => {
-                      console.log(
-                        "admin.databasecommand.delete.error.ondelete",
-                      );
-                      console.error(error);
-                      return res.status(500).json({
-                        type: "admin.databasecommand.delete.error.ondelete",
-                        error: error,
-                        data: {},
-                      });
-                    });
+              if (process.env.NODE_ENV === "_production") {
+                if (process.env.DEBUG === true) {
+                  console.log("admin.databasecommand.delete.denied");
                 }
-              } else {
-                console.log("admin.databasecommand.delete.missingids");
-                return res.status(400).json({
-                  type: "admin.databasecommand.delete.missingids",
-                  data: {},
+                return res.status(403).json({
+                  type: "admin.databasecommand.delete.denied",
+                  message: "command unauthorized in production",
                 });
+              } else {
+                collection
+                  .deleteMany(match)
+                  .then((deleteResponse) => {
+                    if (process.env.DEBUG === true) {
+                      console.log("admin.databasecommand.delete.success");
+                    }
+                    return res.status(200).json({
+                      type: "admin.databasecommand.delete.success",
+                      data: deleteResponse,
+                    });
+                  })
+                  .catch((error) => {
+                    console.log("admin.databasecommand.delete.error.ondelete");
+                    console.error(error);
+                    return res.status(500).json({
+                      type: "admin.databasecommand.delete.error.ondelete",
+                      error: error,
+                      data: {},
+                    });
+                  });
               }
               break;
             case "drop":
