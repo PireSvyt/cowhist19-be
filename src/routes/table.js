@@ -36,7 +36,7 @@ router.get(
   tableGetDetails,
 );
 router.delete(
-  "/v1/:id",
+  "/v1/:tableid",
   authAuthenticate,
   userIsActivated,
   tableAuthenticate,

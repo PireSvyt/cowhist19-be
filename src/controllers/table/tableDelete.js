@@ -22,7 +22,7 @@ module.exports = tableDelete = (req, res, next) => {
   }
 
   // Delete table's games
-  Game.deleteMany({ tableid: req.params.id }).catch((error) => {
+  Game.deleteMany({ tableid: req.params.tableid }).catch((error) => {
     console.log("table.delete.error.ondeletegames");
     console.error(error);
     return res.status(400).json({

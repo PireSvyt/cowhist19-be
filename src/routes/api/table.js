@@ -16,9 +16,9 @@ exports.apiTableCreate = async function (table, token) {
   }
 };
 
-exports.apiTableGetDetails = async function (id, token) {
+exports.apiTableGetDetails = async function (tableid, token) {
   try {
-    const res = await axios.get(apiURL + "/table/v3/" + id, {
+    const res = await axios.get(apiURL + "/table/v3/" + tableid, {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -29,10 +29,10 @@ exports.apiTableGetDetails = async function (id, token) {
   }
 };
 
-exports.apiTableGetHistory = async function (id, parameters, token) {
+exports.apiTableGetHistory = async function (tableid, parameters, token) {
   try {
     const res = await axios.post(
-      apiURL + "/table/v3/history/" + id,
+      apiURL + "/table/v3/history/" + tableid,
       parameters,
       {
         headers: {
@@ -46,13 +46,17 @@ exports.apiTableGetHistory = async function (id, parameters, token) {
   }
 };
 
-exports.apiTableGetStats = async function (id, parameters, token) {
+exports.apiTableGetStats = async function (tableid, parameters, token) {
   try {
-    const res = await axios.post(apiURL + "/table/v1/stats/" + id, parameters, {
-      headers: {
-        Authorization: "Bearer " + token,
+    const res = await axios.post(
+      apiURL + "/table/v1/stats/" + tableid,
+      parameters,
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
       },
-    });
+    );
     return res.data;
   } catch (err) {
     return err.response.data;
@@ -72,9 +76,9 @@ exports.apiTableSave = async function apiTableSave(table, token) {
   }
 };
 
-exports.apiTableDelete = async function (id, token) {
+exports.apiTableDelete = async function (tableid, token) {
   try {
-    const res = await axios.delete(token + "/table/v1/" + id, {
+    const res = await axios.delete(apiURL + "/table/v1/" + tableid, {
       headers: {
         Authorization: "Bearer " + token,
       },

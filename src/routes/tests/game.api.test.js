@@ -221,7 +221,7 @@ describe("TEST OF API : game", () => {
         games[0].gameid,
         userSignInResponse.data.token,
       );
-      console.log("responses.apiGameDelete", responses.apiGameDelete);
+      //console.log("responses.apiGameDelete", responses.apiGameDelete);
       expect(responses.apiGameDelete.type).toBe("game.delete.success");
 
       // Account for step

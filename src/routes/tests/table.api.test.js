@@ -184,7 +184,7 @@ describe("TEST OF API : game", () => {
     });
   });
 
-  describe("Assessment GET apiTableSave", () => {
+  describe("Assessment POST apiTableSave", () => {
     test("successful", async () => {
       // Prep
       let responses = {};
@@ -224,6 +224,46 @@ describe("TEST OF API : game", () => {
         adminSignInResponse.data.token,
       );
       //console.log("responses.check.data", responses.check.data);
+      expect(responses.check.type).toBe("admin.databasecommand.get.success");
+      expect(responses.check.data.items[0].guests).toBe(tableToSave.guests);
+      expect(responses.check.data.items[0].userids.length).toBe(
+        tableToSave.userids.length,
+      );
+      tables[0] = responses.check.data.items[0];
+    });
+  });
+
+  describe("Assessment DELETE apiTableDelete", () => {
+    test("successful", async () => {
+      // Prep
+      let responses = {};
+
+      // Test
+      let tableToDelete = tables[0];
+      //console.log("tableToDelete", tableToDelete);
+      responses["apiTableDelete"] = await tableAPI.apiTableDelete(
+        tableToDelete.tableid,
+        userSignInResponse.data.token,
+      );
+      console.log("responses.apiTableDelete", responses.apiTableDelete);
+      expect(responses.apiTableDelete.type).toBe("table.delete.success");
+
+      // Checks
+      responses["check"] = await adminAPI.adminDatabaseCommand(
+        {
+          action: {
+            type: "get",
+            collection: "tables",
+            condition: {
+              field: "tableid",
+              value: tableToDelete.tableid,
+              filter: "in",
+            },
+          },
+        },
+        adminSignInResponse.data.token,
+      );
+      console.log("responses.check.data", responses.check.data);
       expect(responses.check.type).toBe("admin.databasecommand.get.success");
       expect(responses.check.data.items[0].guests).toBe(tableToSave.guests);
       expect(responses.check.data.items[0].userids.length).toBe(
