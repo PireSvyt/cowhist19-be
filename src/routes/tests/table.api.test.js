@@ -263,6 +263,7 @@ describe("TEST OF API : game", () => {
         },
         adminSignInResponse.data.token,
       );
+      console.log("tableToDelete.tableid", tableToDelete.tableid);
       console.log("responses.check.data", responses.check.data);
       expect(responses.check.type).toBe("admin.databasecommand.get.success");
       expect(responses.check.data.items[0].guests).toBe(tableToSave.guests);
