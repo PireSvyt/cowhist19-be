@@ -71,14 +71,14 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
           let arrayValue = Array.isArray(req.body.action.condition.value)
             ? req.body.action.condition.value
             : [req.body.action.condition.value];
-          switch (req.body.action.condition.operator) {
+          switch (req.body.action.condition.filter) {
             case "in":
-              match[req.body.action.condition.key] = {
+              match[req.body.action.condition.field] = {
                 $in: arrayValue,
               };
               break;
             case "nin":
-              match[req.body.action.condition.key] = {
+              match[req.body.action.condition.field] = {
                 $ne: arrayValue,
               };
               break;
@@ -255,6 +255,7 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                                 "admin.databasecommand.cleanup.success",
                               );
                             }
+                            console.log("admin.databasecommand.cleanup deletes", deletes)
                             return res.status(200).json({
                               type: "admin.databasecommand.cleanup.success",
                               data: deletes,
