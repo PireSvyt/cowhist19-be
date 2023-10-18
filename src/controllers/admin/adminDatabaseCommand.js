@@ -67,29 +67,29 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
 
         // Type
         if (req.body.action.type != undefined) {
-          let match = {};
-          let arrayValue = Array.isArray(req.body.action.condition.value)
-            ? req.body.action.condition.value
-            : [req.body.action.condition.value];
-          switch (req.body.action.condition.filter) {
-            case "in":
-              match[req.body.action.condition.field] = {
-                $in: arrayValue,
-              };
-              break;
-            case "nin":
-              match[req.body.action.condition.field] = {
-                $ne: arrayValue,
-              };
-              break;
-            case "none":
-              break;
-            default:
-            //
-          }
           switch (req.body.action.type) {
             case "get":
               if (req.body.action.condition != undefined) {
+                let match = {};
+                let arrayValue = Array.isArray(req.body.action.condition.value)
+                  ? req.body.action.condition.value
+                  : [req.body.action.condition.value];
+                switch (req.body.action.condition.filter) {
+                  case "in":
+                    match[req.body.action.condition.field] = {
+                      $in: arrayValue,
+                    };
+                    break;
+                  case "nin":
+                    match[req.body.action.condition.field] = {
+                      $ne: arrayValue,
+                    };
+                    break;
+                  case "none":
+                    break;
+                  default:
+                  //
+                }
                 collection
                   .find(match)
                   .then((itemList) => {
@@ -168,26 +168,36 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                   message: "command unauthorized in production",
                 });
               } else {
-                collection
-                  .deleteMany(match)
-                  .then((deleteResponse) => {
-                    if (process.env.DEBUG === true) {
-                      console.log("admin.databasecommand.delete.success");
-                    }
-                    return res.status(200).json({
-                      type: "admin.databasecommand.delete.success",
-                      data: deleteResponse,
+                if (req.body.action.condition != undefined) {
+                  collection
+                    .deleteMany(req.body.action.condition)
+                    .then((deleteResponse) => {
+                      if (process.env.DEBUG === true) {
+                        console.log("admin.databasecommand.delete.success");
+                      }
+                      return res.status(200).json({
+                        type: "admin.databasecommand.delete.success",
+                        data: deleteResponse,
+                      });
+                    })
+                    .catch((error) => {
+                      console.log(
+                        "admin.databasecommand.delete.error.ondelete",
+                      );
+                      console.error(error);
+                      return res.status(500).json({
+                        type: "admin.databasecommand.delete.error.ondelete",
+                        error: error,
+                        data: {},
+                      });
                     });
-                  })
-                  .catch((error) => {
-                    console.log("admin.databasecommand.delete.error.ondelete");
-                    console.error(error);
-                    return res.status(500).json({
-                      type: "admin.databasecommand.delete.error.ondelete",
-                      error: error,
-                      data: {},
-                    });
+                } else {
+                  console.log("admin.databasecommand.delete.missingcondition");
+                  return res.status(400).json({
+                    type: "admin.databasecommand.delete.missingcondition",
+                    data: {},
                   });
+                }
               }
               break;
             case "drop":
