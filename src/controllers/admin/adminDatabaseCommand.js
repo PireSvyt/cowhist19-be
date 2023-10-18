@@ -73,11 +73,14 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                 let match = {};
                 switch (req.body.action.filter.operator) {
                   case "in":
-                    match[condition.field] = condition.value;
+                    match[req.body.action.filter.field] =
+                      req.body.action.filter.value;
                     collection.find().where(match);
                     break;
                   case "nin":
-                    match[condition.field] = { $ne: condition.value };
+                    match[req.body.action.filter.field] = {
+                      $ne: req.body.action.filter.value,
+                    };
                     break;
                   case "none":
                     break;
