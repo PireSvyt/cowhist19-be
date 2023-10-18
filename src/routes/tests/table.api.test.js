@@ -120,15 +120,16 @@ describe("TEST OF API : game", () => {
 
       // Test
       let tableInputs = toolkit.objectGenerator("table");
+      tableInputs.guests = 0;
       tableInputs.userids = users.map((u) => {
         return u.userid;
       });
-      //console.log("tableInputs", tableInputs);
+      console.log("tableInputs", tableInputs);
       responses["apiTableCreate"] = await tableAPI.apiTableCreate(
         tableInputs,
         userSignInResponse.data.token,
       );
-      //console.log("responses.apiTableCreate", responses.apiTableCreate);
+      console.log("responses.apiTableCreate", responses.apiTableCreate);
       expect(responses.apiTableCreate.type).toBe("table.create.success");
 
       // Checks
@@ -143,16 +144,19 @@ describe("TEST OF API : game", () => {
           },
         },
       };
-      //console.log("tableAction", tableAction);
+      console.log("tableAction", tableAction);
       responses["check"] = await adminAPI.adminDatabaseCommand(
         tableAction,
         adminSignInResponse.data.token,
       );
-      //console.log("responses.check", responses.check);
+      console.log("responses.check", responses.check);
       expect(responses.check.type).toBe("admin.databasecommand.get.success");
+      expect(responses.check.data.items.length).toBe(1);
+      expect(responses.check.data.items[0].userids.length).toBe(4);
+      expect(responses.check.data.items[0].guests).toBe(0);
       // Account for step
       tables.push(responses.check.data.items[0]);
-      expect(responses.check.data.items.length).toBe(1);
+      console.log("tables", tables);
     });
   });
 
@@ -162,7 +166,7 @@ describe("TEST OF API : game", () => {
       let responses = {};
 
       // Test
-      console.log("tables[0]", tables[0]);
+      console.log("tables[0].tableid", tables[0].tableid);
       responses["getDetailsInputs"] = await tableAPI.apiTableGetDetails(
         tables[0].tableid,
         userSignInResponse.data.token,

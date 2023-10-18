@@ -32,7 +32,7 @@ module.exports = tableGetDetails = (req, res, next) => {
       $lookup: {
         from: "users",
         foreignField: "userid",
-        localField: "users",
+        localField: "userids",
         as: "players",
         pipeline: [
           {

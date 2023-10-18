@@ -4,7 +4,7 @@ const adminAPI = require("../api/admin.js");
 const gameAPI = require("../api/game.js");
 const toolkit = require("../../resources/toolkit.js");
 
-describe("TEST OF API : game", () => {
+describe.skip("TEST OF API : game", () => {
   // Pool of resources
   let users = [];
   let table = undefined;

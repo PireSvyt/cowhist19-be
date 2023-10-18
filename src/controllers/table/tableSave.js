@@ -35,7 +35,7 @@ module.exports = tableSave = (req, res, next) => {
     let tableToSave = { ...req.body };
 
     // Packaging for saving
-    let tableUsers = [];
+    /*let tableUsers = [];
     tableToSave.users.forEach((user) => {
       let userToAdd = true;
       if (user.status !== undefined) {
@@ -47,7 +47,7 @@ module.exports = tableSave = (req, res, next) => {
         tableUsers.push(user.userid);
       }
     });
-    tableToSave.users = tableUsers;
+    tableToSave.users = tableUsers;*/
 
     // Manage table to users
     Table.findOne({ tableid: tableToSave.tableid })
