@@ -73,8 +73,10 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                 filter[req.body.action.filter.key] =
                   req.body.action.filter.value;
                 collection
-                  .find()
-                  .where(filter)
+                  //.find()
+                  //.where(filter)
+                  .aggregate()
+                  .match(filter)
                   .then((itemList) => {
                     if (itemList.length === req.body.action.ids.length) {
                       if (process.env.DEBUG === true) {
