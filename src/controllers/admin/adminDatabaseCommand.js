@@ -73,8 +73,11 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
                 let match = {};
                 switch (req.body.action.filter.operator) {
                   case "in":
-                    match[req.body.action.filter.key] =
-                      req.body.action.filter.value;
+                    match[req.body.action.filter.key] = {
+                      $in: Array.isArray(req.body.action.filter.value)
+                        ? req.body.action.filter.value
+                        : [req.body.action.filter.value],
+                    };
                     break;
                   case "nin":
                     match[req.body.action.filter.key] = {
