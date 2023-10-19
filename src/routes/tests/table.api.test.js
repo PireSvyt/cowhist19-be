@@ -299,7 +299,7 @@ describe("TEST OF API : table", () => {
       // Test
       let tableToGet = tables[0];
       //console.log("tableToGet", tableToGet);
-      let historyParameters = { need: "list", games: { number: 100 } };
+      let historyParameters = { need: "list", games: { number: 5 } };
       responses["apiTableGetHistory"] = await tableAPI.apiTableGetHistory(
         tableToGet.tableid,
         historyParameters,
@@ -309,9 +309,9 @@ describe("TEST OF API : table", () => {
       expect(responses.apiTableGetHistory.type).toBe(
         "table.gethistory.success",
       );
-      expect(responses.apiTableGetHistory.data.more).toBeFalsy();
+      expect(responses.apiTableGetHistory.data.more).toBeTruthy();
       expect(responses.apiTableGetHistory.data.action).toBe("append");
-      expect(responses.apiTableGetHistory.data.games.length).toBe(games.length);
+      expect(responses.apiTableGetHistory.data.games.length).toBe(5);
 
       // Checks
     });

@@ -31,6 +31,7 @@ exports.apiTableGetDetails = async function (tableid, token) {
   }
 };
 
+// TESTED
 exports.apiTableGetHistory = async function (tableid, parameters, token) {
   try {
     const res = await axios.post(
@@ -48,6 +49,7 @@ exports.apiTableGetHistory = async function (tableid, parameters, token) {
   }
 };
 
+// TESTED
 exports.apiTableGetStats = async function (tableid, parameters, token) {
   try {
     const res = await axios.post(

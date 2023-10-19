@@ -1,10 +1,10 @@
 const MongoClient = require("mongodb").MongoClient;
-const contracts = require("../../../resources/contracts.json");
+const contracts = require("../../../../resources/contracts.json");
 var {
   adjustProbabilities,
   pickOne,
   random_id,
-} = require("../../../resources/toolkit.js");
+} = require("../../../../resources/toolkit.js");
 
 function getDateDict(lastWeeks, weekdaysLikelihoods) {
   const weekdays = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
