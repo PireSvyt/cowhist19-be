@@ -1,6 +1,5 @@
 require("dotenv").config();
 const Table = require("../../models/Table.js");
-const User = require("../../models/User.js");
 const Game = require("../../models/Game.js");
 
 module.exports = tableGetHistory = (req, res, next) => {

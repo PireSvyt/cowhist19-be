@@ -299,7 +299,7 @@ describe("TEST OF API : table", () => {
       // Test
       let tableToGet = tables[0];
       //console.log("tableToGet", tableToGet);
-      let historyParameters = { need: "list" };
+      let historyParameters = { need: "list", games: { number: 100 } };
       responses["apiTableGetHistory"] = await tableAPI.apiTableGetHistory(
         tableToGet.tableid,
         historyParameters,
