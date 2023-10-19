@@ -208,6 +208,7 @@ describe("TEST OF API : user", () => {
       ).toBeTruthy();
     });
   });
+
   describe("Assessment POST apiUserGetStats", () => {
     test("successful", async () => {
       // Prep
@@ -217,12 +218,67 @@ describe("TEST OF API : user", () => {
       responses["apiUserGetStats"] = await userAPI.apiUserGetStats(
         userSignInResponse.data.token,
       );
-      console.log("responses.apiUserGetStats", responses.apiUserGetStats);
+      //console.log("responses.apiUserGetStats", responses.apiUserGetStats);
       expect(responses.apiUserGetStats.type).toBe("user.getstats.success");
 
       // checks
       expect(responses.apiUserGetStats.data.stats).toBeDefined();
       expect(responses.apiUserGetStats.data.stats.games).toBe(games.length);
+      expect(
+        responses.apiUserGetStats.data.stats.rateattack,
+      ).toBeGreaterThanOrEqual(0);
+      expect(
+        responses.apiUserGetStats.data.stats.rateattack,
+      ).toBeLessThanOrEqual(1);
+      expect(
+        responses.apiUserGetStats.data.stats.ratevictory,
+      ).toBeGreaterThanOrEqual(0);
+      expect(
+        responses.apiUserGetStats.data.stats.ratevictory,
+      ).toBeLessThanOrEqual(1);
+    });
+  });
+
+  describe("Assessment POST apiUserInvite", () => {
+    test("successful", async () => {
+      // Prep
+      let responses = {};
+
+      // Test
+      let auser = dataGenerator.userGenerator();
+      let inviteInputs = { pseudo: auser.pseudo, login: auser.login };
+      responses["apiUserInvite"] = await userAPI.apiUserInvite(
+        inviteInputs,
+        userSignInResponse.data.token,
+      );
+      //console.log("responses.apiUserInvite", responses.apiUserInvite);
+      expect(responses.apiUserInvite.type).toBe("user.invite.success.created");
+      expect(responses.apiUserInvite.data.user.userid).toBeDefined();
+
+      // checks
+      let inviteAction = {
+        action: {
+          type: "get",
+          collection: "users",
+          condition: {
+            field: "userid",
+            value: responses.apiUserInvite.data.user.userid,
+            filter: "in",
+          },
+        },
+      };
+      //console.log("inviteAction", inviteAction);
+      responses["check"] = await adminAPI.adminDatabaseCommand(
+        inviteAction,
+        adminSignInResponse.data.token,
+      );
+      //console.log("responses.check", responses.check);
+      //console.log(        "responses.check.data.items[0]",        responses.check.data.items[0],      );
+      expect(responses.check.type).toBe("admin.databasecommand.get.success");
+      expect(responses.check.data.items[0].pseudo).toBe(auser.pseudo);
+      expect(responses.check.data.items[0].login).toBe(auser.login);
+      expect(responses.check.data.items[0].password).toBe("NONE SO FAR");
+      expect(responses.check.data.items[0].status).toBe("invited");
     });
   });
 });

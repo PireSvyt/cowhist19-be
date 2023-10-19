@@ -249,6 +249,50 @@ describe("TEST OF API : table", () => {
     });
   });
 
+  describe("Assessment POST apiTableGetStats", () => {
+    test("successful", async () => {
+      // Prep
+      let responses = {};
+
+      // Test
+      let tableToGet = tables[0];
+      console.log("tableToGet", tableToGet);
+      let statsParameters = {};
+      responses["apiTableGetStats"] = await tableAPI.apiTableGetStats(
+        tableToGet.tableid,
+        statsParameters,
+        userSignInResponse.data.token,
+      );
+      console.log("responses.apiTableGetStats", responses.apiTableGetStats);
+      expect(responses.apiTableGetStats.type).toBe("table.getstats.success");
+
+      // Checks
+    });
+  });
+
+  describe("Assessment POST apiTableGetHistory", () => {
+    test("successful", async () => {
+      // Prep
+      let responses = {};
+
+      // Test
+      let tableToGet = tables[0];
+      console.log("tableToGet", tableToGet);
+      let statsParameters = {};
+      responses["apiTableGetHistory"] = await tableAPI.apiTableGetHistory(
+        tableToGet.tableid,
+        statsParameters,
+        userSignInResponse.data.token,
+      );
+      console.log("responses.apiTableGetHistory", responses.apiTableGetHistory);
+      expect(responses.apiTableGetHistory.type).toBe(
+        "table.gethistory.success",
+      );
+
+      // Checks
+    });
+  });
+
   describe("Assessment DELETE apiTableDelete", () => {
     test("successful", async () => {
       // Prep

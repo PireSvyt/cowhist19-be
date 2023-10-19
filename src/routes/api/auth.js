@@ -3,6 +3,7 @@ const axios = require("axios");
 
 let apiURL = process.env.TESTSUITE_SERVER_URL;
 
+// TESTED
 exports.apiAuthSignUp = async function (signUpInputs) {
   try {
     const res = await axios.post(apiURL + "auth/v1/signup", signUpInputs);
@@ -12,7 +13,6 @@ exports.apiAuthSignUp = async function (signUpInputs) {
   }
 };
 
-// Not automated
 exports.apiAuthSendActivation = async function (sendActivationInputs) {
   try {
     const res = await axios.post(
@@ -25,6 +25,7 @@ exports.apiAuthSendActivation = async function (sendActivationInputs) {
   }
 };
 
+// TESTED
 exports.apiAuthActivate = async function (activateInputs) {
   try {
     const res = await axios.post(apiURL + "auth/v1/activate", activateInputs);
@@ -34,6 +35,7 @@ exports.apiAuthActivate = async function (activateInputs) {
   }
 };
 
+// TESTED
 exports.apiAuthSignIn = async function (signInInputs) {
   try {
     const res = await axios.post(apiURL + "auth/v1/signin", signInInputs);
@@ -52,7 +54,6 @@ exports.apiAuthAssess = async function (token) {
   }
 };
 
-// Not automated
 exports.apiAuthSendPassword = async function (sendPasswordInputs) {
   try {
     const res = await axios.post(

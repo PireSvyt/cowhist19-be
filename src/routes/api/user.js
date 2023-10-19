@@ -20,6 +20,7 @@ exports.apiUserChangePassword = async function (changePasswordInputs, token) {
   }
 };
 
+// TESTED
 exports.apiUserInvite = async function (inviteInputs, token) {
   try {
     const res = await axios.post(apiURL + "/user/v1/invite", inviteInputs, {
@@ -33,6 +34,7 @@ exports.apiUserInvite = async function (inviteInputs, token) {
   }
 };
 
+// TESTED
 exports.apiUserGetDetails = async function (token) {
   try {
     const res = await axios.get(apiURL + "/user/v1", {
@@ -46,6 +48,7 @@ exports.apiUserGetDetails = async function (token) {
   }
 };
 
+// TESTED
 exports.apiUserGetStats = async function (token) {
   try {
     const res = await axios.get(apiURL + "/user/v1/stats", {

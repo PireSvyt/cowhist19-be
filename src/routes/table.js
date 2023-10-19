@@ -9,8 +9,8 @@ const tableCreate = require("../controllers/table/tableCreate.js");
 const tableSave = require("../controllers/table/tableSave.js");
 const tableGetDetails = require("../controllers/table/tableGetDetails.js");
 const tableDelete = require("../controllers/table/tableDelete.js");
-const tableHistory_v3 = require("../controllers/table/tableHistory_v3.js");
-const tableStats = require("../controllers/table/tableStats.js");
+const tableGetHistory = require("../controllers/table/tableGetHistory.js");
+const tableGetStats = require("../controllers/table/tableGetStats.js");
 const tableExistingName = require("../controllers/table/tableExistingName.js");
 
 router.post("/v1/create", authAuthenticate, userIsActivated, tableCreate);
@@ -47,14 +47,14 @@ router.post(
   authAuthenticate,
   userIsActivated,
   tableAuthenticate,
-  tableHistory_v3,
+  tableGetHistory,
 );
 router.post(
   "/v1/stats/:id",
   authAuthenticate,
   userIsActivated,
   tableAuthenticate,
-  tableStats,
+  tableGetStats,
 );
 
 module.exports = router;

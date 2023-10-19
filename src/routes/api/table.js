@@ -3,6 +3,7 @@ const axios = require("axios");
 
 let apiURL = process.env.TESTSUITE_SERVER_URL;
 
+// TESTED
 exports.apiTableCreate = async function (table, token) {
   try {
     const res = await axios.post(apiURL + "/table/v1/create", table, {
@@ -16,6 +17,7 @@ exports.apiTableCreate = async function (table, token) {
   }
 };
 
+// TESTED
 exports.apiTableGetDetails = async function (tableid, token) {
   try {
     const res = await axios.get(apiURL + "/table/v3/" + tableid, {
@@ -63,6 +65,7 @@ exports.apiTableGetStats = async function (tableid, parameters, token) {
   }
 };
 
+// TESTED
 exports.apiTableSave = async function apiTableSave(table, token) {
   try {
     const res = await axios.post(apiURL + "/table/v2/save", table, {
@@ -76,6 +79,7 @@ exports.apiTableSave = async function apiTableSave(table, token) {
   }
 };
 
+// TESTED
 exports.apiTableDelete = async function (tableid, token) {
   try {
     const res = await axios.delete(apiURL + "/table/v1/" + tableid, {

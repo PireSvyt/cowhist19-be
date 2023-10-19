@@ -3,6 +3,7 @@ const axios = require("axios");
 
 let apiURL = process.env.TESTSUITE_SERVER_URL;
 
+// TESTED
 exports.apiGameCreate = async function (saveInputs, token) {
   try {
     const res = await axios.post(apiURL + "game/v1/create", saveInputs, {
@@ -29,6 +30,7 @@ exports.apiGameCreate = async function (saveInputs, token) {
   }
 };*/
 
+// TESTED
 exports.apiGameDelete = async function (deleteId, token) {
   try {
     const res = await axios.delete(apiURL + "game/v1/" + deleteId, {

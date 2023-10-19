@@ -3,7 +3,7 @@ const Table = require("../../models/Table.js");
 const User = require("../../models/User.js");
 const Game = require("../../models/Game.js");
 
-module.exports = tableHistory_v3 = (req, res, next) => {
+module.exports = tableGetHistory = (req, res, next) => {
   /*
   
   provides a list of games sorted per date
@@ -25,20 +25,20 @@ module.exports = tableHistory_v3 = (req, res, next) => {
         * append : games complement previous if any (consolidation needed between existing and payload)
   
   possible response types
-  * table.history.success
-  * table.history.accessdenied.noneed
-  * table.history.accessdenied.needmissmatch
-  * table.history.error.findinggames
+  * table.gethistory.success
+  * table.gethistory.accessdenied.noneed
+  * table.gethistory.accessdenied.needmissmatch
+  * table.gethistory.error.findinggames
   
   */
 
   if (process.env.DEBUG) {
-    console.log("table.tableHistory_v3");
+    console.log("table.tableGetHistory");
   }
 
   // Initialize
   var status = 500;
-  var type = "table.history.error";
+  var type = "table.gethistory.error";
   var filters = {};
   var fields = "";
 
@@ -54,7 +54,7 @@ module.exports = tableHistory_v3 = (req, res, next) => {
   // Is need input relevant?
   if (!req.body.need) {
     status = 403;
-    type = "table.history.accessdenied.noneed";
+    type = "table.gethistory.accessdenied.noneed";
   } else {
     switch (req.body.need) {
       case "list":
@@ -63,7 +63,7 @@ module.exports = tableHistory_v3 = (req, res, next) => {
         break;
       default:
         status = 403;
-        type = "table.history.accessdenied.needmissmatch";
+        type = "table.gethistory.accessdenied.needmissmatch";
     }
   }
 
@@ -181,9 +181,9 @@ module.exports = tableHistory_v3 = (req, res, next) => {
                 newGames.push(newGame);
               });
               // Response
-              console.log("table.history.success");
+              console.log("table.gethistory.success");
               return res.status(200).json({
-                type: "table.history.success",
+                type: "table.gethistory.success",
                 data: {
                   games: newGames,
                   more: more,
@@ -192,25 +192,25 @@ module.exports = tableHistory_v3 = (req, res, next) => {
               });
             })
             .catch((error) => {
-              console.log("table.history.error.findinggames");
+              console.log("table.gethistory.error.findinggames");
               console.error(error);
               return res.status(400).json({
-                type: "table.history.error.findinggames",
+                type: "table.gethistory.error.findinggames",
                 error: error,
               });
             });
         } else {
-          console.log("table.history.error.onfindtable");
+          console.log("table.gethistory.error.onfindtable");
           return res.status(400).json({
-            type: "table.history.error.onfindtable",
+            type: "table.gethistory.error.onfindtable",
           });
         }
       })
       .catch((error) => {
-        console.log("table.history.error.onaggregate");
+        console.log("table.gethistory.error.onaggregate");
         console.error(error);
         res.status(400).json({
-          type: "table.history.error.onaggregate",
+          type: "table.gethistory.error.onaggregate",
           error: error,
         });
       });

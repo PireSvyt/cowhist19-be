@@ -241,22 +241,4 @@ describe("TEST OF API : auth", () => {
       expect(true).toBe(false);
     });
   });
-
-  describe.skip("Assessment POST apiAuthAssess", () => {
-    test.skip("successful", async () => {
-      expect(true).toBe(false);
-    });
-    test.skip("unsuccessful: wrong token", async () => {
-      expect(true).toBe(false);
-    });
-  });
-
-  describe.skip("Assessment POST apiAuthExistingPseudo", () => {
-    test.skip("existing", async () => {
-      expect(true).toBe(false);
-    });
-    test.skip("not existing", async () => {
-      expect(true).toBe(false);
-    });
-  });
 });

@@ -2,7 +2,7 @@ require("dotenv").config();
 const Game = require("../../models/Game.js");
 const serviceProcessGames = require("./services/serviceProcessGames.js");
 
-module.exports = tableStats = (req, res, next) => {
+module.exports = tableGetStats = (req, res, next) => {
   /*
   
   provides the stats according to given parameters
@@ -10,8 +10,8 @@ module.exports = tableStats = (req, res, next) => {
   body parameters are transfered to the processGames function 
   
   possible response types
-  * table.stats.success
-  * table.stats.error
+  * table.getstats.success
+  * table.getstats.error
   
   TODO
   * only users from the table can do this
@@ -21,7 +21,7 @@ module.exports = tableStats = (req, res, next) => {
   */
 
   if (process.env.DEBUG) {
-    console.log("table.stats");
+    console.log("table.getstats");
   }
 
   // Find tablegames
@@ -31,19 +31,19 @@ module.exports = tableStats = (req, res, next) => {
       let stats = serviceProcessGames(games, req.body);
 
       // Response
-      console.log("table.stats.success");
+      console.log("table.getstats.success");
       return res.status(200).json({
-        type: "table.stats.success",
+        type: "table.getstats.success",
         data: {
           stats: stats,
         },
       });
     })
     .catch((error) => {
-      console.log("table.stats.error");
+      console.log("table.getstats.error");
       console.error(error);
       return res.status(400).json({
-        type: "table.stats.error",
+        type: "table.getstats.error",
         error: error,
       });
     });
