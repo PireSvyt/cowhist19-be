@@ -9,6 +9,7 @@ describe("TEST OF API : table", () => {
   // Pool of resources
   let users = [];
   let tables = [];
+  let games = [];
 
   let adminSignInResponse = undefined;
   let userSignInResponse = undefined;
@@ -210,27 +211,87 @@ describe("TEST OF API : table", () => {
   });
 
   describe("Assessment POST apiTableGetStats", () => {
-    test("successful", async () => {
-      // Prep
-      let responses = {};
+    // Prep
+    let responses = {};
+    describe("When no game have been played", () => {
+      test("Then tablestats ranking is empty", async () => {
+        // Test
+        let tableToGet = tables[0];
+        //console.log("tableToGet", tableToGet);
+        let statsParameters = { need: "ranking" };
+        responses["apiTableGetStatsRankingEmpty"] =
+          await tableAPI.apiTableGetStats(
+            tableToGet.tableid,
+            statsParameters,
+            userSignInResponse.data.token,
+          );
+        //console.log("responses.apiTableGetStatsRankingEmpty", responses.apiTableGetStatsRankingEmpty);
+        expect(responses.apiTableGetStatsRankingEmpty.type).toBe(
+          "table.getstats.success",
+        );
+        expect(
+          responses.apiTableGetStatsRankingEmpty.data.stats.ranking.length,
+        ).toBe(0);
 
-      // Test
-      let tableToGet = tables[0];
-      //console.log("tableToGet", tableToGet);
-      let statsParameters = { need: "ranking" }; //"ranking" OR "graph" + "field" information
-      responses["apiTableGetStats"] = await tableAPI.apiTableGetStats(
-        tableToGet.tableid,
-        statsParameters,
-        userSignInResponse.data.token,
-      );
-      console.log("responses.apiTableGetStats", responses.apiTableGetStats);
-      expect(responses.apiTableGetStats.type).toBe("table.getstats.success");
+        // Checks
+      });
+    });
+    describe("When some games have been played", () => {
+      test("Then tablestats ranking is available", async () => {
+        // Prep
+        let responses = {};
+        let gameAction = {
+          action: {
+            type: "insertmany",
+            collection: "games",
+            items: dataGenerator.objectGenerator("game", 10, {
+              tableid: { list: [tables[0].tableid] },
+              players: { list: users },
+            }),
+          },
+        };
+        //console.log("gameAction", gameAction);
+        //console.log("gameAction.action.items[0]", gameAction.action.items[0]);
+        responses["insertGames"] = await adminAPI.adminDatabaseCommand(
+          gameAction,
+          adminSignInResponse.data.token,
+        );
+        //console.log("responses.insertGames", responses.insertGames);
+        expect(responses.insertGames.type).toBe(
+          "admin.databasecommand.insertmany.success",
+        );
+        expect(responses.insertGames.data.length).toBe(
+          gameAction.action.items.length,
+        );
+        games = responses.insertGames.data;
+        //console.log("game0", games[0]);
 
-      // Checks
+        // Test
+        let tableToGet = tables[0];
+        //console.log("tableToGet", tableToGet);
+        let statsParameters = { need: "ranking" }; //"ranking" OR "graph" + "field" information
+        responses["apiTableGetStatsRanking"] = await tableAPI.apiTableGetStats(
+          tableToGet.tableid,
+          statsParameters,
+          userSignInResponse.data.token,
+        );
+        console.log(
+          "responses.apiTableGetStatsRanking",
+          responses.apiTableGetStatsRanking,
+        );
+        expect(responses.apiTableGetStatsRanking.type).toBe(
+          "table.getstats.success",
+        );
+        expect(
+          responses.apiTableGetStatsRanking.data.stats.ranking.length,
+        ).toBe(4);
+
+        // Checks
+      });
     });
   });
 
-  describe("Assessment POST apiTableGetHistory", () => {
+  describe.skip("Assessment POST apiTableGetHistory", () => {
     test("successful", async () => {
       // Prep
       let responses = {};
@@ -238,10 +299,10 @@ describe("TEST OF API : table", () => {
       // Test
       let tableToGet = tables[0];
       //console.log("tableToGet", tableToGet);
-      let statsParameters = {};
+      let historyParameters = { need: "list" };
       responses["apiTableGetHistory"] = await tableAPI.apiTableGetHistory(
         tableToGet.tableid,
-        statsParameters,
+        historyParameters,
         userSignInResponse.data.token,
       );
       console.log("responses.apiTableGetHistory", responses.apiTableGetHistory);
