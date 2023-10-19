@@ -123,7 +123,7 @@ module.exports = tableGetHistory = (req, res, next) => {
               if (req.body.games.lastid !== null) {
                 // Find last game loaded
                 lastidpos = games.findIndex((game) => {
-                  return game.gameid.toString() === req.body.games.lastid;
+                  return game.gameid === req.body.games.lastid;
                 });
                 if (lastidpos === -1) {
                   // Last id not found :/
