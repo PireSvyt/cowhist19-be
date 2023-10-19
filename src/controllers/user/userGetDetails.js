@@ -35,7 +35,7 @@ module.exports = userGetDetails = (req, res, next) => {
     {
       $lookup: {
         from: "tables",
-        foreignField: "users",
+        foreignField: "userids",
         localField: "userid",
         as: "tables",
         pipeline: [

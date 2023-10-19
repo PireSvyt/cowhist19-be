@@ -41,10 +41,9 @@ describe("TEST OF FUNCTION : tableGenerator ", () => {
   });
   describe("When userids perimeter is provided", () => {
     let userids = objectGenerator("user", 4);
-    let table = tableGenerator({ userids: { list: [userids] } });
+    let table = tableGenerator({ userids: { list: userids } });
     test("then fields are populated by default", () => {
       expect(table.userids.length).toBe(4);
-      expect(table.userids[0].userid).toBeDefined();
     });
   });
 });

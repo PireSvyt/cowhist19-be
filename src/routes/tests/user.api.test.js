@@ -1,7 +1,7 @@
 require("@jest/globals");
 const authAPI = require("../api/auth.js");
 const adminAPI = require("../api/admin.js");
-const tableAPI = require("../api/table.js");
+const userAPI = require("../api/user.js");
 const toolkit = require("../../resources/toolkit.js");
 const dataGenerator = require("../../resources/dataGenerator.js");
 
@@ -83,7 +83,7 @@ describe("TEST OF API : user", () => {
         action: {
           type: "insertmany",
           collection: "users",
-          items: dataGenerator.objectGenerator("user", 4, [
+          items: dataGenerator.objectGenerator("user", 3, [
             { name: "status", value: "activated" },
           ]),
         },
@@ -99,6 +99,34 @@ describe("TEST OF API : user", () => {
       users = responses.insertUsers.data;
       //console.log("users", users);
       expect(users.length).toBe(userAction.action.items.length);
+
+      // picked user
+      pickedUser = dataGenerator.objectGenerator("user");
+      //console.log("pickedUser", pickedUser);
+      let pickedUserAction = {
+        action: {
+          type: "insertmany",
+          collection: "users",
+          items: [pickedUser],
+        },
+      };
+      responses["insertPickedUser"] = await adminAPI.adminDatabaseCommand(
+        pickedUserAction,
+        adminSignInResponse.data.token,
+      );
+      expect(responses.insertPickedUser.type).toBe(
+        "admin.databasecommand.insertmany.success",
+      );
+      users.push(pickedUser);
+      let userSignInInputs = {
+        login: pickedUser.login,
+        password: pickedUser.pseudo,
+        encryption: false,
+      };
+      //console.log("userSignInInputs", userSignInInputs);
+      userSignInResponse = await authAPI.apiAuthSignIn(userSignInInputs);
+      //console.log("userSignInResponse", userSignInResponse);
+      expect(userSignInResponse.type).toBe("auth.signin.success");
 
       // Table
       let tableAction = {
@@ -158,66 +186,41 @@ describe("TEST OF API : user", () => {
       );
       games = responses.insertGames.data;
       //console.log("game0", games[0]);
-
-      // picked user
-      pickedUser = toolkit.pickFromArray(users);
-      //console.log("pickedUser", pickedUser);
-      let userSignInInputs = {
-        login: pickedUser.login,
-        password: pickedUser.pseudo,
-        encryption: false,
-      };
-      //console.log("userSignInInputs", userSignInInputs);
-      userSignInResponse = await authAPI.apiAuthSignIn(userSignInInputs);
-      //console.log("userSignInResponse", userSignInResponse);
-      expect(userSignInResponse.type).toBe("auth.signin.success");
     });
   });
 
-  describe.skip("Assessment POST apiUserGetDetails", () => {
+  describe("Assessment POST apiUserGetDetails", () => {
     test("successful", async () => {
       // Prep
       let responses = {};
 
       // Test
-      let tableInputs = dataGenerator.objectGenerator("table");
-      tableInputs.guests = 0;
-      tableInputs.userids = users.map((u) => {
-        return u.userid;
-      });
-      //console.log("tableInputs", tableInputs);
-      responses["apiTableCreate"] = await tableAPI.apiTableCreate(
-        tableInputs,
+      responses["apiUserGetDetails"] = await userAPI.apiUserGetDetails(
         userSignInResponse.data.token,
       );
-      //console.log("responses.apiTableCreate", responses.apiTableCreate);
-      expect(responses.apiTableCreate.type).toBe("table.create.success");
+      console.log("responses.apiUserGetDetails", responses.apiUserGetDetails);
+      expect(responses.apiUserGetDetails.type).toBe("user.getdetails.success");
 
-      // Checks
-      let tableAction = {
-        action: {
-          type: "get",
-          collection: "tables",
-          condition: {
-            field: "tableid",
-            value: tableInputs.tableid,
-            filter: "in",
-          },
-        },
-      };
-      //console.log("tableAction", tableAction);
-      responses["check"] = await adminAPI.adminDatabaseCommand(
-        tableAction,
-        adminSignInResponse.data.token,
+      // checks
+      expect(responses.apiUserGetDetails.data.user.userid).toBe(
+        pickedUser.userid,
       );
-      //console.log("responses.check", responses.check);
-      expect(responses.check.type).toBe("admin.databasecommand.get.success");
-      expect(responses.check.data.items.length).toBe(1);
-      expect(responses.check.data.items[0].userids.length).toBe(4);
-      expect(responses.check.data.items[0].guests).toBe(0);
-      // Account for step
-      tables.push(responses.check.data.items[0]);
-      //console.log("tables", tables);
+      expect(responses.apiUserGetDetails.data.user.pseudo).toBe(
+        pickedUser.pseudo,
+      );
+      expect(responses.apiUserGetDetails.data.user.login).toBe(
+        pickedUser.login,
+      );
+      expect(responses.apiUserGetDetails.data.user.status).toBe(
+        pickedUser.status,
+      );
+      expect(
+        responses.apiUserGetDetails.data.user.tables
+          .map((table) => {
+            return table.tableid;
+          })
+          .includes(tables[0].tableid),
+      ).toBeTruthy();
     });
   });
 });

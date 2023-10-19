@@ -9,7 +9,6 @@ describe("TEST OF API : table", () => {
   // Pool of resources
   let users = [];
   let tables = [];
-  let games = [];
 
   let adminSignInResponse = undefined;
   let userSignInResponse = undefined;
@@ -83,7 +82,7 @@ describe("TEST OF API : table", () => {
         action: {
           type: "insertmany",
           collection: "users",
-          items: dataGenerator.objectGenerator("user", 4),
+          items: dataGenerator.objectGenerator("user", 3),
         },
       };
       responses["insertUsers"] = await adminAPI.adminDatabaseCommand(
@@ -94,12 +93,26 @@ describe("TEST OF API : table", () => {
         "admin.databasecommand.insertmany.success",
       );
       users = responses.insertUsers.data;
-      console.log("users", users);
       expect(users.length).toBe(userAction.action.items.length);
 
       // picked user
-      pickedUser = toolkit.pickFromArray(users);
+      pickedUser = dataGenerator.objectGenerator("user");
       //console.log("pickedUser", pickedUser);
+      let pickedUserAction = {
+        action: {
+          type: "insertmany",
+          collection: "users",
+          items: [pickedUser],
+        },
+      };
+      responses["insertPickedUser"] = await adminAPI.adminDatabaseCommand(
+        pickedUserAction,
+        adminSignInResponse.data.token,
+      );
+      expect(responses.insertPickedUser.type).toBe(
+        "admin.databasecommand.insertmany.success",
+      );
+      users.push(pickedUser);
       let userSignInInputs = {
         login: pickedUser.login,
         password: pickedUser.pseudo,
@@ -169,7 +182,7 @@ describe("TEST OF API : table", () => {
       let responses = {};
 
       // Test
-      //console.log("tables[0].tableid", tables[0].tableid);
+      //console.log("tables[0]", tables[0]);
       responses["getDetails"] = await tableAPI.apiTableGetDetails(
         tables[0].tableid,
         userSignInResponse.data.token,

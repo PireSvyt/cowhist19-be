@@ -5,7 +5,7 @@ const gameAPI = require("../api/game.js");
 const toolkit = require("../../resources/toolkit.js");
 const dataGenerator = require("../../resources/dataGenerator.js");
 
-describe.skip("TEST OF API : game", () => {
+describe("TEST OF API : game", () => {
   // Pool of resources
   let users = [];
   let table = undefined;
@@ -83,7 +83,7 @@ describe.skip("TEST OF API : game", () => {
         action: {
           type: "insertmany",
           collection: "users",
-          items: dataGenerator.objectGenerator("user", 4, {
+          items: dataGenerator.objectGenerator("user", 3, {
             name: { list: ["activated"] },
           }),
         },
@@ -100,33 +100,24 @@ describe.skip("TEST OF API : game", () => {
       //console.log("users", users);
       expect(users.length).toBe(userAction.action.items.length);
 
-      // Table
-      let tableAction = {
+      // picked user
+      pickedUser = dataGenerator.objectGenerator("user");
+      //console.log("pickedUser", pickedUser);
+      let pickedUserAction = {
         action: {
           type: "insertmany",
-          collection: "tables",
-          items: dataGenerator.objectGenerator("table", 1, {
-            userids: {
-              list: users.map((item) => {
-                return item.userid;
-              }),
-            },
-          }),
+          collection: "users",
+          items: [pickedUser],
         },
       };
-      responses["insertTable"] = await adminAPI.adminDatabaseCommand(
-        tableAction,
+      responses["insertPickedUser"] = await adminAPI.adminDatabaseCommand(
+        pickedUserAction,
         adminSignInResponse.data.token,
       );
-      expect(responses.insertTable.type).toBe(
+      expect(responses.insertPickedUser.type).toBe(
         "admin.databasecommand.insertmany.success",
       );
-      table = responses.insertTable.data[0];
-      //console.log("table", table);
-
-      // picked user
-      pickedUser = toolkit.pickFromArray(users);
-      //console.log("pickedUser", pickedUser);
+      users.push(pickedUser);
       let userSignInInputs = {
         login: pickedUser.login,
         password: pickedUser.pseudo,
@@ -136,6 +127,31 @@ describe.skip("TEST OF API : game", () => {
       userSignInResponse = await authAPI.apiAuthSignIn(userSignInInputs);
       //console.log("userSignInResponse", userSignInResponse);
       expect(userSignInResponse.type).toBe("auth.signin.success");
+
+      // Table
+      let tableAction = {
+        action: {
+          type: "insertmany",
+          collection: "tables",
+          items: [
+            dataGenerator.objectGenerator("table", 1, {
+              userids: { list: users },
+            }),
+          ],
+        },
+      };
+      //console.log("tableAction", tableAction);
+      //console.log("tableAction.action.items[0]", tableAction.action.items[0]);
+      responses["insertTable"] = await adminAPI.adminDatabaseCommand(
+        tableAction,
+        adminSignInResponse.data.token,
+      );
+      //console.log("responses.insertTable", responses.insertTable);
+      expect(responses.insertTable.type).toBe(
+        "admin.databasecommand.insertmany.success",
+      );
+      table = responses.insertTable.data[0];
+      //console.log("table", table);
     });
   });
 

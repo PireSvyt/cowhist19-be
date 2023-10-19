@@ -69,11 +69,9 @@ function tableGenerator(tablePerimeter = {}) {
   }
   // Userids
   if (tablePerimeter.userids !== undefined) {
-    table.userids = toolkit
-      .pickFromArray(tablePerimeter.userids.list)
-      .map((user) => {
-        return { userid: user.userid };
-      });
+    table.userids = tablePerimeter.userids.list.map((user) => {
+      return user.userid;
+    });
   }
 
   return table;
