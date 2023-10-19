@@ -145,7 +145,7 @@ module.exports = tableGetHistory = (req, res, next) => {
               // games [ N ... N+M ] length = M+1, ex. 0-10 -> 11 games
               let more = games.length > req.body.games.number;
               // Shorten to desired length
-              if (more) {
+              if (more === true) {
                 games.pop();
               }
               // Package data for front end

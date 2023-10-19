@@ -305,10 +305,13 @@ describe("TEST OF API : table", () => {
         historyParameters,
         userSignInResponse.data.token,
       );
-      console.log("responses.apiTableGetHistory", responses.apiTableGetHistory);
+      //console.log("responses.apiTableGetHistory", responses.apiTableGetHistory);
       expect(responses.apiTableGetHistory.type).toBe(
         "table.gethistory.success",
       );
+      expect(responses.apiTableGetHistory.data.more).toBeFalsy();
+      expect(responses.apiTableGetHistory.data.action).toBe("append");
+      expect(responses.apiTableGetHistory.data.games.length).toBe(games.length);
 
       // Checks
     });
