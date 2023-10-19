@@ -1,12 +1,10 @@
-const bcrypt = require("bcrypt");
-
 module.exports = {
   adjustProbabilities: adjustProbabilities,
+  pickFromArray: pickFromArray,
   pickOne: pickOne,
   random_id: random_id,
   random_string: random_string,
   getLastDates: getLastDates,
-  objectGenerator: objectGenerator,
 };
 
 function adjustProbabilities(dict, field) {
@@ -43,6 +41,43 @@ function adjustProbabilities(dict, field) {
     });
   }
   return adjustedDict;
+}
+
+function pickFromArray(
+  input,
+  count = 1,
+  mapping = (u) => {
+    return u;
+  },
+) {
+  let pickableList = input;
+  let pickedList = [];
+  let pickedItem = undefined;
+
+  if (Array.isArray(input)) {
+    // Pick
+    if (input.length <= count) {
+      pickedList = input;
+    } else {
+      for (let i = 1; i <= count; i++) {
+        pickedItem = [Math.floor(Math.random() * pickableList.length)];
+        pickedList.push(pickableList.splice(pickedItem, 1)[0]);
+      }
+    }
+
+    // Map
+    pickedList.map(mapping);
+
+    // Result
+    if (count === 1) {
+      return pickedList[0];
+    } else {
+      return pickedList;
+    }
+  } else {
+    console.log("pickFromArray input is not an array ", input);
+    return undefined;
+  }
 }
 
 function pickOne(input, field) {
@@ -105,61 +140,4 @@ function getLastDates(days, weekdaysLikelihoods) {
     currentDate.setDate(currentDate.getDate() - 1);
   }
   return dateDict;
-}
-
-function objectGenerator(type, count = 1, forcedfields = []) {
-  if (count > 1) {
-    let list = [];
-    for (let i = 1; i <= count; i++) {
-      list.push(objectGenerator(type, 1, forcedfields));
-    }
-    return list;
-  } else {
-    let result = {};
-    let rid = random_id(16);
-    let rstring = random_string();
-
-    // Baseline
-    switch (type) {
-      case "user":
-        result = {
-          userid: rstring,
-          login: rid + "@yopmail.com",
-          password: bcrypt.hashSync(rid, 10),
-          pseudo: rid,
-          status: "activated",
-        };
-        break;
-      case "table":
-        result = {
-          tableid: rstring,
-          name: rstring,
-          guests: 0,
-          userids: [],
-        };
-        break;
-      case "game":
-        result = {
-          gameid: rstring,
-          tableid: rstring,
-          date: new Date(),
-          contract: "none",
-          outcome: 0,
-          players: [],
-        };
-        break;
-      default:
-        return undefined;
-      //
-    }
-
-    // Forced fields
-    //console.log("forcedfields", forcedfields);
-    forcedfields.forEach((field) => {
-      result[field.name] = field.value;
-    });
-
-    // Result
-    return result;
-  }
 }

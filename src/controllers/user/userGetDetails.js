@@ -3,7 +3,7 @@ const jwt_decode = require("jwt-decode");
 
 const User = require("../../models/User.js");
 
-module.exports = userDetails = (req, res, next) => {
+module.exports = userGetDetails = (req, res, next) => {
   /*
   
   provides user details 
@@ -11,14 +11,14 @@ module.exports = userDetails = (req, res, next) => {
   NOTE : removes field password
   
   possible response types
-  * user.details.success
-  * user.details.error.notfound
-  * user.details.error.onaggregate
+  * user.getdetails.success
+  * user.getdetails.error.notfound
+  * user.getdetails.error.onaggregate
   
   */
 
   if (process.env.DEBUG) {
-    console.log("user.details");
+    console.log("user.getdetails");
   }
 
   // Initialise
@@ -61,25 +61,25 @@ module.exports = userDetails = (req, res, next) => {
   ])
     .then((user) => {
       if (user.length === 1) {
-        console.log("user.details.success");
+        console.log("user.getdetails.success");
         return res.status(200).json({
-          type: "user.details.success",
+          type: "user.getdetails.success",
           data: {
             user: user[0],
           },
         });
       } else {
-        console.log("user.details.error.notfound");
+        console.log("user.getdetails.error.notfound");
         return res.status(403).json({
-          type: "user.details.error.notfound",
+          type: "user.getdetails.error.notfound",
         });
       }
     })
     .catch((error) => {
-      console.log("user.details.error.onaggregate");
+      console.log("user.getdetails.error.onaggregate");
       console.error(error);
       return res.status(400).json({
-        type: "user.details.error.onaggregate",
+        type: "user.getdetails.error.onaggregate",
         error: error,
       });
     });

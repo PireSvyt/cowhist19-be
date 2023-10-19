@@ -33,7 +33,30 @@ exports.apiUserInvite = async function (inviteInputs, token) {
   }
 };
 
+exports.apiUserGetDetails = async function (token) {
+  try {
+    const res = await axios.get(apiURL + "/user/v1", {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    return res.data;
+  } catch (err) {
+    return err.response.data;
+  }
+};
 
-const userIsActivated = require("../controllers/user/userIsActivated.js");
-const userDetails = require("../controllers/user/userDetails.js");
-const userStats = require("../controllers/user/userStats.js");
+exports.apiUserGetStats = async function (token) {
+  try {
+    const res = await axios.get(apiURL + "/user/v1/stats", {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    return res.data;
+  } catch (err) {
+    return err.response.data;
+  }
+};
+
+//const userIsActivated = require("../controllers/user/userIsActivated.js");

@@ -1,6 +1,6 @@
 require("@jest/globals");
 
-var { adjustProbabilities, pickOne, getLastDates } = require("./toolkit.js");
+const { adjustProbabilities, pickOne, getLastDates } = require("./toolkit.js");
 
 describe("TEST OF FUNCTION : adjustProbabilities ", () => {
   describe("When inputs are matching 100% probabilities", () => {

@@ -3,8 +3,9 @@ const authAPI = require("../api/auth.js");
 const adminAPI = require("../api/admin.js");
 const tableAPI = require("../api/table.js");
 const toolkit = require("../../resources/toolkit.js");
+const dataGenerator = require("../../resources/dataGenerator.js");
 
-describe("TEST OF API : game", () => {
+describe("TEST OF API : table", () => {
   // Pool of resources
   let users = [];
   let tables = [];
@@ -82,9 +83,7 @@ describe("TEST OF API : game", () => {
         action: {
           type: "insertmany",
           collection: "users",
-          items: toolkit.objectGenerator("user", 4, [
-            { name: "status", value: "activated" },
-          ]),
+          items: dataGenerator.objectGenerator("user", 4),
         },
       };
       responses["insertUsers"] = await adminAPI.adminDatabaseCommand(
@@ -95,11 +94,11 @@ describe("TEST OF API : game", () => {
         "admin.databasecommand.insertmany.success",
       );
       users = responses.insertUsers.data;
-      //console.log("users", users);
+      console.log("users", users);
       expect(users.length).toBe(userAction.action.items.length);
 
       // picked user
-      pickedUser = users[Math.floor(Math.random() * users.length)];
+      pickedUser = toolkit.pickFromArray(users);
       //console.log("pickedUser", pickedUser);
       let userSignInInputs = {
         login: pickedUser.login,
@@ -119,7 +118,7 @@ describe("TEST OF API : game", () => {
       let responses = {};
 
       // Test
-      let tableInputs = toolkit.objectGenerator("table");
+      let tableInputs = dataGenerator.objectGenerator("table");
       tableInputs.guests = 0;
       tableInputs.userids = users.map((u) => {
         return u.userid;
@@ -149,10 +148,14 @@ describe("TEST OF API : game", () => {
         tableAction,
         adminSignInResponse.data.token,
       );
-      //console.log("responses.check", responses.check);
+      /*console.log("responses.check", responses.check);
+      console.log(
+        "responses.check.data.items[0]",
+        responses.check.data.items[0],
+      );*/
       expect(responses.check.type).toBe("admin.databasecommand.get.success");
       expect(responses.check.data.items.length).toBe(1);
-      expect(responses.check.data.items[0].userids.length).toBe(4);
+      expect(responses.check.data.items[0].userids.length).toBe(users.length);
       expect(responses.check.data.items[0].guests).toBe(0);
       // Account for step
       tables.push(responses.check.data.items[0]);
@@ -245,7 +248,7 @@ describe("TEST OF API : game", () => {
         tableToDelete.tableid,
         userSignInResponse.data.token,
       );
-      console.log("responses.apiTableDelete", responses.apiTableDelete);
+      //console.log("responses.apiTableDelete", responses.apiTableDelete);
       expect(responses.apiTableDelete.type).toBe("table.delete.success");
 
       // Checks
@@ -263,14 +266,12 @@ describe("TEST OF API : game", () => {
         },
         adminSignInResponse.data.token,
       );
-      console.log("tableToDelete.tableid", tableToDelete.tableid);
-      console.log("responses.check.data", responses.check.data);
-      expect(responses.check.type).toBe("admin.databasecommand.get.success");
-      expect(responses.check.data.items[0].guests).toBe(tableToSave.guests);
-      expect(responses.check.data.items[0].userids.length).toBe(
-        tableToSave.userids.length,
+      //console.log("tableToDelete.tableid", tableToDelete.tableid);
+      //console.log("responses.check.data", responses.check.data);
+      expect(responses.check.type).toBe(
+        "admin.databasecommand.get.error.partialmatch",
       );
-      tables[0] = responses.check.data.items[0];
+      expect(responses.check.data.items.length).toBe(0);
     });
   });
 });
