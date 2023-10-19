@@ -58,7 +58,7 @@ module.exports = tableGetHistory = (req, res, next) => {
   } else {
     switch (req.body.need) {
       case "list":
-        filters = { tableid: req.params.id };
+        filters = { tableid: req.params.tableid };
         fields = "contract outcome players date";
         break;
       default:
@@ -82,7 +82,7 @@ module.exports = tableGetHistory = (req, res, next) => {
     Table.aggregate([
       {
         $match: {
-          tableid: req.params.id,
+          tableid: req.params.tableid,
         },
       },
       {

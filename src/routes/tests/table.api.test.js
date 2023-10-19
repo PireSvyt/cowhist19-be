@@ -275,10 +275,10 @@ describe("TEST OF API : table", () => {
           statsParameters,
           userSignInResponse.data.token,
         );
-        console.log(
+        /*console.log(
           "responses.apiTableGetStatsRanking",
           responses.apiTableGetStatsRanking,
-        );
+        );*/
         expect(responses.apiTableGetStatsRanking.type).toBe(
           "table.getstats.success",
         );
@@ -291,7 +291,7 @@ describe("TEST OF API : table", () => {
     });
   });
 
-  describe.skip("Assessment POST apiTableGetHistory", () => {
+  describe("Assessment POST apiTableGetHistory", () => {
     test("successful", async () => {
       // Prep
       let responses = {};
