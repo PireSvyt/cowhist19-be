@@ -4,7 +4,7 @@ const Game = require("../../models/Game.js");
 
 const serviceProcessGames = require("./services/serviceProcessGames.js");
 
-module.exports = userStats = (req, res, next) => {
+module.exports = userGetStats = (req, res, next) => {
   /*
   
   provides user statistics
@@ -13,13 +13,13 @@ module.exports = userStats = (req, res, next) => {
   * rate of attack
   
   possible response types
-  * user.stats.success
-  * user.stats.error.onfind
+  * user.getstats.success
+  * user.getstats.error.onfind
   
   */
 
   if (process.env.DEBUG) {
-    console.log("user.stats");
+    console.log("user.getstats");
   }
 
   // Initialise
@@ -33,19 +33,19 @@ module.exports = userStats = (req, res, next) => {
       let stats = serviceProcessGames(games, decodedToken.userid);
 
       // Response
-      console.log("user.stats.success");
+      console.log("user.getstats.success");
       return res.status(200).json({
-        type: "user.stats.success",
+        type: "user.getstats.success",
         data: {
           stats: stats,
         },
       });
     })
     .catch((error) => {
-      console.log("user.stats.error.onfind");
+      console.log("user.getstats.error.onfind");
       console.error(error);
       return res.status(400).json({
-        type: "user.stats.error.onfind",
+        type: "user.getstats.error.onfind",
         error: error,
       });
     });

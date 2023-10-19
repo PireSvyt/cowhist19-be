@@ -74,18 +74,15 @@ describe("TEST OF API : user", () => {
   });
 
   describe("Assessment set the scene", () => {
-    test("set the scene", async () => {
-      // Prep
-      let responses = {};
-
+    // Prep
+    let responses = {};
+    test("set users", async () => {
       // Users
       let userAction = {
         action: {
           type: "insertmany",
           collection: "users",
-          items: dataGenerator.objectGenerator("user", 3, [
-            { name: "status", value: "activated" },
-          ]),
+          items: dataGenerator.objectGenerator("user", 3),
         },
       };
       //console.log("userAction", userAction);
@@ -127,20 +124,16 @@ describe("TEST OF API : user", () => {
       userSignInResponse = await authAPI.apiAuthSignIn(userSignInInputs);
       //console.log("userSignInResponse", userSignInResponse);
       expect(userSignInResponse.type).toBe("auth.signin.success");
-
+    });
+    test("set tables", async () => {
       // Table
       let tableAction = {
         action: {
           type: "insertmany",
           collection: "tables",
-          items: dataGenerator.objectGenerator("table", 1, [
-            {
-              name: "userids",
-              value: users.map((item) => {
-                return item.userid;
-              }),
-            },
-          ]),
+          items: dataGenerator.objectGenerator("table", 1, {
+            userids: { list: users },
+          }),
         },
       };
       //console.log("tableAction", tableAction);
@@ -154,25 +147,17 @@ describe("TEST OF API : user", () => {
       );
       tables = responses.insertTables.data;
       //console.log("tables", tables);
-
+    });
+    test("set games", async () => {
       // Games
       let gameAction = {
         action: {
           type: "insertmany",
           collection: "games",
-          items: dataGenerator.objectGenerator(
-            "game",
-            5,
-            [
-              {
-                name: "tableid",
-                value: tables[0].tableid,
-              },
-            ],
-            {
-              players: users,
-            },
-          ),
+          items: dataGenerator.objectGenerator("game", 5, {
+            tableid: { list: [tables[0].tableid] },
+            players: { list: users },
+          }),
         },
       };
       //console.log("gameAction", gameAction);
@@ -198,7 +183,7 @@ describe("TEST OF API : user", () => {
       responses["apiUserGetDetails"] = await userAPI.apiUserGetDetails(
         userSignInResponse.data.token,
       );
-      console.log("responses.apiUserGetDetails", responses.apiUserGetDetails);
+      //console.log("responses.apiUserGetDetails", responses.apiUserGetDetails);
       expect(responses.apiUserGetDetails.type).toBe("user.getdetails.success");
 
       // checks
@@ -221,6 +206,23 @@ describe("TEST OF API : user", () => {
           })
           .includes(tables[0].tableid),
       ).toBeTruthy();
+    });
+  });
+  describe("Assessment POST apiUserGetStats", () => {
+    test("successful", async () => {
+      // Prep
+      let responses = {};
+
+      // Test
+      responses["apiUserGetStats"] = await userAPI.apiUserGetStats(
+        userSignInResponse.data.token,
+      );
+      console.log("responses.apiUserGetStats", responses.apiUserGetStats);
+      expect(responses.apiUserGetStats.type).toBe("user.getstats.success");
+
+      // checks
+      expect(responses.apiUserGetStats.data.stats).toBeDefined();
+      expect(responses.apiUserGetStats.data.stats.games).toBe(games.length);
     });
   });
 });

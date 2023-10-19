@@ -117,23 +117,18 @@ function gameGenerator(gamePerimeter = {}) {
   }
   // players
   if (gamePerimeter.players !== undefined) {
-    let playersCandidate = toolkit.pickFromArray(
-      gamePerimeter.players.list,
-      gamePerimeter.players.need,
-    );
+    let playersCandidate = toolkit.pickFromArray(gamePerimeter.players.list, 4);
     let playersWithRolesCandidate = [];
-    // attack
-    for (let i = 1; i <= fullContract.attack; i++) {
-      let candidate = toolkit.pickFromArray(
-        playersCandidate,
-        fullContract.attack,
-      );
-      playersWithRolesCandidate.push({
-        userid: candidate.userid,
-        role: "attack",
-      });
-    }
     // defense
+    playersWithRolesCandidate = toolkit
+      .pickFromArray(playersCandidate, fullContract.defense)
+      .map((candidate) => {
+        return {
+          userid: candidate.userid,
+          role: "defense",
+        };
+      });
+    // attack
     playersCandidate.forEach((candidate) => {
       if (
         !playersWithRolesCandidate
@@ -144,7 +139,7 @@ function gameGenerator(gamePerimeter = {}) {
       ) {
         playersWithRolesCandidate.push({
           userid: candidate.userid,
-          role: "defense",
+          role: "attack",
         });
       }
     });

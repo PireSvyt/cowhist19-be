@@ -161,11 +161,10 @@ describe("TEST OF API : game", () => {
       let responses = {};
 
       // Test
-      let gameInputs = dataGenerator.objectGenerator("game");
-      delete gameInputs.gameid;
-      gameInputs.players = users.map((u) => {
-        return { userid: u.userid, role: "ROLE" };
+      let gameInputs = dataGenerator.objectGenerator("game", 1, {
+        players: { list: users },
       });
+      delete gameInputs.gameid;
       //console.log("gameInputs", gameInputs);
       responses["apiGameCreate"] = await gameAPI.apiGameCreate(
         gameInputs,
