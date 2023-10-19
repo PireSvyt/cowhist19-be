@@ -43,14 +43,14 @@ router.delete(
   tableDelete,
 );
 router.post(
-  "/v3/history/:id",
+  "/v3/history/:tableid",
   authAuthenticate,
   userIsActivated,
   tableAuthenticate,
   tableGetHistory,
 );
 router.post(
-  "/v1/stats/:id",
+  "/v1/stats/:tableid",
   authAuthenticate,
   userIsActivated,
   tableAuthenticate,

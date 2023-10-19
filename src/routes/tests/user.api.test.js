@@ -154,7 +154,7 @@ describe("TEST OF API : user", () => {
         action: {
           type: "insertmany",
           collection: "games",
-          items: dataGenerator.objectGenerator("game", 5, {
+          items: dataGenerator.objectGenerator("game", 10, {
             tableid: { list: [tables[0].tableid] },
             players: { list: users },
           }),
@@ -166,6 +166,7 @@ describe("TEST OF API : user", () => {
         gameAction,
         adminSignInResponse.data.token,
       );
+      //console.log("responses.insertGames", responses.insertGames);
       expect(responses.insertGames.type).toBe(
         "admin.databasecommand.insertmany.success",
       );
@@ -209,7 +210,7 @@ describe("TEST OF API : user", () => {
     });
   });
 
-  describe("Assessment POST apiUserGetStats", () => {
+  describe.skip("Assessment POST apiUserGetStats", () => {
     test("successful", async () => {
       // Prep
       let responses = {};

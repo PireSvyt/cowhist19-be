@@ -73,10 +73,9 @@ describe("TEST OF API : table", () => {
   });
 
   describe("Assessment set the scene", () => {
-    test("set the scene", async () => {
-      // Prep
-      let responses = {};
-
+    // Prep
+    let responses = {};
+    test("set users", async () => {
       // Users
       let userAction = {
         action: {
@@ -85,6 +84,7 @@ describe("TEST OF API : table", () => {
           items: dataGenerator.objectGenerator("user", 3),
         },
       };
+      //console.log("userAction", userAction);
       responses["insertUsers"] = await adminAPI.adminDatabaseCommand(
         userAction,
         adminSignInResponse.data.token,
@@ -93,6 +93,7 @@ describe("TEST OF API : table", () => {
         "admin.databasecommand.insertmany.success",
       );
       users = responses.insertUsers.data;
+      //console.log("users", users);
       expect(users.length).toBe(userAction.action.items.length);
 
       // picked user
@@ -109,10 +110,15 @@ describe("TEST OF API : table", () => {
         pickedUserAction,
         adminSignInResponse.data.token,
       );
+      /*console.log(
+        "responses.insertPickedUser.data[0]",
+        responses.insertPickedUser.data[0],
+      );*/
       expect(responses.insertPickedUser.type).toBe(
         "admin.databasecommand.insertmany.success",
       );
-      users.push(pickedUser);
+      users.push(responses.insertPickedUser.data[0]);
+      // Signin
       let userSignInInputs = {
         login: pickedUser.login,
         password: pickedUser.pseudo,
@@ -122,6 +128,8 @@ describe("TEST OF API : table", () => {
       userSignInResponse = await authAPI.apiAuthSignIn(userSignInInputs);
       //console.log("userSignInResponse", userSignInResponse);
       expect(userSignInResponse.type).toBe("auth.signin.success");
+
+      //console.log("users", users);
     });
   });
 
@@ -131,10 +139,8 @@ describe("TEST OF API : table", () => {
       let responses = {};
 
       // Test
-      let tableInputs = dataGenerator.objectGenerator("table");
-      tableInputs.guests = 0;
-      tableInputs.userids = users.map((u) => {
-        return u.userid;
+      let tableInputs = dataGenerator.objectGenerator("table", 1, {
+        userids: { list: users },
       });
       //console.log("tableInputs", tableInputs);
       responses["apiTableCreate"] = await tableAPI.apiTableCreate(
@@ -169,6 +175,9 @@ describe("TEST OF API : table", () => {
       expect(responses.check.type).toBe("admin.databasecommand.get.success");
       expect(responses.check.data.items.length).toBe(1);
       expect(responses.check.data.items[0].userids.length).toBe(users.length);
+      expect(
+        responses.check.data.items[0].userids.includes(pickedUser.userid),
+      ).toBeTruthy();
       expect(responses.check.data.items[0].guests).toBe(0);
       // Account for step
       tables.push(responses.check.data.items[0]);
@@ -197,6 +206,50 @@ describe("TEST OF API : table", () => {
       expect(
         responses.getDetails.data.table.contracts.length,
       ).toBeGreaterThanOrEqual(1);
+    });
+  });
+
+  describe("Assessment POST apiTableGetStats", () => {
+    test("successful", async () => {
+      // Prep
+      let responses = {};
+
+      // Test
+      let tableToGet = tables[0];
+      //console.log("tableToGet", tableToGet);
+      let statsParameters = { need: "ranking" }; //"ranking" OR "graph" + "field" information
+      responses["apiTableGetStats"] = await tableAPI.apiTableGetStats(
+        tableToGet.tableid,
+        statsParameters,
+        userSignInResponse.data.token,
+      );
+      console.log("responses.apiTableGetStats", responses.apiTableGetStats);
+      expect(responses.apiTableGetStats.type).toBe("table.getstats.success");
+
+      // Checks
+    });
+  });
+
+  describe("Assessment POST apiTableGetHistory", () => {
+    test("successful", async () => {
+      // Prep
+      let responses = {};
+
+      // Test
+      let tableToGet = tables[0];
+      //console.log("tableToGet", tableToGet);
+      let statsParameters = {};
+      responses["apiTableGetHistory"] = await tableAPI.apiTableGetHistory(
+        tableToGet.tableid,
+        statsParameters,
+        userSignInResponse.data.token,
+      );
+      console.log("responses.apiTableGetHistory", responses.apiTableGetHistory);
+      expect(responses.apiTableGetHistory.type).toBe(
+        "table.gethistory.success",
+      );
+
+      // Checks
     });
   });
 
@@ -246,50 +299,6 @@ describe("TEST OF API : table", () => {
         tableToSave.userids.length,
       );
       tables[0] = responses.check.data.items[0];
-    });
-  });
-
-  describe("Assessment POST apiTableGetStats", () => {
-    test("successful", async () => {
-      // Prep
-      let responses = {};
-
-      // Test
-      let tableToGet = tables[0];
-      console.log("tableToGet", tableToGet);
-      let statsParameters = {};
-      responses["apiTableGetStats"] = await tableAPI.apiTableGetStats(
-        tableToGet.tableid,
-        statsParameters,
-        userSignInResponse.data.token,
-      );
-      console.log("responses.apiTableGetStats", responses.apiTableGetStats);
-      expect(responses.apiTableGetStats.type).toBe("table.getstats.success");
-
-      // Checks
-    });
-  });
-
-  describe("Assessment POST apiTableGetHistory", () => {
-    test("successful", async () => {
-      // Prep
-      let responses = {};
-
-      // Test
-      let tableToGet = tables[0];
-      console.log("tableToGet", tableToGet);
-      let statsParameters = {};
-      responses["apiTableGetHistory"] = await tableAPI.apiTableGetHistory(
-        tableToGet.tableid,
-        statsParameters,
-        userSignInResponse.data.token,
-      );
-      console.log("responses.apiTableGetHistory", responses.apiTableGetHistory);
-      expect(responses.apiTableGetHistory.type).toBe(
-        "table.gethistory.success",
-      );
-
-      // Checks
     });
   });
 
