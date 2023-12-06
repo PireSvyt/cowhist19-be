@@ -1,13 +1,13 @@
 require("dotenv").config();
 const contracts = require("../../../resources/contracts.json");
 
-module.exports = function serviceCheckContract(game) {
+module.exports = function serviceCheckContract(contractToCheck) {
   /*
   
-  check that a game matches with contract
+  check that a contract meets requirements
   
   parameters
-  * game to be checked
+  * contractToCheck to be checked
   
   */
 
@@ -21,7 +21,7 @@ module.exports = function serviceCheckContract(game) {
 
   // Find the contract requirements
   let contractList = contracts.filter(
-    (contract) => contract.key === game.contract,
+    (contract) => contract.key === contractToCheck.contract,
   );
   let contract = contractList[0];
   if (contract === undefined) {
@@ -31,8 +31,8 @@ module.exports = function serviceCheckContract(game) {
   } else {
     // Attack
     if (
-      game.players.filter((player) => player.role === "attack").length !==
-      contract.attack
+      contractToCheck.players.filter((player) => player.role === "attack")
+        .length !== contract.attack
     ) {
       compliance = false;
       nonCompliances.push("number of attackant(s) does not match");
@@ -40,19 +40,19 @@ module.exports = function serviceCheckContract(game) {
 
     // Defense
     if (
-      game.players.filter((player) => player.role === "defense").length !==
-      contract.defense
+      contractToCheck.players.filter((player) => player.role === "defense")
+        .length !== contract.defense
     ) {
       compliance = false;
       nonCompliances.push("number of defender(s) does not match");
     }
 
     // Folds
-    if (game.outcome + contract.folds > 13) {
+    if (contractToCheck.outcome + contract.folds > 13) {
       compliance = false;
       nonCompliances.push("number of folds won exceeds possibilities");
     }
-    if (game.outcome < -13) {
+    if (contractToCheck.outcome < -13) {
       compliance = false;
       nonCompliances.push("number of folds lost exceeds possibilities");
     }

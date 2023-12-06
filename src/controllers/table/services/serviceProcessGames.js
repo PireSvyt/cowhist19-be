@@ -31,56 +31,60 @@ module.exports = function serviceProcessGames(games, request) {
 
   // Summarize game outcomes per user
   games.forEach((game) => {
-    if (serviceCheckContract(game)) {
-      let gamePoints = serviceGamePoints(game);
-      game.players.forEach((player) => {
-        // Neglect is a guest
-        let nonguestplayer = true;
-        if (player.nonuser !== undefined) {
-          if (player.nonuser === "guest") {
-            nonguestplayer = false;
-          }
-        }
-        if (nonguestplayer) {
-          // Add player to players if missing
-          if (!Object.keys(players).includes(player.userid)) {
-            players[player.userid] = {
-              userid: player.userid,
-              attackWins: 0,
-              attackLoss: 0,
-              defenseWins: 0,
-              defenseLoss: 0,
-              cumulatedPoints: 0,
-            };
-          }
-          // Record outcome
-          if (game.outcome < 0) {
-            if (player.role === "attack") {
-              players[player.userid].attackLoss += 1;
-              players[player.userid].cumulatedPoints += gamePoints.attack;
-            }
-            if (player.role === "defense") {
-              players[player.userid].defenseWins += 1;
-              players[player.userid].cumulatedPoints += gamePoints.defense;
-            }
-          } else {
-            if (player.role === "attack") {
-              players[player.userid].attackWins += 1;
-              players[player.userid].cumulatedPoints += gamePoints.attack;
-            }
-            if (player.role === "defense") {
-              players[player.userid].defenseLoss += 1;
-              players[player.userid].cumulatedPoints += gamePoints.defense;
+    game.contracts.forEach((contract) => {
+      if (serviceCheckContract(contract)) {
+        let contractPoints = serviceGamePoints(contract);
+        contract.players.forEach((player) => {
+          // Neglect is a guest
+          let nonguestplayer = true;
+          if (player.nonuser !== undefined) {
+            if (player.nonuser === "guest") {
+              nonguestplayer = false;
             }
           }
-        }
-      });
-      if (request.need === "graph") {
-        graph.push({
-          date: game.date,
-          players: neaterStats(statPlayers(players), "graph", request.field),
+          if (nonguestplayer) {
+            // Add player to players if missing
+            if (!Object.keys(players).includes(player.userid)) {
+              players[player.userid] = {
+                userid: player.userid,
+                attackWins: 0,
+                attackLoss: 0,
+                defenseWins: 0,
+                defenseLoss: 0,
+                cumulatedPoints: 0,
+              };
+            }
+            // Record outcome
+            if (contract.outcome < 0) {
+              if (player.role === "attack") {
+                players[player.userid].attackLoss += 1;
+                players[player.userid].cumulatedPoints += contractPoints.attack;
+              }
+              if (player.role === "defense") {
+                players[player.userid].defenseWins += 1;
+                players[player.userid].cumulatedPoints +=
+                  contractPoints.defense;
+              }
+            } else {
+              if (player.role === "attack") {
+                players[player.userid].attackWins += 1;
+                players[player.userid].cumulatedPoints += contractPoints.attack;
+              }
+              if (player.role === "defense") {
+                players[player.userid].defenseLoss += 1;
+                players[player.userid].cumulatedPoints +=
+                  contractPoints.defense;
+              }
+            }
+          }
         });
       }
+    });
+    if (request.need === "graph") {
+      graph.push({
+        date: game.date,
+        players: neaterStats(statPlayers(players), "graph", request.field),
+      });
     }
   });
 

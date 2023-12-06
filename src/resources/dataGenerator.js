@@ -85,9 +85,13 @@ function gameGenerator(gamePerimeter = {}) {
     gameid: rstring,
     tableid: rstring,
     date: new Date(),
-    contract: "9plis",
-    outcome: 0,
-    players: [],
+    contracts: [
+      {
+        contract: "9plis",
+        outcome: 0,
+        players: [],
+      },
+    ],
   };
 
   // tableid
@@ -97,14 +101,18 @@ function gameGenerator(gamePerimeter = {}) {
   // contract
   let fullContract = undefined;
   if (gamePerimeter.contract !== undefined) {
-    game.contract = toolkit.pickFromArray(gamePerimeter.contract.list);
+    game.contracts[0].contract = toolkit.pickFromArray(
+      gamePerimeter.contract.list,
+    );
   }
   fullContract = contracts.filter((contract) => {
-    return contract.key === game.contract;
+    return contract.key === game.contracts[0].contract;
   })[0];
   // outcome
   if (gamePerimeter.outcome !== undefined) {
-    game.outcome = toolkit.pickFromArray(gamePerimeter.outcome.list);
+    game.contracts[0].outcome = toolkit.pickFromArray(
+      gamePerimeter.outcome.list,
+    );
   } else {
     // Random from contract possible range
     let outcomeMax = 13 - fullContract.folds;
@@ -113,7 +121,7 @@ function gameGenerator(gamePerimeter = {}) {
     for (let i = outcomeMin; i <= outcomeMax; i++) {
       outcomeOptions.push(i);
     }
-    game.outcome = toolkit.pickFromArray(outcomeOptions);
+    game.contracts[0].outcome = toolkit.pickFromArray(outcomeOptions);
   }
   // players
   if (gamePerimeter.players !== undefined) {
@@ -143,7 +151,7 @@ function gameGenerator(gamePerimeter = {}) {
         });
       }
     });
-    game.players = playersWithRolesCandidate;
+    game.contracts[0].players = playersWithRolesCandidate;
   }
 
   return game;

@@ -152,33 +152,38 @@ module.exports = tableGetHistory = (req, res, next) => {
               let newGames = [];
               games.forEach((game) => {
                 let newGame = JSON.parse(JSON.stringify(game));
-                newGame.attack = [];
-                newGame.defense = [];
-                newGame.players.forEach((player) => {
-                  let gamePlayer = JSON.parse(JSON.stringify(player));
-                  if (gamePlayer.nonuser === undefined) {
-                    gamePlayer.nonuser = "na";
-                  }
-                  if (gamePlayer.nonuser !== "guest") {
-                    // User is not a guest
-                    let potentialPseudo = table.players.filter(
-                      (tablePlayer) => tablePlayer.userid === gamePlayer.userid,
-                    );
-                    if (potentialPseudo.length > 0) {
-                      // User is part of the table players
-                      gamePlayer.pseudo = potentialPseudo[0].pseudo;
-                    } else {
-                      // User is no longer part of the table players
-                      gamePlayer.nonuser = "removeduser";
+                game.contracts.forEach((contract) => {
+                  let newContract = JSON.parse(JSON.stringify(contract));
+                  newContract.attack = [];
+                  newContract.defense = [];
+                  newContract.players.forEach((player) => {
+                    let contractPlayer = JSON.parse(JSON.stringify(player));
+                    if (contractPlayer.nonuser === undefined) {
+                      contractPlayer.nonuser = "na";
                     }
-                  }
-                  delete gamePlayer.role;
-                  newGame[player.role].push(gamePlayer);
+                    if (contractPlayer.nonuser !== "guest") {
+                      // User is not a guest
+                      let potentialPseudo = table.players.filter(
+                        (tablePlayer) =>
+                          tablePlayer.userid === contractPlayer.userid,
+                      );
+                      if (potentialPseudo.length > 0) {
+                        // User is part of the table players
+                        contractPlayer.pseudo = potentialPseudo[0].pseudo;
+                      } else {
+                        // User is no longer part of the table players
+                        contractPlayer.nonuser = "removeduser";
+                      }
+                    }
+                    delete contractPlayer.role;
+                    delete newGame.players;
+                    newContract[player.role].push(contractPlayer);
+                  });
+                  newGame.contracts.push(newContract);
                 });
-                // Remove players
-                delete newGame.players;
                 newGames.push(newGame);
               });
+
               // Response
               console.log("table.gethistory.success");
               return res.status(200).json({

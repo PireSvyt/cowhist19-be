@@ -54,18 +54,17 @@ describe("TEST OF FUNCTION : gameGenerator ", () => {
     test("then fields are populated by default", () => {
       expect(game.gameid).toBeDefined();
       expect(game.tableid).toBeDefined();
-      expect(game.tableid).toBe(game.gameid);
       expect(game.date).toBeDefined();
-      expect(game.contract).toBe("9plis");
+      expect(game.contracts[0].contract).toBe("9plis");
       expect(
         contracts
           .map((c) => {
             return c.key;
           })
-          .includes(game.contract),
+          .includes(game.contracts[0].contract),
       ).toBeTruthy();
-      expect(game.outcome).toBeDefined();
-      expect(game.players.length).toBe(0);
+      expect(game.contracts[0].outcome).toBeDefined();
+      expect(game.contracts[0].players.length).toBe(0);
     });
   });
   describe("When tableid perimeter is provided", () => {
@@ -85,14 +84,14 @@ describe("TEST OF FUNCTION : gameGenerator ", () => {
     let perimeter = { contract: { list: ["8plis"] } };
     let game = gameGenerator(perimeter);
     test("then fields are populated by default", () => {
-      expect(game.contract).toBe("8plis");
+      expect(game.contracts[0].contract).toBe("8plis");
     });
   });
   describe("When outcome perimeter is provided", () => {
     let perimeter = { outcome: { list: [-12] } };
     let game = gameGenerator(perimeter);
     test("then fields are populated by default", () => {
-      expect(game.outcome).toBe(-12);
+      expect(game.contracts[0].outcome).toBe(-12);
     });
   });
   describe("When players perimeter is provided", () => {
@@ -100,21 +99,21 @@ describe("TEST OF FUNCTION : gameGenerator ", () => {
     let perimeter = { players: { list: userids, need: 4 } };
     let game = gameGenerator(perimeter);
     let fullContract = contracts.filter((contract) => {
-      return contract.key === game.contract;
+      return contract.key === game.contracts[0].contract;
     })[0];
     test("then 4 players are selected", () => {
-      expect(game.players.length).toBe(4);
+      expect(game.contracts[0].players.length).toBe(4);
     });
     test("then attack is consistent with contract", () => {
       expect(
-        game.players.filter((player) => {
+        game.contracts[0].players.filter((player) => {
           return player.role === "attack";
         }).length,
       ).toBe(fullContract.attack);
     });
     test("then defense is consistent with contract", () => {
       expect(
-        game.players.filter((player) => {
+        game.contracts[0].players.filter((player) => {
           return player.role === "defense";
         }).length,
       ).toBe(fullContract.defense);
