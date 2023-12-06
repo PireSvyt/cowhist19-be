@@ -8,10 +8,8 @@ module.exports = gameCreate = (req, res, next) => {
   create a game
   
   possible response types
-  * game.create.success.created
-  * game.create.error.oncreate
-  * game.create.success.modified
-  * game.create.error.onmodify
+  * game.create.success
+  * game.create.error
   
   TODO
   * only users from the table can do this
@@ -48,10 +46,10 @@ module.exports = gameCreate = (req, res, next) => {
       });
     })
     .catch((error) => {
-      console.log("game.create.error.oncreate");
+      console.log("game.create.error");
       console.error(error);
       return res.status(400).json({
-        type: "game.create.error.oncreate",
+        type: "game.create.error",
         error: error,
         data: {
           gameid: "",
