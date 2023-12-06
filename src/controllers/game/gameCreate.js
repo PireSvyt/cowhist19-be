@@ -35,44 +35,27 @@ module.exports = gameCreate = (req, res, next) => {
     gameToSave.date = new Date();
   }
 
-  // Check memebership
-  if (
-    gameToSave.players
-      .map((player) => player.userid)
-      .includes(decodedToken.userid)
-  ) {
-    // Save
-    gameToSave
-      .save()
-      .then(() => {
-        console.log("game.create.success");
-        return res.status(201).json({
-          type: "game.create.success",
-          data: {
-            gameid: gameToSave.gameid,
-          },
-        });
-      })
-      .catch((error) => {
-        console.log("game.create.error.oncreate");
-        console.error(error);
-        return res.status(400).json({
-          type: "game.create.error.oncreate",
-          error: error,
-          data: {
-            gameid: "",
-          },
-        });
+  // Save
+  gameToSave
+    .save()
+    .then(() => {
+      console.log("game.create.success");
+      return res.status(201).json({
+        type: "game.create.success",
+        data: {
+          gameid: gameToSave.gameid,
+        },
       });
-  } else {
-    console.log("game.create.error.ownership");
-    console.error(error);
-    return res.status(400).json({
-      type: "game.create.error.ownership",
-      details: "user at command origin is not among userids",
-      data: {
-        gameid: "",
-      },
+    })
+    .catch((error) => {
+      console.log("game.create.error.oncreate");
+      console.error(error);
+      return res.status(400).json({
+        type: "game.create.error.oncreate",
+        error: error,
+        data: {
+          gameid: "",
+        },
+      });
     });
-  }
 };
