@@ -10,7 +10,7 @@ const gameSchema = mongoose.Schema(
     tableid: { type: String, required: true },
     date: { type: Date, required: true },
     contracts: [
-      {
+      /*{
         contract: { type: String, required: true },
         outcome: { type: Number, required: true },
         players: {
@@ -22,7 +22,7 @@ const gameSchema = mongoose.Schema(
             },
           ],
         },
-      },
+      },*/
     ],
     meta: { type: Map, of: String },
   },
