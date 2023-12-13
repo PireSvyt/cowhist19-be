@@ -120,7 +120,7 @@ module.exports = tableGetHistory = (req, res, next) => {
               let action = "error";
               // Are games already loaded
               let lastidpos = 0;
-              if (req.body.games.lastid !== null) {
+              if (req.body.games.lastid !== undefined) {
                 // Find last game loaded
                 lastidpos = games.findIndex((game) => {
                   return game.gameid === req.body.games.lastid;
