@@ -58,7 +58,7 @@ module.exports = tableGetHistory = (req, res, next) => {
     switch (req.body.need) {
       case "list":
         filters = { tableid: req.params.tableid };
-        fields = "contract outcome players date";
+        fields = "gameid contracts outcome date";
         break;
       default:
         status = 403;
@@ -152,6 +152,7 @@ module.exports = tableGetHistory = (req, res, next) => {
               let newGames = [];
               games.forEach((game) => {
                 let newGame = JSON.parse(JSON.stringify(game));
+                newGame.contracts = [];
                 game.contracts.forEach((contract) => {
                   let newContract = JSON.parse(JSON.stringify(contract));
                   newContract.attack = [];
