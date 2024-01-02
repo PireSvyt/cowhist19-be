@@ -31,9 +31,9 @@ exports.apiGameCreate = async function (saveInputs, token) {
 };*/
 
 // TESTED
-exports.apiGameDelete = async function (deleteId, token) {
+exports.apiGameDelete = async function (deleteInputs, token) {
   try {
-    const res = await axios.delete(apiURL + "game/v1/" + deleteId, {
+    const res = await axios.post(apiURL + "game/v1/delete", deleteInputs, {
       headers: {
         Authorization: "Bearer " + token,
       },

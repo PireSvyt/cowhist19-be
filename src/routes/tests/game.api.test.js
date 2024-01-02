@@ -233,7 +233,9 @@ describe("TEST OF API : game", () => {
       // Test
       //console.log("games[0].gameid", games[0].gameid);
       responses["apiGameDelete"] = await gameAPI.apiGameDelete(
-        games[0].gameid,
+        {
+          gameid: games[0].gameid,
+        },
         userSignInResponse.data.token,
       );
       //console.log("responses.apiGameDelete", responses.apiGameDelete);

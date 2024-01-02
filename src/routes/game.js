@@ -16,8 +16,8 @@ router.post(
   tableAuthenticate,
   gameCreate,
 );
-router.delete(
-  "/v1/:id",
+router.post(
+  "/v1/delete",
   authAuthenticate,
   userIsActivated,
   tableAuthenticate,
