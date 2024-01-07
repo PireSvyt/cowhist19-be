@@ -26,8 +26,13 @@ module.exports = userGetStats = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   const decodedToken = jwt_decode(token);
-
-  Game.find({ "players.userid": decodedToken.userid })
+  Game.find({
+    contracts: {
+      $elemMatch: {
+        "players.userid": decodedToken.userid,
+      },
+    },
+  })
     .then((games) => {
       // Post process
       let stats = serviceProcessGames(games, decodedToken.userid);

@@ -175,6 +175,9 @@ module.exports = tableGetHistory = (req, res, next) => {
                         // User is no longer part of the table players
                         contractPlayer.nonuser = "removeduser";
                       }
+                    } else {
+                      // User is a guest
+                      contractPlayer.pseudo = "a guest";
                     }
                     delete contractPlayer.role;
                     delete newGame.players;
