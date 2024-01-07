@@ -29,7 +29,11 @@ module.exports = userGetStats = (req, res, next) => {
   Game.find({
     contracts: {
       $elemMatch: {
-        "players.userid": decodedToken.userid,
+        players: {
+          $elemMatch: {
+            userid: decodedToken.userid,
+          },
+        },
       },
     },
   })
