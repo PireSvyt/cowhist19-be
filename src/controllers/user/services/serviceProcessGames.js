@@ -34,16 +34,16 @@ module.exports = function serviceProcessGames(games, userid) {
         if (serviceCheckContract(contract)) {
           stats.contracts = stats.contracts + 1;
           // Attack
-          let player = game.players.filter(
+          let player = contract.players.filter(
             (gameplayer) => gameplayer.userid === userid,
           )[0];
           if (player.role === "attack") {
             stats.attack = stats.attack + 1;
-            if (game.outcome >= 0) {
+            if (contract.outcome >= 0) {
               stats.victory = stats.victory + 1;
             }
           } else {
-            if (game.outcome < 0) {
+            if (contract.outcome < 0) {
               stats.victory = stats.victory + 1;
             }
           }
