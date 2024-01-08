@@ -46,7 +46,7 @@ module.exports = tableSave = (req, res, next) => {
         tableUsers.push(player.userid);
       }
     });
-    tableToSave.users = tableUsers;
+    tableToSave.userids = tableUsers;
     delete tableToSave.players
 
     // Manage table to users
