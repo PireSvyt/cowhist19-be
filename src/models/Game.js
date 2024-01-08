@@ -6,6 +6,7 @@ if (process.env.MONGOOSE_DEBUG === "TRUE") {
 
 const gameSchema = mongoose.Schema(
   {
+    schema: { type: String},
     gameid: { type: String, required: true, unique: true },
     tableid: { type: String, required: true },
     date: { type: Date, required: true },

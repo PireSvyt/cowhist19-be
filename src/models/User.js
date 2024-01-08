@@ -7,6 +7,7 @@ if (process.env.MONGOOSE_DEBUG === "TRUE") {
 
 const userSchema = mongoose.Schema(
   {
+    schema: { type: String},
     userid: { type: String, required: true, unique: true },
     // filled at creation via user/userInvite or auth/authSignUp
     // (re-use of MongoDB _id as a string for aggregations)

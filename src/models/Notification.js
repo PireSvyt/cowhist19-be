@@ -6,12 +6,13 @@ if (process.env.MONGOOSE_DEBUG === "TRUE") {
 
 const notificationSchema = mongoose.Schema(
   {
-    id: { type: String, required: true, unique: true },
+    schema: { type: String},
+    notifid: { type: String, required: true, unique: true },
     date: { type: Date, required: true },
     title: { type: String, required: true },
     explanation: { type: String },
   },
-  { strict: true }
+  { strict: true },
 );
 
 module.exports = mongoose.model("Notification", notificationSchema);

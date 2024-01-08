@@ -108,7 +108,7 @@ module.exports = tableHistory_v2 = (req, res, next) => {
               games.sort(compare);
               games = games.slice(
                 req.body.games.index, // from 0
-                req.body.games.index + req.body.games.number // to 10
+                req.body.games.index + req.body.games.number, // to 10
               );
               // Check if more
               // games [ 0 ... 10 ] length = 11
@@ -131,7 +131,7 @@ module.exports = tableHistory_v2 = (req, res, next) => {
                   if (gamePlayer.nonuser !== "guest") {
                     // User is not a guest
                     let potentialPseudo = table.players.filter(
-                      (tablePlayer) => tablePlayer.id === gamePlayer._id
+                      (tablePlayer) => tablePlayer.id === gamePlayer._id,
                     );
                     if (potentialPseudo.length > 0) {
                       // User is part of the table players

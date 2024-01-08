@@ -1,0 +1,125 @@
+[{
+  "_id": {
+    "$oid": "6457e256dc081cebf16fd488"
+  },
+  "pseudo": "Pierre",
+  "login": "savoyat.p@gmail.com",
+  "password": "$2b$10$Kw4QlqDbok8km3T3f.RvUubuu0naEYo3qHBS2SR7a/6Dfsf4Op51u",
+  "status": "activated",
+  "activationtoken": "wIic2pFuls5wzPuVVUzT",
+  "priviledges": [
+    "admin"
+  ],
+  "id": "6457e256dc081cebf16fd488",
+  "__v": 1,
+  "connection": {
+    "current": {
+      "$date": "2023-07-21T18:32:45.775Z"
+    },
+    "last": {
+      "$date": "2023-07-19T10:14:16.562Z"
+    }
+  },
+  "alias": []
+},
+{
+  "_id": {
+    "$oid": "6457e58f698e9fae37423a81"
+  },
+  "pseudo": "Alice",
+  "login": "alicelemaitre.ir@gmail.com",
+  "password": "NONE SO FAR",
+  "status": "invited",
+  "priviledges": [],
+  "id": "6457e58f698e9fae37423a81",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6457e5bc698e9fae37423a88"
+  },
+  "pseudo": "Charlouze",
+  "login": "ctintorewery@gmail.com",
+  "password": "$2a$10$jUDJP7yKIz.4NSmtFNGKoOOZRK6kCLchQonHVyQWt0d1kp154Wtei",
+  "status": "signedup",
+  "priviledges": [],
+  "id": "6457e5bc698e9fae37423a88",
+  "__v": 0,
+  "activationtoken": "iAVPImulbUkg31c6zjpS"
+},
+{
+  "_id": {
+    "$oid": "6457e5d8698e9fae37423a8f"
+  },
+  "pseudo": "Ol",
+  "login": "oli.barthelemy@gmail.com",
+  "password": "$2b$10$Ew5bNAOe49Y/tFKeXkG4mOPN7f3OuY9NOq6.F56PS0dCJw.d.1tKC",
+  "status": "activated",
+  "priviledges": [],
+  "id": "6457e5d8698e9fae37423a8f",
+  "__v": 1,
+  "activationtoken": "jqLFBNwwtszqtZtA1759",
+  "alias": []
+},
+{
+  "_id": {
+    "$oid": "6457e60d698e9fae37423a97"
+  },
+  "pseudo": "Macro",
+  "login": "bernard.maxime.38@gmail.com",
+  "password": "$2b$10$dU6J768cnpRZO/4AxAoLu.6KXK9OvnqvXgLNtzi4R9LB8ejakSRFK",
+  "status": "activated",
+  "priviledges": [],
+  "id": "6457e60d698e9fae37423a97",
+  "__v": 1,
+  "activationtoken": "vPynAdpcBcs2XgzfVuj2",
+  "connection": {
+    "current": {
+      "$date": "2023-07-12T18:00:47.408Z"
+    },
+    "last": {
+      "$date": "2023-07-10T17:45:33.183Z"
+    }
+  },
+  "alias": []
+},
+{
+  "_id": {
+    "$oid": "6457e623698e9fae37423a9e"
+  },
+  "pseudo": "Guilou",
+  "login": "sylvain@lavedrine.net",
+  "password": "$2b$10$.4V8w9U.VPlynT5zzBH.o.ihjiUtnejIQtCSa8pLf.TDcqGWEQSli",
+  "status": "signedup",
+  "priviledges": [],
+  "id": "6457e623698e9fae37423a9e",
+  "__v": 0,
+  "activationtoken": "KSebfKSDPEessQ7LCYrU"
+},
+{
+  "_id": {
+    "$oid": "6457e642698e9fae37423aa5"
+  },
+  "pseudo": "Anna",
+  "login": "d_annabelle@hotmail.com",
+  "password": "$2b$10$S2p2mWsBpIDmPvogg9a7COnoGCTEp5D92c8kc8gGmY0rxjZ48FnzO",
+  "status": "signedup",
+  "priviledges": [],
+  "id": "6457e642698e9fae37423aa5",
+  "__v": 0,
+  "activationtoken": "y0ktBYSOzgA7GHmf7YNi"
+},
+{
+  "_id": {
+    "$oid": "6513f775d9c91a81e0bfe114"
+  },
+  "pseudo": "Théophile",
+  "login": "tzabeth@wemanity.com",
+  "password": "$2a$10$Oebpobp6Qd46B76b1pZKI.wK/vDmrRO8sUKFIe8NdupE1BLqwLIU.",
+  "status": "signedup",
+  "activationtoken": "FeOUyyBWpiFF37H5EUto",
+  "priviledges": [],
+  "alias": [],
+  "id": "6513f775d9c91a81e0bfe114",
+  "__v": 0
+}]

@@ -1,0 +1,1333 @@
+[{
+  "_id": {
+    "$oid": "645bf3a7cdfd34d577b4282e"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "9plis",
+  "outcome": 1,
+  "players": [
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e623698e9fae37423a9e",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e5d8698e9fae37423a8f",
+      "role": "defense"
+    }
+  ],
+  "id": "645bf3a7cdfd34d577b4282e",
+  "date": {
+    "$date": "2023-05-10T19:42:31.138Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "645bf6ea0ea97b855c483b6a"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "9plis",
+  "outcome": 0,
+  "players": [
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e623698e9fae37423a9e",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e5d8698e9fae37423a8f",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "defense"
+    }
+  ],
+  "id": "645bf6ea0ea97b855c483b6a",
+  "date": {
+    "$date": "2023-05-10T19:56:26.072Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "645bfbf023f0767725950bfe"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "10plis",
+  "outcome": 0,
+  "players": [
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e623698e9fae37423a9e",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e5d8698e9fae37423a8f",
+      "role": "defense"
+    }
+  ],
+  "id": "645bfbf023f0767725950bfe",
+  "date": {
+    "$date": "2023-05-10T20:17:52.349Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6477947f3e8e606b39da16c1"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "10plis",
+  "outcome": 0,
+  "players": [
+    {
+      "_id": "6457e5bc698e9fae37423a88",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e5d8698e9fae37423a8f",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "defense"
+    }
+  ],
+  "id": "6477947f3e8e606b39da16c1",
+  "date": {
+    "$date": "2023-05-31T18:39:59.828Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6477a32407571d3539778afd"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "trou8",
+  "outcome": 2,
+  "players": [
+    {
+      "_id": "6457e5d8698e9fae37423a8f",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e5bc698e9fae37423a88",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "defense"
+    }
+  ],
+  "id": "6477a32407571d3539778afd",
+  "date": {
+    "$date": "2023-05-31T19:42:28.041Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "649330bca1683ca52b329a5b"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "10plis",
+  "outcome": -1,
+  "players": [
+    {
+      "_id": "6457e5bc698e9fae37423a88",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "defense"
+    }
+  ],
+  "id": "649330bca1683ca52b329a5b",
+  "date": {
+    "$date": "2023-06-21T17:17:48.881Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "649332b8a1683ca52b329a60"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "9plis",
+  "outcome": 0,
+  "players": [
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e5bc698e9fae37423a88",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "defense"
+    }
+  ],
+  "id": "649332b8a1683ca52b329a60",
+  "date": {
+    "$date": "2023-06-21T17:26:16.319Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "649335028ccaae4f83367a3b"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "trou8",
+  "outcome": 2,
+  "players": [
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e5bc698e9fae37423a88",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "defense"
+    }
+  ],
+  "id": "649335028ccaae4f83367a3b",
+  "date": {
+    "$date": "2023-06-21T17:36:02.867Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6493368d017a2f68f53e7044"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "trou8",
+  "outcome": 2,
+  "players": [
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e5bc698e9fae37423a88",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "defense"
+    }
+  ],
+  "id": "6493368d017a2f68f53e7044",
+  "date": {
+    "$date": "2023-06-21T17:42:37.163Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64933914a823ce572c2c927e"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "9plis",
+  "outcome": -1,
+  "players": [
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e5bc698e9fae37423a88",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "defense"
+    }
+  ],
+  "id": "64933914a823ce572c2c927e",
+  "date": {
+    "$date": "2023-06-21T17:53:24.802Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64933b6bd478b76cb8711d53"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "10plis",
+  "outcome": -1,
+  "players": [
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e5bc698e9fae37423a88",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "defense"
+    }
+  ],
+  "id": "64933b6bd478b76cb8711d53",
+  "date": {
+    "$date": "2023-06-21T18:03:23.071Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64933ddec1fd2cfd8453a1dd"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "9plis",
+  "outcome": -2,
+  "players": [
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e5bc698e9fae37423a88",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "defense"
+    }
+  ],
+  "id": "64933ddec1fd2cfd8453a1dd",
+  "date": {
+    "$date": "2023-06-21T18:13:50.109Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "649340876f368750e8dc6c56"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "trou9",
+  "outcome": 0,
+  "players": [
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e5bc698e9fae37423a88",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "defense"
+    }
+  ],
+  "id": "649340876f368750e8dc6c56",
+  "date": {
+    "$date": "2023-06-21T18:25:11.342Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6493438473bd26a89a0080f2"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "10plis",
+  "outcome": 1,
+  "players": [
+    {
+      "_id": "6457e5bc698e9fae37423a88",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "defense"
+    }
+  ],
+  "id": "6493438473bd26a89a0080f2",
+  "date": {
+    "$date": "2023-06-21T18:37:56.274Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "649345f0601e2345a3ee1307"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "petitemisere",
+  "outcome": -1,
+  "players": [
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e5bc698e9fae37423a88",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "defense"
+    }
+  ],
+  "id": "649345f0601e2345a3ee1307",
+  "date": {
+    "$date": "2023-06-21T18:48:16.153Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64aee0a2768d28cad57de9a5"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "9plis",
+  "outcome": -1,
+  "players": [
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e5bc698e9fae37423a88",
+      "role": "defense"
+    }
+  ],
+  "id": "64aee0a2768d28cad57de9a5",
+  "date": {
+    "$date": "2023-07-12T17:19:30.532Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64aee2265b88b03faa4d00af"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "10plis",
+  "outcome": 1,
+  "players": [
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e5bc698e9fae37423a88",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "defense"
+    }
+  ],
+  "id": "64aee2265b88b03faa4d00af",
+  "date": {
+    "$date": "2023-07-12T17:25:58.482Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64aee4b560156933fc7aeded"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "9plis",
+  "outcome": 1,
+  "players": [
+    {
+      "_id": "6457e5bc698e9fae37423a88",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "defense"
+    }
+  ],
+  "id": "64aee4b560156933fc7aeded",
+  "date": {
+    "$date": "2023-07-12T17:36:53.795Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64aee7956f60c84eb40263e8"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "10plis",
+  "outcome": -4,
+  "players": [
+    {
+      "_id": "6457e5bc698e9fae37423a88",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "defense"
+    }
+  ],
+  "id": "64aee7956f60c84eb40263e8",
+  "date": {
+    "$date": "2023-07-12T17:49:09.655Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64aeea287f15ab79783599a7"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "9plis",
+  "outcome": -1,
+  "players": [
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e5bc698e9fae37423a88",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "defense"
+    }
+  ],
+  "id": "64aeea287f15ab79783599a7",
+  "date": {
+    "$date": "2023-07-12T18:00:08.099Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64aeecdb7f15ab79783599c9"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "trou9",
+  "outcome": 2,
+  "players": [
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e5bc698e9fae37423a88",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "defense"
+    }
+  ],
+  "id": "64aeecdb7f15ab79783599c9",
+  "date": {
+    "$date": "2023-07-12T18:11:39.259Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64aeef8c4c519c35af356409"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "solo8",
+  "outcome": -1,
+  "players": [
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e5bc698e9fae37423a88",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "defense"
+    }
+  ],
+  "id": "64aeef8c4c519c35af356409",
+  "date": {
+    "$date": "2023-07-12T18:23:08.188Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64aef29f59377bfcaaf46dc0"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "9plis",
+  "outcome": 2,
+  "players": [
+    {
+      "_id": "6457e5bc698e9fae37423a88",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "defense"
+    }
+  ],
+  "id": "64aef29f59377bfcaaf46dc0",
+  "date": {
+    "$date": "2023-07-12T18:36:15.036Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64aef57e3525c9b7c6dea42e"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "solo8",
+  "outcome": -2,
+  "players": [
+    {
+      "_id": "6457e5bc698e9fae37423a88",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "defense"
+    }
+  ],
+  "id": "64aef57e3525c9b7c6dea42e",
+  "date": {
+    "$date": "2023-07-12T18:48:30.907Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64aef7893525c9b7c6dea459"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "trou8",
+  "outcome": -1,
+  "players": [
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e5bc698e9fae37423a88",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "defense"
+    }
+  ],
+  "id": "64aef7893525c9b7c6dea459",
+  "date": {
+    "$date": "2023-07-12T18:57:13.607Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651d7ce27a0a5a6a250868e1"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "9plis",
+  "outcome": -3,
+  "players": [
+    {
+      "_id": "6457e5d8698e9fae37423a8f",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e623698e9fae37423a9e",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "defense"
+    }
+  ],
+  "id": "651d7ce27a0a5a6a250868e1",
+  "date": {
+    "$date": "2023-09-06T21:02:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651d7ce29a0a5a6a250868e1"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "10plis",
+  "outcome": -1,
+  "players": [
+    {
+      "_id": "6457e5d8698e9fae37423a8f",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e623698e9fae37423a9e",
+      "role": "defense"
+    }
+  ],
+  "id": "651d7ce29a0a5a6a250868e1",
+  "date": {
+    "$date": "2023-09-06T20:26:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651d7ce30a0a5a6a250868e1"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "9plis",
+  "outcome": 3,
+  "players": [
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e5d8698e9fae37423a8f",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e623698e9fae37423a9e",
+      "role": "defense"
+    }
+  ],
+  "id": "651d7ce30a0a5a6a250868e1",
+  "date": {
+    "$date": "2023-09-06T20:17:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651d7ce31a0a5a6a250868e1"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "10plis",
+  "outcome": 1,
+  "players": [
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e5bc698e9fae37423a88",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e623698e9fae37423a9e",
+      "role": "defense"
+    }
+  ],
+  "id": "651d7ce31a0a5a6a250868e1",
+  "date": {
+    "$date": "2023-08-02T21:32:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651d7ce32a0a5a6a250868e1"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "9plis",
+  "outcome": -1,
+  "players": [
+    {
+      "_id": "6457e623698e9fae37423a9e",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e58f698e9fae37423a81",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "defense"
+    }
+  ],
+  "id": "651d7ce32a0a5a6a250868e1",
+  "date": {
+    "$date": "2023-08-16T19:50:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651d7cd33a0a5a6a250868e1"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "10plis",
+  "outcome": -1,
+  "players": [
+    {
+      "_id": "6457e5d8698e9fae37423a8f",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e623698e9fae37423a9e",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e58f698e9fae37423a81",
+      "role": "defense"
+    }
+  ],
+  "id": "651d7cd33a0a5a6a250868e1",
+  "date": {
+    "$date": "2023-09-06T21:02:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651d7ce01a0a5a6a250868e1"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "9plis",
+  "outcome": 3,
+  "players": [
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e58f698e9fae37423a81",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e623698e9fae37423a9e",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e5d8698e9fae37423a8f",
+      "role": "defense"
+    }
+  ],
+  "id": "651d7ce01a0a5a6a250868e1",
+  "date": {
+    "$date": "2023-08-16T20:22:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651d7ce02a0a5a6a250868e1"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "trou8",
+  "outcome": 4,
+  "players": [
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e5d8698e9fae37423a8f",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e58f698e9fae37423a81",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "defense"
+    }
+  ],
+  "id": "651d7ce02a0a5a6a250868e1",
+  "date": {
+    "$date": "2023-08-16T20:33:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651d7ce03a0a5a6a250868e1"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "9plis",
+  "outcome": 0,
+  "players": [
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e58f698e9fae37423a81",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e623698e9fae37423a9e",
+      "role": "defense"
+    }
+  ],
+  "id": "651d7ce03a0a5a6a250868e1",
+  "date": {
+    "$date": "2023-08-16T21:04:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651d7ce04a0a5a6a250868e1"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "10plis",
+  "outcome": 1,
+  "players": [
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e5d8698e9fae37423a8f",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e623698e9fae37423a9e",
+      "role": "defense"
+    }
+  ],
+  "id": "651d7ce04a0a5a6a250868e1",
+  "date": {
+    "$date": "2023-08-16T21:26:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651d7ce05a0a5a6a250868e1"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "trou8",
+  "outcome": 0,
+  "players": [
+    {
+      "_id": "6457e623698e9fae37423a9e",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e5d8698e9fae37423a8f",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e58f698e9fae37423a81",
+      "role": "defense"
+    }
+  ],
+  "id": "651d7ce05a0a5a6a250868e1",
+  "date": {
+    "$date": "2023-08-16T22:02:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651d7ce06a0a5a6a250868e1"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "9plis",
+  "outcome": -1,
+  "players": [
+    {
+      "_id": "6457e623698e9fae37423a9e",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e5d8698e9fae37423a8f",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e256dc081cebf16fd488",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e58f698e9fae37423a81",
+      "role": "defense"
+    }
+  ],
+  "id": "651d7ce06a0a5a6a250868e1",
+  "date": {
+    "$date": "2023-08-16T22:03:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651d7ce07a0a5a6a250868e1"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "9plis",
+  "outcome": -1,
+  "players": [
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e5d8698e9fae37423a8f",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e623698e9fae37423a9e",
+      "role": "defense"
+    }
+  ],
+  "id": "651d7ce07a0a5a6a250868e1",
+  "date": {
+    "$date": "2023-08-30T19:57:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651d7ce08a0a5a6a250868e1"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "9plis",
+  "outcome": -1,
+  "players": [
+    {
+      "_id": "6457e5d8698e9fae37423a8f",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e623698e9fae37423a9e",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "defense"
+    }
+  ],
+  "id": "651d7ce08a0a5a6a250868e1",
+  "date": {
+    "$date": "2023-08-30T20:18:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651d7cd09a0a5a6a250868e1"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "petitemisere",
+  "outcome": -1,
+  "players": [
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e623698e9fae37423a9e",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e5d8698e9fae37423a8f",
+      "role": "defense"
+    }
+  ],
+  "id": "651d7cd09a0a5a6a250868e1",
+  "date": {
+    "$date": "2023-08-30T21:13:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651d7ce08a0a5a6a250258e1"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "petitemisere",
+  "outcome": -1,
+  "players": [
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e623698e9fae37423a9e",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e5d8698e9fae37423a8f",
+      "role": "defense"
+    }
+  ],
+  "id": "651d7ce08a0a5a6a250258e1",
+  "date": {
+    "$date": "2023-08-30T19:45:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651d7ce08a0a5a6a250268e1"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "9plis",
+  "outcome": 1,
+  "players": [
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e623698e9fae37423a9e",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e5d8698e9fae37423a8f",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e642698e9fae37423aa5",
+      "role": "defense"
+    }
+  ],
+  "id": "651d7ce08a0a5a6a250268e1",
+  "date": {
+    "$date": "2023-08-30T20:05:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651d7ce08a0a5a6a251269e1"
+  },
+  "table": "6457e64b698e9fae37423aab",
+  "contract": "10plis",
+  "outcome": 1,
+  "players": [
+    {
+      "_id": "6457e60d698e9fae37423a97",
+      "role": "attack"
+    },
+    {
+      "_id": "6457e5d8698e9fae37423a8f",
+      "role": "attack"
+    },
+    {
+      "status": "guest",
+      "role": "defense"
+    },
+    {
+      "_id": "6457e623698e9fae37423a9e",
+      "role": "defense"
+    }
+  ],
+  "id": "651d7ce08a0a5a6a251269e1",
+  "date": {
+    "$date": "2023-08-30T21:13:00.000Z"
+  },
+  "__v": 0
+}]

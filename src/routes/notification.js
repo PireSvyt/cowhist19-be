@@ -10,7 +10,7 @@ router.post(
   "/v1/notification",
   authAuthenticate,
   adminAuthenticate,
-  notificationCreate
+  notificationCreate,
 );
 
 module.exports = router;

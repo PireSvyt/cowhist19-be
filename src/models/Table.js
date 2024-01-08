@@ -7,6 +7,7 @@ if (process.env.MONGOOSE_DEBUG === "TRUE") {
 
 const tableSchema = mongoose.Schema(
   {
+    schema: { type: String},
     tableid: { type: String, required: true, unique: true },
     name: { type: String, required: true, unique: true },
     guests: { type: Number, required: true },
