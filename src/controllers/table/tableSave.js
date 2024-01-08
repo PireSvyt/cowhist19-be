@@ -1,6 +1,5 @@
 require("dotenv").config();
 const Table = require("../../models/Table.js");
-const tableCreate = require("./tableCreate.js");
 
 module.exports = tableSave = (req, res, next) => {
   /*

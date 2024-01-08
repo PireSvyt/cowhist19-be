@@ -93,6 +93,7 @@ module.exports = tableGetHistory = (req, res, next) => {
           pipeline: [
             {
               $project: {
+                _id: 0,
                 userid: 1,
                 pseudo: 1,
                 status: 1,
@@ -103,6 +104,7 @@ module.exports = tableGetHistory = (req, res, next) => {
       },
       {
         $project: {
+          _id: 0,
           tableid: 1,
           name: 1,
           guests: 1,

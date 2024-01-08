@@ -2,13 +2,9 @@ const fs = require("fs-extra")
 const stream = require("stream");
 const path = require ("path")
 
-// 
 const usersOrigin = require("./origin/test.users.json");
 const tablesOrigin = require("./origin/test.tables.json");
 const gamesOrigin = require("./origin/test.games.json");
-
-// Service
-//const { random_id, random_string } = require("../../src/resources/toolkit.js");
 
 /*
 
