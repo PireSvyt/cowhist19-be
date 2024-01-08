@@ -19,7 +19,7 @@ module.exports = userInvite = (req, res, next) => {
   }
 
   // User existence check
-  User.findOne({ login: req.body.login }, "pseudo status")
+  User.findOne({ login: req.body.login }, "userid pseudo status")
     .then((user) => {
       if (user) {
         console.log("user.invite.success.alreadyexisting");
