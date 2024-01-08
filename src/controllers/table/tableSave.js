@@ -34,19 +34,20 @@ module.exports = tableSave = (req, res, next) => {
     let tableToSave = { ...req.body };
 
     // Packaging for saving
-    /*let tableUsers = [];
-    tableToSave.users.forEach((user) => {
-      let userToAdd = true;
-      if (user.status !== undefined) {
-        if (user.status === "guest") {
-          userToAdd = false;
+    let tableUsers = [];
+    tableToSave.players.forEach((player) => {
+      let playerToAdd = true;
+      if (player.status !== undefined) {
+        if (player.status === "guest") {
+          playerToAdd = false;
         }
       }
-      if (userToAdd) {
-        tableUsers.push(user.userid);
+      if (playerToAdd) {
+        tableUsers.push(player.userid);
       }
     });
-    tableToSave.users = tableUsers;*/
+    tableToSave.users = tableUsers;
+    delete tableToSave.players
 
     // Manage table to users
     Table.findOne({ tableid: tableToSave.tableid })
