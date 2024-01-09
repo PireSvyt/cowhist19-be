@@ -1,3 +1,4 @@
+require("dotenv").config();
 const User = require("../../models/User.js");
 
 module.exports = userInvite = (req, res, next) => {
@@ -13,10 +14,12 @@ module.exports = userInvite = (req, res, next) => {
   
   */
 
-  console.log("user.invite");
+  if (process.env.DEBUG) {
+    console.log("user.invite");
+  }
 
   // User existence check
-  User.findOne({ login: req.body.login }, "pseudo status")
+  User.findOne({ login: req.body.login }, "userid pseudo status")
     .then((user) => {
       if (user) {
         console.log("user.invite.success.alreadyexisting");
@@ -34,7 +37,7 @@ module.exports = userInvite = (req, res, next) => {
           password: "NONE SO FAR",
           status: "invited",
         });
-        user.id = user._id;
+        user.userid = user._id;
         // Saving
         user
           .save()
@@ -44,7 +47,7 @@ module.exports = userInvite = (req, res, next) => {
               type: "user.invite.success.created",
               data: {
                 user: {
-                  _id: user._id,
+                  userid: user.userid,
                   pseudo: user.pseudo,
                   status: user.status,
                 },

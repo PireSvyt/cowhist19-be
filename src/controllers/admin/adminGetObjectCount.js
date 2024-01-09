@@ -1,3 +1,4 @@
+require("dotenv").config();
 const User = require("../../models/User.js");
 const Table = require("../../models/Table.js");
 const Game = require("../../models/Game.js");
@@ -18,7 +19,9 @@ module.exports = adminGetObjectCount = (req, res, next) => {
   
   */
 
-  console.log("admin.objectcount");
+  if (process.env.DEBUG) {
+    console.log("admin.objectcount");
+  }
 
   User.count()
     .then((users) => {

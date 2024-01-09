@@ -7,10 +7,11 @@ if (process.env.MONGOOSE_DEBUG === "TRUE") {
 
 const tableSchema = mongoose.Schema(
   {
-    id: { type: String, required: true, unique: true },
+    schema: { type: String},
+    tableid: { type: String, required: true, unique: true },
     name: { type: String, required: true, unique: true },
     guests: { type: Number, required: true },
-    users: {
+    userids: {
       type: [
         {
           type: String,
@@ -19,7 +20,7 @@ const tableSchema = mongoose.Schema(
     },
     meta: { type: Map, of: String },
   },
-  { strict: true }
+  { strict: true },
 );
 
 tableSchema.plugin(uniqueValidator);

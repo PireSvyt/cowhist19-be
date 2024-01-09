@@ -7,13 +7,10 @@ const tableAuthenticate = require("../controllers/table/tableAuthenticate.js");
 
 const tableCreate = require("../controllers/table/tableCreate.js");
 const tableSave = require("../controllers/table/tableSave.js");
-//const tableDetails = require("../controllers/table/tableDetails.js");
-const tableDetails_v2 = require("../controllers/table/tableDetails_v2.js");
+const tableGetDetails = require("../controllers/table/tableGetDetails.js");
 const tableDelete = require("../controllers/table/tableDelete.js");
-//const tableHistory = require("../controllers/table/tableHistory.js");
-//const tableHistory_v2 = require("../controllers/table/tableHistory_v2.js");
-const tableHistory_v3 = require("../controllers/table/tableHistory_v3.js");
-const tableStats = require("../controllers/table/tableStats.js");
+const tableGetHistory = require("../controllers/table/tableGetHistory.js");
+const tableGetStats = require("../controllers/table/tableGetStats.js");
 const tableExistingName = require("../controllers/table/tableExistingName.js");
 
 router.post("/v1/create", authAuthenticate, userIsActivated, tableCreate);
@@ -21,7 +18,7 @@ router.post(
   "/v1/existingname",
   authAuthenticate,
   userIsActivated,
-  tableExistingName
+  tableExistingName,
 );
 
 router.post(
@@ -29,35 +26,35 @@ router.post(
   authAuthenticate,
   userIsActivated,
   tableAuthenticate,
-  tableSave
+  tableSave,
 );
 router.get(
-  "/v2/:id",
+  "/v3/:tableid",
   authAuthenticate,
   userIsActivated,
   tableAuthenticate,
-  tableDetails_v2
+  tableGetDetails,
 );
 router.delete(
-  "/v1/:id",
+  "/v1/:tableid",
   authAuthenticate,
   userIsActivated,
   tableAuthenticate,
-  tableDelete
+  tableDelete,
 );
 router.post(
-  "/v3/history/:id",
+  "/v3/history/:tableid",
   authAuthenticate,
   userIsActivated,
   tableAuthenticate,
-  tableHistory_v3
+  tableGetHistory,
 );
 router.post(
-  "/v1/stats/:id",
+  "/v1/stats/:tableid",
   authAuthenticate,
   userIsActivated,
   tableAuthenticate,
-  tableStats
+  tableGetStats,
 );
 
 module.exports = router;

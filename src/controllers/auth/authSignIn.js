@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 // BCRYPT https://www.makeuseof.com/nodejs-bcrypt-hash-verify-salt-password/
@@ -26,14 +27,16 @@ module.exports = authSignIn = (req, res, next) => {
   
   */
 
-  console.log("auth.signin");
+  if (process.env.DEBUG) {
+    console.log("auth.signin");
+  }
 
   let attemptLogin = req.body.login;
   // Login decrypt
   if (req.body.encryption === true) {
     attemptLogin = CryptoJS.AES.decrypt(
       attemptLogin,
-      process.env.ENCRYPTION_KEY
+      process.env.ENCRYPTION_KEY,
     ).toString(CryptoJS.enc.Utf8);
   }
 
@@ -50,7 +53,7 @@ module.exports = authSignIn = (req, res, next) => {
         if (req.body.encryption === true) {
           attemptPassword = CryptoJS.AES.decrypt(
             attemptPassword,
-            process.env.ENCRYPTION_KEY
+            process.env.ENCRYPTION_KEY,
           ).toString(CryptoJS.enc.Utf8);
         }
         bcrypt
@@ -83,16 +86,16 @@ module.exports = authSignIn = (req, res, next) => {
                   return res.status(200).json({
                     type: "auth.signin.success",
                     data: {
-                      id: user._id,
+                      userid: user.userid,
                       token: jwt.sign(
                         {
-                          id: user._id,
+                          userid: user.userid,
                           status: user.status,
                         },
                         process.env.JWT_SECRET,
                         {
                           expiresIn: "72h",
-                        }
+                        },
                       ),
                     },
                   });

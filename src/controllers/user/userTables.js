@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwt_decode = require("jwt-decode");
 const Table = require("../../models/Table.js");
 
@@ -12,14 +13,16 @@ module.exports = userTables = (req, res, next) => {
   
   */
 
-  console.log("user.tables");
+  if (process.env.DEBUG) {
+    console.log("user.tables");
+  }
 
   // Initialise
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   const decodedToken = jwt_decode(token);
 
-  Table.find({ users: decodedToken.id }, "name")
+  Table.find({ users: decodedToken.userid }, "name")
     .then((tables) => {
       console.log("user.tables.success");
       return res.status(200).json({

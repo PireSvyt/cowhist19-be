@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwt_decode = require("jwt-decode");
 const Table = require("../../models/Table.js");
 
@@ -13,7 +14,9 @@ module.exports = tableAuthenticate = (req, res, next) => {
   
   */
 
-  console.log("table.authenticate");
+  if (process.env.DEBUG) {
+    console.log("table.authenticate");
+  }
 
   // Initialise
   const authHeader = req.headers["authorization"];
@@ -21,15 +24,16 @@ module.exports = tableAuthenticate = (req, res, next) => {
   const decodedToken = jwt_decode(token);
 
   // Prep
-  let tableid = req.params.id;
-  if (!tableid) {
-    tableid = req.body.id;
+  let tableid = req.params.tableid;
+  if (tableid === undefined) {
+    tableid = req.body.tableid;
   }
+  console.log("tableid", tableid);
 
-  Table.findOne({ _id: tableid })
+  Table.findOne({ tableid: tableid })
     .then((table) => {
-      if (table !== undefined) {
-        if (table.users.includes(decodedToken.id)) {
+      if (table !== null) {
+        if (table.userids.includes(decodedToken.userid)) {
           next();
         } else {
           console.log("table.authenticate.error.notamember");

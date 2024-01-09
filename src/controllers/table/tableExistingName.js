@@ -1,3 +1,4 @@
+require("dotenv").config();
 const Table = require("../../models/Table.js");
 
 module.exports = tableExistingName = (req, res, next) => {
@@ -12,7 +13,9 @@ module.exports = tableExistingName = (req, res, next) => {
   
   */
 
-  console.log("table.existingname");
+  if (process.env.DEBUG) {
+    console.log("table.existingname");
+  }
 
   Table.findOne({ name: req.body.name })
     .then((table) => {

@@ -30,7 +30,7 @@ describe("TEST OF FUNCTION : random_string ", () => {
         }
         randomstringlist.forEach((randomstring) => {
           expect(
-            randomstringlist.filter((s) => s === randomstring).length
+            randomstringlist.filter((s) => s === randomstring).length,
           ).toEqual(1);
         });
       });

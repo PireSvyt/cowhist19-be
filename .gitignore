@@ -1,6 +1,7 @@
 node_modules
 build
 .env
+env.json
 yarn.lock
 package-lock.json
 .coverage

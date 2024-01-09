@@ -1,3 +1,4 @@
+require("dotenv").config();
 const Table = require("../../models/Table.js");
 
 module.exports = adminGetTablesByGames = (req, res, next) => {
@@ -13,14 +14,16 @@ module.exports = adminGetTablesByGames = (req, res, next) => {
   
   */
 
-  console.log("admin.tablesByGames");
+  if (process.env.DEBUG) {
+    console.log("admin.tablesByGames");
+  }
 
   Table.aggregate([
     {
       $lookup: {
         from: "games",
         foreignField: "table",
-        localField: "id",
+        localField: "tableid",
         as: "games",
       },
     },

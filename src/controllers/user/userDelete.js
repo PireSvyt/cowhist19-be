@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwt_decode = require("jwt-decode");
 
 const User = require("../../models/User.js");
@@ -15,7 +16,9 @@ module.exports = userDelete = (req, res, next) => {
   
   */
 
-  console.log("user.delete");
+  if (process.env.DEBUG) {
+    console.log("user.delete");
+  }
 
   // Initialise
   const authHeader = req.headers["authorization"];
@@ -23,16 +26,16 @@ module.exports = userDelete = (req, res, next) => {
   const decodedToken = jwt_decode(token);
 
   // Delete user
-  User.deleteOne({ id: decodedToken.id })
+  User.deleteOne({ userid: decodedToken.userid })
     .then(() => {
       // Delete user from tables
       Table.updateMany(
-        { users: decodedToken.id },
+        { users: decodedToken.userid },
         {
           $pullAll: {
-            users: [decodedToken.id],
+            users: [decodedToken.userid],
           },
-        }
+        },
       )
         .then(() => {
           console.log("user.delete.success");

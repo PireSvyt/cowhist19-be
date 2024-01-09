@@ -1,3 +1,4 @@
+require("dotenv").config();
 const Table = require("../../models/Table.js");
 
 module.exports = adminGetTablesByPlayers = (req, res, next) => {
@@ -13,7 +14,9 @@ module.exports = adminGetTablesByPlayers = (req, res, next) => {
   
   */
 
-  console.log("admin.tablesByPlayers");
+  if (process.env.DEBUG) {
+    console.log("admin.tablesByPlayers");
+  }
 
   Table.aggregate([
     {

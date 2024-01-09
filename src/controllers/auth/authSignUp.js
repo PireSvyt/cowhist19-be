@@ -1,3 +1,4 @@
+require("dotenv").config();
 const User = require("../../models/User.js");
 const serviceMailing = require("../../mails/serviceMailing.js");
 var random_string = require("./services/random_string.js");
@@ -24,11 +25,69 @@ module.exports = authSignup = (req, res, next) => {
   
   */
 
-  console.log("auth.signup");
+  if (process.env.DEBUG) {
+    console.log("auth.signup");
+  }
 
   User.findOne({ login: req.body.login })
     .then((user) => {
-      if (user) {
+      if (!user) {
+        // Prep
+        var user = new User({
+          userid: random_string(24),
+          pseudo: req.body.pseudo,
+          login: req.body.login,
+          password: req.body.password,
+          status: "signedup",
+          activationtoken: random_string(20),
+        });
+        if (user.userid === undefined) {
+          user.userid = user._id;
+        }
+
+        // User saving
+        user
+          .save()
+          .then(() => {
+            if (req.body.mailing !== "none") {
+              serviceMailing("signup", user).then((mailing) => {
+                if (mailing.type === "mail.mailing.success") {
+                  console.log("auth.signup.success.signedup");
+                  return res.status(201).json({
+                    type: "auth.signup.success.signedup",
+                    data: {
+                      userid: user.userid,
+                    },
+                  });
+                } else {
+                  console.log("auth.signup.error.sendingemail");
+                  return res.status(400).json({
+                    type: "auth.signup.error.sendingemail",
+                  });
+                }
+              });
+            } else {
+              console.log("auth.signup.success.signedup no mail sent");
+              return res.status(201).json({
+                type: "auth.signup.success.signedup",
+                note: "no mail sent",
+                data: {
+                  userid: user.userid,
+                },
+              });
+            }
+          })
+          .catch((error) => {
+            console.log("auth.signup.error.savingoncreate");
+            return res.status(400).json({
+              type: "auth.signup.error.savingoncreate",
+              error: error,
+              data: {
+                userid: "",
+              },
+            });
+          });
+      } else {
         // Invited
         if (user.status === "invited") {
           // User edit
@@ -46,7 +105,7 @@ module.exports = authSignup = (req, res, next) => {
               return res.status(200).json({
                 type: "auth.signup.success.signedup",
                 data: {
-                  id: user._id,
+                  userid: user.userid,
                 },
               });
             })
@@ -56,7 +115,7 @@ module.exports = authSignup = (req, res, next) => {
                 type: "auth.signup.error.savingfrominvited",
                 error: error,
                 data: {
-                  id: "",
+                  userid: "",
                 },
               });
             });
@@ -66,52 +125,10 @@ module.exports = authSignup = (req, res, next) => {
           return res.status(409).json({
             type: "auth.signup.success.alreadysignedup",
             data: {
-              id: user._id,
+              userid: user.userid,
             },
           });
         }
-      } else {
-        // Prep
-        var user = new User({
-          pseudo: req.body.pseudo,
-          login: req.body.login,
-          password: req.body.password,
-          status: "signedup",
-          activationtoken: random_string(20),
-        });
-        user.id = user._id;
-
-        // User saving
-        user
-          .save()
-          .then(() => {
-            serviceMailing("signup", user).then((mailing) => {
-              if (mailing.type === "mail.mailing.success") {
-                console.log("auth.signup.success.signedup");
-                return res.status(201).json({
-                  type: "auth.signup.success.signedup",
-                  data: {
-                    id: user._id,
-                  },
-                });
-              } else {
-                console.log("auth.signup.error.sendingemail");
-                return res.status(400).json({
-                  type: "auth.signup.error.sendingemail",
-                });
-              }
-            });
-          })
-          .catch((error) => {
-            console.log("auth.signup.error.savingoncreate");
-            return res.status(400).json({
-              type: "auth.signup.error.savingoncreate",
-              error: error,
-              data: {
-                id: "",
-              },
-            });
-          });
       }
     })
     .catch((error) => {
@@ -120,7 +137,7 @@ module.exports = authSignup = (req, res, next) => {
         type: "auth.signup.error.notfound",
         error: error,
         data: {
-          id: "",
+          userid: "",
         },
       });
     });

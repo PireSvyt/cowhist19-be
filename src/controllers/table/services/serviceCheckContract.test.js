@@ -5,25 +5,25 @@ var serviceCheckContract = require("./serviceCheckContract.js");
 describe("TEST OF FUNCTION : serviceCheckContract ", () => {
   // Valid contract
   const validContract = {
-    _id: "",
-    table: "6458042a032a849f98f08eb6",
+    gameid: "",
+    tableid: "6458042a032a849f98f08eb6",
     contract: "8plis",
     outcome: 1,
     players: [
       {
-        _id: "6457f5b9746d3231b7dab2cc",
+        userid: "6457f5b9746d3231b7dab2cc",
         role: "defense",
       },
       {
-        _id: "64580468032a849f98f08ebc",
+        userid: "64580468032a849f98f08ebc",
         role: "attack",
       },
       {
-        _id: "64580511032a849f98f08ec9",
+        userid: "64580511032a849f98f08ec9",
         role: "defense",
       },
       {
-        _id: "64580531032a849f98f08ed0",
+        userid: "64580531032a849f98f08ed0",
         role: "attack",
       },
     ],
@@ -36,25 +36,25 @@ describe("TEST OF FUNCTION : serviceCheckContract ", () => {
   });
   // Exceeding folds
   const exceedingFoldsContract = {
-    _id: "",
-    table: "6458042a032a849f98f08eb6",
+    gameid: "",
+    tableid: "6458042a032a849f98f08eb6",
     contract: "12plis",
     outcome: 3,
     players: [
       {
-        _id: "6457f5b9746d3231b7dab2cc",
+        userid: "6457f5b9746d3231b7dab2cc",
         role: "defense",
       },
       {
-        _id: "64580468032a849f98f08ebc",
+        userid: "64580468032a849f98f08ebc",
         role: "attack",
       },
       {
-        _id: "64580511032a849f98f08ec9",
+        userid: "64580511032a849f98f08ec9",
         role: "defense",
       },
       {
-        _id: "64580531032a849f98f08ed0",
+        userid: "64580531032a849f98f08ed0",
         role: "attack",
       },
     ],
@@ -67,21 +67,21 @@ describe("TEST OF FUNCTION : serviceCheckContract ", () => {
   });
   // Invalid attack list
   const invalidAttackContract = {
-    _id: "",
-    table: "6458042a032a849f98f08eb6",
+    gameid: "",
+    tableid: "6458042a032a849f98f08eb6",
     contract: "8plis",
     outcome: -1,
     players: [
       {
-        _id: "6457f5b9746d3231b7dab2cc",
+        userid: "6457f5b9746d3231b7dab2cc",
         role: "defense",
       },
       {
-        _id: "64580511032a849f98f08ec9",
+        userid: "64580511032a849f98f08ec9",
         role: "defense",
       },
       {
-        _id: "64580531032a849f98f08ed0",
+        userid: "64580531032a849f98f08ed0",
         role: "attack",
       },
     ],
@@ -94,21 +94,21 @@ describe("TEST OF FUNCTION : serviceCheckContract ", () => {
   });
   // Invalid defense list
   const invalidDefenseContract = {
-    _id: "",
-    table: "6458042a032a849f98f08eb6",
+    gameid: "",
+    tableid: "6458042a032a849f98f08eb6",
     contract: "8plis",
     outcome: -1,
     players: [
       {
-        _id: "6457f5b9746d3231b7dab2cc",
+        userid: "6457f5b9746d3231b7dab2cc",
         role: "defense",
       },
       {
-        _id: "64580511032a849f98f08ec9",
+        userid: "64580511032a849f98f08ec9",
         role: "attack",
       },
       {
-        _id: "64580531032a849f98f08ed0",
+        userid: "64580531032a849f98f08ed0",
         role: "attack",
       },
     ],

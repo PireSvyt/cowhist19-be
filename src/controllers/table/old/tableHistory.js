@@ -70,7 +70,7 @@ module.exports = tableHistory = (req, res, next) => {
         games.sort(compare);
         games = games.slice(
           req.body.games.index, // from 0
-          req.body.games.index + req.body.games.number // to 10
+          req.body.games.index + req.body.games.number, // to 10
         );
         // Check if more
         // games [ 0 ... 10 ] length = 11

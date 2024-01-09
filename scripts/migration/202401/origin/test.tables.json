@@ -1,0 +1,18 @@
+[{
+  "_id": {
+    "$oid": "6457e64b698e9fae37423aab"
+  },
+  "name": "La table officielle",
+  "users": [
+    "6457e256dc081cebf16fd488",
+    "6457e58f698e9fae37423a81",
+    "6457e5bc698e9fae37423a88",
+    "6457e5d8698e9fae37423a8f",
+    "6457e60d698e9fae37423a97",
+    "6457e623698e9fae37423a9e",
+    "6457e642698e9fae37423aa5"
+  ],
+  "id": "6457e64b698e9fae37423aab",
+  "__v": 0,
+  "guests": 1
+}]

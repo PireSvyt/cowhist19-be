@@ -1,3 +1,4 @@
+require("dotenv").config();
 const User = require("../../models/User.js");
 
 module.exports = authExistingPseudo = (req, res, next) => {
@@ -12,7 +13,9 @@ module.exports = authExistingPseudo = (req, res, next) => {
   
   */
 
-  console.log("auth.existingpseudo");
+  if (process.env.DEBUG) {
+    console.log("auth.existingpseudo");
+  }
 
   User.findOne({ pseudo: req.body.pseudo })
     .then((user) => {

@@ -1,5 +1,5 @@
+require("dotenv").config();
 const Table = require("../../models/Table.js");
-const tableCreate = require("./tableCreate.js");
 
 module.exports = tableSave = (req, res, next) => {
   /*
@@ -18,10 +18,12 @@ module.exports = tableSave = (req, res, next) => {
   
   */
 
-  console.log("table.save");
+  if (process.env.DEBUG) {
+    console.log("table.save");
+  }
 
   // Save
-  if (req.body._id === "" || req.body._id === undefined) {
+  if (req.body.tableid === "" || req.body.tableid === undefined) {
     console.log("table.save.error.emptyid");
     return res.status(503).json({
       type: "table.save.error.emptyid",
@@ -33,30 +35,31 @@ module.exports = tableSave = (req, res, next) => {
 
     // Packaging for saving
     let tableUsers = [];
-    tableToSave.users.forEach((user) => {
-      let userToAdd = true;
-      if (user.status !== undefined) {
-        if (user.status === "guest") {
-          userToAdd = false;
+    tableToSave.players.forEach((player) => {
+      let playerToAdd = true;
+      if (player.status !== undefined) {
+        if (player.status === "guest") {
+          playerToAdd = false;
         }
       }
-      if (userToAdd) {
-        tableUsers.push(user._id);
+      if (playerToAdd) {
+        tableUsers.push(player.userid);
       }
     });
-    tableToSave.users = tableUsers;
+    tableToSave.userids = tableUsers;
+    delete tableToSave.players
 
     // Manage table to users
-    Table.findOne({ _id: tableToSave._id })
+    Table.findOne({ tableid: tableToSave.tableid })
       .then(() => {
         // Save
-        Table.updateOne({ _id: tableToSave._id }, tableToSave)
+        Table.updateOne({ tableid: tableToSave.tableid }, tableToSave)
           .then(() => {
             console.log("table.save.success.modified");
             return res.status(200).json({
               type: "table.save.success.modified",
               data: {
-                id: tableToSave._id,
+                tableid: tableToSave.tableid,
               },
             });
           })

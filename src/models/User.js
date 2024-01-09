@@ -7,7 +7,8 @@ if (process.env.MONGOOSE_DEBUG === "TRUE") {
 
 const userSchema = mongoose.Schema(
   {
-    id: { type: String, required: true, unique: true },
+    schema: { type: String},
+    userid: { type: String, required: true, unique: true },
     // filled at creation via user/userInvite or auth/authSignUp
     // (re-use of MongoDB _id as a string for aggregations)
     pseudo: { type: String, required: true, unique: true },
@@ -35,7 +36,7 @@ const userSchema = mongoose.Schema(
     // "admin"
     alias: [
       {
-        id: { type: String },
+        userid: { type: String },
         login: { type: String },
       },
     ],
@@ -46,7 +47,7 @@ const userSchema = mongoose.Schema(
       last: { type: Date },
     },
   },
-  { strict: true }
+  { strict: true },
 );
 
 userSchema.plugin(uniqueValidator);

@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwt_decode = require("jwt-decode");
 const User = require("../../models/User.js");
 
@@ -13,14 +14,16 @@ module.exports = userIsActivated = (req, res, next) => {
   
   */
 
-  console.log("user.isactivated");
+  if (process.env.DEBUG) {
+    console.log("user.isactivated");
+  }
 
   // Initialise
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   const decodedToken = jwt_decode(token);
 
-  User.findOne({ id: decodedToken.id })
+  User.findOne({ userid: decodedToken.userid })
     .then((user) => {
       if (user !== undefined) {
         if (user.status === "activated") {

@@ -1,16 +1,19 @@
+require("dotenv").config();
 const contracts = require("../../../resources/contracts.json");
 
-module.exports = function serviceGamePoints(game) {
+module.exports = function serviceGamePoints(contractToCheck) {
   /*
   
-  provides the points for attackants and defenses for a game
+  provides the points for attackants and defenses for a contract
   
   parameters
-  * game
+  * contractToCheck
   
   */
 
-  console.log("table.serviceGamePoints");
+  if (process.env.DEBUG === true) {
+    console.log("table.serviceGamePoints");
+  }
 
   // Initialize
   let compliance = true;
@@ -20,7 +23,7 @@ module.exports = function serviceGamePoints(game) {
 
   // Find the contract requirements
   let contractList = contracts.filter(
-    (contract) => contract.key === game.contract
+    (contract) => contract.key === contractToCheck.contract,
   );
   let contract = contractList[0];
   if (contract === undefined) {
@@ -30,39 +33,43 @@ module.exports = function serviceGamePoints(game) {
   } else {
     switch (contract.type) {
       case "coop":
-        if (game.outcome < 0) {
+        if (contractToCheck.outcome < 0) {
           // Loss case
           attack = -(
             contract.points.base -
-            contract.points.fold * game.outcome
+            contract.points.fold * contractToCheck.outcome
           );
           defense = -attack;
         } else {
           // Win case
-          if (game.outcome + contract.folds === 13) {
+          if (contractToCheck.outcome + contract.folds === 13) {
             // All folds
             attack = contract.points.all;
           } else {
-            attack = contract.points.base + contract.points.fold * game.outcome;
+            attack =
+              contract.points.base +
+              contract.points.fold * contractToCheck.outcome;
           }
         }
         break;
       case "solo":
-        if (game.outcome < 0) {
+        if (contractToCheck.outcome < 0) {
           // Loss case
           attack = -(
             contract.points.base -
-            contract.points.fold * game.outcome
+            contract.points.fold * contractToCheck.outcome
           );
           defense = (-attack / 3) * 2;
         } else {
           // Win case
-          attack = contract.points.base + contract.points.fold * game.outcome;
+          attack =
+            contract.points.base +
+            contract.points.fold * contractToCheck.outcome;
           attack = Math.min(attack, contract.points.max);
         }
         break;
       case "fixed":
-        if (game.outcome < 0) {
+        if (contractToCheck.outcome < 0) {
           // Loss case
           attack = -contract.points.attack;
           defense = contract.points.defense;
@@ -72,12 +79,12 @@ module.exports = function serviceGamePoints(game) {
         }
         break;
       case "trou":
-        if (game.outcome < 0) {
+        if (contractToCheck.outcome < 0) {
           // Loss case
           defense = contract.points.attack;
         } else {
           // Win case
-          if (game.outcome + contract.folds === 13) {
+          if (contractToCheck.outcome + contract.folds === 13) {
             attack = contract.points.all;
           } else {
             attack = contract.points.attack;

@@ -1,3 +1,4 @@
+require("dotenv").config();
 const Feedback = require("../../models/Feedback.js");
 
 module.exports = adminFeedbackClose = (req, res, next) => {
@@ -13,7 +14,9 @@ module.exports = adminFeedbackClose = (req, res, next) => {
   
   */
 
-  console.log("admin.feedbackClose");
+  if (process.env.DEBUG) {
+    console.log("admin.feedbackClose");
+  }
 
   Feedback.find({ _id: req.params.id })
     .then((feedback) => {

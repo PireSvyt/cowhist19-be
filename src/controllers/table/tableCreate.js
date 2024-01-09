@@ -1,3 +1,4 @@
+require("dotenv").config();
 const Table = require("../../models/Table.js");
 
 module.exports = tableCreate = (req, res, next) => {
@@ -6,7 +7,7 @@ module.exports = tableCreate = (req, res, next) => {
   creates a table
   
   possible response types
-  * table.create.success.created
+  * table.create.success
   * table.create.error.oncreate
   * table.create.error.idprovided
   
@@ -15,32 +16,31 @@ module.exports = tableCreate = (req, res, next) => {
   
   */
 
-  console.log("table.tableCreate");
-
-  // Prep
-  delete req.body._id;
+  if (process.env.DEBUG) {
+    console.log("table.tableCreate");
+  }
 
   // Save
   let tableToSave = { ...req.body };
-  let tableUsers = [];
+  /*let tableUsers = [];
   tableToSave.users.forEach((user) => {
     if (user.status !== "guest") {
-      tableUsers.push(user._id);
+      tableUsers.push(user.userid);
     }
   });
-  tableToSave.users = tableUsers;
+  tableToSave.users = tableUsers;*/
   tableToSave = new Table(tableToSave);
-  tableToSave.id = tableToSave._id;
+  tableToSave.tableid = tableToSave._id;
 
   // Save
   tableToSave
     .save()
     .then(() => {
-      console.log("table.create.success.created");
+      console.log("table.create.success");
       return res.status(201).json({
-        type: "table.create.success.created",
+        type: "table.create.success",
         data: {
-          id: tableToSave._id,
+          tableid: tableToSave.tableid,
         },
       });
     })
@@ -51,7 +51,7 @@ module.exports = tableCreate = (req, res, next) => {
         type: "table.create.error.oncreate",
         error: error,
         data: {
-          id: null,
+          tableid: null,
         },
       });
     });

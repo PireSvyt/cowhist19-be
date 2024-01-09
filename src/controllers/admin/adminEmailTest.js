@@ -1,3 +1,4 @@
+require("dotenv").config();
 const serviceMailing = require("../../mails/serviceMailing.js");
 
 module.exports = adminEmailTest = (req, res, next) => {
@@ -12,7 +13,9 @@ module.exports = adminEmailTest = (req, res, next) => {
   
   */
 
-  console.log("admin.emailtest");
+  if (process.env.DEBUG) {
+    console.log("admin.emailtest");
+  }
 
   serviceMailing("signup", {
     pseudo: "TESTPSEUDO",

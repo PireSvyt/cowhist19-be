@@ -6,7 +6,8 @@ if (process.env.MONGOOSE_DEBUG === "TRUE") {
 
 const feedbackSchema = mongoose.Schema(
   {
-    id: { type: String, required: true, unique: true },
+    schema: { type: String},
+    feedbackid: { type: String, required: true, unique: true },
     status: { type: String, required: true },
     date: { type: Date, required: true },
     userid: { type: String, required: true },
@@ -15,7 +16,7 @@ const feedbackSchema = mongoose.Schema(
     tag: { type: String },
     text: { type: String },
   },
-  { strict: true }
+  { strict: true },
 );
 
 module.exports = mongoose.model("Feedback", feedbackSchema);

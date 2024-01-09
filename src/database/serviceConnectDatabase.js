@@ -12,7 +12,9 @@ module.exports = function serviceConnectMongoDB() {
   
   */
 
-  console.log("database.connectMongoDB");
+  if (process.env.DEBUG) {
+    console.log("database.connectMongoDB");
+  }
 
   let DB_URL =
     "mongodb+srv://savoyatp:" +

@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwt_decode = require("jwt-decode");
 const User = require("../../models/User.js");
 
@@ -13,14 +14,16 @@ module.exports = adminAuthenticate = (req, res, next) => {
   
   */
 
-  console.log("admin.authenticate");
+  if (process.env.DEBUG) {
+    console.log("admin.authenticate");
+  }
 
   // Initialise
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   const decodedToken = jwt_decode(token);
 
-  User.findOne({ _id: decodedToken.id })
+  User.findOne({ userid: decodedToken.userid })
     .then((user) => {
       if (user !== undefined) {
         if (user.priviledges.includes("admin")) {
@@ -28,13 +31,11 @@ module.exports = adminAuthenticate = (req, res, next) => {
         } else {
           return res.status(403).json({
             type: "admin.authenticate.error.isnotadmin",
-            error: err,
           });
         }
       } else {
         return res.status(403).json({
           type: "admin.authenticate.error.notfound",
-          error: err,
         });
       }
     })
@@ -42,7 +43,7 @@ module.exports = adminAuthenticate = (req, res, next) => {
       console.error(error);
       return res.status(403).json({
         type: "admin.authenticate.error.erroronfind",
-        error: err,
+        error: error,
       });
     });
 };

@@ -1,4 +1,5 @@
-const serviceSendMail = require("./serviceSentMail");
+require("dotenv").config();
+const serviceSendMail = require("./serviceSendMail");
 const mails = require("./mails.json");
 
 module.exports = async function serviceMailing(mail, details = {}) {
@@ -17,7 +18,9 @@ module.exports = async function serviceMailing(mail, details = {}) {
     
     */
 
-  console.log("mail.mailing");
+  if (process.env.DEBUG) {
+    console.log("mail.mailing");
+  }
 
   const lang = "en";
 
@@ -49,15 +52,15 @@ module.exports = async function serviceMailing(mail, details = {}) {
           {
             token: "{{PASSWORD_RESET_URL}}",
             value:
-              "https://cowhist19.vercel.app/resetpassword/" +
+              "https://cowhist19.vercel.app/passwordreset/" +
               details.passwordtoken,
           },
         ];
         mailToSend = {
           to: "'" + details.pseudo + "<" + details.login + ">'",
-          subject: mails.signup[lang].subject,
-          text: replaceTokens(mails.signup[lang].text, replacements),
-          html: replaceTokens(mails.signup[lang].html, replacements),
+          subject: mails.resetpassword[lang].subject,
+          text: replaceTokens(mails.resetpassword[lang].text, replacements),
+          html: replaceTokens(mails.resetpassword[lang].html, replacements),
         };
         break;
       default:
