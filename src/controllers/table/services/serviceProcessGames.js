@@ -20,17 +20,58 @@ module.exports = function serviceProcessGames(games, request) {
   }
 
   // Initialize
+  let upToDate = 50;
   let stats = {};
   let graph = [];
-  let players = {};
 
   // Sort games
   games.sort(function (first, second) {
     return first.date - second.date;
   });
 
+  if (request.year !== undefined) {
+    if (request.need === "ranking") {
+      // Filter to only consider the games of that year
+      games = games.filter((game) => {
+        let gateDate = new Date(game.date);
+        return gateDate.getYear() === request.year;
+      });
+    }
+    if (request.need === "graph") {
+      // Filtering done at the end
+    }
+  } else {
+    if (request.need === "ranking") {
+      let noYearGames = [];
+      for (let g = 0; g < upToDate; g++) {
+        if (g <= games.length) {
+          noYearGames.push(games[games.length - 1 - g]);
+        }
+      }
+      games = noYearGames;
+    }
+    if (request.need === "graph") {
+      let noYearGames = [];
+      for (let g = 0; g < upToDate * 2; g++) {
+        if (g <= games.length) {
+          noYearGames.push(games[games.length - 1 - g]);
+        }
+      }
+      games = noYearGames;
+    }
+  }
+
   // Summarize game outcomes per user
-  games.forEach((game) => {
+  let augmentedGames = [];
+  for (let g = 0; g < games.length; g++) {
+    let game = games[g];
+    let augmentedGame = { ...game };
+    // Initiate stats
+    if (g === 0) {
+      augmentedGame.stats = [];
+    } else {
+      augmentedGame.stats = augmentedGames[g - 1].stats;
+    }
     game.contracts.forEach((contract) => {
       if (serviceCheckContract(contract)) {
         let contractPoints = serviceGamePoints(contract);
@@ -44,8 +85,8 @@ module.exports = function serviceProcessGames(games, request) {
           }
           if (nonguestplayer) {
             // Add player to players if missing
-            if (!Object.keys(players).includes(player.userid)) {
-              players[player.userid] = {
+            if (!Object.keys(augmentedGame.stats).includes(player.userid)) {
+              augmentedGame.stats[player.userid] = {
                 userid: player.userid,
                 attackWins: 0,
                 attackLoss: 0,
@@ -57,22 +98,24 @@ module.exports = function serviceProcessGames(games, request) {
             // Record outcome
             if (contract.outcome < 0) {
               if (player.role === "attack") {
-                players[player.userid].attackLoss += 1;
-                players[player.userid].cumulatedPoints += contractPoints.attack;
+                augmentedGame.stats[player.userid].attackLoss += 1;
+                augmentedGame.stats[player.userid].cumulatedPoints +=
+                  contractPoints.attack;
               }
               if (player.role === "defense") {
-                players[player.userid].defenseWins += 1;
-                players[player.userid].cumulatedPoints +=
+                augmentedGame.stats[player.userid].defenseWins += 1;
+                augmentedGame.stats[player.userid].cumulatedPoints +=
                   contractPoints.defense;
               }
             } else {
               if (player.role === "attack") {
-                players[player.userid].attackWins += 1;
-                players[player.userid].cumulatedPoints += contractPoints.attack;
+                augmentedGame.stats[player.userid].attackWins += 1;
+                augmentedGame.stats[player.userid].cumulatedPoints +=
+                  contractPoints.attack;
               }
               if (player.role === "defense") {
-                players[player.userid].defenseLoss += 1;
-                players[player.userid].cumulatedPoints +=
+                augmentedGame.stats[player.userid].defenseLoss += 1;
+                augmentedGame.stats[player.userid].cumulatedPoints +=
                   contractPoints.defense;
               }
             }
@@ -80,16 +123,66 @@ module.exports = function serviceProcessGames(games, request) {
         });
       }
     });
-    if (request.need === "graph") {
-      graph.push({
-        date: game.date,
-        players: neaterStats(statPlayers(players), "graph", request.field),
+    if (request.year === undefined && upToDate < g) {
+      // Remove outdated game
+      let outdatedGame = game[g - upToDate];
+      outdatedGame.contracts.forEach((outdatedContract) => {
+        if (serviceCheckContract(outdatedContract)) {
+          let outdatedContractPoints = serviceGamePoints(outdatedContract);
+          outdatedContract.players.forEach((player) => {
+            // Neglect is a guest
+            let nonguestplayer = true;
+            if (player.nonuser !== undefined) {
+              if (player.nonuser === "guest") {
+                nonguestplayer = false;
+              }
+            }
+            if (nonguestplayer) {
+              if (outdatedContract.outcome < 0) {
+                if (player.role === "attack") {
+                  augmentedGame.stats[player.userid].attackLoss -= 1;
+                  augmentedGame.stats[player.userid].cumulatedPoints -=
+                    outdatedContractPoints.attack;
+                }
+                if (player.role === "defense") {
+                  augmentedGame.stats[player.userid].defenseWins -= 1;
+                  augmentedGame.stats[player.userid].cumulatedPoints -=
+                    outdatedContractPoints.defense;
+                }
+              } else {
+                if (player.role === "attack") {
+                  augmentedGame.stats[player.userid].attackWins -= 1;
+                  augmentedGame.stats[player.userid].cumulatedPoints -=
+                    outdatedContractPoints.attack;
+                }
+                if (player.role === "defense") {
+                  augmentedGame.stats[player.userid].defenseLoss -= 1;
+                  augmentedGame.stats[player.userid].cumulatedPoints -=
+                    outdatedContractPoints.defense;
+                }
+              }
+              // Check if players is still in the game or did not participated enough...
+              if (
+                augmentedGame.stats[player.userid].attackLoss === 0 &&
+                augmentedGame.stats[player.userid].defenseWins === 0 &&
+                augmentedGame.stats[player.userid].attackWins === 0 &&
+                augmentedGame.stats[player.userid].defenseLoss === 0
+              ) {
+                delete augmentedGame.stats[player.userid];
+              }
+            }
+          });
+        }
       });
     }
-  });
+    augmentedGames.push(augmentedGame);
+  }
 
   // Ranking
-  players = neaterStats(statPlayers(players), "ranking");
+  let players = neaterStats(
+    statPlayers(augmentedGames[augmentedGames.length - 1].stats),
+    "ranking"
+  );
   let playersArray = Object.values(players);
   playersArray.sort(function (a, b) {
     let f = "averagepoints";
@@ -109,6 +202,44 @@ module.exports = function serviceProcessGames(games, request) {
       // Already done
       break;
     case "graph":
+      let graph = [];
+      if (request.year === undefined) {
+        // Only the last games matter
+        for (let g = 0; g < upToDate; g++) {
+          if (g < augmentedGames.length) {
+            let augmentedGame = augmentedGames[augmentedGames.length - g - 1];
+            graph.push({
+              date: augmentedGame.date,
+              players: neaterStats(
+                statPlayers(augmentedGame.stats),
+                "graph",
+                request.field
+              ),
+            });
+          }
+        }
+      } else {
+        // Only the game from today minus request.year matter
+        let nowDate = new Date();
+        let nowYear = nowDate.getYear();
+        let startYear = nowYear - request.year;
+        graph = augmentedGames
+          .filter((augmentedGame) => {
+            let gameDate = new Date(augmentedGame.date);
+            let gameYear = gameDate.getYear();
+            return startYear <= gameYear;
+          })
+          .map((augmentedGame) => {
+            return {
+              date: augmentedGame.date,
+              players: neaterStats(
+                statPlayers(augmentedGame.stats),
+                "graph",
+                request.field
+              ),
+            };
+          });
+      }
       stats.graph = graph;
       break;
     default:
@@ -162,13 +293,14 @@ function neaterStats(players, target, field = "averagepoints") {
   for (const [userid, player] of Object.entries(players)) {
     switch (target) {
       case "ranking":
-        neatPlayers[userid] = {};
-        neatPlayers[userid].userid = player.userid;
-        neatPlayers[userid].games = player.games;
-        neatPlayers[userid].rateattack = player.rateattack;
-        neatPlayers[userid].ratevictory = player.ratevictory;
-        neatPlayers[userid].scorev0 = player.scorev0;
-        neatPlayers[userid].averagepoints = player.averagepoints;
+        neatPlayers[userid] = {
+          userid: player.userid,
+          games: player.games,
+          rateattack: player.rateattack,
+          ratevictory: player.ratevictory,
+          scorev0: player.scorev0,
+          averagepoints: player.averagepoints,
+        };
         break;
       case "graph":
         neatPlayers[userid] = player[field];

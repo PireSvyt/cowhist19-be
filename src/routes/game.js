@@ -7,22 +7,28 @@ const tableAuthenticate = require("../controllers/table/tableAuthenticate.js");
 
 const gameCreate = require("../controllers/game/gameCreate.js");
 const gameDelete = require("../controllers/game/gameDelete.js");
-//const gameGet = require("../controllers/game/gameGet.js");
+const gameGetOldest = require("../controllers/game/gameGetOldest.js");
 
 router.post(
   "/v1/create",
   authAuthenticate,
   userIsActivated,
   tableAuthenticate,
-  gameCreate,
+  gameCreate
 );
 router.post(
   "/v1/delete",
   authAuthenticate,
   userIsActivated,
   tableAuthenticate,
-  gameDelete,
+  gameDelete
 );
-//router.get("/v1/:id", authAuthenticate, userIsActivated, tableAuthenticate, gameGet);
+router.get(
+  "/v1/oldest",
+  authAuthenticate,
+  userIsActivated,
+  tableAuthenticate,
+  gameGetOldest
+);
 
 module.exports = router;
