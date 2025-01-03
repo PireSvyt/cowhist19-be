@@ -43,19 +43,15 @@ module.exports = function serviceProcessGames(games, request) {
   } else {
     if (request.need === "ranking") {
       let noYearGames = [];
-      for (let g = 0; g < upToDate; g++) {
-        if (g <= games.length) {
-          noYearGames.push(games[games.length - 1 - g]);
-        }
+      for (let g = 0; g < upToDate && g < games.length; g++) {
+        noYearGames.push(games[games.length - 1 - g]);
       }
       games = noYearGames;
     }
     if (request.need === "graph") {
       let noYearGames = [];
-      for (let g = 0; g < upToDate * 2; g++) {
-        if (g <= games.length) {
-          noYearGames.push(games[games.length - 1 - g]);
-        }
+      for (let g = 0; g < upToDate * 2 && g < games.length; g++) {
+        noYearGames.push(games[games.length - 1 - g]);
       }
       games = noYearGames;
     }
@@ -64,7 +60,7 @@ module.exports = function serviceProcessGames(games, request) {
   // Summarize game outcomes per user
   let augmentedGames = [];
   for (let g = 0; g < games.length; g++) {
-    let game = games[g];
+    let game = { ...games[g] };
     let augmentedGame = { ...game };
     // Initiate stats
     if (g === 0) {
