@@ -28,7 +28,14 @@ module.exports = tableGetStats = (req, res, next) => {
   Game.find({ tableid: req.params.tableid })
     .then((games) => {
       // Post process
-      let stats = serviceProcessGames(games, req.body);
+      let stats;
+      if (games.length === 0) {
+        stats = {
+          ranking: [],
+        };
+      } else {
+        stats = serviceProcessGames(games, req.body);
+      }
 
       // Response
       console.log("table.getstats.success");
