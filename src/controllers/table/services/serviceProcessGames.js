@@ -65,7 +65,9 @@ module.exports = function serviceProcessGames(games, request) {
     if (g === 0) {
       augmentedGame.stats = {};
     } else {
-      augmentedGame.stats = { ...augmentedGames[g - 1].stats };
+      augmentedGame.stats = {
+        ...augmentedGames[augmentedGames.length - 1].stats,
+      };
     }
     if (augmentedGame.contracts !== undefined) {
       augmentedGame.contracts.forEach((contract) => {
