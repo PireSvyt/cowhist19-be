@@ -67,64 +67,11 @@ module.exports = function serviceProcessGames(games, request) {
     } else {
       augmentedGame.stats = { ...augmentedGames[g - 1].stats };
     }
-    augmentedGame.contracts.forEach((contract) => {
-      if (serviceCheckContract(contract)) {
-        let contractPoints = serviceGamePoints(contract);
-        contract.players.forEach((player) => {
-          // Neglect is a guest
-          let nonguestplayer = true;
-          if (player.nonuser !== undefined) {
-            if (player.nonuser === "guest") {
-              nonguestplayer = false;
-            }
-          }
-          if (nonguestplayer) {
-            // Add player to players if missing
-            if (!Object.keys(augmentedGame.stats).includes(player.userid)) {
-              augmentedGame.stats[player.userid] = {
-                userid: player.userid,
-                attackWins: 0,
-                attackLoss: 0,
-                defenseWins: 0,
-                defenseLoss: 0,
-                cumulatedPoints: 0,
-              };
-            }
-            // Record outcome
-            if (contract.outcome < 0) {
-              if (player.role === "attack") {
-                augmentedGame.stats[player.userid].attackLoss += 1;
-                augmentedGame.stats[player.userid].cumulatedPoints +=
-                  contractPoints.attack;
-              }
-              if (player.role === "defense") {
-                augmentedGame.stats[player.userid].defenseWins += 1;
-                augmentedGame.stats[player.userid].cumulatedPoints +=
-                  contractPoints.defense;
-              }
-            } else {
-              if (player.role === "attack") {
-                augmentedGame.stats[player.userid].attackWins += 1;
-                augmentedGame.stats[player.userid].cumulatedPoints +=
-                  contractPoints.attack;
-              }
-              if (player.role === "defense") {
-                augmentedGame.stats[player.userid].defenseLoss += 1;
-                augmentedGame.stats[player.userid].cumulatedPoints +=
-                  contractPoints.defense;
-              }
-            }
-          }
-        });
-      }
-    });
-    if (request.year === undefined && upToDate < g) {
-      // Remove outdated game
-      let outdatedGame = { ...games[g - upToDate] };
-      outdatedGame.contracts.forEach((outdatedContract) => {
-        if (serviceCheckContract(outdatedContract)) {
-          let outdatedContractPoints = serviceGamePoints(outdatedContract);
-          outdatedContract.players.forEach((player) => {
+    if (augmentedGame.contracts !== undefined) {
+      augmentedGame.contracts.forEach((contract) => {
+        if (serviceCheckContract(contract)) {
+          let contractPoints = serviceGamePoints(contract);
+          contract.players.forEach((player) => {
             // Neglect is a guest
             let nonguestplayer = true;
             if (player.nonuser !== undefined) {
@@ -133,44 +80,99 @@ module.exports = function serviceProcessGames(games, request) {
               }
             }
             if (nonguestplayer) {
-              if (outdatedContract.outcome < 0) {
+              // Add player to players if missing
+              if (!Object.keys(augmentedGame.stats).includes(player.userid)) {
+                augmentedGame.stats[player.userid] = {
+                  userid: player.userid,
+                  attackWins: 0,
+                  attackLoss: 0,
+                  defenseWins: 0,
+                  defenseLoss: 0,
+                  cumulatedPoints: 0,
+                };
+              }
+              // Record outcome
+              if (contract.outcome < 0) {
                 if (player.role === "attack") {
-                  augmentedGame.stats[player.userid].attackLoss -= 1;
-                  augmentedGame.stats[player.userid].cumulatedPoints -=
-                    outdatedContractPoints.attack;
+                  augmentedGame.stats[player.userid].attackLoss += 1;
+                  augmentedGame.stats[player.userid].cumulatedPoints +=
+                    contractPoints.attack;
                 }
                 if (player.role === "defense") {
-                  augmentedGame.stats[player.userid].defenseWins -= 1;
-                  augmentedGame.stats[player.userid].cumulatedPoints -=
-                    outdatedContractPoints.defense;
+                  augmentedGame.stats[player.userid].defenseWins += 1;
+                  augmentedGame.stats[player.userid].cumulatedPoints +=
+                    contractPoints.defense;
                 }
               } else {
                 if (player.role === "attack") {
-                  augmentedGame.stats[player.userid].attackWins -= 1;
-                  augmentedGame.stats[player.userid].cumulatedPoints -=
-                    outdatedContractPoints.attack;
+                  augmentedGame.stats[player.userid].attackWins += 1;
+                  augmentedGame.stats[player.userid].cumulatedPoints +=
+                    contractPoints.attack;
                 }
                 if (player.role === "defense") {
-                  augmentedGame.stats[player.userid].defenseLoss -= 1;
-                  augmentedGame.stats[player.userid].cumulatedPoints -=
-                    outdatedContractPoints.defense;
+                  augmentedGame.stats[player.userid].defenseLoss += 1;
+                  augmentedGame.stats[player.userid].cumulatedPoints +=
+                    contractPoints.defense;
                 }
-              }
-              // Check if players is still in the game or did not participated enough...
-              if (
-                augmentedGame.stats[player.userid].attackLoss === 0 &&
-                augmentedGame.stats[player.userid].defenseWins === 0 &&
-                augmentedGame.stats[player.userid].attackWins === 0 &&
-                augmentedGame.stats[player.userid].defenseLoss === 0
-              ) {
-                delete augmentedGame.stats[player.userid];
               }
             }
           });
         }
       });
+      if (request.year === undefined && upToDate < g) {
+        // Remove outdated game
+        let outdatedGame = { ...games[g - upToDate] };
+        outdatedGame.contracts.forEach((outdatedContract) => {
+          if (serviceCheckContract(outdatedContract)) {
+            let outdatedContractPoints = serviceGamePoints(outdatedContract);
+            outdatedContract.players.forEach((player) => {
+              // Neglect is a guest
+              let nonguestplayer = true;
+              if (player.nonuser !== undefined) {
+                if (player.nonuser === "guest") {
+                  nonguestplayer = false;
+                }
+              }
+              if (nonguestplayer) {
+                if (outdatedContract.outcome < 0) {
+                  if (player.role === "attack") {
+                    augmentedGame.stats[player.userid].attackLoss -= 1;
+                    augmentedGame.stats[player.userid].cumulatedPoints -=
+                      outdatedContractPoints.attack;
+                  }
+                  if (player.role === "defense") {
+                    augmentedGame.stats[player.userid].defenseWins -= 1;
+                    augmentedGame.stats[player.userid].cumulatedPoints -=
+                      outdatedContractPoints.defense;
+                  }
+                } else {
+                  if (player.role === "attack") {
+                    augmentedGame.stats[player.userid].attackWins -= 1;
+                    augmentedGame.stats[player.userid].cumulatedPoints -=
+                      outdatedContractPoints.attack;
+                  }
+                  if (player.role === "defense") {
+                    augmentedGame.stats[player.userid].defenseLoss -= 1;
+                    augmentedGame.stats[player.userid].cumulatedPoints -=
+                      outdatedContractPoints.defense;
+                  }
+                }
+                // Check if players is still in the game or did not participated enough...
+                if (
+                  augmentedGame.stats[player.userid].attackLoss === 0 &&
+                  augmentedGame.stats[player.userid].defenseWins === 0 &&
+                  augmentedGame.stats[player.userid].attackWins === 0 &&
+                  augmentedGame.stats[player.userid].defenseLoss === 0
+                ) {
+                  delete augmentedGame.stats[player.userid];
+                }
+              }
+            });
+          }
+        });
+      }
+      augmentedGames.push(augmentedGame);
     }
-    augmentedGames.push(augmentedGame);
   }
 
   // Ranking
