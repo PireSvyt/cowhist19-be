@@ -60,15 +60,14 @@ module.exports = function serviceProcessGames(games, request) {
   // Summarize game outcomes per user
   let augmentedGames = [];
   for (let g = 0; g < games.length; g++) {
-    let game = { ...games[g] };
-    let augmentedGame = { ...game };
+    let augmentedGame = { ...games[g] };
     // Initiate stats
     if (g === 0) {
-      augmentedGame.stats = [];
+      augmentedGame.stats = {};
     } else {
-      augmentedGame.stats = augmentedGames[g - 1].stats;
+      augmentedGame.stats = { ...augmentedGames[g - 1].stats };
     }
-    game.contracts.forEach((contract) => {
+    augmentedGame.contracts.forEach((contract) => {
       if (serviceCheckContract(contract)) {
         let contractPoints = serviceGamePoints(contract);
         contract.players.forEach((player) => {
@@ -121,7 +120,7 @@ module.exports = function serviceProcessGames(games, request) {
     });
     if (request.year === undefined && upToDate < g) {
       // Remove outdated game
-      let outdatedGame = game[g - upToDate];
+      let outdatedGame = { ...games[g - upToDate] };
       outdatedGame.contracts.forEach((outdatedContract) => {
         if (serviceCheckContract(outdatedContract)) {
           let outdatedContractPoints = serviceGamePoints(outdatedContract);
