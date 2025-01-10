@@ -178,22 +178,26 @@ module.exports = function serviceProcessGames(games, request) {
   }
 
   // Ranking
-  let players = neaterStats(
-    statPlayers(augmentedGames[augmentedGames.length - 1].stats),
-    "ranking"
-  );
-  let playersArray = Object.values(players);
-  playersArray.sort(function (a, b) {
-    let f = "averagepoints";
-    if (a[f] > b[f]) {
-      return -1;
-    }
-    if (a[f] < b[f]) {
-      return 1;
-    }
-    return 0;
-  });
-  stats.ranking = playersArray;
+  if (augmentedGames.length > 0) {
+    let players = neaterStats(
+      statPlayers(augmentedGames[augmentedGames.length - 1].stats),
+      "ranking"
+    );
+    let playersArray = Object.values(players);
+    playersArray.sort(function (a, b) {
+      let f = "averagepoints";
+      if (a[f] > b[f]) {
+        return -1;
+      }
+      if (a[f] < b[f]) {
+        return 1;
+      }
+      return 0;
+    });
+    stats.ranking = playersArray;
+  } else {
+    stats.ranking = [];
+  }
 
   // Additinal request
   switch (request.need) {
