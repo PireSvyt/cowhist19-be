@@ -1,7 +1,7 @@
 require("@jest/globals");
-const authAPI = require("../api/auth.js");
-const adminAPI = require("../api/admin.js");
-const gameAPI = require("../api/game.js");
+const authAPI = require("./api/auth.js");
+const adminAPI = require("./api/admin.js");
+const gameAPI = require("./api/game.js");
 const toolkit = require("../src/resources/toolkit.js");
 const dataGenerator = require("../src/resources/dataGenerator.js");
 
@@ -36,11 +36,11 @@ describe("TEST OF API : game", () => {
             match: { userid: { $ne: adminSignInResponse.data.userid } },
           },
         },
-        adminSignInResponse.data.token,
+        adminSignInResponse.data.token
       );
       //console.log("adminDeleteUsersResponse", adminDeleteUsersResponse);
       expect(adminDeleteUsersResponse.type).toBe(
-        "admin.databasecommand.delete.success",
+        "admin.databasecommand.delete.success"
       );
       adminDeleteTablesResponse = await adminAPI.adminDatabaseCommand(
         {
@@ -50,11 +50,11 @@ describe("TEST OF API : game", () => {
             match: { tableid: { $ne: "delete all" } },
           },
         },
-        adminSignInResponse.data.token,
+        adminSignInResponse.data.token
       );
       //console.log("adminDeleteTablesResponse", adminDeleteTablesResponse);
       expect(adminDeleteTablesResponse.type).toBe(
-        "admin.databasecommand.delete.success",
+        "admin.databasecommand.delete.success"
       );
       adminDeleteGamesResponse = await adminAPI.adminDatabaseCommand(
         {
@@ -64,11 +64,11 @@ describe("TEST OF API : game", () => {
             match: { gameid: { $ne: "delete all" } },
           },
         },
-        adminSignInResponse.data.token,
+        adminSignInResponse.data.token
       );
       //console.log("adminDeleteGamesResponse", adminDeleteGamesResponse);
       expect(adminDeleteGamesResponse.type).toBe(
-        "admin.databasecommand.delete.success",
+        "admin.databasecommand.delete.success"
       );
     });
   });
@@ -90,11 +90,11 @@ describe("TEST OF API : game", () => {
       };
       responses["insertUsers"] = await adminAPI.adminDatabaseCommand(
         userAction,
-        adminSignInResponse.data.token,
+        adminSignInResponse.data.token
       );
       //console.log("responses.insertUsers", responses.insertUsers);
       expect(responses.insertUsers.type).toBe(
-        "admin.databasecommand.insertmany.success",
+        "admin.databasecommand.insertmany.success"
       );
       users = responses.insertUsers.data;
       //console.log("users", users);
@@ -112,10 +112,10 @@ describe("TEST OF API : game", () => {
       };
       responses["insertPickedUser"] = await adminAPI.adminDatabaseCommand(
         pickedUserAction,
-        adminSignInResponse.data.token,
+        adminSignInResponse.data.token
       );
       expect(responses.insertPickedUser.type).toBe(
-        "admin.databasecommand.insertmany.success",
+        "admin.databasecommand.insertmany.success"
       );
       users.push(pickedUser);
       let userSignInInputs = {
@@ -144,11 +144,11 @@ describe("TEST OF API : game", () => {
       //console.log("tableAction.action.items[0]", tableAction.action.items[0]);
       responses["insertTable"] = await adminAPI.adminDatabaseCommand(
         tableAction,
-        adminSignInResponse.data.token,
+        adminSignInResponse.data.token
       );
       //console.log("responses.insertTable", responses.insertTable);
       expect(responses.insertTable.type).toBe(
-        "admin.databasecommand.insertmany.success",
+        "admin.databasecommand.insertmany.success"
       );
       table = responses.insertTable.data[0];
       //console.log("table", table);
@@ -168,7 +168,7 @@ describe("TEST OF API : game", () => {
       //console.log("gameInputs", gameInputs);
       responses["apiGameCreate"] = await gameAPI.apiGameCreate(
         gameInputs,
-        userSignInResponse.data.token,
+        userSignInResponse.data.token
       );
       //console.log("responses.apiGameCreate", responses.apiGameCreate);
       expect(responses.apiGameCreate.type).toBe("game.create.success");
@@ -187,12 +187,12 @@ describe("TEST OF API : game", () => {
             },
           },
         },
-        adminSignInResponse.data.token,
+        adminSignInResponse.data.token
       );
       //console.log("responses.check.data", responses.check.data);
       expect(responses.check.type).toBe("admin.databasecommand.get.success");
       expect(responses.check.data.items[0].gameid).toBe(
-        responses.apiGameCreate.data.gameid,
+        responses.apiGameCreate.data.gameid
       );
 
       // Account for step
@@ -210,17 +210,17 @@ describe("TEST OF API : game", () => {
       //console.log("games[0].gameid", games[0].gameid);
       responses["apiGameGet"] = await gameAPI.apiGameGet(
         games[0].gameid,
-        userSignInResponse.data.token,
+        userSignInResponse.data.token
       );
       console.log("responses.apiGameGet", responses.apiGameGet);
       expect(responses.apiGameGet.type).toBe("game.get.success");
       expect(responses.apiGameGet.data.game.name).toBe(tables[0].name);
       expect(responses.apiGameGet.data.game.guests).toBe(tables[0].guests);
       expect(responses.apiGameGet.data.game.players.length).toBe(
-        tables[0].userids.length,
+        tables[0].userids.length
       );
       expect(
-        responses.apiGameGet.data.game.contracts.length,
+        responses.apiGameGet.data.game.contracts.length
       ).toBeGreaterThanOrEqual(1);
     });
   });
@@ -236,7 +236,7 @@ describe("TEST OF API : game", () => {
         {
           gameid: games[0].gameid,
         },
-        userSignInResponse.data.token,
+        userSignInResponse.data.token
       );
       //console.log("responses.apiGameDelete", responses.apiGameDelete);
       expect(responses.apiGameDelete.type).toBe("game.delete.success");

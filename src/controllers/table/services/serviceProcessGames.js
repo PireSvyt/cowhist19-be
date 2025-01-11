@@ -34,7 +34,7 @@ module.exports = function serviceProcessGames(games, request) {
       // Filter to only consider the games of that year
       games = games.filter((game) => {
         let gateDate = new Date(game.date);
-        return gateDate.getYear() === request.year;
+        return gateDate.getYear() + 1900 === request.year;
       });
     }
     if (request.need === "graph") {
@@ -61,8 +61,9 @@ module.exports = function serviceProcessGames(games, request) {
   let augmentedGames = [];
   for (let g = 0; g < games.length; g++) {
     let augmentedGame = { ...games[g] };
+
     // Initiate stats
-    if (g === 0) {
+    if (augmentedGames.length === 0) {
       augmentedGame.stats = {};
     } else {
       augmentedGame.stats = {
