@@ -40,6 +40,7 @@ module.exports = authSignup = (req, res, next) => {
           password: req.body.password,
           status: "signedup",
           activationtoken: random_string(20),
+          priviledges: [],
         });
         if (user.userid === undefined) {
           user.userid = user._id;
