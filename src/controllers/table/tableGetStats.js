@@ -8,6 +8,10 @@ module.exports = tableGetStats = (req, res, next) => {
   provides the stats according to given parameters
   
   body parameters are transfered to the processGames function 
+
+  parameters
+  * need : ranking or graph
+  * year : optional field to get the stats over a certain year or sliding period
   
   possible response types
   * table.getstats.success
