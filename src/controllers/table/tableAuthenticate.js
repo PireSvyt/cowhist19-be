@@ -34,6 +34,12 @@ module.exports = tableAuthenticate = (req, res, next) => {
     .then((table) => {
       if (table !== null) {
         if (table.userids.includes(decodedToken.userid)) {
+          let tableToLeverage = { ...table };
+          // Sets statsGameNumber if undefined
+          if (tableToLeverage.statsGameNumber === undefined) {
+            tableToLeverage.statsGameNumber = 10; // Default value, see model
+          }
+          req.augmented.table = tableToLeverage;
           next();
         } else {
           console.log("table.authenticate.error.notamember");

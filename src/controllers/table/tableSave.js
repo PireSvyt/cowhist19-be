@@ -47,7 +47,11 @@ module.exports = tableSave = (req, res, next) => {
       }
     });
     tableToSave.userids = tableUsers;
-    delete tableToSave.players
+    delete tableToSave.players;
+    // Sets statsGameNumber if undefined
+    if (tableToSave.statsGameNumber === undefined) {
+      tableToSave.statsGameNumber = 10; // Default value, see model
+    }
 
     // Manage table to users
     Table.findOne({ tableid: tableToSave.tableid })

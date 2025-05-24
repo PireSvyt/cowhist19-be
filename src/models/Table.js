@@ -7,7 +7,7 @@ if (process.env.MONGOOSE_DEBUG === "TRUE") {
 
 const tableSchema = mongoose.Schema(
   {
-    schema: { type: String},
+    schema: { type: String },
     tableid: { type: String, required: true, unique: true },
     name: { type: String, required: true, unique: true },
     guests: { type: Number, required: true },
@@ -18,9 +18,10 @@ const tableSchema = mongoose.Schema(
         },
       ],
     },
+    statsGameNumber: { type: Number, default: 10 },
     meta: { type: Map, of: String },
   },
-  { strict: true },
+  { strict: true }
 );
 
 tableSchema.plugin(uniqueValidator);

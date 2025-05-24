@@ -29,6 +29,10 @@ module.exports = tableCreate = (req, res, next) => {
     }
   });
   tableToSave.users = tableUsers;*/
+  // Sets statsGameNumber if undefined
+  if (tableToSave.statsGameNumber === undefined) {
+    tableToSave.statsGameNumber = 10; // Default value, see model
+  }
   tableToSave = new Table(tableToSave);
   tableToSave.tableid = tableToSave._id;
 

@@ -2,7 +2,7 @@ require("dotenv").config();
 const serviceCheckContract = require("./serviceCheckContract.js");
 const serviceGamePoints = require("./serviceGamePoints.js");
 
-module.exports = function serviceProcessGames(games, request) {
+module.exports = function serviceProcessGames(table, games, request) {
   /*
   
   process the game list to provide stats according to request
@@ -20,7 +20,6 @@ module.exports = function serviceProcessGames(games, request) {
   }
 
   // Initialize
-  let upToDate = 50;
   let stats = {};
   let graph = [];
 
@@ -43,14 +42,14 @@ module.exports = function serviceProcessGames(games, request) {
   } else {
     if (request.need === "ranking") {
       let noYearGames = [];
-      for (let g = 0; g < upToDate && g < games.length; g++) {
+      for (let g = 0; g < table.statsGameNumber && g < games.length; g++) {
         noYearGames.push(games[games.length - 1 - g]);
       }
       games = noYearGames;
     }
     if (request.need === "graph") {
       let noYearGames = [];
-      for (let g = 0; g < upToDate * 2 && g < games.length; g++) {
+      for (let g = 0; g < table.statsGameNumber * 2 && g < games.length; g++) {
         noYearGames.push(games[games.length - 1 - g]);
       }
       games = noYearGames;
@@ -122,9 +121,12 @@ module.exports = function serviceProcessGames(games, request) {
           });
         }
       });
-      if (request.year === undefined && upToDate < g) {
+
+      /*TODO
+      
+      if (request.year === undefined && table.statsGameNumber < g) {
         // Remove outdated game
-        let outdatedGame = { ...games[g - upToDate] };
+        let outdatedGame = { ...games[g - table.statsGameNumber] };
         outdatedGame.contracts.forEach((outdatedContract) => {
           if (serviceCheckContract(outdatedContract)) {
             let outdatedContractPoints = serviceGamePoints(outdatedContract);
@@ -173,11 +175,13 @@ module.exports = function serviceProcessGames(games, request) {
             });
           }
         });
-      }
+      }*/
+
       augmentedGames.push(augmentedGame);
     }
   }
 
+  /*TODO
   // Ranking
   if (augmentedGames.length > 0) {
     let players = neaterStats(
@@ -199,6 +203,7 @@ module.exports = function serviceProcessGames(games, request) {
   } else {
     stats.ranking = [];
   }
+  */
 
   // Additinal request
   switch (request.need) {
@@ -209,7 +214,7 @@ module.exports = function serviceProcessGames(games, request) {
       let graph = [];
       if (request.year === undefined) {
         // Only the last games matter
-        for (let g = 0; g < upToDate; g++) {
+        for (let g = 0; g < table.statsGameNumber; g++) {
           if (g < augmentedGames.length) {
             let augmentedGame = augmentedGames[augmentedGames.length - g - 1];
             graph.push({
@@ -222,7 +227,9 @@ module.exports = function serviceProcessGames(games, request) {
             });
           }
         }
-      } else {
+      }
+      /*TODO
+      else {
         // Only the game from today minus request.year matter
         let nowDate = new Date();
         let nowYear = nowDate.getYear();
@@ -244,6 +251,7 @@ module.exports = function serviceProcessGames(games, request) {
             };
           });
       }
+  */
       stats.graph = graph;
       break;
     default:

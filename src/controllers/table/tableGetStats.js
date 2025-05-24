@@ -38,7 +38,7 @@ module.exports = tableGetStats = (req, res, next) => {
           ranking: [],
         };
       } else {
-        stats = serviceProcessGames(games, req.body);
+        stats = serviceProcessGames(req.augmented.table, games, req.body);
       }
 
       // Response
