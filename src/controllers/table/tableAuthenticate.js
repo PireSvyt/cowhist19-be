@@ -39,6 +39,9 @@ module.exports = tableAuthenticate = (req, res, next) => {
           if (tableToLeverage.statsGameNumber === undefined) {
             tableToLeverage.statsGameNumber = 10; // Default value, see model
           }
+          if (req.augmented === undefined) {
+            req.augmented = {};
+          }
           req.augmented.table = tableToLeverage;
           next();
         } else {
