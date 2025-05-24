@@ -122,8 +122,6 @@ module.exports = function serviceProcessGames(table, games, request) {
         }
       });
 
-      /*TODO
-      
       if (request.year === undefined && table.statsGameNumber < g) {
         // Remove outdated game
         let outdatedGame = { ...games[g - table.statsGameNumber] };
@@ -175,13 +173,12 @@ module.exports = function serviceProcessGames(table, games, request) {
             });
           }
         });
-      }*/
+      }
 
       augmentedGames.push(augmentedGame);
     }
   }
 
-  /*TODO
   // Ranking
   if (augmentedGames.length > 0) {
     let players = neaterStats(
@@ -203,7 +200,6 @@ module.exports = function serviceProcessGames(table, games, request) {
   } else {
     stats.ranking = [];
   }
-  */
 
   // Additinal request
   switch (request.need) {
@@ -211,7 +207,7 @@ module.exports = function serviceProcessGames(table, games, request) {
       // Already done
       break;
     case "graph":
-      let graph = [];
+      graph = [];
       if (request.year === undefined) {
         // Only the last games matter
         for (let g = 0; g < table.statsGameNumber; g++) {
@@ -227,9 +223,7 @@ module.exports = function serviceProcessGames(table, games, request) {
             });
           }
         }
-      }
-      /*TODO
-      else {
+      } else {
         // Only the game from today minus request.year matter
         let nowDate = new Date();
         let nowYear = nowDate.getYear();
@@ -251,7 +245,6 @@ module.exports = function serviceProcessGames(table, games, request) {
             };
           });
       }
-  */
       stats.graph = graph;
       break;
     default:
