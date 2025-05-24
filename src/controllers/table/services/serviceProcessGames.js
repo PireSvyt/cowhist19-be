@@ -174,9 +174,9 @@ module.exports = function serviceProcessGames(table, games, request) {
           }
         });
       }
-
-      augmentedGames.push(augmentedGame);
     }
+
+    augmentedGames.push(augmentedGame);
   }
 
   // Ranking
