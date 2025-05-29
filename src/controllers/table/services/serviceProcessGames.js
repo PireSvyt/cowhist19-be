@@ -21,21 +21,10 @@ module.exports = function serviceProcessGames(table, games, request) {
 
   // Initialize
   let stats = {};
-
-  console.log("table", table);
-  console.log("request", request);
-
-  console.log("raw games #", games.length);
   games = docGames(games);
-  console.log("doc games #", games.length);
   games = sortGames(games);
-  console.log("sorted games #", games.length);
   games = filterGames(table, request, games);
-  console.log("filtered games #", games.length);
-  console.log("filtered games #0", games[0]);
   games = augmentGames(table, request, games);
-  console.log("augmentedGames games #", games.length);
-  console.log("augmentedGames games #0", games[0]);
 
   switch (request.need) {
     case "ranking":
@@ -44,10 +33,7 @@ module.exports = function serviceProcessGames(table, games, request) {
     case "graph":
       stats.graph = computeGraph(table, request, games);
       break;
-    default:
-    // :/
   }
-  console.log("stats", stats);
 
   return stats;
 };
