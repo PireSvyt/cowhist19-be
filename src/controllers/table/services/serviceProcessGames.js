@@ -279,7 +279,7 @@ function computeGraph(table, request, games) {
           ranking[playerid] = rankingGame.graph[playerid];
           ranking[playerid].games = 1;
         } else {
-          Object.keys(stats).forEach((statKey) => {
+          Object.keys(rankingGame.graph[playerid]).forEach((statKey) => {
             ranking[playerid][statKey] += rankingGame.graph[playerid][statKey];
           });
           ranking[playerid].games += 1;
