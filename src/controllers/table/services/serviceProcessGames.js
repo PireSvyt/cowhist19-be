@@ -25,12 +25,15 @@ module.exports = function serviceProcessGames(table, games, request) {
   console.log("table", table);
   console.log("request", request);
 
+  console.log("raw games #", games.length);
+  games = docGames(games);
+  console.log("doc games #", games.length);
   games = sortGames(games);
-  console.log("raw games #", games.len);
+  console.log("sorted games #", games.length);
   games = filterGames(table, request, games);
-  console.log("filtered games #", games.len);
+  console.log("filtered games #", games.length);
   games = augmentGames(table, games);
-  console.log("augmentedGames games #", games.len);
+  console.log("augmentedGames games #", games.length);
   console.log("augmentedGames", games);
 
   switch (request.need) {
@@ -47,6 +50,14 @@ module.exports = function serviceProcessGames(table, games, request) {
 
   return stats;
 };
+
+function docGames(games) {
+  newGames = [];
+  games.forEach((game) => {
+    return game._doc;
+  });
+  return newGames;
+}
 
 function sortGames(games) {
   let newGames = [...games];
