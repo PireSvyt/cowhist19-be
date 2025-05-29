@@ -277,13 +277,15 @@ function computeGraph(table, request, games) {
       Object.keys(rankingGame.graph).forEach((playerid) => {
         if (!Object.keys(ranking).includes(playerid)) {
           ranking[playerid] = rankingGame.graph[playerid];
-          ranking[playerid].games = 1;
         } else {
           Object.keys(rankingGame.graph[playerid]).forEach((statKey) => {
-            ranking[playerid][statKey] += rankingGame.graph[playerid][statKey];
+            if (statKey != "userid") {
+              ranking[playerid][statKey] +=
+                rankingGame.graph[playerid][statKey];
+            }
           });
-          ranking[playerid].games += 1;
         }
+        ranking[playerid].games = 1;
       });
     });
     // Average points
