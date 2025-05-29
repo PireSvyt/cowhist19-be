@@ -42,7 +42,7 @@ module.exports = tableAuthenticate = (req, res, next) => {
           if (req.augmented === undefined) {
             req.augmented = {};
           }
-          req.augmented.table = tableToLeverage;
+          req.augmented.table = tableToLeverage._doc;
           next();
         } else {
           console.log("table.authenticate.error.notamember");
