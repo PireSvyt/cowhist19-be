@@ -108,10 +108,12 @@ function augmentGames(table, request, games) {
     // Initiate stats
     if (augmentedGames.length === 0) {
       augmentedGame.stats = {};
+      augmentedGame.graph = {};
     } else {
       augmentedGame.stats = {
         ...augmentedGames[augmentedGames.length - 1].stats,
       };
+      augmentedGame.graph = {};
     }
     if (augmentedGame.contracts !== undefined) {
       augmentedGame.contracts.forEach((contract) => {
