@@ -28,10 +28,8 @@ module.exports = function serviceProcessGames(table, games, request) {
   games = filterGames(table, request, games);
 
   games = augmentGames(table, request, games);
-  console.log("augmentedGames", games);
 
   games = reverseGames(games);
-  console.log("reversedGames", games);
 
   switch (request.need) {
     case "ranking":
@@ -276,12 +274,12 @@ function computeGraph(table, request, games) {
   function computeRankingFromGames(rankingGames) {
     let ranking = {};
     rankingGames.forEach((rankingGame) => {
-      rankingGame.graph.keys().forEach((playerid) => {
-        if (!ranking.keys().includes(playerid)) {
+      Object.keys(rankingGame.graph).forEach((playerid) => {
+        if (!Object.keys(ranking).includes(playerid)) {
           ranking[playerid] = rankingGame.graph[playerid];
           ranking[playerid].games = 1;
         } else {
-          stats.keys().forEach((statKey) => {
+          Object.keys(stats).forEach((statKey) => {
             ranking[playerid][statKey] += rankingGame.graph[playerid][statKey];
           });
           ranking[playerid].games += 1;
@@ -289,7 +287,7 @@ function computeGraph(table, request, games) {
       });
     });
     // Average points
-    ranking.keys().forEach((playerid) => {
+    Object.keys(ranking).forEach((playerid) => {
       ranking[playerid].averagepoints =
         ranking[playerid].cumulatedPoints / ranking[playerid].games;
     });
