@@ -31,6 +31,7 @@ module.exports = function serviceProcessGames(table, games, request) {
       stats.ranking = computeRanking(games);
       break;
     case "graph":
+      stats.ranking = computeRanking(games);
       stats.graph = computeGraph(table, request, games);
       break;
   }
