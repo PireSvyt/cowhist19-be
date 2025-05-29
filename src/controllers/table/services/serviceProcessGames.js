@@ -285,13 +285,21 @@ function computeGraph(table, request, games) {
             }
           });
         }
-        ranking[playerid].games = 1;
       });
     });
     // Average points
     Object.keys(ranking).forEach((playerid) => {
+      ranking[playerid].games =
+        ranking[playerid].attackLoss +
+        ranking[playerid].attackWins +
+        ranking[playerid].defenseLoss +
+        ranking[playerid].defenseWins;
       ranking[playerid].averagepoints =
         ranking[playerid].cumulatedPoints / ranking[playerid].games;
+    });
+    // Neatering
+    Object.keys(ranking).forEach((playerid) => {
+      ranking[playerid] = ranking[playerid].averagepoints;
     });
     return ranking;
   }
