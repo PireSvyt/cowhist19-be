@@ -42,7 +42,7 @@ module.exports = function serviceProcessGames(table, games, request) {
       stats.ranking = computeRanking(games);
       break;
     case "graph":
-      stats.graph = computeGraph(request, games);
+      stats.graph = computeGraph(table, request, games);
       break;
     default:
     // :/
@@ -247,7 +247,7 @@ function computeRanking(games) {
   }
 }
 
-function computeGraph(request, games) {
+function computeGraph(table, request, games) {
   graph = [];
   if (request.year === undefined) {
     // Only the last games matter
