@@ -21,17 +21,44 @@ module.exports = function serviceProcessGames(table, games, request) {
 
   // Initialize
   let stats = {};
-  let graph = [];
 
-  // Sort games
-  games.sort(function (first, second) {
+  console.log("table", table);
+  console.log("request", request);
+
+  games = sortGames(games);
+  games = filterGames(table, request, games);
+  games = augmentGames(table, games);
+  console.log("augmentedGames", augmentGames);
+
+  switch (request.need) {
+    case "ranking":
+      stats.ranking = computeRanking(games);
+      break;
+    case "graph":
+      stats.graph = computeGraph(request, games);
+      break;
+    default:
+    // :/
+  }
+
+  return stats;
+};
+
+function sortGames(games) {
+  let newGames = [...games];
+  newGames.sort(function (first, second) {
     return first.date - second.date;
   });
+  return newGames;
+}
+
+function filterGames(table, request, games) {
+  newGames = [];
 
   if (request.year !== undefined) {
     if (request.need === "ranking") {
       // Filter to only consider the games of that year
-      games = games.filter((game) => {
+      newGames = games.filter((game) => {
         let gateDate = new Date(game.date);
         return gateDate.getYear() + 1900 === request.year;
       });
@@ -41,22 +68,21 @@ module.exports = function serviceProcessGames(table, games, request) {
     }
   } else {
     if (request.need === "ranking") {
-      let noYearGames = [];
       for (let g = 0; g < table.statsGameNumber && g < games.length; g++) {
-        noYearGames.push(games[games.length - 1 - g]);
+        newGames.push(games[games.length - 1 - g]);
       }
-      games = noYearGames;
     }
     if (request.need === "graph") {
-      let noYearGames = [];
       for (let g = 0; g < table.statsGameNumber * 2 && g < games.length; g++) {
-        noYearGames.push(games[games.length - 1 - g]);
+        newGames.push(games[games.length - 1 - g]);
       }
-      games = noYearGames;
     }
   }
 
-  // Summarize game outcomes per user
+  return newGames;
+}
+
+function augmentGames(table, games) {
   let augmentedGames = [];
   for (let g = 0; g < games.length; g++) {
     let augmentedGame = { ...games[g] };
@@ -179,10 +205,13 @@ module.exports = function serviceProcessGames(table, games, request) {
     augmentedGames.push(augmentedGame);
   }
 
-  // Ranking
-  if (augmentedGames.length > 0) {
+  return augmentedGames;
+}
+
+function computeRanking(games) {
+  if (games.length > 0) {
     let players = neaterStats(
-      statPlayers(augmentedGames[augmentedGames.length - 1].stats),
+      statPlayers(games[games.length - 1].stats),
       "ranking"
     );
     let playersArray = Object.values(players);
@@ -196,63 +225,45 @@ module.exports = function serviceProcessGames(table, games, request) {
       }
       return 0;
     });
-    stats.ranking = playersArray;
+    return playersArray;
   } else {
-    stats.ranking = [];
+    return [];
   }
+}
 
-  // Additinal request
-  switch (request.need) {
-    case "ranking":
-      // Already done
-      break;
-    case "graph":
-      graph = [];
-      if (request.year === undefined) {
-        // Only the last games matter
-        for (let g = 0; g < table.statsGameNumber; g++) {
-          if (g < augmentedGames.length) {
-            let augmentedGame = augmentedGames[augmentedGames.length - g - 1];
-            graph.push({
-              date: augmentedGame.date,
-              players: neaterStats(
-                statPlayers(augmentedGame.stats),
-                "graph",
-                request.field
-              ),
-            });
-          }
-        }
-      } else {
-        // Only the game from today minus request.year matter
-        let nowDate = new Date();
-        let nowYear = nowDate.getYear();
-        let startYear = nowYear - request.year;
-        graph = augmentedGames
-          .filter((augmentedGame) => {
-            let gameDate = new Date(augmentedGame.date);
-            let gameYear = gameDate.getYear();
-            return startYear <= gameYear;
-          })
-          .map((augmentedGame) => {
-            return {
-              date: augmentedGame.date,
-              players: neaterStats(
-                statPlayers(augmentedGame.stats),
-                "graph",
-                request.field
-              ),
-            };
-          });
+function computeGraph(request, games) {
+  graph = [];
+  if (request.year === undefined) {
+    // Only the last games matter
+    for (let g = 0; g < table.statsGameNumber; g++) {
+      if (g < games.length) {
+        let game = games[games.length - g - 1];
+        graph.push({
+          date: game.date,
+          players: neaterStats(statPlayers(game.stats), "graph", request.field),
+        });
       }
-      stats.graph = graph;
-      break;
-    default:
-    // :/
+    }
+  } else {
+    // Only the game from today minus request.year matter
+    let nowDate = new Date();
+    let nowYear = nowDate.getYear();
+    let startYear = nowYear - request.year;
+    graph = games
+      .filter((game) => {
+        let gameDate = new Date(game.date);
+        let gameYear = gameDate.getYear();
+        return startYear <= gameYear;
+      })
+      .map((game) => {
+        return {
+          date: game.date,
+          players: neaterStats(statPlayers(game.stats), "graph", request.field),
+        };
+      });
   }
-
-  return stats;
-};
+  return graph;
+}
 
 function statPlayers(players) {
   // Constants
