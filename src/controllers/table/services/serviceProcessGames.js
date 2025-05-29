@@ -22,15 +22,22 @@ module.exports = function serviceProcessGames(table, games, request) {
   // Initialize
   let stats = {};
   games = docGames(games);
+
   games = sortGames(games);
+
   games = filterGames(table, request, games);
+
   games = augmentGames(table, request, games);
+  console.log("augmentedGames", games);
 
   switch (request.need) {
     case "ranking":
       stats.ranking = computeRanking(games);
       break;
     case "graph":
+      games = reverseGames(games);
+      console.log("reversedGames", games);
+
       stats.ranking = computeRanking(games);
       stats.graph = computeGraph(table, request, games);
       break;
@@ -50,7 +57,15 @@ function docGames(games) {
 function sortGames(games) {
   let newGames = [...games];
   newGames.sort(function (first, second) {
-    return second.date - first.date;
+    return first.date - second.date;
+  });
+  return newGames;
+}
+
+function reverseGames(games) {
+  let newGames = [];
+  games.forEach((game) => {
+    newGames.unshift(game);
   });
   return newGames;
 }
@@ -87,8 +102,8 @@ function filterGames(table, request, games) {
 
 function augmentGames(table, request, games) {
   let augmentedGames = [];
-  for (let g = 0; g < games.length; g++) {
-    let augmentedGame = { ...games[g] };
+  games.forEach((game) => {
+    let augmentedGame = { ...game };
 
     // Initiate stats
     if (augmentedGames.length === 0) {
@@ -150,8 +165,8 @@ function augmentGames(table, request, games) {
           });
         }
       });
-
-      if (request.year === undefined && table.statsGameNumber < g) {
+      /*
+      if (request.year === undefined) {
         // Remove outdated game
         let outdatedGame = { ...games[g - table.statsGameNumber] };
         outdatedGame.contracts.forEach((outdatedContract) => {
@@ -203,10 +218,11 @@ function augmentGames(table, request, games) {
           }
         });
       }
+      */
     }
 
     augmentedGames.push(augmentedGame);
-  }
+  });
 
   return augmentedGames;
 }
@@ -240,7 +256,8 @@ function computeGraph(table, request, games) {
     // Only the last games matter
     for (let g = 0; g < table.statsGameNumber; g++) {
       if (g < games.length) {
-        let game = games[games.length - g - 1];
+        //let game = games[games.length - g - 1];
+        let game = games[g];
         graph.push({
           date: game.date,
           players: neaterStats(statPlayers(game.stats), "graph", request.field),
