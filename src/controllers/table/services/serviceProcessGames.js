@@ -300,7 +300,7 @@ function computeGraph(table, request, games) {
     // Only the last games matter
     for (let g = 0; g < table.statsGameNumber && g < games.length; g++) {
       graph.push({
-        date: game.date,
+        date: games[g].date,
         players: computeRankingFromGames(games.slice(g, table.statsGameNumber)),
       });
     }
