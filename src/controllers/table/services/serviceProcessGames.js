@@ -297,10 +297,6 @@ function computeGraph(table, request, games) {
       ranking[playerid].averagepoints =
         ranking[playerid].cumulatedPoints / ranking[playerid].games;
     });
-    // Neatering
-    Object.keys(ranking).forEach((playerid) => {
-      ranking[playerid] = ranking[playerid].averagepoints;
-    });
     return ranking;
   }
 
