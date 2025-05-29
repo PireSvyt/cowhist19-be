@@ -276,13 +276,13 @@ function computeGraph(table, request, games) {
   function computeRankingFromGames(rankingGames) {
     let ranking = {};
     rankingGames.forEach((rankingGame) => {
-      rankingGame.graph.forEach((playerid, stats) => {
+      rankingGame.graph.keys().forEach((playerid) => {
         if (!ranking.keys().includes(playerid)) {
-          ranking[playerid] = stats;
+          ranking[playerid] = rankingGame.graph[playerid];
           ranking[playerid].games = 1;
         } else {
           stats.keys().forEach((statKey) => {
-            ranking[playerid][statKey] += stats[statKey];
+            ranking[playerid][statKey] += rankingGame.graph[playerid][statKey];
           });
           ranking[playerid].games += 1;
         }
