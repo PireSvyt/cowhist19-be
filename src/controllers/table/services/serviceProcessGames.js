@@ -63,7 +63,7 @@ function docGames(games) {
 function sortGames(games) {
   let newGames = [...games];
   newGames.sort(function (first, second) {
-    return first.date - second.date;
+    return second.date - first.date;
   });
   return newGames;
 }
