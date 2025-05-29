@@ -254,15 +254,13 @@ function computeGraph(table, request, games) {
   graph = [];
   if (request.year === undefined) {
     // Only the last games matter
-    for (let g = 0; g < table.statsGameNumber; g++) {
-      if (g < games.length) {
-        //let game = games[games.length - g - 1];
-        let game = games[g];
-        graph.push({
-          date: game.date,
-          players: neaterStats(statPlayers(game.stats), "graph", request.field),
-        });
-      }
+    for (let g = 0; g < table.statsGameNumber && g < games.length; g++) {
+      //let game = games[games.length - g - 1];
+      let game = { ...games[g] };
+      graph.push({
+        date: game.date,
+        players: neaterStats(statPlayers(game.stats), "graph", request.field),
+      });
     }
   } else {
     // Only the game from today minus request.year matter
