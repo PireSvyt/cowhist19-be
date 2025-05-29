@@ -330,7 +330,7 @@ function computeGraph(table, request, games) {
         };
       });
   }
-  return graph;
+  return reverseGames(graph);
 }
 
 function statPlayers(players) {
