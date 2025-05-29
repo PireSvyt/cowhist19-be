@@ -32,9 +32,10 @@ module.exports = function serviceProcessGames(table, games, request) {
   console.log("sorted games #", games.length);
   games = filterGames(table, request, games);
   console.log("filtered games #", games.length);
-  games = augmentGames(table, games);
+  console.log("filtered games #0", games[0]);
+  games = augmentGames(table, request, games);
   console.log("augmentedGames games #", games.length);
-  console.log("augmentedGames", games);
+  console.log("augmentedGames games #0", games[0]);
 
   switch (request.need) {
     case "ranking":
@@ -97,7 +98,7 @@ function filterGames(table, request, games) {
   return newGames;
 }
 
-function augmentGames(table, games) {
+function augmentGames(table, request, games) {
   let augmentedGames = [];
   for (let g = 0; g < games.length; g++) {
     let augmentedGame = { ...games[g] };
