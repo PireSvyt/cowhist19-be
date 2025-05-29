@@ -54,7 +54,7 @@ module.exports = function serviceProcessGames(table, games, request) {
 function docGames(games) {
   newGames = [];
   games.forEach((game) => {
-    return game._doc;
+    newGames.push(game._doc);
   });
   return newGames;
 }
