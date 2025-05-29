@@ -26,9 +26,12 @@ module.exports = function serviceProcessGames(table, games, request) {
   console.log("request", request);
 
   games = sortGames(games);
+  console.log("raw games #", games.len);
   games = filterGames(table, request, games);
+  console.log("filtered games #", games.len);
   games = augmentGames(table, games);
-  console.log("augmentedGames", augmentGames);
+  console.log("augmentedGames games #", games.len);
+  console.log("augmentedGames", games);
 
   switch (request.need) {
     case "ranking":
@@ -40,6 +43,7 @@ module.exports = function serviceProcessGames(table, games, request) {
     default:
     // :/
   }
+  console.log("stats", stats);
 
   return stats;
 };
