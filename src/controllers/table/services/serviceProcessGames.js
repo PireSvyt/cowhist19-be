@@ -30,14 +30,14 @@ module.exports = function serviceProcessGames(table, games, request) {
   games = augmentGames(table, request, games);
   console.log("augmentedGames", games);
 
+  games = reverseGames(games);
+  console.log("reversedGames", games);
+
   switch (request.need) {
     case "ranking":
       stats.ranking = computeRanking(games);
       break;
     case "graph":
-      games = reverseGames(games);
-      console.log("reversedGames", games);
-
       stats.ranking = computeRanking(games);
       stats.graph = computeGraph(table, request, games);
       break;
@@ -137,16 +137,31 @@ function augmentGames(table, request, games) {
                   cumulatedPoints: 0,
                 };
               }
+              // Graph
+              augmentedGame.graph[player.userid] = {
+                userid: player.userid,
+                attackWins: 0,
+                attackLoss: 0,
+                defenseWins: 0,
+                defenseLoss: 0,
+                cumulatedPoints: 0,
+              };
               // Record outcome
               if (contract.outcome < 0) {
                 if (player.role === "attack") {
                   augmentedGame.stats[player.userid].attackLoss += 1;
                   augmentedGame.stats[player.userid].cumulatedPoints +=
                     contractPoints.attack;
+                  augmentedGame.graph[player.userid].attackLoss += 1;
+                  augmentedGame.graph[player.userid].cumulatedPoints +=
+                    contractPoints.attack;
                 }
                 if (player.role === "defense") {
                   augmentedGame.stats[player.userid].defenseWins += 1;
                   augmentedGame.stats[player.userid].cumulatedPoints +=
+                    contractPoints.defense;
+                  augmentedGame.graph[player.userid].defenseWins += 1;
+                  augmentedGame.graph[player.userid].cumulatedPoints +=
                     contractPoints.defense;
                 }
               } else {
@@ -154,10 +169,16 @@ function augmentGames(table, request, games) {
                   augmentedGame.stats[player.userid].attackWins += 1;
                   augmentedGame.stats[player.userid].cumulatedPoints +=
                     contractPoints.attack;
+                  augmentedGame.graph[player.userid].attackWins += 1;
+                  augmentedGame.graph[player.userid].cumulatedPoints +=
+                    contractPoints.attack;
                 }
                 if (player.role === "defense") {
                   augmentedGame.stats[player.userid].defenseLoss += 1;
                   augmentedGame.stats[player.userid].cumulatedPoints +=
+                    contractPoints.defense;
+                  augmentedGame.graph[player.userid].defenseLoss += 1;
+                  augmentedGame.graph[player.userid].cumulatedPoints +=
                     contractPoints.defense;
                 }
               }
@@ -229,10 +250,7 @@ function augmentGames(table, request, games) {
 
 function computeRanking(games) {
   if (games.length > 0) {
-    let players = neaterStats(
-      statPlayers(games[games.length - 1].stats),
-      "ranking"
-    );
+    let players = neaterStats(statPlayers(games[0].stats), "ranking");
     let playersArray = Object.values(players);
     playersArray.sort(function (a, b) {
       let f = "averagepoints";
@@ -252,14 +270,36 @@ function computeRanking(games) {
 
 function computeGraph(table, request, games) {
   graph = [];
+
+  function computeRankingFromGames(rankingGames) {
+    let ranking = {};
+    rankingGames.forEach((rankingGame) => {
+      rankingGame.graph.forEach((playerid, stats) => {
+        if (!ranking.keys().includes(playerid)) {
+          ranking[playerid] = stats;
+          ranking[playerid].games = 1;
+        } else {
+          stats.keys().forEach((statKey) => {
+            ranking[playerid][statKey] += stats[statKey];
+          });
+          ranking[playerid].games += 1;
+        }
+      });
+    });
+    // Average points
+    ranking.keys().forEach((playerid) => {
+      ranking[playerid].averagepoints =
+        ranking[playerid].cumulatedPoints / ranking[playerid].games;
+    });
+    return ranking;
+  }
+
   if (request.year === undefined) {
     // Only the last games matter
     for (let g = 0; g < table.statsGameNumber && g < games.length; g++) {
-      //let game = games[games.length - g - 1];
-      let game = { ...games[g] };
       graph.push({
         date: game.date,
-        players: neaterStats(statPlayers(game.stats), "graph", request.field),
+        players: computeRankingFromGames(games.slice(g, table.statsGameNumber)),
       });
     }
   } else {
