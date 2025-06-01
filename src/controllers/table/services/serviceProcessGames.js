@@ -2,6 +2,8 @@ require("dotenv").config();
 const serviceCheckContract = require("./serviceCheckContract.js");
 const serviceGamePoints = require("./serviceGamePoints.js");
 
+let debug = true;
+
 module.exports = function serviceProcessGames(table, games, request) {
   /*
   
@@ -19,15 +21,19 @@ module.exports = function serviceProcessGames(table, games, request) {
     console.log("table.serviceProcessGames");
   }
 
-  debug = true;
-
   // Initialize
   let stats = {};
   games = docGames(games);
 
   games = sortGames(games);
+  if (debug) {
+    console.log("sorted games", games.length);
+  }
 
   games = filterGames(table, request, games);
+  if (debug) {
+    console.log("filtered games", games.length);
+  }
 
   games = augmentGames(table, request, games);
   if (debug) {
@@ -261,15 +267,21 @@ function computeRankingFromGames(rankingGames) {
 
 function computeGraph(table, request, games) {
   graph = [];
-  for (let g = 0; g < games.length; g++) {
-    graph.push({
+  let g = -1;
+  games.forEach((game) => {
+    g++;
+    graph.unshift({
       date: games[g].date,
       players: computeRankingFromGames(games.slice(g, table.statsGameNumber)),
     });
+  });
+  if (debug) {
+    console.log("computed graph games", g);
   }
-  return reverseGames(graph);
+  return graph;
 }
 
+/*
 function statPlayers(players) {
   // Constants
   const scorev0Defense = 0.75;
@@ -331,4 +343,4 @@ function neaterStats(players, target, field = "averagepoints") {
     }
   }
   return neatPlayers;
-}
+}*/
