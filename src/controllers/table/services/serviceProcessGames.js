@@ -4,7 +4,7 @@ const serviceGamePoints = require("./serviceGamePoints.js");
 
 let debug = true;
 
-module.exports = function serviceProcessGames(table, games, request) {
+module.exports = function serviceProcessGames(table, inputGames, request) {
   /*
   
   process the game list to provide stats according to request
@@ -23,7 +23,7 @@ module.exports = function serviceProcessGames(table, games, request) {
 
   // Initialize
   let stats = {};
-  games = docGames(games);
+  let games = docGames(inputGames);
 
   games = sortGames(games);
   if (debug) {
