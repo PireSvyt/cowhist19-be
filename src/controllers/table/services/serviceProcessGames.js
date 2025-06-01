@@ -275,12 +275,19 @@ function computeGraph(table, request, games) {
   let g = -1;
   games.forEach((game) => {
     g++;
-    graph.push({
-      date: games[g].date,
-      players: computeRankingFromGames(
-        games.slice(g, g + table.statsGameNumber)
-      ),
-    });
+    if (request.year == undefined) {
+      graph.push({
+        date: game.date,
+        players: computeRankingFromGames(
+          games.slice(g, g + table.statsGameNumber)
+        ),
+      });
+    } else {
+      graph.push({
+        date: game.date,
+        players: computeRankingFromGames(games.slice(g, games.length)),
+      });
+    }
   });
   if (debug) {
     console.log("computed graph games", g);
