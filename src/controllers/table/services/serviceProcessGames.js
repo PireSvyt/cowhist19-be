@@ -114,17 +114,15 @@ function filterGames(table, request, games) {
   } else {
     if (request.need === "ranking") {
       for (let g = 0; g < table.statsGameNumber && g < games.length; g++) {
-        newGames.push(games[games.length - 1 - g]);
+        newGames.unshift(games[games.length - 1 - g]);
       }
     }
     if (request.need === "graph") {
       for (let g = 0; g < table.statsGameNumber * 2 && g < games.length; g++) {
-        newGames.push(games[games.length - 1 - g]);
+        newGames.unshift(games[games.length - 1 - g]);
       }
     }
   }
-
-  return newGames;
 }
 
 function augmentGames(table, request, games) {
