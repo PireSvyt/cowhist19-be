@@ -47,7 +47,9 @@ module.exports = function serviceProcessGames(table, games, request) {
 
   switch (request.need) {
     case "ranking":
-      stats.ranking = sortRanking(computeRankingFromGames(games));
+      stats.ranking = sortRanking(
+        Object.values(computeRankingFromGames(games))
+      );
       if (debug) {
         console.log("stats.ranking", stats.ranking);
       }
