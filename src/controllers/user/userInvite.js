@@ -36,6 +36,7 @@ module.exports = userInvite = (req, res, next) => {
           login: req.body.login,
           password: "NONE SO FAR",
           status: "invited",
+          priviledges: ["none"],
         });
         user.userid = user._id;
         // Saving

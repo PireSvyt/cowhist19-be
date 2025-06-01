@@ -52,21 +52,26 @@ module.exports = tableGetDetails = (req, res, next) => {
         name: 1,
         guests: 1,
         players: 1,
+        statsGameNumber: 1,
       },
     },
   ])
     .then((tables) => {
       if (tables.length === 1) {
         let table = tables[0];
-        // Add guest players
+        // Adds guest players
         for (var guest = 1; guest <= table.guests; guest++) {
           table.players.push({
             userid: random_id(),
             status: "guest",
           });
         }
-        // Add contracts
+        // Adds contracts
         table.contracts = contracts;
+        // Sets statsGameNumber if undefined
+        if (table.statsGameNumber === undefined) {
+          table.statsGameNumber = 10; // Default value, see model
+        }
         // Response
         console.log("table.getdetails.success");
         return res.status(200).json({

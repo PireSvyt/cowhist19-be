@@ -1,8 +1,7 @@
 require("@jest/globals");
-const authAPI = require("../api/auth.js");
-const adminAPI = require("../api/admin.js");
-const tableAPI = require("../api/table.js");
-const toolkit = require("../src/resources/toolkit.js");
+const authAPI = require("./api/auth.js");
+const adminAPI = require("./api/admin.js");
+const tableAPI = require("./api/table.js");
 const dataGenerator = require("../src/resources/dataGenerator.js");
 
 describe("TEST OF API : table", () => {
@@ -36,11 +35,11 @@ describe("TEST OF API : table", () => {
             match: { userid: { $ne: adminSignInResponse.data.userid } },
           },
         },
-        adminSignInResponse.data.token,
+        adminSignInResponse.data.token
       );
       //console.log("adminDeleteUsersResponse", adminDeleteUsersResponse);
       expect(adminDeleteUsersResponse.type).toBe(
-        "admin.databasecommand.delete.success",
+        "admin.databasecommand.delete.success"
       );
       adminDeleteTablesResponse = await adminAPI.adminDatabaseCommand(
         {
@@ -50,11 +49,11 @@ describe("TEST OF API : table", () => {
             match: { tableid: { $ne: "delete all" } },
           },
         },
-        adminSignInResponse.data.token,
+        adminSignInResponse.data.token
       );
       //console.log("adminDeleteTablesResponse", adminDeleteTablesResponse);
       expect(adminDeleteTablesResponse.type).toBe(
-        "admin.databasecommand.delete.success",
+        "admin.databasecommand.delete.success"
       );
       adminDeleteGamesResponse = await adminAPI.adminDatabaseCommand(
         {
@@ -64,11 +63,11 @@ describe("TEST OF API : table", () => {
             match: { gameid: { $ne: "delete all" } },
           },
         },
-        adminSignInResponse.data.token,
+        adminSignInResponse.data.token
       );
       //console.log("adminDeleteGamesResponse", adminDeleteGamesResponse);
       expect(adminDeleteGamesResponse.type).toBe(
-        "admin.databasecommand.delete.success",
+        "admin.databasecommand.delete.success"
       );
     });
   });
@@ -88,10 +87,10 @@ describe("TEST OF API : table", () => {
       //console.log("userAction", userAction);
       responses["insertUsers"] = await adminAPI.adminDatabaseCommand(
         userAction,
-        adminSignInResponse.data.token,
+        adminSignInResponse.data.token
       );
       expect(responses.insertUsers.type).toBe(
-        "admin.databasecommand.insertmany.success",
+        "admin.databasecommand.insertmany.success"
       );
       users = responses.insertUsers.data;
       //console.log("users", users);
@@ -109,14 +108,14 @@ describe("TEST OF API : table", () => {
       };
       responses["insertPickedUser"] = await adminAPI.adminDatabaseCommand(
         pickedUserAction,
-        adminSignInResponse.data.token,
+        adminSignInResponse.data.token
       );
       /*console.log(
         "responses.insertPickedUser.data[0]",
         responses.insertPickedUser.data[0],
       );*/
       expect(responses.insertPickedUser.type).toBe(
-        "admin.databasecommand.insertmany.success",
+        "admin.databasecommand.insertmany.success"
       );
       users.push(responses.insertPickedUser.data[0]);
       // Signin
@@ -146,7 +145,7 @@ describe("TEST OF API : table", () => {
       //console.log("tableInputs", tableInputs);
       responses["apiTableCreate"] = await tableAPI.apiTableCreate(
         tableInputs,
-        userSignInResponse.data.token,
+        userSignInResponse.data.token
       );
       //console.log("responses.apiTableCreate", responses.apiTableCreate);
       expect(responses.apiTableCreate.type).toBe("table.create.success");
@@ -166,7 +165,7 @@ describe("TEST OF API : table", () => {
       //console.log("tableAction", tableAction);
       responses["check"] = await adminAPI.adminDatabaseCommand(
         tableAction,
-        adminSignInResponse.data.token,
+        adminSignInResponse.data.token
       );
       /*console.log("responses.check", responses.check);
       console.log(
@@ -177,7 +176,7 @@ describe("TEST OF API : table", () => {
       expect(responses.check.data.items.length).toBe(1);
       expect(responses.check.data.items[0].userids.length).toBe(users.length);
       expect(
-        responses.check.data.items[0].userids.includes(pickedUser.userid),
+        responses.check.data.items[0].userids.includes(pickedUser.userid)
       ).toBeTruthy();
       expect(responses.check.data.items[0].guests).toBe(0);
       // Account for step
@@ -195,17 +194,17 @@ describe("TEST OF API : table", () => {
       //console.log("tables[0]", tables[0]);
       responses["getDetails"] = await tableAPI.apiTableGetDetails(
         tables[0].tableid,
-        userSignInResponse.data.token,
+        userSignInResponse.data.token
       );
       //console.log("responses.getDetails", responses.getDetails);
       expect(responses.getDetails.type).toBe("table.getdetails.success");
       expect(responses.getDetails.data.table.name).toBe(tables[0].name);
       expect(responses.getDetails.data.table.guests).toBe(tables[0].guests);
       expect(responses.getDetails.data.table.players.length).toBe(
-        tables[0].userids.length,
+        tables[0].userids.length
       );
       expect(
-        responses.getDetails.data.table.contracts.length,
+        responses.getDetails.data.table.contracts.length
       ).toBeGreaterThanOrEqual(1);
     });
   });
@@ -223,14 +222,14 @@ describe("TEST OF API : table", () => {
           await tableAPI.apiTableGetStats(
             tableToGet.tableid,
             statsParameters,
-            userSignInResponse.data.token,
+            userSignInResponse.data.token
           );
         //console.log("responses.apiTableGetStatsRankingEmpty", responses.apiTableGetStatsRankingEmpty);
         expect(responses.apiTableGetStatsRankingEmpty.type).toBe(
-          "table.getstats.success",
+          "table.getstats.success"
         );
         expect(
-          responses.apiTableGetStatsRankingEmpty.data.stats.ranking.length,
+          responses.apiTableGetStatsRankingEmpty.data.stats.ranking.length
         ).toBe(0);
 
         // Checks
@@ -254,14 +253,14 @@ describe("TEST OF API : table", () => {
         //console.log("gameAction.action.items[0]", gameAction.action.items[0]);
         responses["insertGames"] = await adminAPI.adminDatabaseCommand(
           gameAction,
-          adminSignInResponse.data.token,
+          adminSignInResponse.data.token
         );
         //console.log("responses.insertGames", responses.insertGames);
         expect(responses.insertGames.type).toBe(
-          "admin.databasecommand.insertmany.success",
+          "admin.databasecommand.insertmany.success"
         );
         expect(responses.insertGames.data.length).toBe(
-          gameAction.action.items.length,
+          gameAction.action.items.length
         );
         games = responses.insertGames.data;
         //console.log("game0", games[0]);
@@ -273,17 +272,17 @@ describe("TEST OF API : table", () => {
         responses["apiTableGetStatsRanking"] = await tableAPI.apiTableGetStats(
           tableToGet.tableid,
           statsParameters,
-          userSignInResponse.data.token,
+          userSignInResponse.data.token
         );
         /*console.log(
           "responses.apiTableGetStatsRanking",
           responses.apiTableGetStatsRanking,
         );*/
         expect(responses.apiTableGetStatsRanking.type).toBe(
-          "table.getstats.success",
+          "table.getstats.success"
         );
         expect(
-          responses.apiTableGetStatsRanking.data.stats.ranking.length,
+          responses.apiTableGetStatsRanking.data.stats.ranking.length
         ).toBe(4);
 
         // Checks
@@ -303,11 +302,11 @@ describe("TEST OF API : table", () => {
       responses["apiTableGetHistory"] = await tableAPI.apiTableGetHistory(
         tableToGet.tableid,
         historyParameters,
-        userSignInResponse.data.token,
+        userSignInResponse.data.token
       );
       //console.log("responses.apiTableGetHistory", responses.apiTableGetHistory);
       expect(responses.apiTableGetHistory.type).toBe(
-        "table.gethistory.success",
+        "table.gethistory.success"
       );
       expect(responses.apiTableGetHistory.data.more).toBeTruthy();
       expect(responses.apiTableGetHistory.data.action).toBe("append");
@@ -334,11 +333,11 @@ describe("TEST OF API : table", () => {
       //console.log("tableToSave", tableToSave);
       responses["tableSaveInputs"] = await tableAPI.apiTableSave(
         tableToSave,
-        userSignInResponse.data.token,
+        userSignInResponse.data.token
       );
       //console.log("responses.tableSaveInputs", responses.tableSaveInputs);
       expect(responses.tableSaveInputs.type).toBe(
-        "table.save.success.modified",
+        "table.save.success.modified"
       );
 
       // Checks
@@ -354,13 +353,13 @@ describe("TEST OF API : table", () => {
             },
           },
         },
-        adminSignInResponse.data.token,
+        adminSignInResponse.data.token
       );
       //console.log("responses.check.data", responses.check.data);
       expect(responses.check.type).toBe("admin.databasecommand.get.success");
       expect(responses.check.data.items[0].guests).toBe(tableToSave.guests);
       expect(responses.check.data.items[0].userids.length).toBe(
-        tableToSave.userids.length,
+        tableToSave.userids.length
       );
       tables[0] = responses.check.data.items[0];
     });
@@ -376,7 +375,7 @@ describe("TEST OF API : table", () => {
       //console.log("tableToDelete", tableToDelete);
       responses["apiTableDelete"] = await tableAPI.apiTableDelete(
         tableToDelete.tableid,
-        userSignInResponse.data.token,
+        userSignInResponse.data.token
       );
       //console.log("responses.apiTableDelete", responses.apiTableDelete);
       expect(responses.apiTableDelete.type).toBe("table.delete.success");
@@ -394,12 +393,12 @@ describe("TEST OF API : table", () => {
             },
           },
         },
-        adminSignInResponse.data.token,
+        adminSignInResponse.data.token
       );
       //console.log("tableToDelete.tableid", tableToDelete.tableid);
       //console.log("responses.check.data", responses.check.data);
       expect(responses.check.type).toBe(
-        "admin.databasecommand.get.error.partialmatch",
+        "admin.databasecommand.get.error.partialmatch"
       );
       expect(responses.check.data.items.length).toBe(0);
     });

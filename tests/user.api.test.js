@@ -1,7 +1,7 @@
 require("@jest/globals");
-const authAPI = require("../api/auth.js");
-const adminAPI = require("../api/admin.js");
-const userAPI = require("../api/user.js");
+const authAPI = require("./api/auth.js");
+const adminAPI = require("./api/admin.js");
+const userAPI = require("./api/user.js");
 const toolkit = require("../src/resources/toolkit.js");
 const dataGenerator = require("../src/resources/dataGenerator.js");
 
@@ -36,11 +36,11 @@ describe("TEST OF API : user", () => {
             match: { userid: { $ne: adminSignInResponse.data.userid } },
           },
         },
-        adminSignInResponse.data.token,
+        adminSignInResponse.data.token
       );
       //console.log("adminDeleteUsersResponse", adminDeleteUsersResponse);
       expect(adminDeleteUsersResponse.type).toBe(
-        "admin.databasecommand.delete.success",
+        "admin.databasecommand.delete.success"
       );
       adminDeleteTablesResponse = await adminAPI.adminDatabaseCommand(
         {
@@ -50,11 +50,11 @@ describe("TEST OF API : user", () => {
             match: { tableid: { $ne: "delete all" } },
           },
         },
-        adminSignInResponse.data.token,
+        adminSignInResponse.data.token
       );
       //console.log("adminDeleteTablesResponse", adminDeleteTablesResponse);
       expect(adminDeleteTablesResponse.type).toBe(
-        "admin.databasecommand.delete.success",
+        "admin.databasecommand.delete.success"
       );
       adminDeleteGamesResponse = await adminAPI.adminDatabaseCommand(
         {
@@ -64,11 +64,11 @@ describe("TEST OF API : user", () => {
             match: { gameid: { $ne: "delete all" } },
           },
         },
-        adminSignInResponse.data.token,
+        adminSignInResponse.data.token
       );
       //console.log("adminDeleteGamesResponse", adminDeleteGamesResponse);
       expect(adminDeleteGamesResponse.type).toBe(
-        "admin.databasecommand.delete.success",
+        "admin.databasecommand.delete.success"
       );
     });
   });
@@ -88,10 +88,10 @@ describe("TEST OF API : user", () => {
       //console.log("userAction", userAction);
       responses["insertUsers"] = await adminAPI.adminDatabaseCommand(
         userAction,
-        adminSignInResponse.data.token,
+        adminSignInResponse.data.token
       );
       expect(responses.insertUsers.type).toBe(
-        "admin.databasecommand.insertmany.success",
+        "admin.databasecommand.insertmany.success"
       );
       users = responses.insertUsers.data;
       //console.log("users", users);
@@ -109,10 +109,10 @@ describe("TEST OF API : user", () => {
       };
       responses["insertPickedUser"] = await adminAPI.adminDatabaseCommand(
         pickedUserAction,
-        adminSignInResponse.data.token,
+        adminSignInResponse.data.token
       );
       expect(responses.insertPickedUser.type).toBe(
-        "admin.databasecommand.insertmany.success",
+        "admin.databasecommand.insertmany.success"
       );
       users.push(pickedUser);
       let userSignInInputs = {
@@ -140,10 +140,10 @@ describe("TEST OF API : user", () => {
       //console.log("tableAction.action.items", tableAction.action.items);
       responses["insertTables"] = await adminAPI.adminDatabaseCommand(
         tableAction,
-        adminSignInResponse.data.token,
+        adminSignInResponse.data.token
       );
       expect(responses.insertTables.type).toBe(
-        "admin.databasecommand.insertmany.success",
+        "admin.databasecommand.insertmany.success"
       );
       tables = responses.insertTables.data;
       //console.log("tables", tables);
@@ -164,11 +164,11 @@ describe("TEST OF API : user", () => {
       //console.log("gameAction.action.items[0]", gameAction.action.items[0]);
       responses["insertGames"] = await adminAPI.adminDatabaseCommand(
         gameAction,
-        adminSignInResponse.data.token,
+        adminSignInResponse.data.token
       );
       //console.log("responses.insertGames", responses.insertGames);
       expect(responses.insertGames.type).toBe(
-        "admin.databasecommand.insertmany.success",
+        "admin.databasecommand.insertmany.success"
       );
       games = responses.insertGames.data;
       //console.log("game0", games[0]);
@@ -182,30 +182,30 @@ describe("TEST OF API : user", () => {
 
       // Test
       responses["apiUserGetDetails"] = await userAPI.apiUserGetDetails(
-        userSignInResponse.data.token,
+        userSignInResponse.data.token
       );
       //console.log("responses.apiUserGetDetails", responses.apiUserGetDetails);
       expect(responses.apiUserGetDetails.type).toBe("user.getdetails.success");
 
       // checks
       expect(responses.apiUserGetDetails.data.user.userid).toBe(
-        pickedUser.userid,
+        pickedUser.userid
       );
       expect(responses.apiUserGetDetails.data.user.pseudo).toBe(
-        pickedUser.pseudo,
+        pickedUser.pseudo
       );
       expect(responses.apiUserGetDetails.data.user.login).toBe(
-        pickedUser.login,
+        pickedUser.login
       );
       expect(responses.apiUserGetDetails.data.user.status).toBe(
-        pickedUser.status,
+        pickedUser.status
       );
       expect(
         responses.apiUserGetDetails.data.user.tables
           .map((table) => {
             return table.tableid;
           })
-          .includes(tables[0].tableid),
+          .includes(tables[0].tableid)
       ).toBeTruthy();
     });
   });
@@ -217,7 +217,7 @@ describe("TEST OF API : user", () => {
 
       // Test
       responses["apiUserGetStats"] = await userAPI.apiUserGetStats(
-        userSignInResponse.data.token,
+        userSignInResponse.data.token
       );
       //console.log("responses.apiUserGetStats", responses.apiUserGetStats);
       expect(responses.apiUserGetStats.type).toBe("user.getstats.success");
@@ -226,16 +226,16 @@ describe("TEST OF API : user", () => {
       expect(responses.apiUserGetStats.data.stats).toBeDefined();
       expect(responses.apiUserGetStats.data.stats.games).toBe(games.length);
       expect(
-        responses.apiUserGetStats.data.stats.rateattack,
+        responses.apiUserGetStats.data.stats.rateattack
       ).toBeGreaterThanOrEqual(0);
       expect(
-        responses.apiUserGetStats.data.stats.rateattack,
+        responses.apiUserGetStats.data.stats.rateattack
       ).toBeLessThanOrEqual(1);
       expect(
-        responses.apiUserGetStats.data.stats.ratevictory,
+        responses.apiUserGetStats.data.stats.ratevictory
       ).toBeGreaterThanOrEqual(0);
       expect(
-        responses.apiUserGetStats.data.stats.ratevictory,
+        responses.apiUserGetStats.data.stats.ratevictory
       ).toBeLessThanOrEqual(1);
     });
   });
@@ -250,7 +250,7 @@ describe("TEST OF API : user", () => {
       let inviteInputs = { pseudo: auser.pseudo, login: auser.login };
       responses["apiUserInvite"] = await userAPI.apiUserInvite(
         inviteInputs,
-        userSignInResponse.data.token,
+        userSignInResponse.data.token
       );
       //console.log("responses.apiUserInvite", responses.apiUserInvite);
       expect(responses.apiUserInvite.type).toBe("user.invite.success.created");
@@ -271,7 +271,7 @@ describe("TEST OF API : user", () => {
       //console.log("inviteAction", inviteAction);
       responses["check"] = await adminAPI.adminDatabaseCommand(
         inviteAction,
-        adminSignInResponse.data.token,
+        adminSignInResponse.data.token
       );
       //console.log("responses.check", responses.check);
       //console.log(        "responses.check.data.items[0]",        responses.check.data.items[0],      );

@@ -8,6 +8,10 @@ module.exports = tableGetStats = (req, res, next) => {
   provides the stats according to given parameters
   
   body parameters are transfered to the processGames function 
+
+  parameters
+  * need : ranking or graph
+  * year : optional field to get the stats over a certain year or sliding period
   
   possible response types
   * table.getstats.success
@@ -28,7 +32,14 @@ module.exports = tableGetStats = (req, res, next) => {
   Game.find({ tableid: req.params.tableid })
     .then((games) => {
       // Post process
-      let stats = serviceProcessGames(games, req.body);
+      let stats;
+      if (games.length === 0) {
+        stats = {
+          ranking: [],
+        };
+      } else {
+        stats = serviceProcessGames(req.augmented.table, games, req.body);
+      }
 
       // Response
       console.log("table.getstats.success");
