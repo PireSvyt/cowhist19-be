@@ -26,14 +26,8 @@ module.exports = function serviceProcessGames(table, games, request) {
   games = docGames(games);
 
   games = sortGames(games);
-  if (debug) {
-    console.log("sorted games", games);
-  }
 
   games = filterGames(table, request, games);
-  if (debug) {
-    console.log("filtered games", games);
-  }
 
   games = augmentGames(table, request, games);
   if (debug) {
@@ -41,9 +35,6 @@ module.exports = function serviceProcessGames(table, games, request) {
   }
 
   games = reverseGames(games);
-  if (debug) {
-    console.log("reversed games", games);
-  }
 
   switch (request.need) {
     case "ranking":
@@ -55,10 +46,17 @@ module.exports = function serviceProcessGames(table, games, request) {
       }
       break;
     case "graph":
-      stats.graph = computeGraph(table, request, games);
-      stats.ranking = sortRanking(
-        Object.values(stats.graph[stats.graph.length - 1].players)
-      );
+      if (games.length == 0) {
+        stats = {
+          graph: [],
+          ranking: [],
+        };
+      } else {
+        stats.graph = computeGraph(table, request, games);
+        stats.ranking = sortRanking(
+          Object.values(stats.graph[stats.graph.length - 1].players)
+        );
+      }
       if (debug) {
         console.log("stats.graph", stats.graph);
       }
@@ -96,20 +94,11 @@ function filterGames(table, request, games) {
   newGames = [];
 
   if (request.year !== undefined) {
-    if (request.need === "ranking") {
-      // Filter to only consider the games of that year
-      newGames = games.filter((game) => {
-        let gateDate = new Date(game.date);
-        return gateDate.getYear() + 1900 === request.year;
-      });
-    }
-    if (request.need === "graph") {
-      // Filtering games from requested year
-      newGames = games.filter((game) => {
-        let gateDate = new Date(game.date);
-        return gateDate.getYear() + 1900 === request.year;
-      });
-    }
+    // Filtering games from requested year
+    newGames = games.filter((game) => {
+      let gateDate = new Date(game.date);
+      return gateDate.getYear() + 1900 === request.year;
+    });
   } else {
     if (request.need === "ranking") {
       for (let g = 0; g < table.statsGameNumber && g < games.length; g++) {
