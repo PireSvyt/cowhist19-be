@@ -282,22 +282,12 @@ function computeGraph(table, request, games) {
       });
     }
   } else {
-    // Only the game from today minus request.year matter
-    let nowDate = new Date();
-    let nowYear = nowDate.getYear();
-    let startYear = nowYear - request.year;
-    graph = games
-      .filter((game) => {
-        let gameDate = new Date(game.date);
-        let gameYear = gameDate.getYear();
-        return startYear <= gameYear;
-      })
-      .map((game) => {
-        return {
-          date: game.date,
-          players: neaterStats(statPlayers(game.stats), "graph", request.field),
-        };
+    for (let g = 0; g < games.length; g++) {
+      graph.push({
+        date: games[g].date,
+        players: computeRankingFromGames(games.slice(g, table.statsGameNumber)),
       });
+    }
   }
   return reverseGames(graph);
 }
