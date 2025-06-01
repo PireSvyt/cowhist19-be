@@ -37,7 +37,13 @@ module.exports = function serviceProcessGames(table, games, request) {
 
   games = augmentGames(table, request, games);
   if (debug) {
-    console.log("augmented games", games);
+    console.log("augmented games");
+    games.forEach((game) => {
+      console.log("game", game.date);
+      Object.values(game.graph).forEach((val) => {
+        console.log("stat", val);
+      });
+    });
   }
 
   games = reverseGames(games);
@@ -236,7 +242,7 @@ function computeRankingFromGames(rankingGames) {
   rankingGames.forEach((rankingGame) => {
     Object.keys(rankingGame.graph).forEach((playerid) => {
       if (!Object.keys(ranking).includes(playerid)) {
-        ranking[playerid] = rankingGame.graph[playerid];
+        ranking[playerid] = { ...rankingGame.graph[playerid] };
       } else {
         Object.keys(rankingGame.graph[playerid]).forEach((statKey) => {
           if (statKey != "userid") {
