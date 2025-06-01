@@ -272,7 +272,9 @@ function computeGraph(table, request, games) {
     g++;
     graph.unshift({
       date: games[g].date,
-      players: computeRankingFromGames(games.slice(g, table.statsGameNumber)),
+      players: computeRankingFromGames(
+        games.slice(g, g + table.statsGameNumber)
+      ),
     });
   });
   if (debug) {
