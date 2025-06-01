@@ -270,7 +270,7 @@ function computeGraph(table, request, games) {
   let g = -1;
   games.forEach((game) => {
     g++;
-    graph.unshift({
+    graph.push({
       date: games[g].date,
       players: computeRankingFromGames(
         games.slice(g, g + table.statsGameNumber)
@@ -280,7 +280,10 @@ function computeGraph(table, request, games) {
   if (debug) {
     console.log("computed graph games", g);
   }
-  return graph;
+  if (request.year == undefined) {
+    graph = graph.slice(0, table.statsGameNumber);
+  }
+  return reverseGames(graph);
 }
 
 /*
