@@ -123,6 +123,7 @@ function filterGames(table, request, games) {
       }
     }
   }
+  return newGames;
 }
 
 function augmentGames(table, request, games) {
