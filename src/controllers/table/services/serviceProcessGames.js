@@ -56,7 +56,9 @@ module.exports = function serviceProcessGames(table, games, request) {
       break;
     case "graph":
       stats.graph = computeGraph(table, request, games);
-      stats.ranking = sortRanking(stats.graph[stats.graph.length - 1].players);
+      stats.ranking = sortRanking(
+        Object.values(stats.graph[stats.graph.length - 1].players)
+      );
       if (debug) {
         console.log("stats.graph", stats.graph);
       }
