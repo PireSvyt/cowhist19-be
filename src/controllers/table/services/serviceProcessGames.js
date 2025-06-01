@@ -260,6 +260,14 @@ function computeRankingFromGames(rankingGames) {
       ranking[playerid].defenseWins;
     ranking[playerid].averagepoints =
       ranking[playerid].cumulatedPoints / ranking[playerid].games;
+    ranking[playerid].rateattack =
+      ((ranking[playerid].attackLoss + ranking[playerid].attackWins) /
+        ranking[playerid].games) *
+      100;
+    ranking[playerid].ratevictory =
+      ((ranking[playerid].attackWins + ranking[playerid].defenseWins) /
+        ranking[playerid].games) *
+      100;
   });
   return ranking;
 }
