@@ -19,25 +19,45 @@ module.exports = function serviceProcessGames(table, games, request) {
     console.log("table.serviceProcessGames");
   }
 
+  debug = true;
+
   // Initialize
   let stats = {};
   games = docGames(games);
 
   games = sortGames(games);
+  if (debug) {
+    console.log("sorted games", games);
+  }
 
   games = filterGames(table, request, games);
+  if (debug) {
+    console.log("filtered games", games);
+  }
 
   games = augmentGames(table, request, games);
+  if (debug) {
+    console.log("augmented games", games);
+  }
 
   games = reverseGames(games);
+  if (debug) {
+    console.log("reversed games", games);
+  }
 
   switch (request.need) {
     case "ranking":
-      stats.ranking = computeRanking(games);
+      stats.ranking = sortRanking(computeRankingFromGames(games));
+      if (debug) {
+        console.log("stats.ranking", stats.ranking);
+      }
       break;
     case "graph":
-      stats.ranking = computeRanking(games);
       stats.graph = computeGraph(table, request, games);
+      stats.ranking = sortRanking(stats.graph[stats.graph.length - 1].players);
+      if (debug) {
+        console.log("stats.graph", stats.graph);
+      }
       break;
   }
 
@@ -80,7 +100,11 @@ function filterGames(table, request, games) {
       });
     }
     if (request.need === "graph") {
-      // Filtering done at the end
+      // Filtering games from requested year
+      newGames = games.filter((game) => {
+        let gateDate = new Date(game.date);
+        return gateDate.getYear() + 1900 === request.year;
+      });
     }
   } else {
     if (request.need === "ranking") {
@@ -186,60 +210,6 @@ function augmentGames(table, request, games) {
           });
         }
       });
-      /*
-      if (request.year === undefined) {
-        // Remove outdated game
-        let outdatedGame = { ...games[g - table.statsGameNumber] };
-        outdatedGame.contracts.forEach((outdatedContract) => {
-          if (serviceCheckContract(outdatedContract)) {
-            let outdatedContractPoints = serviceGamePoints(outdatedContract);
-            outdatedContract.players.forEach((player) => {
-              // Neglect is a guest
-              let nonguestplayer = true;
-              if (player.nonuser !== undefined) {
-                if (player.nonuser === "guest") {
-                  nonguestplayer = false;
-                }
-              }
-              if (nonguestplayer) {
-                if (outdatedContract.outcome < 0) {
-                  if (player.role === "attack") {
-                    augmentedGame.stats[player.userid].attackLoss -= 1;
-                    augmentedGame.stats[player.userid].cumulatedPoints -=
-                      outdatedContractPoints.attack;
-                  }
-                  if (player.role === "defense") {
-                    augmentedGame.stats[player.userid].defenseWins -= 1;
-                    augmentedGame.stats[player.userid].cumulatedPoints -=
-                      outdatedContractPoints.defense;
-                  }
-                } else {
-                  if (player.role === "attack") {
-                    augmentedGame.stats[player.userid].attackWins -= 1;
-                    augmentedGame.stats[player.userid].cumulatedPoints -=
-                      outdatedContractPoints.attack;
-                  }
-                  if (player.role === "defense") {
-                    augmentedGame.stats[player.userid].defenseLoss -= 1;
-                    augmentedGame.stats[player.userid].cumulatedPoints -=
-                      outdatedContractPoints.defense;
-                  }
-                }
-                // Check if players is still in the game or did not participated enough...
-                if (
-                  augmentedGame.stats[player.userid].attackLoss === 0 &&
-                  augmentedGame.stats[player.userid].defenseWins === 0 &&
-                  augmentedGame.stats[player.userid].attackWins === 0 &&
-                  augmentedGame.stats[player.userid].defenseLoss === 0
-                ) {
-                  delete augmentedGame.stats[player.userid];
-                }
-              }
-            });
-          }
-        });
-      }
-      */
     }
 
     augmentedGames.push(augmentedGame);
@@ -248,57 +218,50 @@ function augmentGames(table, request, games) {
   return augmentedGames;
 }
 
-function computeRanking(games) {
-  if (games.length > 0) {
-    let players = neaterStats(statPlayers(games[0].stats), "ranking");
-    let playersArray = Object.values(players);
-    playersArray.sort(function (a, b) {
-      let f = "averagepoints";
-      if (a[f] > b[f]) {
-        return -1;
+function sortRanking(ranking) {
+  ranking.sort(function (a, b) {
+    let f = "averagepoints";
+    if (a[f] > b[f]) {
+      return -1;
+    }
+    if (a[f] < b[f]) {
+      return 1;
+    }
+    return 0;
+  });
+  return ranking;
+}
+
+function computeRankingFromGames(rankingGames) {
+  let ranking = {};
+  rankingGames.forEach((rankingGame) => {
+    Object.keys(rankingGame.graph).forEach((playerid) => {
+      if (!Object.keys(ranking).includes(playerid)) {
+        ranking[playerid] = rankingGame.graph[playerid];
+      } else {
+        Object.keys(rankingGame.graph[playerid]).forEach((statKey) => {
+          if (statKey != "userid") {
+            ranking[playerid][statKey] += rankingGame.graph[playerid][statKey];
+          }
+        });
       }
-      if (a[f] < b[f]) {
-        return 1;
-      }
-      return 0;
     });
-    return playersArray;
-  } else {
-    return [];
-  }
+  });
+  // Average points
+  Object.keys(ranking).forEach((playerid) => {
+    ranking[playerid].games =
+      ranking[playerid].attackLoss +
+      ranking[playerid].attackWins +
+      ranking[playerid].defenseLoss +
+      ranking[playerid].defenseWins;
+    ranking[playerid].averagepoints =
+      ranking[playerid].cumulatedPoints / ranking[playerid].games;
+  });
+  return ranking;
 }
 
 function computeGraph(table, request, games) {
   graph = [];
-
-  function computeRankingFromGames(rankingGames) {
-    let ranking = {};
-    rankingGames.forEach((rankingGame) => {
-      Object.keys(rankingGame.graph).forEach((playerid) => {
-        if (!Object.keys(ranking).includes(playerid)) {
-          ranking[playerid] = rankingGame.graph[playerid];
-        } else {
-          Object.keys(rankingGame.graph[playerid]).forEach((statKey) => {
-            if (statKey != "userid") {
-              ranking[playerid][statKey] +=
-                rankingGame.graph[playerid][statKey];
-            }
-          });
-        }
-      });
-    });
-    // Average points
-    Object.keys(ranking).forEach((playerid) => {
-      ranking[playerid].games =
-        ranking[playerid].attackLoss +
-        ranking[playerid].attackWins +
-        ranking[playerid].defenseLoss +
-        ranking[playerid].defenseWins;
-      ranking[playerid].averagepoints =
-        ranking[playerid].cumulatedPoints / ranking[playerid].games;
-    });
-    return ranking;
-  }
 
   if (request.year === undefined) {
     // Only the last games matter
